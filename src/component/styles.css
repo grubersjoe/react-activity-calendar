@@ -1,0 +1,28 @@
+.calendar {
+  max-width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.calendar text {
+  fill: currentColor;
+}
+
+.block {
+  outline: 1px solid rgba(0, 0, 0, 0.08);
+  outline-offset: -1px;
+  shape-rendering: geometricPrecision;
+}
+
+.footer {
+  display: flex;
+}
+
+@keyframes loadingAnimation {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}

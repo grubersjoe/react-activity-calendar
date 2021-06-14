@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "react-hooks"],
+  "ignorePatterns": ["*.css"],
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": 0,
+    "arrow-body-style": ["error", "as-needed"],
+    "react/prop-types": 0
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}

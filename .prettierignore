@@ -1,0 +1,12 @@
+.gitignore
+.npmignore
+.prettierignore
+
+LICENSE
+
+*.directory
+*.lock
+*.ico
+*.png
+
+**/*/build/**/*
