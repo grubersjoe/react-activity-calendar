@@ -1,6 +1,5 @@
 import { Theme } from './types';
 
-// GitHub theme
 export const DEFAULT_THEME: Theme = {
   level4: '#216e39',
   level3: '#30a14e',
@@ -9,5 +8,5 @@ export const DEFAULT_THEME: Theme = {
   level0: '#ebedf0',
 };
 
-export const NAMESPACE = 'react-github-calendar';
+export const NAMESPACE = 'react-activity-calendar';
 export const MIN_DISTANCE_MONTH_LABELS = 2;

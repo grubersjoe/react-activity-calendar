@@ -3,12 +3,12 @@ import { Story, Meta } from '@storybook/react';
 import ReactTooltip from 'react-tooltip';
 import { eachDayOfInterval, formatISO } from 'date-fns/esm';
 
-import GitHubCalendar, { Props } from './Calendar';
+import ActivityCalendar, { Props } from './ActivityCalendar';
 import { Day, Level } from '../types';
 
 export default {
   title: 'Activity Calendar',
-  component: GitHubCalendar,
+  component: ActivityCalendar,
   parameters: {
     controls: {
       sort: 'requiredFirst',
@@ -55,7 +55,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<Props> = args => <GitHubCalendar {...args} />;
+const Template: Story<Props> = args => <ActivityCalendar {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

@@ -77,7 +77,7 @@ export interface Props {
   weekStart?: WeekDay;
 }
 
-const GitHubCalendar: FunctionComponent<Props> = ({
+const ActivityCalendar: FunctionComponent<Props> = ({
   data,
   blockMargin = 4,
   blockRadius = 2,
@@ -281,4 +281,4 @@ const GitHubCalendar: FunctionComponent<Props> = ({
   );
 };
 
-export default GitHubCalendar;
+export default ActivityCalendar;

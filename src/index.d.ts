@@ -85,7 +85,7 @@ export interface Theme {
 
 declare function createCalendarTheme(baseColor: ColorInput, emptyColor?: string): Theme;
 
-declare const GitHubCalendar: FunctionComponent<Props>;
+declare const ActivityCalendar: FunctionComponent<Props>;
 
 export { createCalendarTheme };
-export default GitHubCalendar;
+export default ActivityCalendar;

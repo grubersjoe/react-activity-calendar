@@ -1,5 +1,5 @@
-import GitHubCalendar from './component/Calendar';
+import ActivityCalendar from './component/ActivityCalendar';
 import { createCalendarTheme } from './util';
 
 export { createCalendarTheme };
-export default GitHubCalendar;
+export default ActivityCalendar;
