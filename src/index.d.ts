@@ -12,19 +12,21 @@ export interface Day {
 
 export interface Props {
   /**
-   * List of calendar entries.
+   * List of calendar entries for one year. Every Day object requires an ISO 8601 `date`
+   * property (yyyy-MM-dd), a `count` property with the amount of tracked data and finally
+   * a `level` property in the range 0 - 4 to specify activity intensity.
    */
   data: Array<Day>;
   /**
-   * Block margin in pixel.
+   * Margin between blocks in pixels.
    */
   blockMargin?: number;
   /**
-   * Block radius in pixel.
+   * Border radius of blocks in pixels.
    */
   blockRadius?: number;
   /**
-   * Block size in pixel.
+   * Block size in pixels.
    */
   blockSize?: number;
   /**
@@ -32,11 +34,11 @@ export interface Props {
    */
   children?: ReactNode;
   /**
-   * Base color to compute graph intensity hues. Any valid CSS color is possible.
+   * Base color to compute graph intensity hues (darkest color). Any valid CSS color is accepted
    */
   color?: ColorInput;
   /**
-   * A date-fns/format compatible date string used in tooltip messages.
+   * A date-fns/format compatible date string used in tooltips.
    */
   dateFormat?: string;
   /**
@@ -44,21 +46,17 @@ export interface Props {
    */
   fontSize?: number;
   /**
-   * Toggle to hide color legend.
+   * Toggle to hide color legend below calendar.
    */
   hideColorLegend?: boolean;
   /**
-   * Toggle to hide month labels.
+   * Toggle to hide month labels above calendar.
    */
   hideMonthLabels?: boolean;
   /**
-   * Toggle to hide total count.
+   * Toggle to hide total count below calendar.
    */
   hideTotalCount?: boolean;
-  /**
-   * Show loading state (skeleton).
-   */
-  loading?: boolean;
   /**
    * Toggle to show day labels.
    */
@@ -88,6 +86,7 @@ export interface Theme {
 declare function createCalendarTheme(baseColor: ColorInput, emptyColor?: string): Theme;
 
 declare const ActivityCalendar: FunctionComponent<Props>;
+declare const Skeleton: FunctionComponent;
 
-export { createCalendarTheme };
+export { createCalendarTheme, Skeleton };
 export default ActivityCalendar;
