@@ -2,6 +2,8 @@ import { FunctionComponent, ReactNode, CSSProperties } from 'react';
 import { ColorInput } from 'tinycolor2';
 import { Day as WeekDay } from 'date-fns';
 
+export type CalendarData = Array<Day>;
+
 export interface Day {
   date: string;
   count: number;
