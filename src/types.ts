@@ -6,7 +6,7 @@ export interface Day {
   level: Level;
 }
 
-export type Week = Array<Day | undefined>;
+type Week = Array<Day | undefined>;
 export type Weeks = Array<Week>;
 
 export interface Label {

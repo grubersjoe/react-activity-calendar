@@ -9,13 +9,15 @@ import { DEFAULT_THEME, MIN_DISTANCE_MONTH_LABELS, NAMESPACE } from '../constant
 import { Day, Theme } from '../types';
 import { createCalendarTheme, getClassName, getMonthLabels, groupByWeeks } from '../util';
 
+type CalendarData = Array<Day>;
+
 export interface Props {
   /**
    * List of calendar entries for one year. Every Day object requires an ISO 8601 `date`
    * property (yyyy-MM-dd), a `count` property with the amount of tracked data and finally
    * a `level` property in the range 0 - 4 to specify activity intensity.
    */
-  data: Array<Day>;
+  data: CalendarData;
   /**
    * Margin between blocks in pixels.
    */
