@@ -1,6 +1,6 @@
 {
   "name": "react-activity-calendar",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": " A React component to display activity data in calendar",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
@@ -9,11 +9,16 @@
   "main": "build/index.js",
   "module": "build/index.es.js",
   "types": "build/index.d.ts",
+  "files": [
+    "build"
+  ],
   "scripts": {
     "build": "rollup -c",
     "build:storybook": "build-storybook -o docs/",
     "format": "prettier --write './*' 'src/**/*'",
-    "lint": "eslint 'src/**/*'",
+    "lint": "eslint 'src/**/*' --max-warnings=0",
+    "postbuild": "dts-bundle-generator src/index.ts -o build/index.d.ts --no-check --no-banner",
+    "prepublishOnly": "npm run lint && npm run build && npm run build:storybook",
     "start": "rollup -c -w",
     "storybook": "start-storybook -p 6006"
   },
@@ -60,9 +65,9 @@
     "react-dom": "^17.0.0",
     "react-tooltip": "^17.0.0"
   },
-  "files": [
-    "build"
-  ],
+  "resolutions": {
+    "@types/react": "^17.0.0"
+  },
   "browserslist": [
     "last 2 chrome version",
     "last 2 firefox version",
