@@ -6,7 +6,21 @@ A React component to display activity data in a calendar (heatmap).
 
 ![Screenshot](screenshot.png)
 
+## Development
+
+### Start the Storybook
+
+```shell
+yarn storybook
+```
+
+### Update docs
+
+```shell
+yarn build:storybook
+```
+
 ## Related projects
 
-- grubersjoe/react-github-calendar
-- grubersjoe/github-contributions-api
+- [grubersjoe/react-github-calendar](https://github.com/grubersjoe/react-github-calendar)
+- [grubersjoe/github-contributions-api](https://github.com/grubersjoe/github-contributions-api)
