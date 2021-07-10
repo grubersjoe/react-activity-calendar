@@ -1,7 +1,9 @@
 import color, { ColorInput } from 'tinycolor2';
 import {
   differenceInCalendarDays,
+  eachDayOfInterval,
   format,
+  formatISO,
   getDay,
   nextDay,
   parseISO,
@@ -9,8 +11,12 @@ import {
 } from 'date-fns/esm';
 import type { Day as WeekDay } from 'date-fns';
 
-import { DEFAULT_THEME, NAMESPACE, MIN_DISTANCE_MONTH_LABELS } from './constants';
 import { Day, Weeks, Label, Theme } from './types';
+
+export const NAMESPACE = 'react-activity-calendar';
+export const MIN_DISTANCE_MONTH_LABELS = 2;
+
+const DEFAULT_THEME = createCalendarTheme('#042a33');
 
 export function groupByWeeks(
   days: Array<Day>,
@@ -86,10 +92,36 @@ export function createCalendarTheme(
   };
 }
 
+export function getTheme(theme?: Theme, color?: ColorInput): Theme {
+  if (theme) {
+    return Object.assign({}, DEFAULT_THEME, theme);
+  }
+
+  if (color) {
+    return createCalendarTheme(color);
+  }
+
+  return DEFAULT_THEME;
+}
+
 export function getClassName(name: string, styles?: string): string {
   if (styles) {
     return `${NAMESPACE}__${name} ${styles}`;
   }
 
   return `${NAMESPACE}__${name}`;
+}
+
+export function generateEmptyData(): Array<Day> {
+  const year = new Date().getFullYear();
+  const days = eachDayOfInterval({
+    start: new Date(year, 0, 1),
+    end: new Date(year, 11, 31),
+  });
+
+  return days.map(date => ({
+    date: formatISO(date, { representation: 'date' }),
+    count: 0,
+    level: 0,
+  }));
 }

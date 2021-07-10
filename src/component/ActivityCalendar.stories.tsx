@@ -1,10 +1,10 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import ReactTooltip from 'react-tooltip';
-import { eachDayOfInterval, formatISO } from 'date-fns/esm';
+import { eachDayOfInterval, formatISO, lastDayOfMonth } from 'date-fns/esm';
 
 import ActivityCalendar, { Props } from './ActivityCalendar';
-import { Day, Level } from '../types';
+import { Day, Level, Theme } from '../types';
 
 export default {
   title: 'Activity Calendar',
@@ -57,15 +57,50 @@ export default {
 
 const Template: Story<Props> = args => <ActivityCalendar {...args} />;
 
+const theme: Theme = {
+  level0: '#F0F0F0',
+  level1: '#C4EDDE',
+  level2: '#7AC7C4',
+  level3: '#F73859',
+  level4: '#384259',
+};
+
 export const Default = Template.bind({});
 Default.args = {
   data: generateData(),
 };
 
-export const CustomColor = Template.bind({});
-CustomColor.args = {
+export const Loading = Template.bind({});
+Loading.args = {
+  loading: true,
+  data: generateData(),
+};
+
+export const SpecificDateRange = Template.bind({});
+SpecificDateRange.args = {
+  data: generateData(2, 7),
+};
+
+export const WithColor = Template.bind({});
+WithColor.args = {
   data: generateData(),
   color: '#0f6499',
+};
+
+export const ExplicitTheme = Template.bind({});
+ExplicitTheme.args = {
+  data: generateData(),
+  theme,
+};
+
+export const CustomizedLook = Template.bind({});
+CustomizedLook.args = {
+  data: generateData(),
+  blockSize: 14,
+  blockRadius: 7,
+  blockMargin: 5,
+  fontSize: 16,
+  theme,
 };
 
 export const WithMondayAsWeekStart = Template.bind({});
@@ -97,30 +132,26 @@ WithDayLabels.args = {
   },
 };
 
-function generateData(): Array<Day> {
-  const MAX = 50;
+function generateData(monthStart = 0, monthEnd = 11): Array<Day> {
+  const MAX = 10;
+  const LEVELS = 5;
+
+  const yearStart = new Date().getFullYear();
+  const yearEnd = monthEnd < monthStart ? yearStart + 1 : yearStart;
+
   const days = eachDayOfInterval({
-    start: new Date(2020, 0, 1),
-    end: new Date(2020, 11, 31),
+    start: new Date(yearStart, monthStart, 1),
+    end: lastDayOfMonth(new Date(yearEnd, monthEnd, 1)),
   });
 
   return days.map(date => {
-    const count = Math.max(0, Math.round(Math.random() * MAX - Math.random() * (MAX / 2)));
-
-    const level = Math.floor(count / (MAX / 5)) as Level;
-
-    if (level > 3) {
-      console.log({
-        date: formatISO(date, { representation: 'date' }),
-        level,
-        count,
-      });
-    }
+    const count = Math.max(0, Math.round(Math.random() * MAX - Math.random() * (0.8 * MAX)));
+    const level = Math.ceil(count / (MAX / (LEVELS - 1))) as Level;
 
     return {
       date: formatISO(date, { representation: 'date' }),
-      level,
       count,
+      level,
     };
   });
 }

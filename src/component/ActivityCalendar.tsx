@@ -1,21 +1,38 @@
 import React, { FunctionComponent, CSSProperties, ReactNode } from 'react';
 import { format, getYear, parseISO } from 'date-fns/esm';
-import { ColorInput } from 'tinycolor2';
+import tinycolor, { ColorInput } from 'tinycolor2';
 import type { Day as WeekDay } from 'date-fns';
 
 import styles from './styles.css';
 
-import { DEFAULT_THEME, MIN_DISTANCE_MONTH_LABELS, NAMESPACE } from '../constants';
 import { Day, Theme } from '../types';
-import { createCalendarTheme, getClassName, getMonthLabels, groupByWeeks } from '../util';
+import {
+  MIN_DISTANCE_MONTH_LABELS,
+  NAMESPACE,
+  generateEmptyData,
+  getClassName,
+  getMonthLabels,
+  getTheme,
+  groupByWeeks,
+} from '../util';
 
 type CalendarData = Array<Day>;
 
 export interface Props {
   /**
-   * List of calendar entries for one year. Every Day object requires an ISO 8601 `date`
-   * property (yyyy-MM-dd), a `count` property with the amount of tracked data and finally
-   * a `level` property in the range 0 - 4 to specify activity intensity.
+   * List of calendar entries. Every `Day` object requires an ISO 8601 `date`
+   * property in the format `yyyy-MM-dd`, a `count` property with the amount of tracked data and finally
+   * a `level` property in the range `0 - 4` to specify activity intensity.
+   *
+   * Example object:
+   *
+   * ```json
+   * {
+   *   date: "2021-02-20",
+   *   count: 16,
+   *   level: 3
+   * }
+   * ```
    */
   data: CalendarData;
   /**
@@ -59,6 +76,10 @@ export interface Props {
    */
   hideTotalCount?: boolean;
   /**
+   * Toggle for loading state. `data` property will be ignored if set.
+   */
+  loading?: boolean;
+  /**
    * Toggle to show weekday labels left to the calendar.
    */
   showWeekdayLabels?: boolean;
@@ -67,7 +88,7 @@ export interface Props {
    */
   style?: CSSProperties;
   /**
-   * An object specifying all theme colors explicitly.
+   * An object specifying all theme colors explicitly`.
    */
   theme?: Theme;
   /**
@@ -90,46 +111,35 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   hideTotalCount = false,
   showWeekdayLabels = false,
   style = {},
-  theme = undefined,
+  theme: themeProp,
   weekStart = 0, // Sunday
+  loading = false,
 }: Props) => {
-  // PropsWithChildren<Props> is required for react-docgen
+  if (loading) {
+    data = generateEmptyData();
+  }
+
   if (data.length === 0) {
-    return (
-      <article className={NAMESPACE} style={style}>
-        No data
-      </article>
-    );
+    return null;
   }
 
   const weeks = groupByWeeks(data, weekStart);
   const totalCount = data.reduce((sum, day) => sum + day.count, 0);
   const year = getYear(parseISO(data[0]?.date));
 
+  const theme = getTheme(themeProp, color);
   const textHeight = hideMonthLabels ? 0 : fontSize + 2 * blockMargin;
 
-  function getTheme(): Theme {
-    if (theme) {
-      return Object.assign({}, DEFAULT_THEME, theme);
-    }
-
-    if (color) {
-      return createCalendarTheme(color);
-    }
-
-    return DEFAULT_THEME;
-  }
-
   function getDimensions() {
-    const width = weeks.length * (blockSize + blockMargin) - blockMargin;
-    const height = textHeight + (blockSize + blockMargin) * 7 - blockMargin;
-
-    return { width, height };
+    return {
+      width: weeks.length * (blockSize + blockMargin) - blockMargin,
+      height: textHeight + (blockSize + blockMargin) * 7 - blockMargin,
+    };
   }
 
   function getTooltipMessage(contribution: Day) {
-    const date = parseISO(contribution.date);
-    return `<strong>${contribution.count} contributions</strong> on ${format(date, dateFormat)}`;
+    const date = format(parseISO(contribution.date), dateFormat);
+    return `<strong>${contribution.count} contributions</strong> on ${date}`;
   }
 
   function renderLabels() {
@@ -184,19 +194,24 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   }
 
   function renderBlocks() {
-    const theme = getTheme();
-
     return weeks
-      .map(week =>
-        week.map((day, y) => {
+      .map((week, weekIndex) =>
+        week.map((day, dayIndex) => {
           if (!day) {
             return null;
           }
 
+          const style = loading
+            ? {
+                animation: `${styles.loadingAnimation} 1.5s ease-in-out infinite`,
+                animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
+              }
+            : undefined;
+
           return (
             <rect
               x={0}
-              y={textHeight + (blockSize + blockMargin) * y}
+              y={textHeight + (blockSize + blockMargin) * dayIndex}
               width={blockSize}
               height={blockSize}
               fill={theme[`level${day.level}` as keyof Theme]}
@@ -206,6 +221,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
               data-date={day.date}
               data-tip={children ? getTooltipMessage(day) : undefined}
               key={day.date}
+              style={style}
             />
           );
         }),
@@ -218,8 +234,6 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   }
 
   function renderFooter() {
-    const theme = getTheme();
-
     if (hideTotalCount && hideColorLegend) {
       return null;
     }
@@ -229,12 +243,16 @@ const ActivityCalendar: FunctionComponent<Props> = ({
         className={getClassName('footer', styles.footer)}
         style={{ marginTop: blockMargin, fontSize }}
       >
-        {!hideTotalCount && (
+        {/* Placeholder */}
+        {loading && <div>&nbsp;</div>}
+
+        {!loading && !hideTotalCount && (
           <div className={getClassName('count')}>
             {totalCount} contributions in {year}
           </div>
         )}
-        {!hideColorLegend && (
+
+        {!loading && !hideColorLegend && (
           <div className={getClassName('legend-colors')} style={{ marginLeft: 'auto' }}>
             <span style={{ marginRight: '0.5em' }}>Less</span>
             {Array(5)
@@ -258,16 +276,23 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   }
 
   const { width, height } = getDimensions();
+  const additionalStyles = {
+    width,
+    maxWidth: '100%',
+    // Required for CSS loading animation
+    [`--${NAMESPACE}-loading`]: theme.level0,
+    [`--${NAMESPACE}-loading-active`]: tinycolor(theme.level0).darken(8).toString(),
+  };
 
   return (
-    <article className={NAMESPACE} style={{ ...style, ...{ maxWidth: '100%', width } }}>
+    <article className={NAMESPACE} style={{ ...style, ...additionalStyles }}>
       <svg
         width={width}
         height={height}
         viewBox={`0 0 ${width} ${height}`}
         className={getClassName('calendar', styles.calendar)}
       >
-        {renderLabels()}
+        {!loading && renderLabels()}
         {renderBlocks()}
       </svg>
       {renderFooter()}

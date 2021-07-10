@@ -9,8 +9,8 @@
 }
 
 .block {
-  outline: 1px solid rgba(0, 0, 0, 0.08);
-  outline-offset: -1px;
+  stroke: rgba(0, 0, 0, 0.1);
+  stroke-width: 1px;
   shape-rendering: geometricPrecision;
 }
 
@@ -18,11 +18,15 @@
   display: flex;
 }
 
+/*noinspection CssUnresolvedCustomProperty*/
 @keyframes loadingAnimation {
-  from {
-    transform: translateX(-100%);
+  0% {
+    fill: var(--react-activity-calendar-loading);
   }
-  to {
-    transform: translateX(100%);
+  50% {
+    fill: var(--react-activity-calendar-loading-active);
+  }
+  100% {
+    fill: var(--react-activity-calendar-loading);
   }
 }
