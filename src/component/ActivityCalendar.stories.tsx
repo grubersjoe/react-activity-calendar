@@ -127,9 +127,6 @@ export const WithDayLabels = Template.bind({});
 WithDayLabels.args = {
   data: generateData(),
   showWeekdayLabels: true,
-  style: {
-    marginLeft: '1rem',
-  },
 };
 
 function generateData(monthStart = 0, monthEnd = 11): Array<Day> {
