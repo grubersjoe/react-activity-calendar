@@ -68,9 +68,13 @@ export function getMonthLabels(weeks: Weeks): Array<Label> {
 
       return labels;
     }, [])
-    .filter(
-      (label, index, labels) => index > 0 || labels[1].x - label.x > MIN_DISTANCE_MONTH_LABELS,
-    );
+    .filter((label, index, labels) => {
+      if (index === 0) {
+        return labels[1] && labels[1].x - label.x > MIN_DISTANCE_MONTH_LABELS;
+      }
+
+      return true;
+    });
 }
 
 export function createCalendarTheme(

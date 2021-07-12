@@ -177,7 +177,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
           <g className={getClassName('legend-month')} style={style}>
             {getMonthLabels(weeks).map(({ text, x }, index, labels) => {
               // Skip the first month label if there's not enough space to the next one
-              if (index === 0 && labels[1].x - x <= MIN_DISTANCE_MONTH_LABELS) {
+              if (index === 0 && labels[1] && labels[1].x - x <= MIN_DISTANCE_MONTH_LABELS) {
                 return null;
               }
 
