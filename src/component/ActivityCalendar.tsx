@@ -21,8 +21,9 @@ type CalendarData = Array<Day>;
 export interface Props {
   /**
    * List of calendar entries. Every `Day` object requires an ISO 8601 `date`
-   * property in the format `yyyy-MM-dd`, a `count` property with the amount of tracked data and finally
-   * a `level` property in the range `0 - 4` to specify activity intensity.
+   * property in the format `yyyy-MM-dd`, a `count` property with the amount
+   * of tracked data and finally a `level` property in the range `0 - 4` to
+   * specify activity intensity.
    *
    * Example object:
    *
@@ -279,7 +280,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   const additionalStyles = {
     width,
     maxWidth: '100%',
-    // Required for CSS loading animation
+    // Required to have correct colors in CSS loading animation
     [`--${NAMESPACE}-loading`]: theme.level0,
     [`--${NAMESPACE}-loading-active`]: tinycolor(theme.level0).darken(8).toString(),
   };
@@ -300,5 +301,9 @@ const ActivityCalendar: FunctionComponent<Props> = ({
     </article>
   );
 };
+
+export const Skeleton: FunctionComponent<Omit<Props, 'data'>> = props => (
+  <ActivityCalendar data={[]} {...props} />
+);
 
 export default ActivityCalendar;
