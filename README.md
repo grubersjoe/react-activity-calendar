@@ -1,10 +1,12 @@
 # React Activity Calendar
 
+[![CI](https://github.com/grubersjoe/react-activity-calendar/actions/workflows/test.yml/badge.svg)](https://github.com/grubersjoe/react-activity-calendar/actions/workflows/test.yml)
+
 A React component to display activity data in a calendar (heatmap).
 
-**[Demo (Storybook)](https://grubersjoe.github.io/react-activity-calendar)**
+**[Demo and documentation (Storybook)](https://grubersjoe.github.io/react-activity-calendar)**
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot.png?v4)
 
 ## Development
 
@@ -14,7 +16,7 @@ A React component to display activity data in a calendar (heatmap).
 yarn storybook
 ```
 
-### Update docs
+### Update documentation
 
 ```shell
 yarn build:storybook
