@@ -1,6 +1,8 @@
 import React, { FunctionComponent, CSSProperties, ReactNode } from 'react';
-import { format, getYear, parseISO } from 'date-fns/esm';
 import tinycolor, { ColorInput } from 'tinycolor2';
+import format from 'date-fns/format';
+import getYear from 'date-fns/getYear';
+import parseISO from 'date-fns/parseISO';
 import type { Day as WeekDay } from 'date-fns';
 
 import styles from './styles.css';

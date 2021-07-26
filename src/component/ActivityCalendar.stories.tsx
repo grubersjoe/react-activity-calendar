@@ -1,7 +1,9 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import ReactTooltip from 'react-tooltip';
-import { eachDayOfInterval, formatISO, lastDayOfMonth } from 'date-fns/esm';
+import eachDayOfInterval from 'date-fns/eachDayOfInterval';
+import formatISO from 'date-fns/formatISO';
+import lastDayOfMonth from 'date-fns/lastDayOfMonth';
 
 import ActivityCalendar, { Props } from './ActivityCalendar';
 import { Day, Level, Theme } from '../types';
