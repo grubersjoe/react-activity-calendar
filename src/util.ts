@@ -153,3 +153,13 @@ export const DEFAULT_MONTH_LABELS = [
 ];
 
 export const DEFAULT_WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+export const DEFAULT_LABELS = {
+  months: DEFAULT_MONTH_LABELS,
+  weekdays: DEFAULT_WEEKDAY_LABELS,
+  totalCount: '{{count}} contributions in {{year}}',
+  legend: {
+    less: 'Less',
+    more: 'More',
+  },
+};

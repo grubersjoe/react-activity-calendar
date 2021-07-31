@@ -17,8 +17,8 @@ import {
   groupByWeeks,
   MIN_DISTANCE_MONTH_LABELS,
   NAMESPACE,
-  DEFAULT_MONTH_LABELS,
   DEFAULT_WEEKDAY_LABELS,
+  DEFAULT_LABELS,
 } from '../util';
 
 type CalendarData = Array<Day>;
@@ -119,15 +119,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   hideColorLegend = false,
   hideMonthLabels = false,
   hideTotalCount = false,
-  labels = {
-    months: DEFAULT_MONTH_LABELS,
-    weekdays: DEFAULT_WEEKDAY_LABELS,
-    totalCount: '{{count}} contributions in {{year}}',
-    legend: {
-      less: 'Less',
-      more: 'More',
-    },
-  },
+  labels: labelsProp,
   loading = false,
   showWeekdayLabels = false,
   style = {},
@@ -147,6 +139,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   const year = getYear(parseISO(data[0]?.date));
 
   const theme = getTheme(themeProp, color);
+  const labels = Object.assign({}, DEFAULT_LABELS, labelsProp);
   const textHeight = hideMonthLabels ? 0 : fontSize + 2 * blockMargin;
 
   function getDimensions() {
