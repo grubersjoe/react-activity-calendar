@@ -1,21 +1,24 @@
 import React, { FunctionComponent, CSSProperties, ReactNode } from 'react';
 import tinycolor, { ColorInput } from 'tinycolor2';
 import format from 'date-fns/format';
+import getDay from 'date-fns/getDay';
 import getYear from 'date-fns/getYear';
 import parseISO from 'date-fns/parseISO';
 import type { Day as WeekDay } from 'date-fns';
 
 import styles from './styles.css';
 
-import { Day, Theme } from '../types';
+import { Day, Labels, Theme } from '../types';
 import {
-  MIN_DISTANCE_MONTH_LABELS,
-  NAMESPACE,
   generateEmptyData,
   getClassName,
   getMonthLabels,
   getTheme,
   groupByWeeks,
+  MIN_DISTANCE_MONTH_LABELS,
+  NAMESPACE,
+  DEFAULT_MONTH_LABELS,
+  DEFAULT_WEEKDAY_LABELS,
 } from '../util';
 
 type CalendarData = Array<Day>;
@@ -79,6 +82,10 @@ export interface Props {
    */
   hideTotalCount?: boolean;
   /**
+   * Localization strings for all calendar labels. `totalCount` supports the placeholders `{{count}}` and `{{year}}`:
+   */
+  labels?: Labels;
+  /**
    * Toggle for loading state. `data` property will be ignored if set.
    */
   loading?: boolean;
@@ -112,11 +119,20 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   hideColorLegend = false,
   hideMonthLabels = false,
   hideTotalCount = false,
+  labels = {
+    months: DEFAULT_MONTH_LABELS,
+    weekdays: DEFAULT_WEEKDAY_LABELS,
+    totalCount: '{{count}} contributions in {{year}}',
+    legend: {
+      less: 'Less',
+      more: 'More',
+    },
+  },
+  loading = false,
   showWeekdayLabels = false,
   style = {},
   theme: themeProp,
   weekStart = 0, // Sunday
-  loading = false,
 }: Props) => {
   if (loading) {
     data = generateEmptyData();
@@ -163,6 +179,8 @@ const ActivityCalendar: FunctionComponent<Props> = ({
                 return null;
               }
 
+              const dayIndex = getDay(parseISO(day.date));
+
               return (
                 <text
                   x={-2 * blockMargin}
@@ -170,7 +188,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
                   textAnchor="end"
                   key={day.date}
                 >
-                  {format(parseISO(day.date), 'EEEEEE')}
+                  {labels.weekdays ? labels.weekdays[dayIndex] : DEFAULT_WEEKDAY_LABELS[dayIndex]}
                 </text>
               );
             })}
@@ -178,7 +196,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
         )}
         {!hideMonthLabels && (
           <g className={getClassName('legend-month')} style={style}>
-            {getMonthLabels(weeks).map(({ text, x }, index, labels) => {
+            {getMonthLabels(weeks, labels.months).map(({ text, x }, index, labels) => {
               // Skip the first month label if there's not enough space to the next one
               if (index === 0 && labels[1] && labels[1].x - x <= MIN_DISTANCE_MONTH_LABELS) {
                 return null;
@@ -251,13 +269,17 @@ const ActivityCalendar: FunctionComponent<Props> = ({
 
         {!loading && !hideTotalCount && (
           <div className={getClassName('count')}>
-            {totalCount} contributions in {year}
+            {labels.totalCount
+              ? labels.totalCount
+                  .replace('{{count}}', String(totalCount))
+                  .replace('{{year}}', String(year))
+              : `${totalCount} contributions in ${year}`}
           </div>
         )}
 
         {!loading && !hideColorLegend && (
           <div className={getClassName('legend-colors')} style={{ marginLeft: 'auto' }}>
-            <span style={{ marginRight: '0.5em' }}>Less</span>
+            <span style={{ marginRight: '0.5em' }}>{labels?.legend?.less ?? 'Less'}</span>
             {Array(5)
               .fill(undefined)
               .map((_, index) => (
@@ -271,7 +293,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
                   />
                 </svg>
               ))}
-            <span style={{ marginLeft: '0.5em' }}>More</span>
+            <span style={{ marginLeft: '0.5em' }}>{labels?.legend?.more ?? 'More'}</span>
           </div>
         )}
       </footer>

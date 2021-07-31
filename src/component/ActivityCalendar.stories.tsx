@@ -7,6 +7,7 @@ import lastDayOfMonth from 'date-fns/lastDayOfMonth';
 
 import ActivityCalendar, { Props } from './ActivityCalendar';
 import { Day, Level, Theme } from '../types';
+import { DEFAULT_MONTH_LABELS, DEFAULT_WEEKDAY_LABELS } from '../util';
 
 export default {
   title: 'Activity Calendar',
@@ -59,6 +60,50 @@ export default {
 
 const Template: Story<Props> = args => <ActivityCalendar {...args} />;
 
+const TemplateLocalized: Story<Props> = args => (
+  <>
+    <h1>Localization</h1>
+    <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
+    <pre>
+      {`
+// Shape of \`labels\` property (default values).
+// All properties are optional.
+
+const labels = {
+  months: [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ],
+  weekdays: [
+    'Sun', // Sunday first!
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thu',
+    'Fri',
+    'Sat',
+  ],
+  totalCount: '{{count}} contributions in {{year}}',
+  legend: {
+    less: 'Less',
+    more: 'More',
+  },
+};
+`}
+    </pre>
+  </>
+);
+
 const theme: Theme = {
   level0: '#F0F0F0',
   level1: '#C4EDDE',
@@ -67,32 +112,47 @@ const theme: Theme = {
   level4: '#384259',
 };
 
+const labels = {
+  months: DEFAULT_MONTH_LABELS,
+  weekdays: DEFAULT_WEEKDAY_LABELS,
+  totalCount: '{{count}} contributions in {{year}}',
+  legend: {
+    less: 'Less',
+    more: 'More',
+  },
+};
+
 export const Default = Template.bind({});
 Default.args = {
   data: generateData(),
+  labels,
 };
 
 export const Loading = Template.bind({});
 Loading.args = {
   loading: true,
   data: generateData(),
+  labels,
 };
 
 export const SpecificDateRange = Template.bind({});
 SpecificDateRange.args = {
   data: generateData(2, 7),
+  labels,
 };
 
 export const WithColor = Template.bind({});
 WithColor.args = {
   data: generateData(),
   color: '#0f6499',
+  labels,
 };
 
 export const ExplicitTheme = Template.bind({});
 ExplicitTheme.args = {
   data: generateData(),
   theme,
+  labels,
 };
 
 export const CustomizedLook = Template.bind({});
@@ -103,18 +163,21 @@ CustomizedLook.args = {
   blockMargin: 5,
   fontSize: 16,
   theme,
+  labels,
 };
 
 export const WithMondayAsWeekStart = Template.bind({});
 WithMondayAsWeekStart.args = {
   data: generateData(),
   weekStart: 1,
+  labels,
 };
 
 export const WithTooltips = Template.bind({});
 WithTooltips.args = {
   data: generateData(),
   children: <ReactTooltip html />,
+  labels,
 };
 
 export const WithoutLabels = Template.bind({});
@@ -123,12 +186,29 @@ WithoutLabels.args = {
   hideMonthLabels: true,
   hideColorLegend: true,
   hideTotalCount: true,
+  labels,
 };
 
 export const WithDayLabels = Template.bind({});
 WithDayLabels.args = {
   data: generateData(),
   showWeekdayLabels: true,
+  labels,
+};
+
+export const WithLocalizedLabels = TemplateLocalized.bind({});
+WithLocalizedLabels.args = {
+  data: generateData(),
+  showWeekdayLabels: true,
+  labels: {
+    months: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+    weekdays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+    totalCount: '{{count}} Beiträge in {{year}}',
+    legend: {
+      less: 'Weniger',
+      more: 'Mehr',
+    },
+  },
 };
 
 function generateData(monthStart = 0, monthEnd = 11): Array<Day> {

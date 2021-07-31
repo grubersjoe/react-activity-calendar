@@ -1,20 +1,26 @@
 import color, { ColorInput } from 'tinycolor2';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import eachDayOfInterval from 'date-fns/eachDayOfInterval';
-import format from 'date-fns/format';
 import formatISO from 'date-fns/formatISO';
 import getDay from 'date-fns/getDay';
+import getMonth from 'date-fns/getMonth';
 import nextDay from 'date-fns/nextDay';
 import parseISO from 'date-fns/parseISO';
 import subWeeks from 'date-fns/subWeeks';
 import type { Day as WeekDay } from 'date-fns';
 
-import { Day, Weeks, Label, Theme } from './types';
+import { Day, Weeks, Theme } from './types';
 
 export const NAMESPACE = 'react-activity-calendar';
 export const MIN_DISTANCE_MONTH_LABELS = 2;
 
 const DEFAULT_THEME = createCalendarTheme('#042a33');
+
+interface Label {
+  x: number;
+  y: number;
+  text: string;
+}
 
 export function groupByWeeks(
   days: Array<Day>,
@@ -41,7 +47,10 @@ export function groupByWeeks(
     .map((_, calendarWeek) => paddedDays.slice(calendarWeek * 7, calendarWeek * 7 + 7));
 }
 
-export function getMonthLabels(weeks: Weeks): Array<Label> {
+export function getMonthLabels(
+  weeks: Weeks,
+  monthNames: Array<string> = DEFAULT_MONTH_LABELS,
+): Array<Label> {
   return weeks
     .reduce<Array<Label>>((labels, week, index) => {
       const firstWeekDay = week.find(day => day !== undefined);
@@ -50,7 +59,7 @@ export function getMonthLabels(weeks: Weeks): Array<Label> {
         throw new Error(`Unexpected error: Week is empty: [${week}]`);
       }
 
-      const month = format(parseISO(firstWeekDay.date), 'MMM');
+      const month = monthNames[getMonth(parseISO(firstWeekDay.date))];
       const prev = labels[labels.length - 1];
 
       if (index === 0 || prev.text !== month) {
@@ -127,3 +136,20 @@ export function generateEmptyData(): Array<Day> {
     level: 0,
   }));
 }
+
+export const DEFAULT_MONTH_LABELS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+export const DEFAULT_WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

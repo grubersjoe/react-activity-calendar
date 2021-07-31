@@ -9,11 +9,15 @@ export interface Day {
 type Week = Array<Day | undefined>;
 export type Weeks = Array<Week>;
 
-export interface Label {
-  x: number;
-  y: number;
-  text: string;
-}
+export type Labels = Partial<{
+  readonly months: Array<string>;
+  readonly weekdays: Array<string>;
+  readonly totalCount: string;
+  readonly legend: Partial<{
+    readonly less: string;
+    readonly more: string;
+  }>;
+}>;
 
 export interface Theme {
   readonly level4: string;
