@@ -30,21 +30,49 @@ export function groupByWeeks(
     return [];
   }
 
-  // Determine the first date of the calendar. If the first contribution date is
-  // not specified week day the desired day one week earlier will be selected.
-  const firstDate = parseISO(days[0].date);
+  // The calendar expects a continuous sequence of days, so fill gaps with empty activity.
+  const normalizedDays = normalizeCalendarDays(days);
+
+  // Determine the first date of the calendar. If the first contribution date is not
+  // specified week day the desired day one week earlier will be selected.
+  const firstDate = parseISO(normalizedDays[0].date);
   const firstCalendarDate =
     getDay(firstDate) === weekStart ? firstDate : subWeeks(nextDay(firstDate, weekStart), 1);
 
-  // In order to correctly group contributions by week it is necessary to left pad the list
+  // In order to correctly group contributions by week it is necessary to left pad the list,
+  // because the first date might not be desired week day.
   const paddedDays = [
     ...Array(differenceInCalendarDays(firstDate, firstCalendarDate)).fill(undefined),
-    ...days,
+    ...normalizedDays,
   ];
 
   return Array(Math.ceil(paddedDays.length / 7))
     .fill(undefined)
     .map((_, calendarWeek) => paddedDays.slice(calendarWeek * 7, calendarWeek * 7 + 7));
+}
+
+function normalizeCalendarDays(days: Array<Day>): Array<Day> {
+  const daysMap = days.reduce((map, day) => {
+    map.set(day.date, day);
+    return map;
+  }, new Map<string, Day>());
+
+  return eachDayOfInterval({
+    start: parseISO(days[0].date),
+    end: parseISO(days[days.length - 1].date),
+  }).map(day => {
+    const date = formatISO(day, { representation: 'date' });
+
+    if (daysMap.has(date)) {
+      return daysMap.get(date) as Day;
+    }
+
+    return {
+      date,
+      count: 0,
+      level: 0,
+    };
+  });
 }
 
 export function getMonthLabels(
