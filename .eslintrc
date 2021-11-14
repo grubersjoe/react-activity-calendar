@@ -9,9 +9,10 @@
   "plugins": ["@typescript-eslint"],
   "ignorePatterns": ["*.css"],
   "rules": {
-    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/ban-types": ["error"],
+    "@typescript-eslint/ban-ts-comment": ["off"],
     "arrow-body-style": ["error", "as-needed"],
-    "react/prop-types": 0
+    "react/prop-types": ["off"]
   },
   "settings": {
     "react": {

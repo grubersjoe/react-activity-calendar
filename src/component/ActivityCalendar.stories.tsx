@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { Story, Meta } from '@storybook/react';
 import ReactTooltip from 'react-tooltip';
 import eachDayOfInterval from 'date-fns/eachDayOfInterval';
@@ -8,6 +8,17 @@ import lastDayOfMonth from 'date-fns/lastDayOfMonth';
 import ActivityCalendar, { Props } from './ActivityCalendar';
 import { Day, Level, Theme } from '../types';
 import { DEFAULT_MONTH_LABELS, DEFAULT_WEEKDAY_LABELS } from '../util';
+
+const styles: {
+  [elem: string]: CSSProperties;
+} = {
+  code: {
+    fontSize: '0.9rem',
+  },
+  p: {
+    maxWidth: '68ch',
+  },
+};
 
 export default {
   title: 'Activity Calendar',
@@ -63,8 +74,9 @@ const Template: Story<Props> = args => <ActivityCalendar {...args} />;
 const TemplateLocalized: Story<Props> = args => (
   <>
     <h1>Localization</h1>
+    <p>(Example in German)</p>
     <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
-    <pre>
+    <pre style={styles.code}>
       {`
 // Shape of \`labels\` property (default values).
 // All properties are optional.
@@ -99,6 +111,40 @@ const labels = {
     more: 'More',
   },
 };
+`}
+    </pre>
+  </>
+);
+
+const TemplateEventHandlers: Story<Props> = args => (
+  <>
+    <h1>Event Handlers</h1>
+    <p style={styles.p}>
+      You can register event handlers for the SVG <code style={styles.code}>&lt;rect/&gt;</code>{' '}
+      elements that are used to render the calendar days. This way you can control the behaviour on
+      click, hover, etc.
+    </p>
+    <p style={styles.p}>
+      All event listeners have the following signature, so you are able to use the shown data inside
+      the handler:
+    </p>
+    <p style={styles.p}>
+      <code style={styles.code}>(event: React.SyntheticEvent) =&gt; (data: Day) =&gt; void</code>
+    </p>
+    <p style={styles.p}>Click on any block below to see it in action:</p>
+    <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
+    <pre style={styles.code}>
+      {`
+<ActivityCalendar 
+  data={data}  
+  eventHandlers: {
+    onClick: event => data => {
+      console.log({ event, data });
+      alert(JSON.stringify(data, null, 4));
+    },
+    onMouseEnter: event => data => console.log('mouseEnter'),
+  }
+/>
 `}
     </pre>
   </>
@@ -207,6 +253,18 @@ WithLocalizedLabels.args = {
     legend: {
       less: 'Weniger',
       more: 'Mehr',
+    },
+  },
+};
+
+const eventHandlerData = generateData();
+export const EventHandlers = TemplateEventHandlers.bind({});
+EventHandlers.args = {
+  data: eventHandlerData,
+  eventHandlers: {
+    onClick: event => data => {
+      console.log({ event, data });
+      alert(JSON.stringify(data, null, 4));
     },
   },
 };

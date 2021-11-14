@@ -8,7 +8,7 @@ import type { Day as WeekDay } from 'date-fns';
 
 import styles from './styles.css';
 
-import { Day, Labels, Theme } from '../types';
+import { Day, EventHandlerMap, Labels, ReactEvent, SVGRectEventHandler, Theme } from '../types';
 import {
   generateEmptyData,
   getClassName,
@@ -66,6 +66,10 @@ export interface Props {
    */
   dateFormat?: string;
   /**
+   * Event handlers to register for the SVG `<rect>` elements that are used to render the calendar days. Handler signature: `event => data => void`
+   */
+  eventHandlers?: EventHandlerMap;
+  /**
    * Font size for text in pixels.
    */
   fontSize?: number;
@@ -115,6 +119,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   children,
   color = undefined,
   dateFormat = 'MMM do, yyyy',
+  eventHandlers = {},
   fontSize = 14,
   hideColorLegend = false,
   hideMonthLabels = false,
@@ -152,6 +157,18 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   function getTooltipMessage(contribution: Day) {
     const date = format(parseISO(contribution.date), dateFormat);
     return `<strong>${contribution.count} contributions</strong> on ${date}`;
+  }
+
+  function getEventHandlers(data: Day): SVGRectEventHandler {
+    return (
+      Object.keys(eventHandlers) as Array<keyof SVGRectEventHandler>
+    ).reduce<SVGRectEventHandler>(
+      (handlers, key) => ({
+        ...handlers,
+        [key]: (event: ReactEvent<SVGRectElement>) => eventHandlers[key]?.(event)(data),
+      }),
+      {},
+    );
   }
 
   function renderLabels() {
@@ -224,6 +241,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
 
           return (
             <rect
+              {...getEventHandlers(day)}
               x={0}
               y={textHeight + (blockSize + blockMargin) * dayIndex}
               width={blockSize}
@@ -297,7 +315,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   const additionalStyles = {
     width,
     maxWidth: '100%',
-    // Required to have correct colors in CSS loading animation
+    // Required for correct colors in CSS loading animation
     [`--${NAMESPACE}-loading`]: theme.level0,
     [`--${NAMESPACE}-loading-active`]: tinycolor(theme.level0).darken(8).toString(),
   };
