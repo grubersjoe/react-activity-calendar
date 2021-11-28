@@ -313,7 +313,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
 
   const { width, height } = getDimensions();
   const additionalStyles = {
-    maxWidth: '100%',
+    maxWidth: width,
     // Required for correct colors in CSS loading animation
     [`--${NAMESPACE}-loading`]: theme.level0,
     [`--${NAMESPACE}-loading-active`]: tinycolor(theme.level0).darken(8).toString(),
