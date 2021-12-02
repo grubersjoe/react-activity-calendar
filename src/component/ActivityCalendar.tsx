@@ -273,7 +273,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
     return (
       <footer
         className={getClassName('footer', styles.footer)}
-        style={{ marginTop: blockMargin, fontSize }}
+        style={{ marginTop: 2 * blockMargin, fontSize }}
       >
         {/* Placeholder */}
         {loading && <div>&nbsp;</div>}
@@ -289,12 +289,12 @@ const ActivityCalendar: FunctionComponent<Props> = ({
         )}
 
         {!loading && !hideColorLegend && (
-          <div className={getClassName('legend-colors')} style={{ marginLeft: 'auto' }}>
-            <span style={{ marginRight: '0.5em' }}>{labels?.legend?.less ?? 'Less'}</span>
+          <div className={getClassName('legend-colors', styles.legendColors)}>
+            <span style={{ marginRight: '0.4em' }}>{labels?.legend?.less ?? 'Less'}</span>
             {Array(5)
               .fill(undefined)
               .map((_, index) => (
-                <svg width={blockSize} height={blockSize} key={index} style={{ margin: '0 0.1em' }}>
+                <svg width={blockSize} height={blockSize} key={index}>
                   <rect
                     width={blockSize}
                     height={blockSize}
@@ -304,7 +304,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
                   />
                 </svg>
               ))}
-            <span style={{ marginLeft: '0.5em' }}>{labels?.legend?.more ?? 'More'}</span>
+            <span style={{ marginLeft: '0.4em' }}>{labels?.legend?.more ?? 'More'}</span>
           </div>
         )}
       </footer>
