@@ -43,6 +43,7 @@
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "babel-loader": "^8.2.3",
+    "dts-bundle-generator": "^6.2.0",
     "eslint": "^8.3.0",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
