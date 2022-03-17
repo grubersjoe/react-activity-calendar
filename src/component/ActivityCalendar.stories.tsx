@@ -7,7 +7,7 @@ import lastDayOfMonth from 'date-fns/lastDayOfMonth';
 
 import ActivityCalendar, { Props } from './ActivityCalendar';
 import { Day, Level, Theme } from '../types';
-import { DEFAULT_MONTH_LABELS, DEFAULT_WEEKDAY_LABELS } from '../util';
+import { DEFAULT_MONTH_LABELS, DEFAULT_WEEKDAY_LABELS } from '../lib';
 
 const styles: {
   [elem: string]: CSSProperties;
@@ -66,6 +66,21 @@ export default {
         },
       },
     },
+    weekdays: {
+      options: [0, 1, 2, 3, 4, 5, 6],
+      control: {
+        type: 'multi-select',
+        labels: {
+          0: 'Sunday (0)',
+          1: 'Monday (1)',
+          2: 'Tuesday (2)',
+          3: 'Wednesday (3)',
+          4: 'Thursday (4)',
+          5: 'Friday (5)',
+          6: 'Saturday (6)',
+        },
+      },
+    },
   },
 } as Meta;
 
@@ -105,7 +120,7 @@ const labels = {
     'Fri',
     'Sat',
   ],
-  totalCount: '{{count}} contributions in {{year}}',
+  totalCount: '{{count}} in {{year}}',
   legend: {
     less: 'Less',
     more: 'More',
@@ -161,7 +176,7 @@ const theme: Theme = {
 const labels = {
   months: DEFAULT_MONTH_LABELS,
   weekdays: DEFAULT_WEEKDAY_LABELS,
-  totalCount: '{{count}} contributions in {{year}}',
+  totalCount: '{{count}} in {{year}}',
   legend: {
     less: 'Less',
     more: 'More',
