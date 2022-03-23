@@ -1,13 +1,12 @@
 {
   "name": "react-activity-calendar",
-  "version": "1.4.5",
+  "version": "1.5.0",
   "description": " A React component to display activity data in calendar",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
   "homepage": "https://grubersjoe.github.io/react-activity-calendar/",
   "repository": "grubersjoe/react-activity-calendar",
   "main": "build/index.js",
-  "module": "build/index.es.js",
   "types": "build/index.d.ts",
   "files": [
     "build"

@@ -13,20 +13,12 @@ const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 
 export default {
   input: 'src/index.ts',
-  output: [
-    {
-      file: pkg.main,
-      format: 'cjs',
-      sourcemap: true,
-      exports: 'named',
-    },
-    {
-      file: pkg.module,
-      format: 'es',
-      sourcemap: true,
-      exports: 'named',
-    },
-  ],
+  output: {
+    file: pkg.main,
+    format: 'cjs',
+    sourcemap: true,
+    exports: 'named',
+  },
   plugins: [
     external({
       includeDependencies: true,
