@@ -7,7 +7,7 @@ import getMonth from 'date-fns/getMonth';
 import nextDay from 'date-fns/nextDay';
 import parseISO from 'date-fns/parseISO';
 import subWeeks from 'date-fns/subWeeks';
-import type { Day as WeekDay } from 'date-fns';
+import type { Day as Weekday } from 'date-fns';
 
 import { Day, Weeks, Theme } from './types';
 
@@ -24,17 +24,17 @@ interface Label {
 
 export function groupByWeeks(
   days: Array<Day>,
-  weekStart: WeekDay = 0, // 0 = Sunday
+  weekStart: Weekday = 0, // 0 = Sunday
 ): Weeks {
   if (days.length === 0) {
     return [];
   }
 
   // The calendar expects a continuous sequence of days, so fill gaps with empty activity.
-  const normalizedDays = normalizeCalendarDays(days);
+  const normalizedDays = fillGaps(days);
 
-  // Determine the first date of the calendar. If the first contribution date is not
-  // specified week day the desired day one week earlier will be selected.
+  // Determine the first date of the calendar. If the first contribution date is not the specified
+  // week day, the desired day one week earlier will be selected.
   const firstDate = parseISO(normalizedDays[0].date);
   const firstCalendarDate =
     getDay(firstDate) === weekStart ? firstDate : subWeeks(nextDay(firstDate, weekStart), 1);
@@ -51,7 +51,17 @@ export function groupByWeeks(
     .map((_, calendarWeek) => paddedDays.slice(calendarWeek * 7, calendarWeek * 7 + 7));
 }
 
-function normalizeCalendarDays(days: Array<Day>): Array<Day> {
+export function filterWeekdays(weeks: Weeks, weekdays?: Array<Weekday>): Weeks {
+  if (!weekdays) {
+    return weeks;
+  }
+
+  return weeks
+    .map(week => week.filter((_, dayIndex) => weekdays.includes(dayIndex as Weekday)))
+    .filter(week => week.some(day => day !== undefined));
+}
+
+function fillGaps(days: Array<Day>): Array<Day> {
   const daysMap = days.reduce((map, day) => {
     map.set(day.date, day);
     return map;
@@ -185,7 +195,7 @@ export const DEFAULT_WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri',
 export const DEFAULT_LABELS = {
   months: DEFAULT_MONTH_LABELS,
   weekdays: DEFAULT_WEEKDAY_LABELS,
-  totalCount: '{{count}} contributions in {{year}}',
+  totalCount: '{{count}} in {{year}}',
   legend: {
     less: 'Less',
     more: 'More',
