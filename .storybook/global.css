@@ -1,0 +1,10 @@
+
+svg {
+    background: rebeccapurple;
+    display: none;
+    --react-activity-calendar-level0: hsl(0, 0%, 92%);
+    --react-activity-calendar-level1: blue;
+    --react-activity-calendar-level2: red !important;
+    --react-activity-calendar-level3: hsl(191deg 85% 11% / 76%);
+    --react-activity-calendar-level4: hsl(191deg 85% 11% / 92%);
+}

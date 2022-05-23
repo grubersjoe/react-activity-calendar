@@ -246,7 +246,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
               y={textHeight + (blockSize + blockMargin) * dayIndex}
               width={blockSize}
               height={blockSize}
-              fill={theme[`level${day.level}` as keyof Theme]}
+              fill={`var(--${NAMESPACE}-level${day.level})`}
               rx={blockRadius}
               ry={blockRadius}
               className={styles.block}
@@ -314,6 +314,12 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   const { width, height } = getDimensions();
   const additionalStyles = {
     maxWidth: width,
+    [`--${NAMESPACE}-level0`]: theme.level0,
+    [`--${NAMESPACE}-level1`]: theme.level1,
+    [`--${NAMESPACE}-level2`]: theme.level2,
+    [`--${NAMESPACE}-level3`]: theme.level3,
+    [`--${NAMESPACE}-level4`]: theme.level4,
+
     // Required for correct colors in CSS loading animation
     [`--${NAMESPACE}-loading`]: theme.level0,
     [`--${NAMESPACE}-loading-active`]: tinycolor(theme.level0).darken(8).toString(),
