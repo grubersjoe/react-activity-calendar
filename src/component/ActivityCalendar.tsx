@@ -1,7 +1,6 @@
 import React, { FunctionComponent, CSSProperties, ReactNode } from 'react';
 import tinycolor, { ColorInput } from 'tinycolor2';
 import format from 'date-fns/format';
-import getDay from 'date-fns/getDay';
 import getYear from 'date-fns/getYear';
 import parseISO from 'date-fns/parseISO';
 import type { Day as WeekDay } from 'date-fns';
@@ -58,7 +57,7 @@ export interface Props {
    */
   children?: ReactNode;
   /**
-   * Base color to compute graph intensity hues (darkest color). Any valid CSS color is accepted
+   * Base color to compute graph intensity hues (the darkest color). Any valid CSS color is accepted
    */
   color?: ColorInput;
   /**
@@ -184,19 +183,19 @@ const ActivityCalendar: FunctionComponent<Props> = ({
       <>
         {showWeekdayLabels && (
           <g className={getClassName('legend-weekday')} style={style}>
-            {weeks[1].map((day, y) => {
-              if (!day || y % 2 === 0) {
+            {weeks[0].map((day, index) => {
+              if (index % 2 === 0) {
                 return null;
               }
 
-              const dayIndex = getDay(parseISO(day.date));
+              const dayIndex = (index + weekStart) % 7;
 
               return (
                 <text
                   x={-2 * blockMargin}
-                  y={textHeight + (fontSize / 2 + blockMargin) + (blockSize + blockMargin) * y}
+                  y={textHeight + (fontSize / 2 + blockMargin) + (blockSize + blockMargin) * index}
                   textAnchor="end"
-                  key={day.date}
+                  key={index}
                 >
                   {labels.weekdays ? labels.weekdays[dayIndex] : DEFAULT_WEEKDAY_LABELS[dayIndex]}
                 </text>
