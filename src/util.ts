@@ -30,17 +30,18 @@ export function groupByWeeks(
     return [];
   }
 
-  // The calendar expects a continuous sequence of days, so fill gaps with empty activity.
+  // The calendar expects a continuous sequence of days, so fill gaps with empty
+  // activity data.
   const normalizedDays = normalizeCalendarDays(days);
 
-  // Determine the first date of the calendar. If the first contribution date is not
-  // specified week day the desired day one week earlier will be selected.
+  // Determine the first date of the calendar. If the first contribution date is
+  // not the specified weekday, the desired day one week earlier is selected.
   const firstDate = parseISO(normalizedDays[0].date);
   const firstCalendarDate =
     getDay(firstDate) === weekStart ? firstDate : subWeeks(nextDay(firstDate, weekStart), 1);
 
-  // In order to correctly group contributions by week it is necessary to left pad the list,
-  // because the first date might not be desired week day.
+  // To correctly group contributions by week, it is necessary to left pad the
+  // list because the first date might not be desired weekday.
   const paddedDays = [
     ...Array(differenceInCalendarDays(firstDate, firstCalendarDate)).fill(undefined),
     ...normalizedDays,
