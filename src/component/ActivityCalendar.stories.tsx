@@ -162,6 +162,7 @@ const labels = {
   months: DEFAULT_MONTH_LABELS,
   weekdays: DEFAULT_WEEKDAY_LABELS,
   totalCount: '{{count}} contributions in {{year}}',
+  tooltip: '<strong>{{count}} contributions</strong> on {{date}}',
   legend: {
     less: 'Less',
     more: 'More',

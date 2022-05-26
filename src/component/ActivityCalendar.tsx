@@ -85,7 +85,9 @@ export interface Props {
    */
   hideTotalCount?: boolean;
   /**
-   * Localization strings for all calendar labels. `totalCount` supports the placeholders `{{count}}` and `{{year}}`:
+   * Localization strings for all calendar labels.
+   * `totalCount` supports the placeholders `{{count}}` and `{{year}}`
+   * `tooltip` supports the placeholders `{{count}}` and `{{date}}`
    */
   labels?: Labels;
   /**
@@ -155,7 +157,9 @@ const ActivityCalendar: FunctionComponent<Props> = ({
 
   function getTooltipMessage(contribution: Day) {
     const date = format(parseISO(contribution.date), dateFormat);
-    return `<strong>${contribution.count} contributions</strong> on ${date}`;
+    const tooltip = labels.tooltip ?? DEFAULT_LABELS.tooltip;
+
+    return tooltip.replaceAll('{{count}}', String(contribution.count)).replaceAll('{{date}}', date);
   }
 
   function getEventHandlers(data: Day): SVGRectEventHandler {
