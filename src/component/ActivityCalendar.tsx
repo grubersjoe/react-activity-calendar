@@ -86,8 +86,9 @@ export interface Props {
   hideTotalCount?: boolean;
   /**
    * Localization strings for all calendar labels.
-   * `totalCount` supports the placeholders `{{count}}` and `{{year}}`
-   * `tooltip` supports the placeholders `{{count}}` and `{{date}}`
+   *
+   * - `totalCount` supports the placeholders `{{count}}` and `{{year}}`.
+   * - `tooltip` supports the placeholders `{{count}}` and `{{date}}`.
    */
   labels?: Labels;
   /**
