@@ -1,6 +1,6 @@
 {
   "name": "react-activity-calendar",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": " A React component to display activity data in calendar",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
@@ -67,6 +67,11 @@
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0",
     "react-tooltip": "^4.2.0"
+  },
+  "peerDependenciesMeta": {
+    "react-tooltip": {
+      "optional": true
+    }
   },
   "browserslist": [
     "last 1 chrome version",
