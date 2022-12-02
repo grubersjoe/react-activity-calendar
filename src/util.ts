@@ -1,12 +1,14 @@
 import color, { ColorInput } from 'tinycolor2';
-import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
-import eachDayOfInterval from 'date-fns/eachDayOfInterval';
-import formatISO from 'date-fns/formatISO';
-import getDay from 'date-fns/getDay';
-import getMonth from 'date-fns/getMonth';
-import nextDay from 'date-fns/nextDay';
-import parseISO from 'date-fns/parseISO';
-import subWeeks from 'date-fns/subWeeks';
+import {
+  differenceInCalendarDays,
+  eachDayOfInterval,
+  formatISO,
+  getDay,
+  getMonth,
+  nextDay,
+  parseISO,
+  subWeeks,
+} from 'date-fns';
 import type { Day as WeekDay } from 'date-fns';
 
 import { Day, Weeks, Theme } from './types';

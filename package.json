@@ -1,6 +1,6 @@
 {
   "name": "react-activity-calendar",
-  "version": "1.6.5",
+  "version": "1.6.6",
   "description": " A React component to display activity data in calendar",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
@@ -32,6 +32,9 @@
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-url": "^8.0.1",
     "@storybook/addon-essentials": "~6.5.14",
     "@storybook/addon-links": "~6.5.14",
     "@storybook/addons": "~6.5.14",
@@ -53,14 +56,10 @@
     "react-dom": "^18.2.0",
     "react-tooltip": "^4.5.1",
     "rollup": "^3.5.1",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-filesize": "^9.1.2",
-    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.2",
     "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-url": "^3.0.1",
     "typescript": "^4.9.3"
   },
   "peerDependencies": {
