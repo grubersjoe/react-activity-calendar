@@ -1,6 +1,6 @@
 {
   "name": "react-activity-calendar",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "description": " A React component to display activity data in calendar",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",

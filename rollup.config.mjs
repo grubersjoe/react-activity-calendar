@@ -16,6 +16,9 @@ export default {
     format: 'cjs',
     sourcemap: true,
     exports: 'named',
+    // Use 'auto' instead of 'default' for better interoperability with CRA etc.
+    // https://rollupjs.org/guide/en/#outputinterop
+    interop: 'auto',
   },
   plugins: [
     external({
