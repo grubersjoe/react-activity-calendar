@@ -4,11 +4,10 @@ import external from 'rollup-plugin-peer-deps-external';
 import filesize from 'rollup-plugin-filesize';
 import postcss from 'rollup-plugin-postcss';
 import resolve from '@rollup/plugin-node-resolve';
-import url from '@rollup/plugin-url';
 
 import pkg from './package.json' assert { type: "json" };
 
-const extensions = ['.js', '.jsx', '.ts', '.tsx'];
+const extensions = [ '.ts', '.tsx'];
 
 export default {
   input: 'src/index.ts',
@@ -25,7 +24,6 @@ export default {
     postcss({
       modules: true,
     }),
-    url(),
     babel({
       extensions,
       exclude: 'node_modules/**',
