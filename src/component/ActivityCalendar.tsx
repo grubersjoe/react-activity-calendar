@@ -106,6 +106,10 @@ export interface Props {
    */
   theme?: Theme;
   /**
+   * Overwrite the total activity count.
+   */
+  totalCount?: number;
+  /**
    * Index of day to be used as start of week. 0 represents Sunday.
    */
   weekStart?: WeekDay;
@@ -129,6 +133,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   showWeekdayLabels = false,
   style = {},
   theme: themeProp,
+  totalCount: totalCountProp,
   weekStart = 0, // Sunday
 }: Props) => {
   if (loading) {
@@ -139,9 +144,13 @@ const ActivityCalendar: FunctionComponent<Props> = ({
     return null;
   }
 
-  const weeks = groupByWeeks(data, weekStart);
-  const totalCount = data.reduce((sum, day) => sum + day.count, 0);
   const year = getYear(parseISO(data[0]?.date));
+  const weeks = groupByWeeks(data, weekStart);
+
+  const totalCount =
+    typeof totalCountProp === 'number'
+      ? totalCountProp
+      : data.reduce((sum, day) => sum + day.count, 0);
 
   const theme = getTheme(themeProp, color);
   const labels = Object.assign({}, DEFAULT_LABELS, labelsProp);
