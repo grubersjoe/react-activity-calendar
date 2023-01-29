@@ -15,7 +15,7 @@ export type Labels = Partial<{
   readonly months: Array<string>;
   readonly weekdays: Array<string>;
   readonly totalCount: string;
-  readonly tooltip: string;
+  readonly tooltip: string | ((contribution: Day) => string);
   readonly legend: Partial<{
     readonly less: string;
     readonly more: string;

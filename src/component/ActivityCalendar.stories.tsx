@@ -225,6 +225,20 @@ WithTooltips.args = {
   labels,
 };
 
+export const WithTooltipsCallback = Template.bind({});
+WithTooltipsCallback.args = {
+  data: generateData(),
+  children: <ReactTooltip html />,
+  labels: {
+    ...labels,
+    tooltip(day) {
+      // Some complex logic here
+      const div = day.count % 3 ? "not " : "";
+      return `On ${day.date}, the contributions were ${div}divisible by 3.`
+    },
+  },
+};
+
 export const WithoutLabels = Template.bind({});
 WithoutLabels.args = {
   data: generateData(),

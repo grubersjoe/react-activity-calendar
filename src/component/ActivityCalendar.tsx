@@ -162,8 +162,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
       height: textHeight + (blockSize + blockMargin) * 7 - blockMargin,
     };
   }
-
-  function getTooltipMessage(contribution: Day) {
+  const getTooltipMessage = typeof labels.tooltip === "function" ? labels.tooltip : (contribution: Day) => {
     const date = format(parseISO(contribution.date), dateFormat);
     const tooltip = labels.tooltip ?? DEFAULT_LABELS.tooltip;
 
