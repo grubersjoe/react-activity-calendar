@@ -224,7 +224,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
               }
 
               return (
-                <text x={(blockSize + blockMargin) * x} alignmentBaseline="hanging" key={x}>
+                <text x={(blockSize + blockMargin) * x} dominantBaseline="hanging" key={x}>
                   {text}
                 </text>
               );
