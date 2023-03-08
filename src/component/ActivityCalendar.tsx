@@ -3,7 +3,7 @@ import tinycolor, { ColorInput } from 'tinycolor2';
 import { format, getYear, parseISO } from 'date-fns';
 import type { Day as WeekDay } from 'date-fns';
 
-import styles from './styles.css';
+import styles from './styles.module.css';
 
 import { Day, EventHandlerMap, Labels, ReactEvent, SVGRectEventHandler, Theme } from '../types';
 import {
