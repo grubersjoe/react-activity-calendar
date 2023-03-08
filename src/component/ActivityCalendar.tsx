@@ -5,7 +5,14 @@ import type { Day as WeekDay } from 'date-fns';
 
 import styles from './styles.module.css';
 
-import { Day, EventHandlerMap, Labels, ReactEvent, SVGRectEventHandler, Theme } from '../types';
+import {
+  Activity,
+  EventHandlerMap,
+  Labels,
+  ReactEvent,
+  SVGRectEventHandler,
+  Theme,
+} from '../types';
 import {
   generateEmptyData,
   getClassName,
@@ -18,11 +25,11 @@ import {
   DEFAULT_LABELS,
 } from '../util';
 
-type CalendarData = Array<Day>;
+type CalendarData = Array<Activity>;
 
 export interface Props {
   /**
-   * List of calendar entries. Every `Day` object requires an ISO 8601 `date`
+   * List of calendar entries. Every `Activity` object requires an ISO 8601 `date`
    * property in the format `yyyy-MM-dd`, a `count` property with the amount
    * of tracked data and finally a `level` property in the range `0 - 4` to
    * specify activity intensity.
@@ -63,7 +70,7 @@ export interface Props {
    */
   dateFormat?: string;
   /**
-   * Event handlers to register for the SVG `<rect>` elements that are used to render the calendar days. Handler signature: `event => data => void`
+   * Event handlers to register for the SVG `<rect>` elements that are used to render the calendar days. Handler signature: `event => activity => void`
    */
   eventHandlers?: EventHandlerMap;
   /**
@@ -163,20 +170,20 @@ const ActivityCalendar: FunctionComponent<Props> = ({
     };
   }
 
-  function getTooltipMessage(contribution: Day) {
-    const date = format(parseISO(contribution.date), dateFormat);
+  function getTooltipMessage(activity: Activity) {
+    const date = format(parseISO(activity.date), dateFormat);
     const tooltip = labels.tooltip ?? DEFAULT_LABELS.tooltip;
 
-    return tooltip.replaceAll('{{count}}', String(contribution.count)).replaceAll('{{date}}', date);
+    return tooltip.replaceAll('{{count}}', String(activity.count)).replaceAll('{{date}}', date);
   }
 
-  function getEventHandlers(data: Day): SVGRectEventHandler {
+  function getEventHandlers(activity: Activity): SVGRectEventHandler {
     return (
       Object.keys(eventHandlers) as Array<keyof SVGRectEventHandler>
     ).reduce<SVGRectEventHandler>(
       (handlers, key) => ({
         ...handlers,
-        [key]: (event: ReactEvent<SVGRectElement>) => eventHandlers[key]?.(event)(data),
+        [key]: (event: ReactEvent<SVGRectElement>) => eventHandlers[key]?.(event)(activity),
       }),
       {},
     );
@@ -295,7 +302,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
               ? labels.totalCount
                   .replace('{{count}}', String(totalCount))
                   .replace('{{year}}', String(year))
-              : `${totalCount} contributions in ${year}`}
+              : `${totalCount} activities in ${year}`}
           </div>
         )}
 

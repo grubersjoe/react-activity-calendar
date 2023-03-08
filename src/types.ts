@@ -2,14 +2,13 @@ import React, { DOMAttributes } from 'react';
 
 export type Level = 0 | 1 | 2 | 3 | 4;
 
-export interface Day {
+export interface Activity {
   date: string;
   count: number;
   level: Level;
 }
 
-type Week = Array<Day | undefined>;
-export type Weeks = Array<Week>;
+export type Week = Array<Activity | undefined>;
 
 export type Labels = Partial<{
   readonly months: Array<string>;
@@ -38,7 +37,7 @@ export type SVGRectEventHandler = Omit<
 export type EventHandlerMap = {
   [key in keyof SVGRectEventHandler]: (
     ...event: Parameters<NonNullable<SVGRectEventHandler[keyof SVGRectEventHandler]>>
-  ) => (data: Day) => void;
+  ) => (activity: Activity) => void;
 };
 
 export type ReactEvent<E extends Element> = React.AnimationEvent<E> &

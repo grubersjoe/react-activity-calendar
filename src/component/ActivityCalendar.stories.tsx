@@ -4,7 +4,7 @@ import ReactTooltip from 'react-tooltip';
 import { eachDayOfInterval, formatISO, lastDayOfMonth } from 'date-fns';
 
 import ActivityCalendar, { Props } from './ActivityCalendar';
-import { Day, Level, Theme } from '../types';
+import { Activity, Level, Theme } from '../types';
 import { DEFAULT_MONTH_LABELS, DEFAULT_WEEKDAY_LABELS } from '../util';
 
 const styles: {
@@ -103,7 +103,7 @@ const labels = {
     'Fri',
     'Sat',
   ],
-  totalCount: '{{count}} contributions in {{year}}',
+  totalCount: '{{count}} activities in {{year}}',
   legend: {
     less: 'Less',
     more: 'More',
@@ -136,11 +136,11 @@ const TemplateEventHandlers: Story<Props> = args => (
 <ActivityCalendar 
   data={data}  
   eventHandlers: {
-    onClick: event => data => {
-      console.log({ event, data });
-      alert(JSON.stringify(data, null, 4));
+    onClick: event => activity => {
+      console.log({ event, activity });
+      alert(JSON.stringify(activity, null, 4));
     },
-    onMouseEnter: event => data => console.log('mouseEnter'),
+    onMouseEnter: event => activity => console.log('mouseEnter'),
   }
 />
 `}
@@ -159,8 +159,8 @@ const theme: Theme = {
 const labels = {
   months: DEFAULT_MONTH_LABELS,
   weekdays: DEFAULT_WEEKDAY_LABELS,
-  totalCount: '{{count}} contributions in {{year}}',
-  tooltip: '<strong>{{count}} contributions</strong> on {{date}}',
+  totalCount: '{{count}} activities in {{year}}',
+  tooltip: '<strong>{{count}} activities</strong> on {{date}}',
   legend: {
     less: 'Less',
     more: 'More',
@@ -248,7 +248,7 @@ WithLocalizedLabels.args = {
   labels: {
     months: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
     weekdays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
-    totalCount: '{{count}} Beiträge in {{year}}',
+    totalCount: '{{count}} Aktivitäten in {{year}}',
     legend: {
       less: 'Weniger',
       more: 'Mehr',
@@ -261,14 +261,14 @@ export const EventHandlers = TemplateEventHandlers.bind({});
 EventHandlers.args = {
   data: eventHandlerData,
   eventHandlers: {
-    onClick: event => data => {
-      console.log({ event, data });
-      alert(JSON.stringify(data, null, 4));
+    onClick: event => activity => {
+      console.log({ event, activity });
+      alert(JSON.stringify(activity, null, 4));
     },
   },
 };
 
-function generateData(monthStart = 0, monthEnd = 11): Array<Day> {
+function generateData(monthStart = 0, monthEnd = 11): Array<Activity> {
   const MAX = 10;
   const LEVELS = 5;
 

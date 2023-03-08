@@ -11,7 +11,7 @@ import {
 } from 'date-fns';
 import type { Day as WeekDay } from 'date-fns';
 
-import { Day, Weeks, Theme } from './types';
+import { Activity, Theme, Week } from './types';
 
 export const NAMESPACE = 'react-activity-calendar';
 export const MIN_DISTANCE_MONTH_LABELS = 2;
@@ -25,9 +25,9 @@ interface Label {
 }
 
 export function groupByWeeks(
-  days: Array<Day>,
+  days: Array<Activity>,
   weekStart: WeekDay = 0, // 0 = Sunday
-): Weeks {
+): Array<Week> {
   if (days.length === 0) {
     return [];
   }
@@ -36,14 +36,14 @@ export function groupByWeeks(
   // activity data.
   const normalizedDays = normalizeCalendarDays(days);
 
-  // Determine the first date of the calendar. If the first contribution date is
-  // not the specified weekday, the desired day one week earlier is selected.
+  // Determine the first date of the calendar. If the first date is not the
+  // set start weekday, the selected weekday one week earlier is used.
   const firstDate = parseISO(normalizedDays[0].date);
   const firstCalendarDate =
     getDay(firstDate) === weekStart ? firstDate : subWeeks(nextDay(firstDate, weekStart), 1);
 
-  // To correctly group contributions by week, it is necessary to left pad the
-  // list because the first date might not be desired weekday.
+  // To correctly group activities by week, it is necessary to left pad the
+  // list because the first date might not be set start weekday.
   const paddedDays = [
     ...Array(differenceInCalendarDays(firstDate, firstCalendarDate)).fill(undefined),
     ...normalizedDays,
@@ -54,11 +54,11 @@ export function groupByWeeks(
     .map((_, calendarWeek) => paddedDays.slice(calendarWeek * 7, calendarWeek * 7 + 7));
 }
 
-function normalizeCalendarDays(days: Array<Day>): Array<Day> {
+function normalizeCalendarDays(days: Array<Activity>): Array<Activity> {
   const daysMap = days.reduce((map, day) => {
     map.set(day.date, day);
     return map;
-  }, new Map<string, Day>());
+  }, new Map<string, Activity>());
 
   return eachDayOfInterval({
     start: parseISO(days[0].date),
@@ -67,7 +67,7 @@ function normalizeCalendarDays(days: Array<Day>): Array<Day> {
     const date = formatISO(day, { representation: 'date' });
 
     if (daysMap.has(date)) {
-      return daysMap.get(date) as Day;
+      return daysMap.get(date) as Activity;
     }
 
     return {
@@ -79,7 +79,7 @@ function normalizeCalendarDays(days: Array<Day>): Array<Day> {
 }
 
 export function getMonthLabels(
-  weeks: Weeks,
+  weeks: Array<Week>,
   monthNames: Array<string> = DEFAULT_MONTH_LABELS,
 ): Array<Label> {
   return weeks
@@ -154,7 +154,7 @@ export function getClassName(name: string, styles?: string): string {
   return `${NAMESPACE}__${name}`;
 }
 
-export function generateEmptyData(): Array<Day> {
+export function generateEmptyData(): Array<Activity> {
   const year = new Date().getFullYear();
   const days = eachDayOfInterval({
     start: new Date(year, 0, 1),
@@ -188,8 +188,8 @@ export const DEFAULT_WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri',
 export const DEFAULT_LABELS = {
   months: DEFAULT_MONTH_LABELS,
   weekdays: DEFAULT_WEEKDAY_LABELS,
-  totalCount: '{{count}} contributions in {{year}}',
-  tooltip: '<strong>{{count}} contributions</strong> on {{date}}',
+  totalCount: '{{count}} activities in {{year}}',
+  tooltip: '<strong>{{count}} activities</strong> on {{date}}',
   legend: {
     less: 'Less',
     more: 'More',
