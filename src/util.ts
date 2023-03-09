@@ -1,4 +1,5 @@
 import color, { ColorInput } from 'tinycolor2';
+import type { Day as WeekDay } from 'date-fns';
 import {
   differenceInCalendarDays,
   eachDayOfInterval,
@@ -9,7 +10,6 @@ import {
   parseISO,
   subWeeks,
 } from 'date-fns';
-import type { Day as WeekDay } from 'date-fns';
 
 import { Activity, Theme, Week } from './types';
 
@@ -32,9 +32,7 @@ export function groupByWeeks(
     return [];
   }
 
-  // The calendar expects a continuous sequence of days, so fill gaps with empty
-  // activity data.
-  const normalizedDays = normalizeCalendarDays(days);
+  const normalizedDays = fillHoles(days);
 
   // Determine the first date of the calendar. If the first date is not the
   // set start weekday, the selected weekday one week earlier is used.
@@ -54,7 +52,11 @@ export function groupByWeeks(
     .map((_, calendarWeek) => paddedDays.slice(calendarWeek * 7, calendarWeek * 7 + 7));
 }
 
-function normalizeCalendarDays(days: Array<Activity>): Array<Activity> {
+/**
+ * The calendar expects a continuous sequence of days, so fill gaps with empty
+ * activity data.
+ */
+function fillHoles(days: Array<Activity>): Array<Activity> {
   const daysMap = days.reduce((map, day) => {
     map.set(day.date, day);
     return map;
@@ -189,7 +191,6 @@ export const DEFAULT_LABELS = {
   months: DEFAULT_MONTH_LABELS,
   weekdays: DEFAULT_WEEKDAY_LABELS,
   totalCount: '{{count}} activities in {{year}}',
-  tooltip: '<strong>{{count}} activities</strong> on {{date}}',
   legend: {
     less: 'Less',
     more: 'More',

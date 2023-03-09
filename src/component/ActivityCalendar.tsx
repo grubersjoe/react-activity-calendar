@@ -1,19 +1,23 @@
-import React, { FunctionComponent, CSSProperties, ReactNode } from 'react';
+import React, { CSSProperties, Fragment, FunctionComponent, ReactElement } from 'react';
 import tinycolor, { ColorInput } from 'tinycolor2';
-import { format, getYear, parseISO } from 'date-fns';
 import type { Day as WeekDay } from 'date-fns';
+import { getYear, parseISO } from 'date-fns';
 
 import styles from './styles.module.css';
 
 import {
   Activity,
+  BlockElement,
   EventHandlerMap,
   Labels,
   ReactEvent,
   SVGRectEventHandler,
   Theme,
 } from '../types';
+
 import {
+  DEFAULT_LABELS,
+  DEFAULT_WEEKDAY_LABELS,
   generateEmptyData,
   getClassName,
   getMonthLabels,
@@ -21,11 +25,7 @@ import {
   groupByWeeks,
   MIN_DISTANCE_MONTH_LABELS,
   NAMESPACE,
-  DEFAULT_WEEKDAY_LABELS,
-  DEFAULT_LABELS,
 } from '../util';
-
-type CalendarData = Array<Activity>;
 
 export interface Props {
   /**
@@ -44,7 +44,7 @@ export interface Props {
    * }
    * ```
    */
-  data: CalendarData;
+  data: Array<Activity>;
   /**
    * Margin between blocks in pixels.
    */
@@ -58,17 +58,9 @@ export interface Props {
    */
   blockSize?: number;
   /**
-   * Pass `<ReactTooltip html />` as child to show tooltips.
-   */
-  children?: ReactNode;
-  /**
    * Base color to compute graph intensity hues (the darkest color). Any valid CSS color is accepted
    */
   color?: ColorInput;
-  /**
-   * A date-fns/format compatible date string used in tooltips.
-   */
-  dateFormat?: string;
   /**
    * Event handlers to register for the SVG `<rect>` elements that are used to render the calendar days. Handler signature: `event => activity => void`
    */
@@ -93,13 +85,16 @@ export interface Props {
    * Localization strings for all calendar labels.
    *
    * - `totalCount` supports the placeholders `{{count}}` and `{{year}}`.
-   * - `tooltip` supports the placeholders `{{count}}` and `{{date}}`.
    */
   labels?: Labels;
   /**
    * Toggle for loading state. `data` property will be ignored if set.
    */
   loading?: boolean;
+  /**
+   * Render prop for calendar blocks (activities). For example, useful to wrap the element with a tooltip component. Use `React.cloneElement` to pass additional props to the element if necessary.
+   */
+  renderBlock?: (block: BlockElement, activity: Activity) => ReactElement;
   /**
    * Toggle to show weekday labels left to the calendar.
    */
@@ -127,9 +122,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   blockMargin = 4,
   blockRadius = 2,
   blockSize = 12,
-  children,
   color = undefined,
-  dateFormat = 'MMM do, yyyy',
   eventHandlers = {},
   fontSize = 14,
   hideColorLegend = false,
@@ -137,6 +130,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   hideTotalCount = false,
   labels: labelsProp,
   loading = false,
+  renderBlock = undefined,
   showWeekdayLabels = false,
   style = {},
   theme: themeProp,
@@ -157,7 +151,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   const totalCount =
     typeof totalCountProp === 'number'
       ? totalCountProp
-      : data.reduce((sum, day) => sum + day.count, 0);
+      : data.reduce((sum, activity) => sum + activity.count, 0);
 
   const theme = getTheme(themeProp, color);
   const labels = Object.assign({}, DEFAULT_LABELS, labelsProp);
@@ -168,13 +162,6 @@ const ActivityCalendar: FunctionComponent<Props> = ({
       width: weeks.length * (blockSize + blockMargin) - blockMargin,
       height: textHeight + (blockSize + blockMargin) * 7 - blockMargin,
     };
-  }
-
-  function getTooltipMessage(activity: Activity) {
-    const date = format(parseISO(activity.date), dateFormat);
-    const tooltip = labels.tooltip ?? DEFAULT_LABELS.tooltip;
-
-    return tooltip.replaceAll('{{count}}', String(activity.count)).replaceAll('{{date}}', date);
   }
 
   function getEventHandlers(activity: Activity): SVGRectEventHandler {
@@ -189,64 +176,11 @@ const ActivityCalendar: FunctionComponent<Props> = ({
     );
   }
 
-  function renderLabels() {
-    const style = {
-      fontSize,
-    };
-
-    if (!showWeekdayLabels && hideMonthLabels) {
-      return null;
-    }
-
-    return (
-      <>
-        {showWeekdayLabels && (
-          <g className={getClassName('legend-weekday')} style={style}>
-            {weeks[0].map((day, index) => {
-              if (index % 2 === 0) {
-                return null;
-              }
-
-              const dayIndex = (index + weekStart) % 7;
-
-              return (
-                <text
-                  x={-2 * blockMargin}
-                  y={textHeight + (fontSize / 2 + blockMargin) + (blockSize + blockMargin) * index}
-                  textAnchor="end"
-                  key={index}
-                >
-                  {labels.weekdays ? labels.weekdays[dayIndex] : DEFAULT_WEEKDAY_LABELS[dayIndex]}
-                </text>
-              );
-            })}
-          </g>
-        )}
-        {!hideMonthLabels && (
-          <g className={getClassName('legend-month')} style={style}>
-            {getMonthLabels(weeks, labels.months).map(({ text, x }, index, labels) => {
-              // Skip the first month label if there's not enough space to the next one
-              if (index === 0 && labels[1] && labels[1].x - x <= MIN_DISTANCE_MONTH_LABELS) {
-                return null;
-              }
-
-              return (
-                <text x={(blockSize + blockMargin) * x} dominantBaseline="hanging" key={x}>
-                  {text}
-                </text>
-              );
-            })}
-          </g>
-        )}
-      </>
-    );
-  }
-
-  function renderBlocks() {
+  function renderCalendar() {
     return weeks
       .map((week, weekIndex) =>
-        week.map((day, dayIndex) => {
-          if (!day) {
+        week.map((activity, dayIndex) => {
+          if (!activity) {
             return null;
           }
 
@@ -257,22 +191,25 @@ const ActivityCalendar: FunctionComponent<Props> = ({
               }
             : undefined;
 
-          return (
+          const block = (
             <rect
-              {...getEventHandlers(day)}
+              {...getEventHandlers(activity)}
               x={0}
               y={textHeight + (blockSize + blockMargin) * dayIndex}
               width={blockSize}
               height={blockSize}
-              fill={theme[`level${day.level}` as keyof Theme]}
+              fill={theme[`level${activity.level}` as keyof Theme]}
               rx={blockRadius}
               ry={blockRadius}
               className={styles.block}
-              data-date={day.date}
-              data-tip={children ? getTooltipMessage(day) : undefined}
-              key={day.date}
               style={style}
             />
+          );
+
+          return (
+            <Fragment key={activity.date}>
+              {renderBlock ? renderBlock(block, activity) : block}
+            </Fragment>
           );
         }),
       )
@@ -329,6 +266,59 @@ const ActivityCalendar: FunctionComponent<Props> = ({
     );
   }
 
+  function renderLabels() {
+    const style = {
+      fontSize,
+    };
+
+    if (!showWeekdayLabels && hideMonthLabels) {
+      return null;
+    }
+
+    return (
+      <>
+        {showWeekdayLabels && (
+          <g className={getClassName('legend-weekday')} style={style}>
+            {weeks[0].map((day, index) => {
+              if (index % 2 === 0) {
+                return null;
+              }
+
+              const dayIndex = (index + weekStart) % 7;
+
+              return (
+                <text
+                  x={-2 * blockMargin}
+                  y={textHeight + (fontSize / 2 + blockMargin) + (blockSize + blockMargin) * index}
+                  textAnchor="end"
+                  key={index}
+                >
+                  {labels.weekdays ? labels.weekdays[dayIndex] : DEFAULT_WEEKDAY_LABELS[dayIndex]}
+                </text>
+              );
+            })}
+          </g>
+        )}
+        {!hideMonthLabels && (
+          <g className={getClassName('legend-month')} style={style}>
+            {getMonthLabels(weeks, labels.months).map(({ text, x }, index, labels) => {
+              // Skip the first month label if there's not enough space to the next one
+              if (index === 0 && labels[1] && labels[1].x - x <= MIN_DISTANCE_MONTH_LABELS) {
+                return null;
+              }
+
+              return (
+                <text x={(blockSize + blockMargin) * x} dominantBaseline="hanging" key={x}>
+                  {text}
+                </text>
+              );
+            })}
+          </g>
+        )}
+      </>
+    );
+  }
+
   const { width, height } = getDimensions();
   const additionalStyles = {
     maxWidth: width,
@@ -346,10 +336,9 @@ const ActivityCalendar: FunctionComponent<Props> = ({
         className={getClassName('calendar', styles.calendar)}
       >
         {!loading && renderLabels()}
-        {renderBlocks()}
+        {renderCalendar()}
       </svg>
       {renderFooter()}
-      {children}
     </article>
   );
 };

@@ -1,4 +1,10 @@
-import React, { DOMAttributes } from 'react';
+import React, {
+  DOMAttributes,
+  HTMLAttributes,
+  JSXElementConstructor,
+  ReactElement,
+  SVGAttributes,
+} from 'react';
 
 export type Level = 0 | 1 | 2 | 3 | 4;
 
@@ -14,7 +20,6 @@ export type Labels = Partial<{
   readonly months: Array<string>;
   readonly weekdays: Array<string>;
   readonly totalCount: string;
-  readonly tooltip: string;
   readonly legend: Partial<{
     readonly less: string;
     readonly more: string;
@@ -28,6 +33,11 @@ export interface Theme {
   readonly level1: string;
   readonly level0: string;
 }
+
+
+interface BlockAttributes extends SVGAttributes<SVGRectElement>, HTMLAttributes<SVGRectElement> {}
+export type BlockElement = ReactElement<BlockAttributes, JSXElementConstructor<SVGRectElement>>;
+
 
 export type SVGRectEventHandler = Omit<
   DOMAttributes<SVGRectElement>,

@@ -1,22 +1,13 @@
-import React, { CSSProperties } from 'react';
-import { Story, Meta } from '@storybook/react';
-import ReactTooltip from 'react-tooltip';
+import React, { cloneElement } from 'react';
+import { Meta, Story } from '@storybook/react';
 import { eachDayOfInterval, formatISO, lastDayOfMonth } from 'date-fns';
+import { Tooltip as MuiTooltip } from '@mui/material';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
 
 import ActivityCalendar, { Props } from './ActivityCalendar';
 import { Activity, Level, Theme } from '../types';
 import { DEFAULT_MONTH_LABELS, DEFAULT_WEEKDAY_LABELS } from '../util';
-
-const styles: {
-  [elem: string]: CSSProperties;
-} = {
-  code: {
-    fontSize: '0.9rem',
-  },
-  p: {
-    maxWidth: '68ch',
-  },
-};
 
 export default {
   title: 'Activity Calendar',
@@ -39,9 +30,6 @@ export default {
     },
     blockSize: {
       control: { type: 'range', min: 4, max: 100, step: 2 },
-    },
-    children: {
-      control: false,
     },
     color: {
       control: 'color',
@@ -69,14 +57,77 @@ export default {
 
 const Template: Story<Props> = args => <ActivityCalendar {...args} />;
 
+const TemplateTooltips: Story<Props> = args => (
+  <>
+    <h1>Tooltip Examples</h1>
+    <p>
+      To add a 3rd party tooltip component to the calendar you can use the <code>renderBlock</code>{' '}
+      property.
+    </p>
+
+    <h2>
+      <a href="https://mui.com/material-ui/react-tooltip/">Material UI</a>
+    </h2>
+    <p>
+      In the simplest case, each block only needs to be wrapped with a <code>&lt;Tooltip/&gt;</code>{' '}
+      component, as shown here for Material UI:
+    </p>
+    <pre>
+      {`<ActivityCalendar
+  data={myData}
+  renderBlock={(block, activity) => (
+    <MuiTooltip title={\`\${activity.count} activities on \${activity.date}\`}>
+      {block}
+    </MuiTooltip>
+  )}
+/>`}
+    </pre>
+    <ActivityCalendar
+      {...args}
+      renderBlock={(block, activity) => (
+        <MuiTooltip title={`${activity.count} activities on ${activity.date}`}>{block}</MuiTooltip>
+      )}
+    />
+
+    <h2>
+      <a href="https://github.com/ReactTooltip/react-tooltip">react-tooltip</a>
+    </h2>
+    <p>
+      Some libraries, like <code>react-tooltip</code>, require that additional props are passed to
+      the block elements. You can achieve that using the <code>React.cloneElement</code> function:
+    </p>
+    <pre>
+      {`<ActivityCalendar
+  data={myData}
+  renderBlock={(block, activity) =>
+    React.cloneElement(block, {
+      'data-tooltip-id': 'react-tooltip',
+      'data-tooltip-html': \`\${activity.count} activities on \${activity.date}\`,
+    })
+  }
+/>
+<ReactTooltip id="react-tooltip" />`}
+    </pre>
+    <ActivityCalendar
+      {...args}
+      renderBlock={(block, activity) =>
+        cloneElement(block, {
+          'data-tooltip-id': 'react-tooltip',
+          'data-tooltip-html': `${activity.count} activities on ${activity.date}`,
+        })
+      }
+    />
+    <ReactTooltip id="react-tooltip" />
+  </>
+);
+
 const TemplateLocalized: Story<Props> = args => (
   <>
     <h1>Localization</h1>
     <p>(Example in German)</p>
     <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
-    <pre style={styles.code}>
-      {`
-// Shape of \`labels\` property (default values).
+    <pre>
+      {`// Shape of \`labels\` property (default values).
 // All properties are optional.
 
 const labels = {
@@ -117,21 +168,20 @@ const labels = {
 const TemplateEventHandlers: Story<Props> = args => (
   <>
     <h1>Event Handlers</h1>
-    <p style={styles.p}>
-      You can register event handlers for the SVG <code style={styles.code}>&lt;rect/&gt;</code>{' '}
-      elements that are used to render the calendar days. This way you can control the behaviour on
-      click, hover, etc.
+    <p>
+      You can register event handlers for the SVG <code>&lt;rect/&gt;</code> elements that are used
+      to render the calendar days. This way you can control the behaviour on click, hover, etc.
     </p>
-    <p style={styles.p}>
+    <p>
       All event listeners have the following signature, so you are able to use the shown data inside
       the handler:
     </p>
-    <p style={styles.p}>
-      <code style={styles.code}>(event: React.SyntheticEvent) =&gt; (data: Day) =&gt; void</code>
+    <p>
+      <code>(event: React.SyntheticEvent) =&gt; (data: Day) =&gt; void</code>
     </p>
-    <p style={styles.p}>Click on any block below to see it in action:</p>
+    <p>Click on any block below to see it in action:</p>
     <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
-    <pre style={styles.code}>
+    <pre>
       {`
 <ActivityCalendar 
   data={data}  
@@ -160,7 +210,6 @@ const labels = {
   months: DEFAULT_MONTH_LABELS,
   weekdays: DEFAULT_WEEKDAY_LABELS,
   totalCount: '{{count}} activities in {{year}}',
-  tooltip: '<strong>{{count}} activities</strong> on {{date}}',
   legend: {
     less: 'Less',
     more: 'More',
@@ -218,11 +267,9 @@ WithMondayAsWeekStart.args = {
   labels,
 };
 
-export const WithTooltips = Template.bind({});
+export const WithTooltips = TemplateTooltips.bind({});
 WithTooltips.args = {
   data: generateData(),
-  children: <ReactTooltip html />,
-  labels,
 };
 
 export const WithoutLabels = Template.bind({});
