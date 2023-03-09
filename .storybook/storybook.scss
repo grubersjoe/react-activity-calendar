@@ -29,7 +29,7 @@ p {
 }
 
 a {
-  color: #225662;
+  color: inherit;
 }
 
 code,
@@ -49,4 +49,19 @@ pre {
   padding: 1em 1.25em;
   background-color: hsl(210, 50%, 98%);
   border: solid 1px hsl(210, 50%, 94%);
+}
+
+.dark {
+  body {
+    color: #fff;
+  }
+
+  a {
+    color: hsl(191, 11%, 81%);
+  }
+
+  pre {
+    background-color: hsl(0, 0%, 24%);
+    border: solid 1px hsl(0, 0%, 28%);
+  }
 }
