@@ -1,4 +1,3 @@
-import color, { ColorInput } from 'tinycolor2';
 import type { Day as WeekDay } from 'date-fns';
 import {
   differenceInCalendarDays,
@@ -10,6 +9,7 @@ import {
   parseISO,
   subWeeks,
 } from 'date-fns';
+import color, { ColorInput } from 'tinycolor2';
 
 import { Activity, Theme, Week } from './types';
 

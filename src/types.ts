@@ -34,10 +34,8 @@ export interface Theme {
   readonly level0: string;
 }
 
-
 interface BlockAttributes extends SVGAttributes<SVGRectElement>, HTMLAttributes<SVGRectElement> {}
 export type BlockElement = ReactElement<BlockAttributes, JSXElementConstructor<SVGRectElement>>;
-
 
 export type SVGRectEventHandler = Omit<
   DOMAttributes<SVGRectElement>,

@@ -1,13 +1,13 @@
-import React, { cloneElement } from 'react';
+import { Tooltip as MuiTooltip } from '@mui/material';
 import { Meta, Story } from '@storybook/react';
 import { eachDayOfInterval, formatISO, lastDayOfMonth } from 'date-fns';
-import { Tooltip as MuiTooltip } from '@mui/material';
+import React, { cloneElement } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
-import ActivityCalendar, { Props } from './ActivityCalendar';
 import { Activity, Level, Theme } from '../types';
 import { DEFAULT_MONTH_LABELS, DEFAULT_WEEKDAY_LABELS } from '../util';
+import ActivityCalendar, { Props } from './ActivityCalendar';
 
 export default {
   title: 'Activity Calendar',
