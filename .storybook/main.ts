@@ -1,18 +1,46 @@
-import { StorybookViteConfig } from '@storybook/builder-vite';
+import type { StorybookConfig } from '@storybook/core-common';
 
-const config: StorybookViteConfig = {
+const config: StorybookConfig = {
+  addons: ['@storybook/addon-essentials'],
   core: {
-    builder: '@storybook/builder-vite',
+    builder: 'webpack5',
   },
-  async viteFinal(config) {
-    return config;
-  },
-  addons: ['@storybook/addon-links', '@storybook/addon-essentials'],
   framework: '@storybook/react',
   stories: ['../src/**/*.stories.@(ts|tsx)'],
   typescript: {
     reactDocgen: 'react-docgen',
   },
+  webpackFinal: async config => {
+    if (config?.module?.rules) {
+      // Replace shipped CSS rule to support CSS modules and SCSS
+      config.module.rules = config.module.rules.map(rule => {
+        if (rule.test?.toString() === '/\\.css$/') {
+          return {
+            test: /\.(c|sc|sa)ss$/,
+            sideEffects: true,
+            use: [
+              'style-loader',
+              {
+                loader: 'css-loader',
+                options: {
+                  importLoaders: 1,
+                  modules: {
+                    auto: true, // Auto-detect CSS modules based on filename (.module.css)
+                    localIdentName: '[hash:base64]',
+                  },
+                },
+              },
+              'sass-loader',
+            ],
+          };
+        }
+
+        return rule;
+      });
+    }
+
+    return config;
+  },
 };
 
-export default config;
+module.exports = config;
