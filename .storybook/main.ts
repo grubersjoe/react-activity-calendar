@@ -1,7 +1,7 @@
 import type { StorybookConfig } from '@storybook/core-common';
 
 const config: StorybookConfig = {
-  addons: ['@storybook/addon-essentials'],
+  addons: ['@storybook/addon-essentials', 'storybook-dark-mode'],
   core: {
     builder: 'webpack5',
   },
