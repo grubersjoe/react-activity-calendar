@@ -8,5 +8,7 @@ LICENSE
 *.lock
 *.ico
 *.png
+*.mjs
+*.d.ts
 
 **/*/build/**/*

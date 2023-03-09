@@ -1,9 +1,7 @@
-import React, { CSSProperties, Fragment, FunctionComponent, ReactElement } from 'react';
-import tinycolor, { ColorInput } from 'tinycolor2';
 import type { Day as WeekDay } from 'date-fns';
 import { getYear, parseISO } from 'date-fns';
-
-import styles from './styles.module.css';
+import React, { CSSProperties, Fragment, FunctionComponent, ReactElement } from 'react';
+import tinycolor, { ColorInput } from 'tinycolor2';
 
 import {
   Activity,
@@ -14,18 +12,18 @@ import {
   SVGRectEventHandler,
   Theme,
 } from '../types';
-
 import {
   DEFAULT_LABELS,
   DEFAULT_WEEKDAY_LABELS,
+  MIN_DISTANCE_MONTH_LABELS,
+  NAMESPACE,
   generateEmptyData,
   getClassName,
   getMonthLabels,
   getTheme,
   groupByWeeks,
-  MIN_DISTANCE_MONTH_LABELS,
-  NAMESPACE,
 } from '../util';
+import styles from './styles.module.css';
 
 export interface Props {
   /**
