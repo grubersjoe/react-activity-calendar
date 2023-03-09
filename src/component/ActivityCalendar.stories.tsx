@@ -34,8 +34,14 @@ export default {
     color: {
       control: 'color',
     },
+    eventHandlers: {
+      control: false,
+    },
     fontSize: {
       control: { type: 'range', min: 6, max: 32, step: 2 },
+    },
+    style: {
+      control: false,
     },
     weekStart: {
       options: [0, 1, 2, 3, 4, 5, 6],
