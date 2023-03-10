@@ -1,8 +1,9 @@
+import chroma from 'chroma-js';
 import type { Day as WeekDay } from 'date-fns';
 import { getYear, parseISO } from 'date-fns';
 import React, { CSSProperties, Fragment, FunctionComponent, ReactElement } from 'react';
-import tinycolor, { ColorInput } from 'tinycolor2';
 
+import { useColorScheme } from '../hooks/useColorScheme';
 import {
   Activity,
   BlockElement,
@@ -10,17 +11,17 @@ import {
   Labels,
   ReactEvent,
   SVGRectEventHandler,
-  Theme,
+  ThemeInput,
 } from '../types';
 import {
   DEFAULT_LABELS,
   DEFAULT_WEEKDAY_LABELS,
   MIN_DISTANCE_MONTH_LABELS,
   NAMESPACE,
+  createTheme,
   generateEmptyData,
   getClassName,
   getMonthLabels,
-  getTheme,
   groupByWeeks,
 } from '../util';
 import styles from './styles.module.css';
@@ -56,13 +57,14 @@ export interface Props {
    */
   blockSize?: number;
   /**
-   * Base color to compute graph intensity hues (the darkest color). Any valid CSS color is accepted
+   * Use a specific color scheme instead of the system one. `light` is the default.
    */
-  color?: ColorInput;
+  colorScheme?: 'light' | 'dark';
   /**
    * Event handlers to register for the SVG `<rect>` elements that are used to render the calendar days. Handler signature: `event => activity => void`
    */
   eventHandlers?: EventHandlerMap;
+
   /**
    * Font size for text in pixels.
    */
@@ -104,7 +106,7 @@ export interface Props {
   /**
    * An object specifying all theme colors explicitly`.
    */
-  theme?: Theme;
+  theme?: ThemeInput;
   /**
    * Overwrite the total activity count.
    */
@@ -120,21 +122,22 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   blockMargin = 4,
   blockRadius = 2,
   blockSize = 12,
-  color = undefined,
   eventHandlers = {},
   fontSize = 14,
   hideColorLegend = false,
   hideMonthLabels = false,
   hideTotalCount = false,
-  labels: labelsProp,
   loading = false,
   renderBlock = undefined,
   showWeekdayLabels = false,
   style = {},
-  theme: themeProp,
   totalCount: totalCountProp,
   weekStart = 0, // Sunday
+  ...props
 }: Props) => {
+  const systemColorScheme = useColorScheme();
+  const colorScheme = props.colorScheme ?? systemColorScheme;
+
   if (loading) {
     data = generateEmptyData();
   }
@@ -151,8 +154,8 @@ const ActivityCalendar: FunctionComponent<Props> = ({
       ? totalCountProp
       : data.reduce((sum, activity) => sum + activity.count, 0);
 
-  const theme = getTheme(themeProp, color);
-  const labels = Object.assign({}, DEFAULT_LABELS, labelsProp);
+  const theme = createTheme(props.theme);
+  const labels = Object.assign({}, DEFAULT_LABELS, props.labels);
   const textHeight = hideMonthLabels ? 0 : fontSize + 2 * blockMargin;
 
   function getDimensions() {
@@ -184,7 +187,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
 
           const style = loading
             ? {
-                animation: `${styles.loadingAnimation} 1.5s ease-in-out infinite`,
+                animation: `${styles.loadingAnimation} 1.75s ease-in-out infinite`,
                 animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
               }
             : undefined;
@@ -196,10 +199,9 @@ const ActivityCalendar: FunctionComponent<Props> = ({
               y={textHeight + (blockSize + blockMargin) * dayIndex}
               width={blockSize}
               height={blockSize}
-              fill={theme[`level${activity.level}` as keyof Theme]}
+              fill={theme[colorScheme][activity.level]}
               rx={blockRadius}
               ry={blockRadius}
-              className={styles.block}
               style={style}
             />
           );
@@ -246,12 +248,12 @@ const ActivityCalendar: FunctionComponent<Props> = ({
             <span style={{ marginRight: '0.4em' }}>{labels?.legend?.less ?? 'Less'}</span>
             {Array(5)
               .fill(undefined)
-              .map((_, index) => (
-                <svg width={blockSize} height={blockSize} key={index}>
+              .map((_, level) => (
+                <svg width={blockSize} height={blockSize} key={level}>
                   <rect
                     width={blockSize}
                     height={blockSize}
-                    fill={theme[`level${index}` as keyof Theme]}
+                    fill={theme[colorScheme][level]}
                     rx={blockRadius}
                     ry={blockRadius}
                   />
@@ -321,12 +323,18 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   const additionalStyles = {
     maxWidth: width,
     // Required for correct colors in CSS loading animation
-    [`--${NAMESPACE}-loading`]: theme.level0,
-    [`--${NAMESPACE}-loading-active`]: tinycolor(theme.level0).darken(8).toString(),
+    [`--${NAMESPACE}-loading`]: theme[colorScheme][0],
+    [`--${NAMESPACE}-loading-active`]:
+      colorScheme === 'light'
+        ? chroma(theme[colorScheme][0]).darken(0.3).hex()
+        : chroma(theme[colorScheme][0]).brighten(0.25).hex(),
   };
 
   return (
-    <article className={NAMESPACE} style={{ ...style, ...additionalStyles }}>
+    <article
+      className={`${NAMESPACE} ${styles.container}`}
+      style={{ ...style, ...additionalStyles }}
+    >
       <svg
         width={width}
         height={height}
