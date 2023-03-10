@@ -1,3 +1,9 @@
+.container rect {
+  stroke: rgba(0, 0, 0, 0.08);
+  stroke-width: 1px;
+  shape-rendering: geometricPrecision;
+}
+
 .calendar {
   display: block;
   max-width: 100%;
@@ -7,12 +13,6 @@
 
 .calendar text {
   fill: currentColor;
-}
-
-.block {
-  stroke: rgba(0, 0, 0, 0.1);
-  stroke-width: 1px;
-  shape-rendering: geometricPrecision;
 }
 
 .footer {
@@ -36,5 +36,11 @@
   }
   100% {
     fill: var(--react-activity-calendar-loading);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .container rect {
+    stroke: rgba(255, 255, 255, 0.04);
   }
 }

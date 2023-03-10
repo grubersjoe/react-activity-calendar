@@ -1,3 +1,4 @@
+import chroma from 'chroma-js';
 import type { Day as WeekDay } from 'date-fns';
 import {
   differenceInCalendarDays,
@@ -9,14 +10,16 @@ import {
   parseISO,
   subWeeks,
 } from 'date-fns';
-import color, { ColorInput } from 'tinycolor2';
 
-import { Activity, Theme, Week } from './types';
+import { Activity, Color, ColorScale, Theme, ThemeInput, Week } from './types';
 
 export const NAMESPACE = 'react-activity-calendar';
 export const MIN_DISTANCE_MONTH_LABELS = 2;
 
-const DEFAULT_THEME = createCalendarTheme('#042a33');
+const defaultTheme = createTheme({
+  light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
+  dark: ['hsl(0, 0%, 20%)', 'hsl(0, 0%, 94%)'],
+});
 
 interface Label {
   x: number;
@@ -117,35 +120,33 @@ export function getMonthLabels(
     });
 }
 
-export function createCalendarTheme(
-  baseColor: ColorInput,
-  emptyColor = color('white').darken(8).toHslString(),
-): Theme {
-  const base = color(baseColor);
+export function createTheme(theme?: ThemeInput): Theme {
+  if (typeof theme === 'object') {
+    if (theme.light === undefined || theme.dark === undefined) {
+      throw new Error(
+        'The theme must contain the fields "light" and "dark" with a tuple of exactly 2 or 5 colors respectively.',
+      );
+    }
 
-  if (!base.isValid()) {
-    return DEFAULT_THEME;
+    return {
+      light: isColorScale(theme.light) ? theme.light : createColorScale(theme.light),
+      dark: isColorScale(theme.dark) ? theme.dark : createColorScale(theme.dark),
+    };
   }
 
-  return {
-    level4: base.setAlpha(0.92).toHslString(),
-    level3: base.setAlpha(0.76).toHslString(),
-    level2: base.setAlpha(0.6).toHslString(),
-    level1: base.setAlpha(0.44).toHslString(),
-    level0: emptyColor,
-  };
+  return defaultTheme;
 }
 
-export function getTheme(theme?: Theme, color?: ColorInput): Theme {
-  if (theme) {
-    return Object.assign({}, DEFAULT_THEME, theme);
+function isColorScale(input: Array<unknown>): input is ColorScale {
+  return input.length === 5 && input.every(color => chroma.valid(color));
+}
+
+function createColorScale(colors: [min: Color, max: Color]): ColorScale {
+  if (colors.length !== 2) {
+    throw new Error('Exactly two colors must be passed to calculate the color scale.');
   }
 
-  if (color) {
-    return createCalendarTheme(color);
-  }
-
-  return DEFAULT_THEME;
+  return chroma.scale(colors).mode('lch').colors(5) as ColorScale;
 }
 
 export function getClassName(name: string, styles?: string): string {

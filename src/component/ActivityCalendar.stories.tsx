@@ -4,14 +4,26 @@ import { eachDayOfInterval, formatISO, lastDayOfMonth } from 'date-fns';
 import React, { cloneElement } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
+import { useDarkMode } from 'storybook-dark-mode';
 
 import { Activity, Level, Theme } from '../types';
 import { DEFAULT_MONTH_LABELS, DEFAULT_WEEKDAY_LABELS } from '../util';
 import ActivityCalendar, { Props } from './ActivityCalendar';
 
-export default {
+const meta: Meta = {
   title: 'Activity Calendar',
   component: ActivityCalendar,
+  decorators: [
+    (Story, { args, viewMode }) => {
+      const darkMode = useDarkMode();
+
+      if (viewMode === 'story') {
+        args.colorScheme = darkMode ? 'dark' : 'light';
+      }
+
+      return <Story />;
+    },
+  ],
   parameters: {
     controls: {
       sort: 'requiredFirst',
@@ -31,8 +43,8 @@ export default {
     blockSize: {
       control: { type: 'range', min: 4, max: 100, step: 2 },
     },
-    color: {
-      control: 'color',
+    colorScheme: {
+      control: false,
     },
     eventHandlers: {
       control: false,
@@ -41,6 +53,9 @@ export default {
       control: { type: 'range', min: 6, max: 32, step: 2 },
     },
     style: {
+      control: false,
+    },
+    theme: {
       control: false,
     },
     weekStart: {
@@ -59,7 +74,9 @@ export default {
       },
     },
   },
-} as Meta;
+};
+
+export default meta;
 
 const Template: Story<Props> = args => <ActivityCalendar {...args} />;
 
@@ -70,7 +87,6 @@ const TemplateTooltips: Story<Props> = args => (
       To add a 3rd party tooltip component to the calendar you can use the <code>renderBlock</code>{' '}
       property.
     </p>
-
     <h2>
       <a href="https://mui.com/material-ui/react-tooltip/">Material UI</a>
     </h2>
@@ -94,7 +110,6 @@ const TemplateTooltips: Story<Props> = args => (
         <MuiTooltip title={`${activity.count} activities on ${activity.date}`}>{block}</MuiTooltip>
       )}
     />
-
     <h2>
       <a href="https://github.com/ReactTooltip/react-tooltip">react-tooltip</a>
     </h2>
@@ -204,12 +219,9 @@ const TemplateEventHandlers: Story<Props> = args => (
   </>
 );
 
-const theme: Theme = {
-  level0: '#F0F0F0',
-  level1: '#C4EDDE',
-  level2: '#7AC7C4',
-  level3: '#F73859',
-  level4: '#384259',
+const explicitTheme: Theme = {
+  light: ['#f0f0f0', '#c4edde', '#7ac7c4', '#f73859', '#384259'],
+  dark: ['hsl(0, 0%, 22%)', '#4D455D', '#7DB9B6', '#F5E9CF', '#E96479'],
 };
 
 const labels = {
@@ -235,34 +247,31 @@ Loading.args = {
   labels,
 };
 
-export const SpecificDateRange = Template.bind({});
-SpecificDateRange.args = {
-  data: generateData(2, 7),
-  labels,
-};
-
-export const WithColor = Template.bind({});
-WithColor.args = {
+export const WithCalculatedTheme = Template.bind({});
+WithCalculatedTheme.args = {
   data: generateData(),
-  color: '#0f6499',
+  theme: {
+    light: ['hsl(0, 0%, 92%)', 'hsl(225, 42%, 38%)'],
+    dark: ['hsl(0, 0%, 22%)', 'hsl(225,92%,77%)'],
+  },
   labels,
 };
 
-export const ExplicitTheme = Template.bind({});
-ExplicitTheme.args = {
+export const WithExplicitColorTheme = Template.bind({});
+WithExplicitColorTheme.args = {
   data: generateData(),
-  theme,
+  theme: explicitTheme,
   labels,
 };
 
-export const CustomizedLook = Template.bind({});
-CustomizedLook.args = {
+export const WithCustomizedLook = Template.bind({});
+WithCustomizedLook.args = {
   data: generateData(),
   blockSize: 14,
   blockRadius: 7,
   blockMargin: 5,
   fontSize: 16,
-  theme,
+  theme: explicitTheme,
   labels,
 };
 
@@ -270,6 +279,12 @@ export const WithMondayAsWeekStart = Template.bind({});
 WithMondayAsWeekStart.args = {
   data: generateData(),
   weekStart: 1,
+  labels,
+};
+
+export const WithSpecificDateRange = Template.bind({});
+WithSpecificDateRange.args = {
+  data: generateData(2, 7),
   labels,
 };
 

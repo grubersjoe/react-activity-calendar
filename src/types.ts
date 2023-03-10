@@ -1,3 +1,4 @@
+import chroma from 'chroma-js';
 import React, {
   DOMAttributes,
   HTMLAttributes,
@@ -17,21 +18,33 @@ export interface Activity {
 export type Week = Array<Activity | undefined>;
 
 export type Labels = Partial<{
-  readonly months: Array<string>;
-  readonly weekdays: Array<string>;
-  readonly totalCount: string;
-  readonly legend: Partial<{
-    readonly less: string;
-    readonly more: string;
+  months: Array<string>;
+  weekdays: Array<string>;
+  totalCount: string;
+  legend: Partial<{
+    less: string;
+    more: string;
   }>;
 }>;
 
+export type Color = string | chroma.Color;
+
+export type ColorScale = [
+  level0: string,
+  level1: string,
+  level2: string,
+  level3: string,
+  level4: string,
+];
+
 export interface Theme {
-  readonly level4: string;
-  readonly level3: string;
-  readonly level2: string;
-  readonly level1: string;
-  readonly level0: string;
+  light: ColorScale;
+  dark: ColorScale;
+}
+
+export interface ThemeInput {
+  light: ColorScale | [min: Color, max: Color];
+  dark: ColorScale | [min: Color, max: Color];
 }
 
 interface BlockAttributes extends SVGAttributes<SVGRectElement>, HTMLAttributes<SVGRectElement> {}

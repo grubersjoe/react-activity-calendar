@@ -54,6 +54,7 @@ pre {
 .dark {
   body {
     color: #fff;
+    background: #222;
   }
 
   a {
@@ -61,7 +62,7 @@ pre {
   }
 
   pre {
-    background-color: hsl(0, 0%, 24%);
-    border: solid 1px hsl(0, 0%, 28%);
+    background-color: hsl(0, 0%, 18%);
+    border: solid 1px hsl(0, 0%, 22%);
   }
 }
