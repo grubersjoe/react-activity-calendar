@@ -262,7 +262,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
               ry={blockRadius}
               className={styles.block}
               data-date={day.date}
-              data-tip={children ? getTooltipMessage(day) : undefined}
+              data-tip-html={children ? getTooltipMessage(day) : undefined}
               key={day.date}
               style={style}
             />
