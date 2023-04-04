@@ -1,5 +1,5 @@
 import { Tooltip as MuiTooltip } from '@mui/material';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react';
 import { eachDayOfInterval, formatISO, lastDayOfMonth } from 'date-fns';
 import React, { cloneElement } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
@@ -10,7 +10,9 @@ import { Activity, Level, Theme } from '../types';
 import { DEFAULT_MONTH_LABELS, DEFAULT_WEEKDAY_LABELS } from '../util';
 import ActivityCalendar, { Props } from './ActivityCalendar';
 
-const meta: Meta = {
+type Story = StoryObj<Props>;
+
+const meta: Meta<Props> = {
   title: 'Activity Calendar',
   component: ActivityCalendar,
   decorators: [
@@ -76,11 +78,7 @@ const meta: Meta = {
   },
 };
 
-export default meta;
-
-const Template: Story<Props> = args => <ActivityCalendar {...args} />;
-
-const TemplateTooltips: Story<Props> = args => (
+const TemplateTooltips: StoryFn<Props> = args => (
   <>
     <h1>Tooltip Examples</h1>
     <p>
@@ -142,7 +140,7 @@ const TemplateTooltips: Story<Props> = args => (
   </>
 );
 
-const TemplateLocalized: Story<Props> = args => (
+const TemplateLocalized: StoryFn<Props> = args => (
   <>
     <h1>Localization</h1>
     <p>(Example in German)</p>
@@ -186,7 +184,7 @@ const labels = {
   </>
 );
 
-const TemplateEventHandlers: Story<Props> = args => (
+const TemplateEventHandlers: StoryFn<Props> = args => (
   <>
     <h1>Event Handlers</h1>
     <p>
@@ -197,14 +195,13 @@ const TemplateEventHandlers: Story<Props> = args => (
       All event listeners have the following signature, so you are able to use the shown data inside
       the handler:
     </p>
-    <p>
+    <pre>
       <code>(event: React.SyntheticEvent) =&gt; (data: Day) =&gt; void</code>
-    </p>
+    </pre>
     <p>Click on any block below to see it in action:</p>
     <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
     <pre>
-      {`
-<ActivityCalendar 
+      {`<ActivityCalendar 
   data={data}  
   eventHandlers: {
     onClick: event => activity => {
@@ -218,6 +215,8 @@ const TemplateEventHandlers: Story<Props> = args => (
     </pre>
   </>
 );
+
+export default meta;
 
 const explicitTheme: Theme = {
   light: ['#f0f0f0', '#c4edde', '#7ac7c4', '#f73859', '#384259'],
@@ -234,104 +233,122 @@ const labels = {
   },
 };
 
-export const Default = Template.bind({});
-Default.args = {
-  data: generateData(),
-  labels,
-};
-
-export const Loading = Template.bind({});
-Loading.args = {
-  loading: true,
-  data: generateData(),
-  labels,
-};
-
-export const WithCalculatedTheme = Template.bind({});
-WithCalculatedTheme.args = {
-  data: generateData(),
-  theme: {
-    light: ['hsl(0, 0%, 92%)', 'hsl(225, 42%, 38%)'],
-    dark: ['hsl(0, 0%, 22%)', 'hsl(225,92%,77%)'],
+export const Default: Story = {
+  args: {
+    data: generateData(),
+    labels,
   },
-  labels,
 };
 
-export const WithExplicitColorTheme = Template.bind({});
-WithExplicitColorTheme.args = {
-  data: generateData(),
-  theme: explicitTheme,
-  labels,
+export const Loading: Story = {
+  args: {
+    loading: true,
+    data: generateData(),
+    labels,
+  },
 };
 
-export const WithCustomizedLook = Template.bind({});
-WithCustomizedLook.args = {
-  data: generateData(),
-  blockSize: 14,
-  blockRadius: 7,
-  blockMargin: 5,
-  fontSize: 16,
-  theme: explicitTheme,
-  labels,
+export const WithCalculatedTheme: Story = {
+  args: {
+    data: generateData(),
+    theme: {
+      light: ['hsl(0, 0%, 92%)', 'hsl(225, 42%, 38%)'],
+      dark: ['hsl(0, 0%, 22%)', 'hsl(225,92%,77%)'],
+    },
+    labels,
+  },
 };
 
-export const WithMondayAsWeekStart = Template.bind({});
-WithMondayAsWeekStart.args = {
-  data: generateData(),
-  weekStart: 1,
-  labels,
+export const WithExplicitTheme: Story = {
+  args: {
+    data: generateData(),
+    theme: explicitTheme,
+    labels,
+  },
 };
 
-export const WithSpecificDateRange = Template.bind({});
-WithSpecificDateRange.args = {
-  data: generateData(2, 7),
-  labels,
+export const WithCustomizedLook: Story = {
+  args: {
+    data: generateData(),
+    blockSize: 14,
+    blockRadius: 7,
+    blockMargin: 5,
+    fontSize: 16,
+    theme: explicitTheme,
+    labels,
+  },
 };
 
-export const WithTooltips = TemplateTooltips.bind({});
-WithTooltips.args = {
-  data: generateData(),
+export const WithMondayAsWeekStart: Story = {
+  args: {
+    data: generateData(),
+    weekStart: 1,
+    labels,
+  },
 };
 
-export const WithoutLabels = Template.bind({});
-WithoutLabels.args = {
-  data: generateData(),
-  hideMonthLabels: true,
-  hideColorLegend: true,
-  hideTotalCount: true,
-  labels,
+export const WithSpecificDateRange: Story = {
+  args: {
+    data: generateData(2, 7),
+    labels,
+  },
 };
 
-export const WithDayLabels = Template.bind({});
-WithDayLabels.args = {
-  data: generateData(),
-  showWeekdayLabels: true,
-  labels,
+export const WithTooltips: Story = {
+  render: TemplateTooltips,
+
+  args: {
+    data: generateData(),
+  },
 };
 
-export const WithLocalizedLabels = TemplateLocalized.bind({});
-WithLocalizedLabels.args = {
-  data: generateData(),
-  showWeekdayLabels: true,
-  labels: {
-    months: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
-    weekdays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
-    totalCount: '{{count}} Aktivitäten in {{year}}',
-    legend: {
-      less: 'Weniger',
-      more: 'Mehr',
+export const WithoutLabels: Story = {
+  args: {
+    data: generateData(),
+    hideMonthLabels: true,
+    hideColorLegend: true,
+    hideTotalCount: true,
+    labels,
+  },
+};
+
+export const WithDayLabels: Story = {
+  args: {
+    data: generateData(),
+    showWeekdayLabels: true,
+    labels,
+  },
+};
+
+export const WithLocalizedLabels: Story = {
+  render: TemplateLocalized,
+
+  args: {
+    data: generateData(),
+    showWeekdayLabels: true,
+    labels: {
+      months: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+      weekdays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+      totalCount: '{{count}} Aktivitäten in {{year}}',
+      legend: {
+        less: 'Weniger',
+        more: 'Mehr',
+      },
     },
   },
 };
 
 const eventHandlerData = generateData();
-export const EventHandlers = TemplateEventHandlers.bind({});
-EventHandlers.args = {
-  data: eventHandlerData,
-  eventHandlers: {
-    onClick: event => activity => {
-      console.log({ event, activity });
-      alert(JSON.stringify(activity, null, 4));
+
+export const EventHandlers: Story = {
+  render: TemplateEventHandlers,
+  args: {
+    data: eventHandlerData,
+    eventHandlers: {
+      onClick: event => activity => {
+        console.log({ event, activity });
+        alert(JSON.stringify(activity, null, 4));
+      },
     },
   },
 };

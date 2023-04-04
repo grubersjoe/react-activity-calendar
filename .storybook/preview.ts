@@ -10,9 +10,8 @@ const common: ThemeVars = {
 
 export const parameters = {
   darkMode: {
-    classTarget: 'html',
     stylePreview: true,
-    dark: { ...themes.dark, ...common },
-    light: { ...themes.normal, ...common },
+    dark: { ...common, ...themes.dark },
+    light: { ...common, ...themes.light },
   },
 };
