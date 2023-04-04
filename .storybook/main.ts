@@ -1,12 +1,17 @@
-import type { StorybookConfig } from '@storybook/core-common';
+import { StorybookConfig } from '@storybook/react-webpack5';
+import { RuleSetRule } from 'webpack';
 
 const config: StorybookConfig = {
   addons: ['@storybook/addon-essentials', 'storybook-dark-mode'],
-  core: {
-    builder: 'webpack5',
+  core: {},
+  framework: {
+    name: '@storybook/react-webpack5',
+    options: {},
   },
-  framework: '@storybook/react',
   stories: ['../src/**/*.stories.@(ts|tsx)'],
+  docs: {
+    autodocs: true,
+  },
   typescript: {
     reactDocgen: 'react-docgen',
   },
@@ -14,7 +19,7 @@ const config: StorybookConfig = {
     if (config?.module?.rules) {
       // Replace shipped CSS rule to support CSS modules and SCSS
       config.module.rules = config.module.rules.map(rule => {
-        if (rule.test?.toString() === '/\\.css$/') {
+        if ((rule as RuleSetRule).test?.toString() === '/\\.css$/') {
           return {
             test: /\.(c|sc|sa)ss$/,
             sideEffects: true,
@@ -25,7 +30,8 @@ const config: StorybookConfig = {
                 options: {
                   importLoaders: 1,
                   modules: {
-                    auto: true, // Auto-detect CSS modules based on filename (.module.css)
+                    auto: true,
+                    // Auto-detect CSS modules based on filename (.module.css)
                     localIdentName: '[hash:base64]',
                   },
                 },
