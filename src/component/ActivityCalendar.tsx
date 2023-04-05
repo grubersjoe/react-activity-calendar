@@ -10,6 +10,7 @@ import {
   NAMESPACE,
 } from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import {
   Activity,
   BlockElement,
@@ -140,6 +141,8 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   const systemColorScheme = useColorScheme();
   const colorScheme = props.colorScheme ?? systemColorScheme;
 
+  const useAnimation = !usePrefersReducedMotion();
+
   if (loading) {
     data = generateEmptyData();
   }
@@ -187,12 +190,13 @@ const ActivityCalendar: FunctionComponent<Props> = ({
             return null;
           }
 
-          const style = loading
-            ? {
-                animation: `${styles.loadingAnimation} 1.75s ease-in-out infinite`,
-                animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
-              }
-            : undefined;
+          const style =
+            loading && useAnimation
+              ? {
+                  animation: `${styles.loadingAnimation} 1.75s ease-in-out infinite`,
+                  animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
+                }
+              : undefined;
 
           const block = (
             <rect
@@ -324,12 +328,14 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   const { width, height } = getDimensions();
   const additionalStyles = {
     maxWidth: width,
-    // Required for correct colors in CSS loading animation
-    [`--${NAMESPACE}-loading`]: theme[colorScheme][0],
-    [`--${NAMESPACE}-loading-active`]:
-      colorScheme === 'light'
-        ? chroma(theme[colorScheme][0]).darken(0.3).hex()
-        : chroma(theme[colorScheme][0]).brighten(0.25).hex(),
+    ...(useAnimation && {
+      // Required for correct colors in CSS loading animation
+      [`--${NAMESPACE}-loading`]: theme[colorScheme][0],
+      [`--${NAMESPACE}-loading-active`]:
+        colorScheme === 'light'
+          ? chroma(theme[colorScheme][0]).darken(0.3).hex()
+          : chroma(theme[colorScheme][0]).brighten(0.25).hex(),
+    }),
   };
 
   return (
