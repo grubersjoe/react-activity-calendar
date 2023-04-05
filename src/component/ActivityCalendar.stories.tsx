@@ -21,6 +21,8 @@ const meta: Meta<Props> = {
 
       if (viewMode === 'story') {
         args.colorScheme = darkMode ? 'dark' : 'light';
+      } else {
+        args.colorScheme = 'light';
       }
 
       return <Story />;
