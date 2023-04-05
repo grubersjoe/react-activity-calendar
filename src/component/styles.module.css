@@ -4,6 +4,12 @@
   shape-rendering: geometricPrecision;
 }
 
+@media (prefers-color-scheme: dark) {
+  .container rect {
+    stroke: rgba(255, 255, 255, 0.04);
+  }
+}
+
 .calendar {
   display: block;
   max-width: 100%;
@@ -13,6 +19,26 @@
 
 .calendar text {
   fill: currentColor;
+}
+
+.calendar [data-level='0'] {
+  fill: var(--react-activity-calendar-level-0);
+}
+
+.calendar [data-level='1'] {
+  fill: var(--react-activity-calendar-level-1);
+}
+
+.calendar [data-level='2'] {
+  fill: var(--react-activity-calendar-level-2);
+}
+
+.calendar [data-level='3'] {
+  fill: var(--react-activity-calendar-level-3);
+}
+
+.calendar [data-level='4'] {
+  fill: var(--react-activity-calendar-level-4);
 }
 
 .footer {
@@ -26,7 +52,6 @@
   gap: 0.2em;
 }
 
-/*noinspection CssUnresolvedCustomProperty*/
 @keyframes loadingAnimation {
   0% {
     fill: var(--react-activity-calendar-loading);
@@ -36,11 +61,5 @@
   }
   100% {
     fill: var(--react-activity-calendar-loading);
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .container rect {
-    stroke: rgba(255, 255, 255, 0.04);
   }
 }
