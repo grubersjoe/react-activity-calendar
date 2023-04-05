@@ -3,6 +3,12 @@ import type { Day as WeekDay } from 'date-fns';
 import { getYear, parseISO } from 'date-fns';
 import React, { CSSProperties, Fragment, FunctionComponent, ReactElement } from 'react';
 
+import {
+  DEFAULT_LABELS,
+  DEFAULT_WEEKDAY_LABELS,
+  MIN_DISTANCE_MONTH_LABELS,
+  NAMESPACE,
+} from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
 import {
   Activity,
@@ -14,10 +20,6 @@ import {
   ThemeInput,
 } from '../types';
 import {
-  DEFAULT_LABELS,
-  DEFAULT_WEEKDAY_LABELS,
-  MIN_DISTANCE_MONTH_LABELS,
-  NAMESPACE,
   createTheme,
   generateEmptyData,
   getClassName,

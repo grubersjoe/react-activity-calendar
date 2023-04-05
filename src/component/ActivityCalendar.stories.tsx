@@ -6,8 +6,8 @@ import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { useDarkMode } from 'storybook-dark-mode';
 
+import { DEFAULT_MONTH_LABELS, DEFAULT_WEEKDAY_LABELS } from '../constants';
 import { Activity, Level, Theme } from '../types';
-import { DEFAULT_MONTH_LABELS, DEFAULT_WEEKDAY_LABELS } from '../util';
 import ActivityCalendar, { Props } from './ActivityCalendar';
 
 type Story = StoryObj<Props>;
