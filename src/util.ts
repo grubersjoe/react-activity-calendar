@@ -85,7 +85,7 @@ export function getMonthLabels(
       const firstWeekDay = week.find(day => day !== undefined);
 
       if (!firstWeekDay) {
-        throw new Error(`Unexpected error: Week is empty: [${week}]`);
+        throw new Error(`Unexpected error: Week is empty: [${week}].`);
       }
 
       const month = monthNames[getMonth(parseISO(firstWeekDay.date))];
@@ -114,12 +114,8 @@ export function getMonthLabels(
 }
 
 export function createTheme(theme?: ThemeInput): Theme {
-  if (typeof theme === 'object') {
-    if (theme.light === undefined || theme.dark === undefined) {
-      throw new Error(
-        'The theme must contain the fields "light" and "dark" with a tuple of exactly 2 or 5 colors respectively.',
-      );
-    }
+  if (theme) {
+    validateTheme(theme);
 
     return {
       light: isColorScale(theme.light) ? theme.light : createColorScale(theme.light),
@@ -135,15 +131,36 @@ export function createTheme(theme?: ThemeInput): Theme {
   return createTheme(defaultTheme);
 }
 
+function validateTheme(theme: ThemeInput) {
+  if (typeof theme !== 'object' || theme.light === undefined || theme.dark === undefined) {
+    throw new Error(
+      'The theme object must contain the fields "light" and "dark" with a list of exactly 2 or 5 colors respectively.',
+    );
+  }
+
+  const lightLength: number = theme.light.length;
+  const darkLength: number = theme.dark.length;
+
+  if (lightLength !== 2 && lightLength !== 5) {
+    throw new Error(`theme.light must contain exactly 2 or 5 colors, ${lightLength} passed.`);
+  }
+
+  if (darkLength !== 2 && darkLength !== 5) {
+    throw new Error(`theme.dark must contain exactly 2 or 5 colors, ${darkLength} passed.`);
+  }
+}
+
 function isColorScale(input: Array<unknown>): input is ColorScale {
-  return input.length === 5 && input.every(color => chroma.valid(color));
+  const invalidColor = input.find(color => !chroma.valid(color));
+
+  if (invalidColor) {
+    throw new Error(`Invalid color "${invalidColor}" passed. All CSS color formats are accepted.`);
+  }
+
+  return input.length === 5;
 }
 
 function createColorScale(colors: [min: Color, max: Color]): ColorScale {
-  if (colors.length !== 2) {
-    throw new Error('Exactly two colors must be passed to calculate the color scale.');
-  }
-
   return chroma.scale(colors).mode('lch').colors(5) as ColorScale;
 }
 
