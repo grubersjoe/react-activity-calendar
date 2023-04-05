@@ -1,3 +1,4 @@
+import { Preview } from '@storybook/react';
 import { ThemeVars, themes } from '@storybook/theming';
 
 import './storybook.scss';
@@ -8,10 +9,14 @@ const common: ThemeVars = {
   brandUrl: 'https://github.com/grubersjoe/react-activity-calendar',
 };
 
-export const parameters = {
-  darkMode: {
-    stylePreview: true,
-    dark: { ...common, ...themes.dark },
-    light: { ...common, ...themes.light },
+export const preview: Preview = {
+  parameters: {
+    darkMode: {
+      stylePreview: true,
+      dark: { ...common, ...themes.dark },
+      light: { ...common, ...themes.light },
+    },
   },
 };
+
+export default preview;
