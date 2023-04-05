@@ -16,11 +16,6 @@ import { Activity, Color, ColorScale, Theme, ThemeInput, Week } from './types';
 export const NAMESPACE = 'react-activity-calendar';
 export const MIN_DISTANCE_MONTH_LABELS = 2;
 
-const defaultTheme = createTheme({
-  light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
-  dark: ['hsl(0, 0%, 20%)', 'hsl(0, 0%, 94%)'],
-});
-
 interface Label {
   x: number;
   y: number;
@@ -119,6 +114,11 @@ export function getMonthLabels(
       return true;
     });
 }
+
+const defaultTheme = createTheme({
+  light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
+  dark: ['hsl(0, 0%, 20%)', 'hsl(0, 0%, 92%)'],
+});
 
 export function createTheme(theme?: ThemeInput): Theme {
   if (typeof theme === 'object') {

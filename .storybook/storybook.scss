@@ -1,6 +1,7 @@
 body {
   font-family: 'Nunito Sans', -apple-system, '.SFNSText-Regular', 'San Francisco',
     BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
   line-height: 1.5;
 }
 
@@ -32,16 +33,13 @@ a {
   color: inherit;
 }
 
-pre,
-code {
-  font-family: ui-monospace, Menlo, Monaco, 'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace',
-    'Source Code Pro', 'Droid Sans Mono', 'Courier New', monospace;
-}
-
-#storybook-root {
-  code,
-  pre {
-    font-size: 0.9rem;
+#storybook-root,
+.docs-story {
+  pre,
+  code {
+    font-family: ui-monospace, Menlo, Monaco, 'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace',
+      'Source Code Pro', 'Droid Sans Mono', 'Courier New', monospace;
+    font-size: 13px;
   }
 
   code {
@@ -60,12 +58,18 @@ code {
 
 .dark {
   color: #fff;
-  background-color: hsl(0, 0%, 15%);
+  background-color: hsl(0, 0%, 12%);
 
   #storybook-root {
     pre {
       background-color: hsl(0, 0%, 18%);
       border: solid 1px hsl(0, 0%, 22%);
     }
+  }
+}
+
+.sbdocs {
+  td pre > code {
+    white-space: pre !important;
   }
 }
