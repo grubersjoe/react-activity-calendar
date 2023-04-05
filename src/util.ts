@@ -11,10 +11,8 @@ import {
   subWeeks,
 } from 'date-fns';
 
+import { DEFAULT_MONTH_LABELS, MIN_DISTANCE_MONTH_LABELS, NAMESPACE } from './constants';
 import { Activity, Color, ColorScale, Theme, ThemeInput, Week } from './types';
-
-export const NAMESPACE = 'react-activity-calendar';
-export const MIN_DISTANCE_MONTH_LABELS = 2;
 
 interface Label {
   x: number;
@@ -115,11 +113,6 @@ export function getMonthLabels(
     });
 }
 
-const defaultTheme = createTheme({
-  light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
-  dark: ['hsl(0, 0%, 20%)', 'hsl(0, 0%, 92%)'],
-});
-
 export function createTheme(theme?: ThemeInput): Theme {
   if (typeof theme === 'object') {
     if (theme.light === undefined || theme.dark === undefined) {
@@ -134,7 +127,12 @@ export function createTheme(theme?: ThemeInput): Theme {
     };
   }
 
-  return defaultTheme;
+  const defaultTheme = {
+    light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
+    dark: ['hsl(0, 0%, 20%)', 'hsl(0, 0%, 92%)'],
+  } satisfies ThemeInput;
+
+  return createTheme(defaultTheme);
 }
 
 function isColorScale(input: Array<unknown>): input is ColorScale {
@@ -170,30 +168,3 @@ export function generateEmptyData(): Array<Activity> {
     level: 0,
   }));
 }
-
-export const DEFAULT_MONTH_LABELS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
-
-export const DEFAULT_WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-export const DEFAULT_LABELS = {
-  months: DEFAULT_MONTH_LABELS,
-  weekdays: DEFAULT_WEEKDAY_LABELS,
-  totalCount: '{{count}} activities in {{year}}',
-  legend: {
-    less: 'Less',
-    more: 'More',
-  },
-};
