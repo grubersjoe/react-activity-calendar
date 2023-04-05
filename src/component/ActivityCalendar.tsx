@@ -60,14 +60,14 @@ export interface Props {
    */
   blockSize?: number;
   /**
-   * Use a specific color scheme instead of the system one. `light` is the default.
+   * Use a specific color scheme instead of the system one.
    */
   colorScheme?: 'light' | 'dark';
   /**
-   * Event handlers to register for the SVG `<rect>` elements that are used to render the calendar days. Handler signature: `event => activity => void`
+   * Event handlers to register for the SVG `<rect>` elements that are used to
+   * render the calendar days. Handler signature: `event => activity => void`
    */
   eventHandlers?: EventHandlerMap;
-
   /**
    * Font size for text in pixels.
    */
@@ -87,7 +87,7 @@ export interface Props {
   /**
    * Localization strings for all calendar labels.
    *
-   * - `totalCount` supports the placeholders `{{count}}` and `{{year}}`.
+   * `totalCount` supports the placeholders `{{count}}` and `{{year}}`.
    */
   labels?: Labels;
   /**
@@ -95,7 +95,9 @@ export interface Props {
    */
   loading?: boolean;
   /**
-   * Render prop for calendar blocks (activities). For example, useful to wrap the element with a tooltip component. Use `React.cloneElement` to pass additional props to the element if necessary.
+   * Render prop for calendar blocks (activities). For example, useful to wrap
+   * the element with a tooltip component. Use `React.cloneElement` to pass
+   * additional props to the element if necessary.
    */
   renderBlock?: (block: BlockElement, activity: Activity) => ReactElement;
   /**
@@ -107,7 +109,23 @@ export interface Props {
    */
   style?: CSSProperties;
   /**
-   * An object specifying all theme colors explicitly`.
+   * An object to set the color scales for the `light` and `dark` theme. Both
+   * color scales can either be calculated automatically by passing a tuple
+   * with exactly two colors (lowest and highest intensity) or by listing all
+   * five colors explicitly. Colors can be specified in all valid CSS formats.
+   *
+   * Example:
+   *
+   * ```tsx
+   * <ActivityCalendar
+   *   data={data}
+   *   theme={{
+   *     light: ['hsl(0, 0%, 92%)', 'firebrick'],
+   *     dark: ['#333', 'rgb(214, 16, 174)'],
+   *   }}
+   * />
+   * ```
+   *
    */
   theme?: ThemeInput;
   /**
@@ -125,21 +143,23 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   blockMargin = 4,
   blockRadius = 2,
   blockSize = 12,
+  colorScheme: colorSchemeProp = undefined,
   eventHandlers = {},
   fontSize = 14,
   hideColorLegend = false,
   hideMonthLabels = false,
   hideTotalCount = false,
+  labels: labelsProp,
   loading = false,
   renderBlock = undefined,
   showWeekdayLabels = false,
   style = {},
-  totalCount: totalCountProp,
+  theme: themeProp = undefined,
+  totalCount: totalCountProp = undefined,
   weekStart = 0, // Sunday
-  ...props
 }: Props) => {
   const systemColorScheme = useColorScheme();
-  const colorScheme = props.colorScheme ?? systemColorScheme;
+  const colorScheme = colorSchemeProp ?? systemColorScheme;
 
   const useAnimation = !usePrefersReducedMotion();
 
@@ -159,8 +179,8 @@ const ActivityCalendar: FunctionComponent<Props> = ({
       ? totalCountProp
       : data.reduce((sum, activity) => sum + activity.count, 0);
 
-  const theme = createTheme(props.theme);
-  const labels = Object.assign({}, DEFAULT_LABELS, props.labels);
+  const theme = createTheme(themeProp);
+  const labels = Object.assign({}, DEFAULT_LABELS, labelsProp);
   const textHeight = hideMonthLabels ? 0 : fontSize + 2 * blockMargin;
 
   function getDimensions() {
