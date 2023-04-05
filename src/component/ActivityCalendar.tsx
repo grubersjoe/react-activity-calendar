@@ -143,13 +143,13 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   blockMargin = 4,
   blockRadius = 2,
   blockSize = 12,
-  colorScheme: colorSchemeProp = undefined,
+  colorScheme = undefined,
   eventHandlers = {},
   fontSize = 14,
   hideColorLegend = false,
   hideMonthLabels = false,
   hideTotalCount = false,
-  labels: labelsProp,
+  labels: labelsProp = undefined,
   loading = false,
   renderBlock = undefined,
   showWeekdayLabels = false,
@@ -158,8 +158,9 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   totalCount: totalCountProp = undefined,
   weekStart = 0, // Sunday
 }: Props) => {
+  const theme = createTheme(themeProp);
   const systemColorScheme = useColorScheme();
-  const colorScheme = colorSchemeProp ?? systemColorScheme;
+  const colorScale = theme[colorScheme ?? systemColorScheme];
 
   const useAnimation = !usePrefersReducedMotion();
 
@@ -179,7 +180,6 @@ const ActivityCalendar: FunctionComponent<Props> = ({
       ? totalCountProp
       : data.reduce((sum, activity) => sum + activity.count, 0);
 
-  const theme = createTheme(themeProp);
   const labels = Object.assign({}, DEFAULT_LABELS, labelsProp);
   const textHeight = hideMonthLabels ? 0 : fontSize + 2 * blockMargin;
 
@@ -225,9 +225,10 @@ const ActivityCalendar: FunctionComponent<Props> = ({
               y={textHeight + (blockSize + blockMargin) * dayIndex}
               width={blockSize}
               height={blockSize}
-              fill={theme[colorScheme][activity.level]}
               rx={blockRadius}
               ry={blockRadius}
+              data-date={activity.date}
+              data-level={activity.level}
               style={style}
             />
           );
@@ -279,7 +280,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
                   <rect
                     width={blockSize}
                     height={blockSize}
-                    fill={theme[colorScheme][level]}
+                    fill={colorScale[level]}
                     rx={blockRadius}
                     ry={blockRadius}
                   />
@@ -346,23 +347,27 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   }
 
   const { width, height } = getDimensions();
-  const additionalStyles = {
+
+  const calendarStyles = {
     maxWidth: width,
+
+    [`--${NAMESPACE}-level-0`]: colorScale[0],
+    [`--${NAMESPACE}-level-1`]: colorScale[1],
+    [`--${NAMESPACE}-level-2`]: colorScale[2],
+    [`--${NAMESPACE}-level-3`]: colorScale[3],
+    [`--${NAMESPACE}-level-4`]: colorScale[4],
+
     ...(useAnimation && {
-      // Required for correct colors in CSS loading animation
-      [`--${NAMESPACE}-loading`]: theme[colorScheme][0],
+      [`--${NAMESPACE}-loading`]: colorScale[0],
       [`--${NAMESPACE}-loading-active`]:
         colorScheme === 'light'
-          ? chroma(theme[colorScheme][0]).darken(0.3).hex()
-          : chroma(theme[colorScheme][0]).brighten(0.25).hex(),
+          ? chroma(colorScale[0]).darken(0.3).hex()
+          : chroma(colorScale[0]).brighten(0.25).hex(),
     }),
   };
 
   return (
-    <article
-      className={`${NAMESPACE} ${styles.container}`}
-      style={{ ...style, ...additionalStyles }}
-    >
+    <article className={`${NAMESPACE} ${styles.container}`} style={{ ...style, ...calendarStyles }}>
       <svg
         width={width}
         height={height}
