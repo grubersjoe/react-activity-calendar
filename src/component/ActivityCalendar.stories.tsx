@@ -6,7 +6,7 @@ import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { useDarkMode } from 'storybook-dark-mode';
 
-import { DEFAULT_MONTH_LABELS, DEFAULT_WEEKDAY_LABELS } from '../constants';
+import { DEFAULT_MONTH_LABELS, DEFAULT_WEEKDAY_LABELS, LEVEL_COUNT } from '../constants';
 import { Activity, Level, Theme } from '../types';
 import ActivityCalendar, { Props } from './ActivityCalendar';
 
@@ -355,7 +355,6 @@ export const EventHandlers: Story = {
 
 function generateData(monthStart = 0, monthEnd = 11): Array<Activity> {
   const MAX = 10;
-  const LEVELS = 5;
 
   const yearStart = new Date().getFullYear();
   const yearEnd = monthEnd < monthStart ? yearStart + 1 : yearStart;
@@ -367,7 +366,7 @@ function generateData(monthStart = 0, monthEnd = 11): Array<Activity> {
 
   return days.map(date => {
     const count = Math.max(0, Math.round(Math.random() * MAX - Math.random() * (0.8 * MAX)));
-    const level = Math.ceil(count / (MAX / (LEVELS - 1))) as Level;
+    const level = Math.ceil(count / (MAX / (LEVEL_COUNT - 1))) as Level;
 
     return {
       date: formatISO(date, { representation: 'date' }),
