@@ -6,6 +6,7 @@ import React, { CSSProperties, Fragment, FunctionComponent, ReactElement } from 
 import {
   DEFAULT_LABELS,
   DEFAULT_WEEKDAY_LABELS,
+  LEVEL_COUNT,
   MIN_DISTANCE_MONTH_LABELS,
   NAMESPACE,
 } from '../constants';
@@ -273,7 +274,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
         {!loading && !hideColorLegend && (
           <div className={getClassName('legend-colors', styles.legendColors)}>
             <span style={{ marginRight: '0.4em' }}>{labels?.legend?.less ?? 'Less'}</span>
-            {Array(5)
+            {Array(LEVEL_COUNT)
               .fill(undefined)
               .map((_, level) => (
                 <svg width={blockSize} height={blockSize} key={level}>

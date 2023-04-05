@@ -11,7 +11,12 @@ import {
   subWeeks,
 } from 'date-fns';
 
-import { DEFAULT_MONTH_LABELS, MIN_DISTANCE_MONTH_LABELS, NAMESPACE } from './constants';
+import {
+  DEFAULT_MONTH_LABELS,
+  LEVEL_COUNT,
+  MIN_DISTANCE_MONTH_LABELS,
+  NAMESPACE,
+} from './constants';
 import { Activity, Color, ColorScale, Theme, ThemeInput, Week } from './types';
 
 interface Label {
@@ -134,34 +139,38 @@ export function createTheme(theme?: ThemeInput): Theme {
 function validateTheme(theme: ThemeInput) {
   if (typeof theme !== 'object' || theme.light === undefined || theme.dark === undefined) {
     throw new Error(
-      'The theme object must contain the fields "light" and "dark" with a list of exactly 2 or 5 colors respectively.',
+      `The theme object must contain the fields "light" and "dark" with a list of exactly 2 or ${LEVEL_COUNT} colors respectively.`,
     );
   }
 
   const lightLength: number = theme.light.length;
   const darkLength: number = theme.dark.length;
 
-  if (lightLength !== 2 && lightLength !== 5) {
-    throw new Error(`theme.light must contain exactly 2 or 5 colors, ${lightLength} passed.`);
+  if (lightLength !== 2 && lightLength !== LEVEL_COUNT) {
+    throw new Error(
+      `theme.light must contain exactly 2 or ${LEVEL_COUNT} colors, ${lightLength} passed.`,
+    );
   }
 
-  if (darkLength !== 2 && darkLength !== 5) {
-    throw new Error(`theme.dark must contain exactly 2 or 5 colors, ${darkLength} passed.`);
+  if (darkLength !== 2 && darkLength !== LEVEL_COUNT) {
+    throw new Error(
+      `theme.dark must contain exactly 2 or ${LEVEL_COUNT} colors, ${darkLength} passed.`,
+    );
   }
 }
 
-function isColorScale(input: Array<unknown>): input is ColorScale {
-  const invalidColor = input.find(color => !chroma.valid(color));
+function isColorScale(colors: Array<unknown>): colors is ColorScale {
+  const invalidColor = colors.find(color => !chroma.valid(color));
 
   if (invalidColor) {
     throw new Error(`Invalid color "${invalidColor}" passed. All CSS color formats are accepted.`);
   }
 
-  return input.length === 5;
+  return colors.length === LEVEL_COUNT;
 }
 
 function createColorScale(colors: [min: Color, max: Color]): ColorScale {
-  return chroma.scale(colors).mode('lch').colors(5) as ColorScale;
+  return chroma.scale(colors).mode('lch').colors(LEVEL_COUNT) as ColorScale;
 }
 
 export function getClassName(name: string, styles?: string): string {
