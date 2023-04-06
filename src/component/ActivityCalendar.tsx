@@ -176,11 +176,6 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   const year = getYear(parseISO(data[0]?.date));
   const weeks = groupByWeeks(data, weekStart);
 
-  const totalCount =
-    typeof totalCountProp === 'number'
-      ? totalCountProp
-      : data.reduce((sum, activity) => sum + activity.count, 0);
-
   const labels = Object.assign({}, DEFAULT_LABELS, labelsProp);
   const textHeight = hideMonthLabels ? 0 : fontSize + 2 * blockMargin;
 
@@ -252,6 +247,11 @@ const ActivityCalendar: FunctionComponent<Props> = ({
     if (hideTotalCount && hideColorLegend) {
       return null;
     }
+
+    const totalCount =
+      typeof totalCountProp === 'number'
+        ? totalCountProp
+        : data.reduce((sum, activity) => sum + activity.count, 0);
 
     return (
       <footer
