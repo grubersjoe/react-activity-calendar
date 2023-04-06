@@ -13,7 +13,7 @@ import ActivityCalendar, { Props } from './ActivityCalendar';
 type Story = StoryObj<Props>;
 
 const meta: Meta<Props> = {
-  title: 'Activity Calendar',
+  title: 'React Activity Calendar',
   component: ActivityCalendar,
   decorators: [
     (Story, { args, viewMode }) => {
