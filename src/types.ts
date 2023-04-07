@@ -1,4 +1,3 @@
-import chroma from 'chroma-js';
 import React, {
   DOMAttributes,
   HTMLAttributes,
@@ -27,25 +26,25 @@ export type Labels = Partial<{
   }>;
 }>;
 
-export type Color = string | chroma.Color;
-
-export type ColorScale = [
-  level0: string,
-  level1: string,
-  level2: string,
-  level3: string,
-  level4: string,
-];
+export type Color = string;
+export type ColorScale = [Color, Color, Color, Color, Color];
+export type ColorScaleInput = [from: Color, to: Color];
 
 export interface Theme {
-  light: ColorScale;
-  dark: ColorScale;
+  light: [string, string, string, string, string];
+  dark: [string, string, string, string, string];
 }
 
-export interface ThemeInput {
-  light: ColorScale | [min: Color, max: Color];
-  dark: ColorScale | [min: Color, max: Color];
-}
+// Require that at least one color scheme is passed.
+export type ThemeInput =
+  | {
+      light: ColorScale | ColorScaleInput;
+      dark?: ColorScale | ColorScaleInput;
+    }
+  | {
+      light?: ColorScale | ColorScaleInput;
+      dark: ColorScale | ColorScaleInput;
+    };
 
 interface BlockAttributes extends SVGAttributes<SVGRectElement>, HTMLAttributes<SVGRectElement> {}
 export type BlockElement = ReactElement<BlockAttributes, JSXElementConstructor<SVGRectElement>>;
