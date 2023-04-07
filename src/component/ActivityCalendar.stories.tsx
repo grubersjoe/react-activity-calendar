@@ -1,4 +1,5 @@
 import { Tooltip as MuiTooltip } from '@mui/material';
+import LinkTo from '@storybook/addon-links/react';
 import { Meta, StoryFn, StoryObj } from '@storybook/react';
 import { eachDayOfInterval, formatISO, lastDayOfMonth } from 'date-fns';
 import React, { cloneElement } from 'react';
@@ -6,6 +7,8 @@ import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { useDarkMode } from 'storybook-dark-mode';
 
+import CodeBlock from '../../.storybook/components/CodeBlock';
+import Container from '../../.storybook/components/Container';
 import { DEFAULT_MONTH_LABELS, DEFAULT_WEEKDAY_LABELS, LEVEL_COUNT } from '../constants';
 import { Activity, Level, Theme } from '../types';
 import ActivityCalendar, { Props } from './ActivityCalendar';
@@ -50,16 +53,10 @@ const meta: Meta<Props> = {
     colorScheme: {
       control: false,
     },
-    eventHandlers: {
-      control: false,
-    },
     fontSize: {
       control: { type: 'range', min: 6, max: 32, step: 2 },
     },
     style: {
-      control: false,
-    },
-    theme: {
       control: false,
     },
     weekStart: {
@@ -80,8 +77,71 @@ const meta: Meta<Props> = {
   },
 };
 
+const TemplateTheme: StoryFn<Props> = args => (
+  <Container>
+    <h1>Themes</h1>
+    <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
+
+    <h2>Usage</h2>
+    <p>
+      Use the <code>theme</code> prop to set the calendar colors for the light and dark{' '}
+      <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme">
+        system color scheme
+      </a>
+      . The color scale for at least one color scheme needs to be specified. For undefined values,
+      the default theme is used. By default, the calendar will use the currently set system color
+      scheme. However, you can enforce a specific color scheme with the{' '}
+      <a href="/?path=/docs/react-activity-calendar--docs">
+        <code>colorScheme</code>
+      </a>{' '}
+      prop.
+    </p>
+    <p>
+      Define each color scale{' '}
+      <LinkTo kind="react-activity-calendar" name="with-explicit-theme">
+        explicitly
+      </LinkTo>{' '}
+      with five colors or pass exactly two colors (lowest and highest intensity) to calculate a
+      single-hue scale. Specify colors in any valid CSS format.
+    </p>
+    <CodeBlock>
+      {`import ActivityCalendar, {ThemeInput} from "react-activity-calendar";
+
+const minimalTheme: ThemeInput = {
+  light: ['hsl(0, 0%, 92%)', 'rebeccapurple'],
+  // dark: the default theme will be used as fallback
+}
+
+<ActivityCalendar data={data} theme={minimalTheme} /> 
+
+const explicitTheme: ThemeInput = {
+  light: ['#f0f0f0', '#c4edde', '#7ac7c4', '#f73859', '#384259'],
+  dark: ['#383838', '#4D455D', '#7DB9B6', '#F5E9CF', '#E96479'],
+}; 
+
+<ActivityCalendar data={data} theme={explicitTheme} /> 
+`}
+    </CodeBlock>
+  </Container>
+);
+
+const TemplateExplicitTheme: StoryFn<Props> = args => (
+  <Container>
+    <h1>Explicit theme</h1>
+    <p></p>
+    <p>
+      See the{' '}
+      <LinkTo kind="react-activity-calendar" name="with-theme">
+        WithTheme
+      </LinkTo>{' '}
+      story for usage details.
+    </p>
+    <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
+  </Container>
+);
+
 const TemplateTooltips: StoryFn<Props> = args => (
-  <>
+  <Container>
     <h1>Tooltip Examples</h1>
     <p>
       To add a 3rd party tooltip component to the calendar you can use the <code>renderBlock</code>{' '}
@@ -94,7 +154,7 @@ const TemplateTooltips: StoryFn<Props> = args => (
       In the simplest case, each block only needs to be wrapped with a <code>&lt;Tooltip/&gt;</code>{' '}
       component, as shown here for Material UI:
     </p>
-    <pre>
+    <CodeBlock>
       {`<ActivityCalendar
   data={myData}
   renderBlock={(block, activity) => (
@@ -103,7 +163,7 @@ const TemplateTooltips: StoryFn<Props> = args => (
     </MuiTooltip>
   )}
 />`}
-    </pre>
+    </CodeBlock>
     <ActivityCalendar
       {...args}
       renderBlock={(block, activity) => (
@@ -117,7 +177,7 @@ const TemplateTooltips: StoryFn<Props> = args => (
       Some libraries, like <code>react-tooltip</code>, require that additional props are passed to
       the block elements. You can achieve that using the <code>React.cloneElement</code> function:
     </p>
-    <pre>
+    <CodeBlock>
       {`<ActivityCalendar
   data={myData}
   renderBlock={(block, activity) =>
@@ -128,7 +188,7 @@ const TemplateTooltips: StoryFn<Props> = args => (
   }
 />
 <ReactTooltip id="react-tooltip" />`}
-    </pre>
+    </CodeBlock>
     <ActivityCalendar
       {...args}
       renderBlock={(block, activity) =>
@@ -139,15 +199,15 @@ const TemplateTooltips: StoryFn<Props> = args => (
       }
     />
     <ReactTooltip id="react-tooltip" />
-  </>
+  </Container>
 );
 
 const TemplateLocalized: StoryFn<Props> = args => (
-  <>
+  <Container>
     <h1>Localization</h1>
     <p>(Example in German)</p>
     <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
-    <pre>
+    <CodeBlock>
       {`// Shape of \`labels\` property (default values).
 // All properties are optional.
 
@@ -182,27 +242,23 @@ const labels = {
   },
 };
 `}
-    </pre>
-  </>
+    </CodeBlock>
+  </Container>
 );
 
 const TemplateEventHandlers: StoryFn<Props> = args => (
-  <>
+  <Container>
     <h1>Event Handlers</h1>
     <p>
       You can register event handlers for the SVG <code>&lt;rect/&gt;</code> elements that are used
-      to render the calendar days. This way you can control the behaviour on click, hover, etc.
+      to render the calendar days. This way you can control the behaviour on click, hover, etc. All
+      event listeners have the following signature, so you are able to use the shown data inside the
+      handler:
     </p>
-    <p>
-      All event listeners have the following signature, so you are able to use the shown data inside
-      the handler:
-    </p>
-    <pre>
-      <code>(event: React.SyntheticEvent) =&gt; (data: Day) =&gt; void</code>
-    </pre>
+    <CodeBlock>{'(event: React.SyntheticEvent) => (data: Day) => void'}</CodeBlock>
     <p>Click on any block below to see it in action:</p>
     <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
-    <pre>
+    <CodeBlock>
       {`<ActivityCalendar 
   data={data}  
   eventHandlers: {
@@ -214,8 +270,8 @@ const TemplateEventHandlers: StoryFn<Props> = args => (
   }
 />
 `}
-    </pre>
-  </>
+    </CodeBlock>
+  </Container>
 );
 
 export default meta;
@@ -250,11 +306,12 @@ export const Loading: Story = {
   },
 };
 
-export const WithCalculatedTheme: Story = {
+export const WithTheme: Story = {
+  render: TemplateTheme,
   args: {
     data: generateData(),
     theme: {
-      light: ['hsl(0, 0%, 92%)', 'hsl(225, 42%, 38%)'],
+      light: ['hsl(0, 0%, 92%)', 'rebeccapurple'],
       dark: ['hsl(0, 0%, 22%)', 'hsl(225,92%,77%)'],
     },
     labels,
@@ -262,6 +319,7 @@ export const WithCalculatedTheme: Story = {
 };
 
 export const WithExplicitTheme: Story = {
+  render: TemplateExplicitTheme,
   args: {
     data: generateData(),
     theme: explicitTheme,
@@ -324,7 +382,6 @@ export const WithDayLabels: Story = {
 
 export const WithLocalizedLabels: Story = {
   render: TemplateLocalized,
-
   args: {
     data: generateData(),
     showWeekdayLabels: true,
