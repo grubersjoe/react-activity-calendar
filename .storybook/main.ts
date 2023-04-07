@@ -2,7 +2,7 @@ import { StorybookConfig } from '@storybook/react-webpack5';
 import { RuleSetRule } from 'webpack';
 
 const config: StorybookConfig = {
-  addons: ['@storybook/addon-essentials', 'storybook-dark-mode'],
+  addons: ['@storybook/addon-essentials', '@storybook/addon-links', 'storybook-dark-mode'],
   core: {},
   framework: {
     name: '@storybook/react-webpack5',
