@@ -21,13 +21,8 @@ import {
   SVGRectEventHandler,
   ThemeInput,
 } from '../types';
-import {
-  createTheme,
-  generateEmptyData,
-  getClassName,
-  getMonthLabels,
-  groupByWeeks,
-} from '../util';
+import { generateEmptyData, getClassName, getMonthLabels, groupByWeeks } from '../utils';
+import { createTheme } from '../utils/theme';
 import styles from './styles.module.css';
 
 export interface Props {
@@ -110,10 +105,13 @@ export interface Props {
    */
   style?: CSSProperties;
   /**
-   * An object to set the color scales for the `light` and `dark` theme. Both
-   * color scales can either be calculated automatically by passing a tuple
-   * with exactly two colors (lowest and highest intensity) or by listing all
-   * five colors explicitly. Colors can be specified in all valid CSS formats.
+   * An object to set the color scales for the `light` and `dark` theme. At
+   * least one scale must be passed if this prop is set. The default color
+   * scales will be used for undefined fields.
+   *
+   * Each color scale can either be calculated automatically by passing exactly
+   * two colors (lowest and highest intensity) or by listing all five colors
+   * explicitly. Colors can be specified in any valid CSS format.
    *
    * Example:
    *

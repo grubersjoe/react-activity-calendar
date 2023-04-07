@@ -1,4 +1,3 @@
-import chroma from 'chroma-js';
 import type { Day as WeekDay } from 'date-fns';
 import {
   differenceInCalendarDays,
@@ -11,13 +10,8 @@ import {
   subWeeks,
 } from 'date-fns';
 
-import {
-  DEFAULT_MONTH_LABELS,
-  LEVEL_COUNT,
-  MIN_DISTANCE_MONTH_LABELS,
-  NAMESPACE,
-} from './constants';
-import { Activity, Color, ColorScale, Theme, ThemeInput, Week } from './types';
+import { DEFAULT_MONTH_LABELS, MIN_DISTANCE_MONTH_LABELS, NAMESPACE } from '../constants';
+import { Activity, Week } from '../types';
 
 interface Label {
   x: number;
@@ -116,61 +110,6 @@ export function getMonthLabels(
 
       return true;
     });
-}
-
-export function createTheme(theme?: ThemeInput): Theme {
-  if (theme) {
-    validateTheme(theme);
-
-    return {
-      light: isColorScale(theme.light) ? theme.light : createColorScale(theme.light),
-      dark: isColorScale(theme.dark) ? theme.dark : createColorScale(theme.dark),
-    };
-  }
-
-  const defaultTheme = {
-    light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
-    dark: ['hsl(0, 0%, 20%)', 'hsl(0, 0%, 92%)'],
-  } satisfies ThemeInput;
-
-  return createTheme(defaultTheme);
-}
-
-function validateTheme(theme: ThemeInput) {
-  if (typeof theme !== 'object' || theme.light === undefined || theme.dark === undefined) {
-    throw new Error(
-      `The theme object must contain the fields "light" and "dark" with a list of exactly 2 or ${LEVEL_COUNT} colors respectively.`,
-    );
-  }
-
-  const lightLength: number = theme.light.length;
-  const darkLength: number = theme.dark.length;
-
-  if (lightLength !== 2 && lightLength !== LEVEL_COUNT) {
-    throw new Error(
-      `theme.light must contain exactly 2 or ${LEVEL_COUNT} colors, ${lightLength} passed.`,
-    );
-  }
-
-  if (darkLength !== 2 && darkLength !== LEVEL_COUNT) {
-    throw new Error(
-      `theme.dark must contain exactly 2 or ${LEVEL_COUNT} colors, ${darkLength} passed.`,
-    );
-  }
-}
-
-function isColorScale(colors: Array<unknown>): colors is ColorScale {
-  const invalidColor = colors.find(color => !chroma.valid(color));
-
-  if (invalidColor) {
-    throw new Error(`Invalid color "${invalidColor}" passed. All CSS color formats are accepted.`);
-  }
-
-  return colors.length === LEVEL_COUNT;
-}
-
-function createColorScale(colors: [min: Color, max: Color]): ColorScale {
-  return chroma.scale(colors).mode('lch').colors(LEVEL_COUNT) as ColorScale;
 }
 
 export function getClassName(name: string, styles?: string): string {
