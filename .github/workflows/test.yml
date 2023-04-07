@@ -26,3 +26,6 @@ jobs:
 
       - name: Run linter (ESLint)
         run: yarn lint
+
+      - name: Run unit tests
+        run: yarn test
