@@ -155,7 +155,9 @@ const TemplateTooltips: StoryFn<Props> = args => (
       component, as shown here for Material UI:
     </p>
     <CodeBlock>
-      {`<ActivityCalendar
+      {`import { Tooltip as MuiTooltip } from '@mui/material';
+
+<ActivityCalendar
   data={myData}
   renderBlock={(block, activity) => (
     <MuiTooltip title={\`\${activity.count} activities on \${activity.date}\`}>
@@ -178,7 +180,10 @@ const TemplateTooltips: StoryFn<Props> = args => (
       the block elements. You can achieve that using the <code>React.cloneElement</code> function:
     </p>
     <CodeBlock>
-      {`<ActivityCalendar
+      {`import { Tooltip as ReactTooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
+
+<ActivityCalendar
   data={myData}
   renderBlock={(block, activity) =>
     React.cloneElement(block, {
