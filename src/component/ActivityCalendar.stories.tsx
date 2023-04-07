@@ -90,7 +90,7 @@ const TemplateTheme: StoryFn<Props> = args => (
       </a>
       . The color scale for at least one color scheme needs to be specified. For undefined values,
       the default theme is used. By default, the calendar will use the currently set system color
-      scheme. However, you can enforce a specific color scheme with the{' '}
+      scheme, but you can enforce a specific color scheme with the{' '}
       <a href="/?path=/docs/react-activity-calendar--docs">
         <code>colorScheme</code>
       </a>{' '}
@@ -102,7 +102,7 @@ const TemplateTheme: StoryFn<Props> = args => (
         explicitly
       </LinkTo>{' '}
       with five colors or pass exactly two colors (lowest and highest intensity) to calculate a
-      single-hue scale. Specify colors in any valid CSS format.
+      single-hue scale. Colors can be specified in any valid CSS format.
     </p>
     <CodeBlock>
       {`import ActivityCalendar, {ThemeInput} from "react-activity-calendar";
