@@ -54,7 +54,9 @@ a {
     font-size: 14px;
   }
 
-  .syntax-highlighter {
+  pre {
+    // Match sidebar background
+    background: #222425 !important;
   }
 
   pre code {
@@ -68,11 +70,6 @@ a {
   &.sb-show-main {
     color: #fff;
     background-color: hsl(0, 0%, 12%);
-  }
-
-  pre {
-    // Match sidebar background
-    background: #222425 !important;
   }
 }
 
