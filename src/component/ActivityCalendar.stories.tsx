@@ -89,8 +89,8 @@ const TemplateTheme: StoryFn<Props> = args => (
         system color scheme
       </a>
       . The color scale for at least one color scheme needs to be specified. For undefined values,
-      the default theme is used. By default, the calendar will use the currently set system color
-      scheme, but you can enforce a specific color scheme with the{' '}
+      the default theme is selected. By default, the calendar will use the currently set system
+      color scheme, but you can enforce a specific color scheme with the{' '}
       <a href="/?path=/docs/react-activity-calendar--docs">
         <code>colorScheme</code>
       </a>{' '}
@@ -134,7 +134,7 @@ const TemplateExplicitTheme: StoryFn<Props> = args => (
       <LinkTo kind="react-activity-calendar" name="with-theme">
         WithTheme
       </LinkTo>{' '}
-      story for usage details.
+      story for details how to use the <code>theme</code> prop.
     </p>
     <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
   </Container>

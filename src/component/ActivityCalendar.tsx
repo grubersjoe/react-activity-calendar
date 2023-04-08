@@ -56,7 +56,8 @@ export interface Props {
    */
   blockSize?: number;
   /**
-   * Use a specific color scheme instead of the system one. Supported values are `'light'` and `'dark'`.
+   * Use a specific color scheme instead of the system one. Supported values
+   * are `'light'` and `'dark'`.
    */
   colorScheme?: 'light' | 'dark';
   /**
@@ -107,9 +108,9 @@ export interface Props {
   /**
    * Set the calendar colors for the `light` and `dark` system color scheme. The
    * color scale for at least one color scheme needs to be specified. For
-   * undefined values, the default theme is used. By default, the calendar will
-   * use the currently set system color scheme, but you can enforce a specific
-   * color scheme with the `colorScheme` prop.
+   * undefined values, the default theme is selected. By default, the calendar
+   * will use the currently set system color scheme, but you can enforce a
+   * specific color scheme with the `colorScheme` prop.
    *
    * Define each color scale explicitly with five colors or pass exactly two
    * colors (lowest and highest intensity) to calculate a single-hue scale.
