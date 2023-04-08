@@ -1,7 +1,7 @@
 import chroma from 'chroma-js';
 
 import { LEVEL_COUNT } from '../constants';
-import { ColorScale, ColorScaleInput, Theme, ThemeInput } from '../types';
+import { Color, ColorScale, Theme, ThemeInput } from '../types';
 
 export const defaultTheme = createTheme({
   light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
@@ -60,6 +60,6 @@ function isColorScale(colors: Array<unknown>): colors is ColorScale {
   return colors.length === LEVEL_COUNT;
 }
 
-function createColorScale(colors: ColorScaleInput): ColorScale {
+function createColorScale(colors: [from: Color, to: Color]): ColorScale {
   return chroma.scale(colors).mode('lch').colors(LEVEL_COUNT) as ColorScale;
 }

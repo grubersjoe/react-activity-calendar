@@ -27,8 +27,13 @@ export type Labels = Partial<{
 }>;
 
 export type Color = string;
-export type ColorScale = [Color, Color, Color, Color, Color];
-export type ColorScaleInput = [from: Color, to: Color];
+export type ColorScale = [
+  level0: Color,
+  level1: Color,
+  level2: Color,
+  level3: Color,
+  level4: Color,
+];
 
 export interface Theme {
   light: [string, string, string, string, string];
@@ -38,12 +43,12 @@ export interface Theme {
 // Require that at least one color scheme is passed.
 export type ThemeInput =
   | {
-      light: ColorScale | ColorScaleInput;
-      dark?: ColorScale | ColorScaleInput;
+      light: ColorScale | [from: Color, to: Color];
+      dark?: ColorScale | [from: Color, to: Color];
     }
   | {
-      light?: ColorScale | ColorScaleInput;
-      dark: ColorScale | ColorScaleInput;
+      light?: ColorScale | [from: Color, to: Color];
+      dark: ColorScale | [from: Color, to: Color];
     };
 
 interface BlockAttributes extends SVGAttributes<SVGRectElement>, HTMLAttributes<SVGRectElement> {}
