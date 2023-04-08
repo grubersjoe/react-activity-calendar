@@ -44,6 +44,10 @@ a {
   }
 }
 
+#storybook-root {
+  overflow: hidden;
+}
+
 #storybook-root,
 .docs-story {
   pre,
@@ -51,13 +55,17 @@ a {
   .syntax-highlighter {
     font-family: ui-monospace, Menlo, Monaco, 'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace',
       'Source Code Pro', 'Droid Sans Mono', 'Courier New', monospace;
-    font-size: 14px;
+    font-size: 13px;
+
+    @media (min-width: 768px) {
+      font-size: 14px;
+    }
   }
 
   pre code {
     margin-left: 0.1em;
     margin-right: 0.1em;
-    font-size: 13px;
+    font-size: 85%;
   }
 }
 
