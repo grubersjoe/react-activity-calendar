@@ -2,11 +2,15 @@
 
 [![CI](https://github.com/grubersjoe/react-activity-calendar/actions/workflows/test.yml/badge.svg)](https://github.com/grubersjoe/react-activity-calendar/actions/workflows/test.yml)
 
-A React component to display activity data in a calendar (heatmap).
+A flexible React component to display activity data in a calendar (heatmap).
 
-**[Demo and documentation (Storybook)](https://grubersjoe.github.io/react-activity-calendar)**
+_April 2023: v2 has been released. See the
+[release notes](https://github.com/grubersjoe/react-activity-calendar/releases/tag/2.0) for breaking
+changes._
 
-![Screenshot](screenshot.png?v4)
+## [Documentation (Storybook)](https://grubersjoe.github.io/react-activity-calendar)
+
+![Screenshot](screenshot.png?v5)
 
 ## Development
 
