@@ -266,13 +266,13 @@ const TemplateEventHandlers: StoryFn<Props> = args => (
     <CodeBlock>
       {`<ActivityCalendar 
   data={data}  
-  eventHandlers: {
+  eventHandler={{
     onClick: event => activity => {
       console.log({ event, activity });
       alert(JSON.stringify(activity, null, 4));
     },
     onMouseEnter: event => activity => console.log('mouseEnter'),
-  }
+  }}
 />
 `}
     </CodeBlock>
