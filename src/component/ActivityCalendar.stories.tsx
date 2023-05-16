@@ -177,7 +177,7 @@ const TemplateTooltips: StoryFn<Props> = args => (
     </h2>
     <p>
       Some libraries, like <code>react-tooltip</code>, require that additional props are passed to
-      the block elements. You can achieve that using the <code>React.cloneElement</code> function:
+      the block elements. You can achieve this using the <code>React.cloneElement</code> function:
     </p>
     <CodeBlock>
       {`import { Tooltip as ReactTooltip } from "react-tooltip";
@@ -257,10 +257,18 @@ const TemplateEventHandlers: StoryFn<Props> = args => (
     <p>
       You can register event handlers for the SVG <code>&lt;rect/&gt;</code> elements that are used
       to render the calendar days. This way you can control the behaviour on click, hover, etc. All
-      event listeners have the following signature, so you are able to use the shown data inside the
-      handler:
+      event listeners have the following signature, so you can use the activity data of the block
+      inside the handler:
     </p>
-    <CodeBlock>{'(event: React.SyntheticEvent) => (data: Day) => void'}</CodeBlock>
+    <CodeBlock>
+      {`(event: React.SyntheticEvent) => (data: Activity) => void
+      
+interface Activity {
+  date: string;
+  count: number;
+  level: 0 | 1 | 2 | 3 | 4;
+}`}
+    </CodeBlock>
     <p>Click on any block below to see it in action:</p>
     <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
     <CodeBlock>

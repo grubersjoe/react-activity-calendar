@@ -27,9 +27,9 @@ import styles from './styles.module.css';
 
 export interface Props {
   /**
-   * List of calendar entries. Every `Activity` object requires an ISO 8601 `date`
-   * property in the format `yyyy-MM-dd`, a `count` property with the amount
-   * of tracked data and finally a `level` property in the range `0 - 4` to
+   * List of calendar entries. Every `Activity` object requires an ISO 8601
+   * `date` string in the format `yyyy-MM-dd`, a `count` property with the
+   * amount of tracked data and a `level` property in the range `0-4` to
    * specify activity intensity.
    *
    * Example object:
