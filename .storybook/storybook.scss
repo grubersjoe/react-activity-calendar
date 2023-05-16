@@ -81,3 +81,7 @@ a {
     white-space: pre !important;
   }
 }
+
+.sb-show-main.sb-main-centered #storybook-root {
+  padding: 2.5rem; // weekday labels
+}
