@@ -14,7 +14,7 @@ export interface Activity {
   level: Level;
   layers?: {
     [key: string]: number;
-  }
+  };
 }
 
 export type Week = Array<Activity | undefined>;
@@ -41,11 +41,11 @@ export type ColorScale = [
 export interface Theme {
   light: [string, string, string, string, string];
   dark: [string, string, string, string, string];
-  layers?: ThemeLayer
+  layers?: ThemeLayer;
 }
 
 export interface ThemeLayer {
-  [key: string]: string
+  [key: string]: string;
 }
 
 // Require that at least one color scheme is passed.
@@ -58,7 +58,7 @@ export type ThemeInput =
   | {
       light?: ColorScale | [from: Color, to: Color];
       dark: ColorScale | [from: Color, to: Color];
-      layers?: ThemeLayer | {}
+      layers?: ThemeLayer | {};
     };
 
 interface BlockAttributes extends SVGAttributes<SVGRectElement>, HTMLAttributes<SVGRectElement> {}

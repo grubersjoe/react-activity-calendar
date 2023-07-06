@@ -431,14 +431,14 @@ layerTheme.layers = {
   layer_1: 'cyan',
   layer_2: 'grey',
   layer_3: 'yellow',
-  layer_4: 'magenta'
-}
+  layer_4: 'magenta',
+};
 
 export const WithLayers: Story = {
   args: {
     data: generateData(0, 11, 5),
     labels,
-    theme: layerTheme
+    theme: layerTheme,
   },
 };
 
@@ -447,7 +447,7 @@ export const WithLoadingLayers: Story = {
     loading: true,
     data: generateData(0, 11, 3),
     labels,
-    theme: layerTheme
+    theme: layerTheme,
   },
 };
 
@@ -466,13 +466,18 @@ function generateData(monthStart = 0, monthEnd = 11, layer = 0): Array<Activity>
     const count = Math.max(0, Math.round(Math.random() * MAX - Math.random() * (0.8 * MAX)));
     const level = Math.ceil(count / (MAX / (LEVEL_COUNT - 1))) as Level;
 
-    const layers = Array(layer).fill(0).reduce((prev, curr, idx) => {
-      if (!prev) {
-        prev = {};
-      }
-      prev[`layer_${idx}`] = Math.max(0, Math.round(Math.random() * MAX - Math.random() * (0.8 * MAX)));
-      return prev;
-    }, undefined);
+    const layers = Array(layer)
+      .fill(0)
+      .reduce((prev, curr, idx) => {
+        if (!prev) {
+          prev = {};
+        }
+        prev[`layer_${idx}`] = Math.max(
+          0,
+          Math.round(Math.random() * MAX - Math.random() * (0.8 * MAX)),
+        );
+        return prev;
+      }, undefined);
 
     return {
       date: formatISO(date, { representation: 'date' }),
