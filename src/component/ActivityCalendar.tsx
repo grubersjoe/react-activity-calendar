@@ -207,13 +207,25 @@ const ActivityCalendar: FunctionComponent<Props> = ({
             return null;
           }
 
-          const style =
+          const style : any =
             loading && useAnimation
               ? {
                   animation: `${styles.loadingAnimation} 1.75s ease-in-out infinite`,
                   animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
                 }
-              : undefined;
+              : {};
+          
+          if (activity.layers) {
+            console.log('layers', activity.layers);
+            console.log('theme layer', theme.layers);
+            const layerColors = Object.keys(activity.layers!).map(key => theme.layers![key]);
+            console.log('colors', layerColors);
+            const layerWeight = Object.keys(activity.layers!).map(key => {
+              return activity.layers![key] || 1;
+            });
+            console.log('weight', layerColors);
+            style.fill = `${chroma.average(layerColors, undefined, layerWeight).css()}`
+          }
 
           const block = (
             <rect
@@ -225,7 +237,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
               rx={blockRadius}
               ry={blockRadius}
               data-date={activity.date}
-              data-level={activity.level}
+              data-level={activity.layers ? null : activity.level}
               style={style}
             />
           );

@@ -18,6 +18,7 @@ export function createTheme(theme?: ThemeInput): Theme {
     return {
       light: isColorScale(theme.light) ? theme.light : createColorScale(theme.light),
       dark: isColorScale(theme.dark) ? theme.dark : createColorScale(theme.dark),
+      layers: theme.layers
     };
   }
 
