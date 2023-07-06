@@ -53,12 +53,12 @@ export type ThemeInput =
   | {
       light: ColorScale | [from: Color, to: Color];
       dark?: ColorScale | [from: Color, to: Color];
-      layers?: ThemeLayer | {};
+      layers?: ThemeLayer;
     }
   | {
       light?: ColorScale | [from: Color, to: Color];
       dark: ColorScale | [from: Color, to: Color];
-      layers?: ThemeLayer | {};
+      layers?: ThemeLayer;
     };
 
 interface BlockAttributes extends SVGAttributes<SVGRectElement>, HTMLAttributes<SVGRectElement> {}

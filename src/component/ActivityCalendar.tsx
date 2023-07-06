@@ -207,23 +207,18 @@ const ActivityCalendar: FunctionComponent<Props> = ({
             return null;
           }
 
-          const style: any =
+          const style =
             loading && useAnimation
               ? {
                   animation: `${styles.loadingAnimation} 1.75s ease-in-out infinite`,
                   animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
+                  fill: '',
                 }
               : {};
 
-          if (activity.layers) {
-            console.log('layers', activity.layers);
-            console.log('theme layer', theme.layers);
-            const layerColors = Object.keys(activity.layers!).map(key => theme.layers![key]);
-            console.log('colors', layerColors);
-            const layerWeight = Object.keys(activity.layers!).map(key => {
-              return activity.layers![key] || 1;
-            });
-            console.log('weight', layerColors);
+          if (activity.layers !== undefined && theme.layers !== undefined) {
+            const layerColors = Object.keys(activity.layers).map(key => theme.layers?.[key]) as string[];
+            const layerWeight = Object.keys(activity.layers).map(key => activity.layers?.[key] || 1);
             style.fill = `${chroma.average(layerColors, undefined, layerWeight).css()}`;
           }
 
