@@ -430,12 +430,22 @@ layerTheme.layers = {
   layer_0: 'red',
   layer_1: 'cyan',
   layer_2: 'grey',
-  layer_4: 'yellow'
+  layer_3: 'yellow',
+  layer_4: 'magenta'
 }
 
 export const WithLayers: Story = {
   args: {
     data: generateData(0, 11, 5),
+    labels,
+    theme: layerTheme
+  },
+};
+
+export const WithLoadingLayers: Story = {
+  args: {
+    loading: true,
+    data: generateData(0, 11, 3),
     labels,
     theme: layerTheme
   },
@@ -452,13 +462,11 @@ function generateData(monthStart = 0, monthEnd = 11, layer = 0): Array<Activity>
     end: lastDayOfMonth(new Date(yearEnd, monthEnd, 1)),
   });
 
-  const maxLayers = Math.floor(Math.random() * layer);
-
   return days.map(date => {
     const count = Math.max(0, Math.round(Math.random() * MAX - Math.random() * (0.8 * MAX)));
     const level = Math.ceil(count / (MAX / (LEVEL_COUNT - 1))) as Level;
 
-    const layers = Array(maxLayers).fill(0).reduce((prev, curr, idx) => {
+    const layers = Array(layer).fill(0).reduce((prev, curr, idx) => {
       if (!prev) {
         prev = {};
       }
