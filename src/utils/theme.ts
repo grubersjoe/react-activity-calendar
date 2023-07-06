@@ -49,6 +49,16 @@ function validateTheme(theme: ThemeInput) {
       );
     }
   }
+
+  if (theme.layers) {
+    Object.values(theme.layers).forEach(c => {
+      if (!chroma.valid(c)) {
+        throw new Error(
+          `theme.layers has invalid color ${c}`
+        )
+      }
+    })
+  }
 }
 
 function isColorScale(colors: Array<unknown>): colors is ColorScale {
