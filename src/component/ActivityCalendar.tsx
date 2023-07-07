@@ -218,7 +218,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
 
           if (activity.layers !== undefined && theme.layers !== undefined) {
             const layerColors = Object.keys(activity.layers).map(key => theme.layers?.[key]) as string[];
-            const layerWeight = Object.keys(activity.layers).map(key => activity.layers?.[key] || 1);
+            const layerWeight = Object.keys(activity.layers).map(key => activity.layers?.[key] || 0);
             style.fill = `${chroma.average(layerColors, undefined, layerWeight).css()}`;
           }
 

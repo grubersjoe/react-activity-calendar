@@ -427,8 +427,8 @@ export const EventHandlers: Story = {
 
 const layerTheme = Object.assign({}, explicitTheme);
 layerTheme.layers = {
-  layer_0: 'red',
-  layer_1: 'cyan',
+  layer_0: '#39d353',
+  layer_1: '#2a2b59',
   layer_2: 'grey',
   layer_3: 'yellow',
   layer_4: 'magenta',
@@ -436,7 +436,7 @@ layerTheme.layers = {
 
 export const WithLayers: Story = {
   args: {
-    data: generateData(0, 11, 5),
+    data: generateData(0, 11, 2),
     labels,
     theme: layerTheme,
   },
