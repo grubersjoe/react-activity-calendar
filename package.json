@@ -1,11 +1,11 @@
 {
-  "name": "react-activity-calendar",
-  "version": "2.0.2",
+  "name": "@anystats/react-activity-calendar",
+  "version": "2.0.3",
   "description": " A React component to display activity data in calendar",
-  "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
+  "author": "Aldira Putra Raharja <me@dirathea.com>",
   "license": "MIT",
-  "homepage": "https://grubersjoe.github.io/react-activity-calendar/",
-  "repository": "grubersjoe/react-activity-calendar",
+  "homepage": "https://anystats.github.io/react-activity-calendar/",
+  "repository": "anystats/react-activity-calendar",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "files": [
