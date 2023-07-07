@@ -259,7 +259,12 @@ const ActivityCalendar: FunctionComponent<Props> = ({
     const totalCount =
       typeof totalCountProp === 'number'
         ? totalCountProp
-        : data.reduce((sum, activity) => sum + activity.count, 0);
+        : data.reduce((sum, activity) => {
+          if (activity.layers) {
+            return sum + Object.values(activity.layers).reduce((sum, layer) => sum + layer, 0);
+          }
+          return sum + activity.count;
+        }, 0);
 
     return (
       <footer
@@ -279,7 +284,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
           </div>
         )}
 
-        {!loading && !hideColorLegend && (
+        {!loading && !hideColorLegend && !theme.layers && (
           <div className={getClassName('legend-colors', styles.legendColors)}>
             <span style={{ marginRight: '0.4em' }}>{labels?.legend?.less ?? 'Less'}</span>
             {Array(LEVEL_COUNT)
@@ -296,6 +301,27 @@ const ActivityCalendar: FunctionComponent<Props> = ({
                 </svg>
               ))}
             <span style={{ marginLeft: '0.4em' }}>{labels?.legend?.more ?? 'More'}</span>
+          </div>
+        )}
+
+        {!loading && !hideColorLegend && theme.layers && (
+          <div className={getClassName('legend-colors', styles.legendColors)}>
+            {Object.keys(theme.layers)
+              .map((key) => (
+                <>
+                  <span style={{ marginRight: '0.4em' }}>{key}</span>
+                  <svg width={blockSize} height={blockSize} key={key}>
+                    <rect
+                      width={blockSize}
+                      height={blockSize}
+                      fill={chroma(theme.layers?.[key] as string).css()}
+                      rx={blockRadius}
+                      ry={blockRadius}
+                    />
+                  </svg>
+                  <span style={{ marginRight: '0.4em' }}></span>
+                </>
+              ))}
           </div>
         )}
       </footer>

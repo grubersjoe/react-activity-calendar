@@ -429,15 +429,17 @@ const layerTheme = Object.assign({}, explicitTheme);
 layerTheme.layers = {
   layer_0: '#39d353',
   layer_1: '#2a2b59',
-  layer_2: 'grey',
-  layer_3: 'yellow',
-  layer_4: 'magenta',
 };
+
+const layerLabels = {
+  ...labels,
+  totalCount: '{{count}} activities on 2 platform in {{year}}'
+}
 
 export const WithLayers: Story = {
   args: {
     data: generateData(0, 11, 2),
-    labels,
+    labels: layerLabels,
     theme: layerTheme,
   },
 };
@@ -445,7 +447,7 @@ export const WithLayers: Story = {
 export const WithLoadingLayers: Story = {
   args: {
     loading: true,
-    data: generateData(0, 11, 3),
+    data: generateData(0, 11, 2),
     labels,
     theme: layerTheme,
   },
