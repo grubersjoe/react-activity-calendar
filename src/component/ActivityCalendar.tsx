@@ -351,8 +351,6 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   const { width, height } = getDimensions();
 
   const calendarStyles = {
-    maxWidth: width,
-
     [`--${NAMESPACE}-level-0`]: colorScale[0],
     [`--${NAMESPACE}-level-1`]: colorScale[1],
     [`--${NAMESPACE}-level-2`]: colorScale[2],

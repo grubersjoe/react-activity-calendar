@@ -43,6 +43,7 @@
 
 .footer {
   display: flex;
+  gap: 1.5em;
 }
 
 .legendColors {

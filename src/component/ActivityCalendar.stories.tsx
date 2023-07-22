@@ -367,6 +367,33 @@ export const WithSpecificDateRange: Story = {
   },
 };
 
+export const WithLittleData: Story = {
+  args: {
+    data: [
+      {
+        date: '2023-06-14',
+        count: 2,
+        level: 1,
+      },
+      {
+        date: '2023-06-22',
+        count: 16,
+        level: 3,
+      },
+      {
+        date: '2023-07-05',
+        count: 3,
+        level: 1,
+      },
+      {
+        date: '2023-07-17',
+        count: 10,
+        level: 2,
+      },
+    ],
+  },
+};
+
 export const WithTooltips: Story = {
   render: TemplateTooltips,
 
