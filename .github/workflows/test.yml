@@ -1,31 +1,50 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  - push
+  - pull_request
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Node
+        uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'npm'
 
-      - name: Cache dependencies
-        uses: actions/cache@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        id: pnpm-install
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          version: 8
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install
 
       - name: Run type checks (TypeScript)
-        run: yarn tsc
+        run: pnpm tsc
 
       - name: Run linter (ESLint)
-        run: yarn lint
+        run: pnpm lint
 
       - name: Run unit tests
-        run: yarn test
+        run: pnpm test
