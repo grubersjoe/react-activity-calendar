@@ -158,7 +158,7 @@ const TemplateTooltips: StoryFn<Props> = args => (
       {`import { Tooltip as MuiTooltip } from '@mui/material';
 
 <ActivityCalendar
-  data={myData}
+  data={data}
   renderBlock={(block, activity) => (
     <MuiTooltip title={\`\${activity.count} activities on \${activity.date}\`}>
       {block}
@@ -184,7 +184,7 @@ const TemplateTooltips: StoryFn<Props> = args => (
 import "react-tooltip/dist/react-tooltip.css";
 
 <ActivityCalendar
-  data={myData}
+  data={data}
   renderBlock={(block, activity) =>
     React.cloneElement(block, {
       'data-tooltip-id': 'react-tooltip',

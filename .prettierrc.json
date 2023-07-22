@@ -5,7 +5,6 @@
   "importOrderSortSpecifiers": true,
   "printWidth": 100,
   "proseWrap": "always",
-  "semi": true,
   "singleQuote": true,
-  "trailingComma": "all"
+  "plugins": ["@trivago/prettier-plugin-sort-imports"]
 }
