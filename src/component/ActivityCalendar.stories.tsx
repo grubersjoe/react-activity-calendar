@@ -261,7 +261,7 @@ const TemplateEventHandlers: StoryFn<Props> = args => (
       inside the handler:
     </p>
     <CodeBlock>
-      {`(event: React.SyntheticEvent) => (data: Activity) => void
+      {`(event: React.SyntheticEvent) => (activity: Activity) => void
       
 interface Activity {
   date: string;

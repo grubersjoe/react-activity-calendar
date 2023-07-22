@@ -20,51 +20,51 @@ interface Label {
 }
 
 export function groupByWeeks(
-  days: Array<Activity>,
+  activities: Array<Activity>,
   weekStart: WeekDay = 0, // 0 = Sunday
 ): Array<Week> {
-  if (days.length === 0) {
+  if (activities.length === 0) {
     return [];
   }
 
-  const normalizedDays = fillHoles(days);
+  const normalizedActivities = fillHoles(activities);
 
   // Determine the first date of the calendar. If the first date is not the
   // set start weekday, the selected weekday one week earlier is used.
-  const firstDate = parseISO(normalizedDays[0].date);
+  const firstDate = parseISO(normalizedActivities[0].date);
   const firstCalendarDate =
     getDay(firstDate) === weekStart ? firstDate : subWeeks(nextDay(firstDate, weekStart), 1);
 
-  // To correctly group activities by week, it is necessary to left pad the
+  // To correctly group activities by week, it is necessary to left-pad the
   // list because the first date might not be set start weekday.
-  const paddedDays = [
+  const paddedActivities = [
     ...Array(differenceInCalendarDays(firstDate, firstCalendarDate)).fill(undefined),
-    ...normalizedDays,
+    ...normalizedActivities,
   ];
 
-  return Array(Math.ceil(paddedDays.length / 7))
+  return Array(Math.ceil(paddedActivities.length / 7))
     .fill(undefined)
-    .map((_, calendarWeek) => paddedDays.slice(calendarWeek * 7, calendarWeek * 7 + 7));
+    .map((_, calendarWeek) => paddedActivities.slice(calendarWeek * 7, calendarWeek * 7 + 7));
 }
 
 /**
  * The calendar expects a continuous sequence of days, so fill gaps with empty
  * activity data.
  */
-function fillHoles(days: Array<Activity>): Array<Activity> {
-  const daysMap = days.reduce((map, day) => {
-    map.set(day.date, day);
-    return map;
-  }, new Map<string, Activity>());
+function fillHoles(activities: Array<Activity>): Array<Activity> {
+  const dateMap: Record<string, Activity> = {};
+  for (const activity of activities) {
+    dateMap[activity.date] = activity;
+  }
 
   return eachDayOfInterval({
-    start: parseISO(days[0].date),
-    end: parseISO(days[days.length - 1].date),
+    start: parseISO(activities[0].date),
+    end: parseISO(activities[activities.length - 1].date),
   }).map(day => {
     const date = formatISO(day, { representation: 'date' });
 
-    if (daysMap.has(date)) {
-      return daysMap.get(date) as Activity;
+    if (dateMap[date]) {
+      return dateMap[date];
     }
 
     return {

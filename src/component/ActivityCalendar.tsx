@@ -78,7 +78,7 @@ export interface Props {
    */
   hideMonthLabels?: boolean;
   /**
-   * Toggle to hide total count below calendar.
+   * Toggle to hide the total count below calendar.
    */
   hideTotalCount?: boolean;
   /**
@@ -113,7 +113,7 @@ export interface Props {
    * specific color scheme with the `colorScheme` prop.
    *
    * Define each color scale explicitly with five colors or pass exactly two
-   * colors (lowest and highest intensity) to calculate a single-hue scale.
+   * colors (the lowest and highest intensity) to calculate a single-hue scale.
    * Colors can be specified in any valid CSS format.
    *
    * Example:
