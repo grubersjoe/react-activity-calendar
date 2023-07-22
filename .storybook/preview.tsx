@@ -1,12 +1,12 @@
 import { DocsContainer } from '@storybook/addon-docs';
 import { DocsContainerProps } from '@storybook/blocks';
 import { Preview } from '@storybook/react';
-import { ThemeVars, themes } from '@storybook/theming';
+import { ThemeVarsPartial, themes } from '@storybook/theming';
 import { useDarkMode } from 'storybook-dark-mode';
 
 import './storybook.scss';
 
-const common: ThemeVars = {
+const common: ThemeVarsPartial = {
   base: 'light',
   brandTitle: 'React Activity Calendar',
   brandUrl: 'https://github.com/grubersjoe/react-activity-calendar',
@@ -15,6 +15,7 @@ const common: ThemeVars = {
 export const preview: Preview = {
   parameters: {
     docs: {
+      toc: true,
       container: (props: DocsContainerProps) => (
         <DocsContainer
           {...props}
