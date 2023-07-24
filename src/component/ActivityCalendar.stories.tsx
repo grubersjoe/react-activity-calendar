@@ -409,7 +409,7 @@ export const EventHandlers: Story = {
   ),
 };
 
-const Source = ({ code, language = 'tsx' }: { code: string; language: string }) => (
+const Source = ({ code, language = 'tsx' }: { code: string; language?: string }) => (
   <StorybookSource code={code} dark={useDarkMode()} language={language} />
 );
 
