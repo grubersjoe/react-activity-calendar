@@ -22,6 +22,9 @@ export const preview: Preview = {
           theme={{ ...common, ...(useDarkMode() ? themes.dark : themes.light) }}
         />
       ),
+      source: {
+        language: 'tsx',
+      },
     },
     darkMode: {
       stylePreview: true,

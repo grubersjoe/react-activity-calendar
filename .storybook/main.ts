@@ -12,7 +12,6 @@ const config: StorybookConfig = {
     '@storybook/addon-links',
     'storybook-dark-mode',
   ],
-  core: {},
   framework: {
     name: '@storybook/react-webpack5',
     options: {},
@@ -24,11 +23,13 @@ const config: StorybookConfig = {
   typescript: {
     reactDocgen: 'react-docgen',
   },
-  webpackFinal: async config => {
-    if (config?.module?.rules) {
+  webpackFinal: config => {
+    if (config.module?.rules) {
       // Replace shipped CSS rule to support CSS modules and SCSS
-      config.module.rules = config.module.rules.map(rule => {
-        if ((rule as RuleSetRule).test?.toString() === '/\\.css$/') {
+      config.module.rules = config.module.rules.map(r => {
+        const rule = r as RuleSetRule;
+
+        if (rule.test?.toString() === '/\\.css$/') {
           return {
             test: /\.(c|sc|sa)ss$/,
             sideEffects: true,
@@ -50,7 +51,24 @@ const config: StorybookConfig = {
           };
         }
 
+        // Ignore asset/source imports (see below)
+        if (rule.test?.toString() === '/\\.(mjs|tsx?|jsx?)$/') {
+          return {
+            ...rule,
+            resourceQuery: { not: [/raw/] },
+          };
+        }
+
         return rule;
+      });
+
+      config.module.rules.push({
+        resourceQuery: /raw/,
+        type: 'asset/source',
+        loader: 'string-replace-loader',
+        options: {
+          multiple: [{ search: '// @ts-nocheck\n', replace: '' }],
+        },
       });
     }
 

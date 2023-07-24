@@ -1,14 +1,13 @@
-.gitignore
-.npmignore
-.prettierignore
-
 LICENSE
+pnpm-lock.yaml
+examples
 
-*.directory
-*.lock
-*.ico
-*.png
+.*
+!.storybook
+
 *.mjs
 *.d.ts
+*.ico
+*.png
 
-**/*/build/**/*
+**/build/**/*

@@ -77,6 +77,7 @@
     "sass-loader": "^13.3.2",
     "storybook": "~7.1.0",
     "storybook-dark-mode": "^3.0.0",
+    "string-replace-loader": "^3.1.0",
     "style-loader": "^3.3.3",
     "typescript": "^5.1.6"
   },

@@ -106,15 +106,14 @@ export interface Props {
    */
   style?: CSSProperties;
   /**
-   * Set the calendar colors for the `light` and `dark` system color scheme. The
-   * color scale for at least one color scheme needs to be specified. For
-   * undefined values, the default theme is selected. By default, the calendar
-   * will use the currently set system color scheme, but you can enforce a
-   * specific color scheme with the `colorScheme` prop.
-   *
+   * Set the calendar colors for the light and dark system color scheme.
    * Define each color scale explicitly with five colors or pass exactly two
    * colors (the lowest and highest intensity) to calculate a single-hue scale.
    * Colors can be specified in any valid CSS format.
+   *
+   * The colors for at least one scheme must be set. If undefined, the default
+   * theme is used. By default, the calendar will select the current system color
+   * scheme, but you can enforce a specific scheme with the `colorScheme` prop.
    *
    * Example:
    *
