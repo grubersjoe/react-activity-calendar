@@ -32,6 +32,10 @@ export interface Props {
    * amount of tracked data and a `level` property in the range `0-4` to
    * specify activity intensity.
    *
+   * For missing dates, no activity is assumed. This allows choosing the start
+   * and end date of the calendar arbitrarily by passing empty entries as the
+   * first and last item.
+   *
    * Example object:
    *
    * ```json
