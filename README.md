@@ -17,13 +17,13 @@ changes._
 ### Start the Storybook
 
 ```shell
-yarn storybook
+npm run storybook
 ```
 
 ### Update documentation
 
 ```shell
-yarn build:storybook
+npm run build:storybook
 ```
 
 ## Related projects
