@@ -80,6 +80,21 @@ const meta: Meta<Props> = {
   },
 };
 
+// Storybook does not initialize the controls for some reason
+const defaultProps = {
+  data: generateData(),
+  blockMargin: 4,
+  blockRadius: 2,
+  blockSize: 12,
+  fontSize: 14,
+  hideColorLegend: false,
+  hideMonthLabels: false,
+  hideTotalCount: false,
+  loading: false,
+  showWeekdayLabels: false,
+  weekStart: 0, // Sunday
+} satisfies Props;
+
 export default meta;
 const explicitTheme: Theme = {
   light: ['#f0f0f0', '#c4edde', '#7ac7c4', '#f73859', '#384259'],
@@ -87,9 +102,7 @@ const explicitTheme: Theme = {
 };
 
 export const Default: Story = {
-  args: {
-    data: generateData(),
-  },
+  args: defaultProps,
   parameters: {
     docs: {
       source: {
@@ -101,8 +114,8 @@ export const Default: Story = {
 
 export const Loading: Story = {
   args: {
+    ...defaultProps,
     loading: true,
-    data: generateData(),
   },
   parameters: {
     docs: {
@@ -115,11 +128,11 @@ export const Loading: Story = {
 
 export const WithTheme: Story = {
   args: {
+    ...defaultProps,
     theme: {
       light: ['hsl(0, 0%, 92%)', 'rebeccapurple'],
       dark: ['hsl(0, 0%, 22%)', 'hsl(225,92%,77%)'],
     },
-    data: generateData(),
   },
   parameters: {
     docs: {
@@ -160,7 +173,7 @@ export const WithTheme: Story = {
 
 export const WithExplicitTheme: Story = {
   args: {
-    data: generateData(),
+    ...defaultProps,
     theme: explicitTheme,
   },
   parameters: {
@@ -188,7 +201,7 @@ export const WithExplicitTheme: Story = {
 
 export const WithCustomizedLook: Story = {
   args: {
-    data: generateData(),
+    ...defaultProps,
     blockSize: 14,
     blockRadius: 7,
     blockMargin: 5,
@@ -206,7 +219,7 @@ export const WithCustomizedLook: Story = {
 
 export const WithMondayAsWeekStart: Story = {
   args: {
-    data: generateData(),
+    ...defaultProps,
     weekStart: 1,
   },
   parameters: {
@@ -220,6 +233,7 @@ export const WithMondayAsWeekStart: Story = {
 
 export const WithSpecificDateRange: Story = {
   args: {
+    ...defaultProps,
     data: generateData(2, 7),
   },
   parameters: {
@@ -233,6 +247,7 @@ export const WithSpecificDateRange: Story = {
 
 export const WithLittleData: Story = {
   args: {
+    ...defaultProps,
     data: [
       {
         date: '2023-06-14',
@@ -259,9 +274,7 @@ export const WithLittleData: Story = {
 };
 
 export const WithScreenOverflow: Story = {
-  args: {
-    data: generateData(),
-  },
+  args: defaultProps,
   parameters: {
     docs: {
       source: {
@@ -280,9 +293,7 @@ export const WithScreenOverflow: Story = {
 };
 
 export const WithTooltips: Story = {
-  args: {
-    data: generateData(),
-  },
+  args: defaultProps,
   parameters: {
     docs: {
       source: {
@@ -337,7 +348,7 @@ export const WithTooltips: Story = {
 
 export const WithoutLabels: Story = {
   args: {
-    data: generateData(),
+    ...defaultProps,
     hideMonthLabels: true,
     hideColorLegend: true,
     hideTotalCount: true,
@@ -353,7 +364,7 @@ export const WithoutLabels: Story = {
 
 export const WithDayLabels: Story = {
   args: {
-    data: generateData(),
+    ...defaultProps,
     showWeekdayLabels: true,
   },
   parameters: {
@@ -367,7 +378,7 @@ export const WithDayLabels: Story = {
 
 export const WithLocalizedLabels: Story = {
   args: {
-    data: generateData(),
+    ...defaultProps,
     showWeekdayLabels: true,
     labels: {
       months: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
@@ -400,7 +411,7 @@ const eventHandlerData = generateData();
 
 export const EventHandlers: Story = {
   args: {
-    data: eventHandlerData,
+    ...defaultProps,
     eventHandlers: {
       onClick: () => activity => alert(JSON.stringify(activity)),
       onMouseEnter: () => () => console.log('on mouse enter'),
