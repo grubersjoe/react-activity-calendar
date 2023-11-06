@@ -14,6 +14,7 @@
   "scripts": {
     "build": "rollup -c",
     "build:storybook": "storybook build -o docs/",
+    "ci": "npx tsc && npm run lint && npm run test",
     "format": "prettier --write './*' 'src/**/*' '.storybook/**/*'",
     "lint": "eslint 'src/**/*' --max-warnings=0",
     "postbuild": "dts-bundle-generator src/index.ts -o build/index.d.ts --no-check --no-banner --external-imports react tinycolor2 date-fns",

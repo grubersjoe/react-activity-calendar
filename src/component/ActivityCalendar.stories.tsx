@@ -407,8 +407,6 @@ export const WithLocalizedLabels: Story = {
   ),
 };
 
-const eventHandlerData = generateData();
-
 export const EventHandlers: Story = {
   args: {
     ...defaultProps,
