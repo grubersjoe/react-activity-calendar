@@ -1,3 +1,9 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .container rect {
   stroke: rgba(0, 0, 0, 0.08);
   stroke-width: 1px;
@@ -10,11 +16,15 @@
   }
 }
 
+.scrollContainer {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
 .calendar {
   display: block;
-  max-width: 100%;
-  height: auto;
-  overflow: visible;
+  width: max-content;
 }
 
 .calendar text {

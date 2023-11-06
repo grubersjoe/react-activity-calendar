@@ -51,7 +51,7 @@ const meta: Meta<Props> = {
       control: { type: 'range', min: 0, max: 20 },
     },
     blockSize: {
-      control: { type: 'range', min: 4, max: 100, step: 2 },
+      control: { type: 'range', min: 4, max: 30, step: 1 },
     },
     colorScheme: {
       control: false,
@@ -256,6 +256,27 @@ export const WithLittleData: Story = {
       },
     ],
   },
+};
+
+export const WithScreenOverflow: Story = {
+  args: {
+    data: generateData(),
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: '<ActivityCalendar data={data} />',
+      },
+    },
+  },
+  render: args => (
+    <Container>
+      <h1>With screen overflow</h1>
+      <div style={{ width: 480, border: 'dashed 1px #929292' }}>
+        <ActivityCalendar {...args} />
+      </div>
+    </Container>
+  ),
 };
 
 export const WithTooltips: Story = {

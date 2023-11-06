@@ -21,7 +21,7 @@ import {
   SVGRectEventHandler,
   ThemeInput,
 } from '../types';
-import { generateEmptyData, getClassName, getMonthLabels, groupByWeeks } from '../utils';
+import { generateEmptyData, getClassName, getMonthLabels, groupByWeeks } from '../utils/calendar';
 import { createTheme } from '../utils/theme';
 import styles from './styles.module.css';
 
@@ -158,7 +158,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   loading = false,
   renderBlock = undefined,
   showWeekdayLabels = false,
-  style = {},
+  style: styleProp = {},
   theme: themeProp = undefined,
   totalCount: totalCountProp = undefined,
   weekStart = 0, // Sunday
@@ -258,10 +258,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
         : data.reduce((sum, activity) => sum + activity.count, 0);
 
     return (
-      <footer
-        className={getClassName('footer', styles.footer)}
-        style={{ marginTop: 2 * blockMargin, fontSize }}
-      >
+      <footer className={getClassName('footer', styles.footer)}>
         {/* Placeholder */}
         {loading && <div>&nbsp;</div>}
 
@@ -299,10 +296,6 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   }
 
   function renderLabels() {
-    const style = {
-      fontSize,
-    };
-
     if (!showWeekdayLabels && hideMonthLabels) {
       return null;
     }
@@ -310,8 +303,8 @@ const ActivityCalendar: FunctionComponent<Props> = ({
     return (
       <>
         {showWeekdayLabels && (
-          <g className={getClassName('legend-weekday')} style={style}>
-            {weeks[0].map((day, index) => {
+          <g className={getClassName('legend-weekday')}>
+            {weeks[0].map((_, index) => {
               if (index % 2 === 0) {
                 return null;
               }
@@ -332,7 +325,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
           </g>
         )}
         {!hideMonthLabels && (
-          <g className={getClassName('legend-month')} style={style}>
+          <g className={getClassName('legend-month')}>
             {getMonthLabels(weeks, labels.months).map(({ text, x }, index, labels) => {
               // Skip the first month label if there's not enough space to the next one
               if (index === 0 && labels[1] && labels[1].x - x <= MIN_DISTANCE_MONTH_LABELS) {
@@ -353,7 +346,8 @@ const ActivityCalendar: FunctionComponent<Props> = ({
 
   const { width, height } = getDimensions();
 
-  const calendarStyles = {
+  const containerStyles = {
+    fontSize,
     [`--${NAMESPACE}-level-0`]: colorScale[0],
     [`--${NAMESPACE}-level-1`]: colorScale[1],
     [`--${NAMESPACE}-level-2`]: colorScale[2],
@@ -370,16 +364,21 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   };
 
   return (
-    <article className={`${NAMESPACE} ${styles.container}`} style={{ ...style, ...calendarStyles }}>
-      <svg
-        width={width}
-        height={height}
-        viewBox={`0 0 ${width} ${height}`}
-        className={getClassName('calendar', styles.calendar)}
-      >
-        {!loading && renderLabels()}
-        {renderCalendar()}
-      </svg>
+    <article
+      className={`${NAMESPACE} ${styles.container}`}
+      style={{ ...styleProp, ...containerStyles }}
+    >
+      <div className={getClassName('scroll-container', styles.scrollContainer)}>
+        <svg
+          width={width}
+          height={height}
+          viewBox={`0 0 ${width} ${height}`}
+          className={getClassName('calendar', styles.calendar)}
+        >
+          {!loading && renderLabels()}
+          {renderCalendar()}
+        </svg>
+      </div>
       {renderFooter()}
     </article>
   );
