@@ -53,14 +53,16 @@
 
 .footer {
   display: flex;
-  gap: 1.5em;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  white-space: nowrap;
 }
 
 .legendColors {
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 0.2em;
+  gap: 3px;
 }
 
 @keyframes loadingAnimation {
