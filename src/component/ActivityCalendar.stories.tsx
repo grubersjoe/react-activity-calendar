@@ -273,7 +273,7 @@ export const WithLittleData: Story = {
   },
 };
 
-export const WithScreenOverflow: Story = {
+export const WithNarrowScreen: Story = {
   args: defaultProps,
   parameters: {
     docs: {
@@ -283,12 +283,9 @@ export const WithScreenOverflow: Story = {
     },
   },
   render: args => (
-    <Container>
-      <h1>With screen overflow</h1>
-      <div style={{ width: 480, maxWidth: '100%', border: 'dashed 1px #929292' }}>
-        <ActivityCalendar {...args} />
-      </div>
-    </Container>
+    <div style={{ width: 480, maxWidth: '100%', border: 'dashed 1px #929292' }}>
+      <ActivityCalendar {...args} />
+    </div>
   ),
 };
 
