@@ -10,13 +10,12 @@ import {
   subWeeks,
 } from 'date-fns';
 
-import { DEFAULT_MONTH_LABELS, MIN_DISTANCE_MONTH_LABELS, NAMESPACE } from '../constants';
+import { DEFAULT_MONTH_LABELS, NAMESPACE } from '../constants';
 import { Activity, Week } from '../types';
 
-interface Label {
-  x: number;
-  y: number;
-  text: string;
+interface MonthLabel {
+  weekIndex: number;
+  label: string;
 }
 
 export function groupByWeeks(
@@ -35,21 +34,24 @@ export function groupByWeeks(
   const firstCalendarDate =
     getDay(firstDate) === weekStart ? firstDate : subWeeks(nextDay(firstDate, weekStart), 1);
 
-  // To correctly group activities by week, it is necessary to left-pad the
-  // list because the first date might not be set start weekday.
+  // To correctly group activities by week, it is necessary to left-pad the list
+  // because the first date might not be set start weekday.
   const paddedActivities = [
     ...Array(differenceInCalendarDays(firstDate, firstCalendarDate)).fill(undefined),
     ...normalizedActivities,
   ];
 
-  return Array(Math.ceil(paddedActivities.length / 7))
+  const numberOfWeeks = Math.ceil(paddedActivities.length / 7);
+
+  // Finally, group activities by week
+  return Array(numberOfWeeks)
     .fill(undefined)
-    .map((_, calendarWeek) => paddedActivities.slice(calendarWeek * 7, calendarWeek * 7 + 7));
+    .map((_, weekIndex) => paddedActivities.slice(weekIndex * 7, weekIndex * 7 + 7));
 }
 
 /**
- * The calendar expects a continuous sequence of days, so fill gaps with empty
- * activity data.
+ * The calendar expects a continuous sequence of days,
+ * so fill gaps with empty activity data.
  */
 function fillHoles(activities: Array<Activity>): Array<Activity> {
   const dateMap: Record<string, Activity> = {};
@@ -78,34 +80,39 @@ function fillHoles(activities: Array<Activity>): Array<Activity> {
 export function getMonthLabels(
   weeks: Array<Week>,
   monthNames: Array<string> = DEFAULT_MONTH_LABELS,
-): Array<Label> {
+): Array<MonthLabel> {
   return weeks
-    .reduce<Array<Label>>((labels, week, index) => {
-      const firstWeekDay = week.find(day => day !== undefined);
+    .reduce<Array<MonthLabel>>((labels, week, weekIndex) => {
+      const firstActivity = week.find(activity => activity !== undefined);
 
-      if (!firstWeekDay) {
-        throw new Error(`Unexpected error: Week is empty: [${week}].`);
+      if (!firstActivity) {
+        throw new Error(`Unexpected error: Week ${weekIndex + 1} is empty: [${week}].`);
       }
 
-      const month = monthNames[getMonth(parseISO(firstWeekDay.date))];
-      const prev = labels[labels.length - 1];
+      const month = monthNames[getMonth(parseISO(firstActivity.date))];
+      const prevLabel = labels[labels.length - 1];
 
-      if (index === 0 || prev.text !== month) {
-        return [
-          ...labels,
-          {
-            x: index,
-            y: 0,
-            text: month,
-          },
-        ];
+      if (weekIndex === 0 || prevLabel.label !== month) {
+        return [...labels, { weekIndex, label: month }];
       }
 
       return labels;
     }, [])
-    .filter((label, index, labels) => {
+    .filter(({ weekIndex }, index, labels) => {
+      // Labels should only be shown if there is "enough" space (data).
+      // This is a naive implementation that does not take the block size,
+      // font size etc. into account.
+      const minWeeks = 2;
+
+      // Skip the first month label if there is not enough space to the next one.
       if (index === 0) {
-        return labels[1] && labels[1].x - label.x > MIN_DISTANCE_MONTH_LABELS;
+        return labels[1] && labels[1].weekIndex - weekIndex > minWeeks;
+      }
+
+      // Skip the last month label the there is not enough data in that month to
+      // avoid overflowing the calendar on the right.
+      if (index === labels.length - 1) {
+        return weeks.slice(weekIndex).length >= minWeeks;
       }
 
       return true;

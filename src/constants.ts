@@ -2,8 +2,6 @@ export const NAMESPACE = 'react-activity-calendar';
 
 export const LEVEL_COUNT = 5;
 
-export const MIN_DISTANCE_MONTH_LABELS = 2;
-
 export const DEFAULT_MONTH_LABELS = [
   'Jan',
   'Feb',

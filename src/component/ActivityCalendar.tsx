@@ -3,13 +3,7 @@ import type { Day as WeekDay } from 'date-fns';
 import { getYear, parseISO } from 'date-fns';
 import React, { CSSProperties, Fragment, FunctionComponent, ReactElement } from 'react';
 
-import {
-  DEFAULT_LABELS,
-  DEFAULT_WEEKDAY_LABELS,
-  LEVEL_COUNT,
-  MIN_DISTANCE_MONTH_LABELS,
-  NAMESPACE,
-} from '../constants';
+import { DEFAULT_LABELS, DEFAULT_WEEKDAY_LABELS, LEVEL_COUNT, NAMESPACE } from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import {
@@ -326,18 +320,15 @@ const ActivityCalendar: FunctionComponent<Props> = ({
         )}
         {!hideMonthLabels && (
           <g className={getClassName('legend-month')}>
-            {getMonthLabels(weeks, labels.months).map(({ text, x }, index, labels) => {
-              // Skip the first month label if there's not enough space to the next one
-              if (index === 0 && labels[1] && labels[1].x - x <= MIN_DISTANCE_MONTH_LABELS) {
-                return null;
-              }
-
-              return (
-                <text x={(blockSize + blockMargin) * x} dominantBaseline="hanging" key={x}>
-                  {text}
-                </text>
-              );
-            })}
+            {getMonthLabels(weeks, labels.months).map(({ label, weekIndex }) => (
+              <text
+                x={(blockSize + blockMargin) * weekIndex}
+                dominantBaseline="hanging"
+                key={weekIndex}
+              >
+                {label}
+              </text>
+            ))}
           </g>
         )}
       </>
