@@ -2,16 +2,18 @@ import type { Day as WeekDay } from 'date-fns';
 import {
   differenceInCalendarDays,
   eachDayOfInterval,
+  endOfYear,
   formatISO,
   getDay,
   getMonth,
   nextDay,
   parseISO,
+  startOfYear,
   subWeeks,
 } from 'date-fns';
 
-import { DEFAULT_MONTH_LABELS, NAMESPACE } from '../constants';
-import { Activity, Week } from '../types';
+import { DEFAULT_MONTH_LABELS, LEVEL_COUNT, NAMESPACE } from '../constants';
+import { Activity, Level, Week } from '../types';
 
 interface MonthLabel {
   weekIndex: number;
@@ -139,4 +141,27 @@ export function generateEmptyData(): Array<Activity> {
     count: 0,
     level: 0,
   }));
+}
+
+export function generateData(interval?: { start: Date; end: Date }): Array<Activity> {
+  const max = 10;
+  const now = new Date();
+
+  const days = eachDayOfInterval(
+    interval ?? {
+      start: startOfYear(now),
+      end: endOfYear(now),
+    },
+  );
+
+  return days.map(date => {
+    const count = Math.max(0, Math.round(Math.random() * max - Math.random() * (0.8 * max)));
+    const level = Math.floor((count / max) * LEVEL_COUNT) as Level;
+
+    return {
+      date: formatISO(date, { representation: 'date' }),
+      count,
+      level,
+    };
+  });
 }

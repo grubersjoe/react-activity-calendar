@@ -2,7 +2,6 @@ import { Tooltip as MuiTooltip } from '@mui/material';
 import LinkTo from '@storybook/addon-links/react';
 import { Source as StorybookSource } from '@storybook/blocks';
 import { Meta, StoryObj } from '@storybook/react';
-import { eachDayOfInterval, formatISO, lastDayOfMonth } from 'date-fns';
 import React, { cloneElement } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
@@ -18,8 +17,8 @@ import exampleThemeExplicit from '../../examples/themes-explicit?raw';
 import exampleTheme from '../../examples/themes?raw';
 import exampleTooltipsMui from '../../examples/tooltips-mui?raw';
 import exampleTooltipsReact from '../../examples/tooltips-react?raw';
-import { LEVEL_COUNT } from '../constants';
-import { Level, Theme } from '../types';
+import { Theme } from '../types';
+import { generateData } from '../utils/calendar';
 import ActivityCalendar, { Props } from './ActivityCalendar';
 
 type Story = StoryObj<Props>;
@@ -234,7 +233,10 @@ export const WithMondayAsWeekStart: Story = {
 export const WithSpecificDateRange: Story = {
   args: {
     ...defaultProps,
-    data: generateData(2, 7),
+    data: generateData({
+      start: new Date(2023, 2, 8),
+      end: new Date(2023, 7, 1),
+    }),
   },
   parameters: {
     docs: {
@@ -439,26 +441,3 @@ export const EventHandlers: Story = {
 const Source = ({ code, language = 'tsx' }: { code: string; language?: string }) => (
   <StorybookSource code={code} dark={useDarkMode()} language={language} />
 );
-
-function generateData(monthStart = 0, monthEnd = 11) {
-  const MAX = 10;
-
-  const yearStart = new Date().getFullYear();
-  const yearEnd = monthEnd < monthStart ? yearStart + 1 : yearStart;
-
-  const days = eachDayOfInterval({
-    start: new Date(yearStart, monthStart, 1),
-    end: lastDayOfMonth(new Date(yearEnd, monthEnd, 1)),
-  });
-
-  return days.map(date => {
-    const count = Math.max(0, Math.round(Math.random() * MAX - Math.random() * (0.8 * MAX)));
-    const level = Math.floor((count / MAX) * LEVEL_COUNT) as Level;
-
-    return {
-      date: formatISO(date, { representation: 'date' }),
-      count,
-      level,
-    };
-  });
-}
