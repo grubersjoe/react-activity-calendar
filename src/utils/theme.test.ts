@@ -18,7 +18,7 @@ describe('createTheme', () => {
         // @ts-ignore
         'invalid',
       ),
-    ).toThrowError();
+    ).toThrow();
   });
 
   test('throws an error if neither "light" or "dark" inputs are set', () => {
@@ -27,7 +27,7 @@ describe('createTheme', () => {
         // @ts-ignore
         {},
       ),
-    ).toThrowError();
+    ).toThrow();
   });
 
   test('throws an error if too few colors are passed', () => {
@@ -36,7 +36,7 @@ describe('createTheme', () => {
         // @ts-ignore
         light: ['blue'],
       }),
-    ).toThrowError();
+    ).toThrow();
   });
 
   test('throws an error if too many colors are passed', () => {
@@ -45,7 +45,7 @@ describe('createTheme', () => {
         // @ts-ignore
         dark: Array(LEVEL_COUNT + 1).fill('blue'),
       }),
-    ).toThrowError();
+    ).toThrow();
   });
 
   test('uses default dark color scale if undefined in input', () => {
@@ -75,7 +75,7 @@ describe('createTheme', () => {
       createTheme({
         dark: ['#333', '🙃'],
       }),
-    ).toThrowError();
+    ).toThrow();
   });
 
   test('returns the same value for explicit inputs', () => {
