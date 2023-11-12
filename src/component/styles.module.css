@@ -23,8 +23,7 @@
 }
 
 .calendar {
-  display: block;
-  width: max-content;
+  display: block; /* SVGs are inline-block by default */
 }
 
 .calendar text {
