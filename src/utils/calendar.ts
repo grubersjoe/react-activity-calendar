@@ -114,7 +114,7 @@ export function getMonthLabels(
       // Skip the last month label the there is not enough data in that month to
       // avoid overflowing the calendar on the right.
       if (index === labels.length - 1) {
-        return weeks.slice(weekIndex).length >= minWeeks;
+        return weeks.slice(weekIndex).length > minWeeks;
       }
 
       return true;
