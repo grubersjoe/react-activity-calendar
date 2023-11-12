@@ -104,17 +104,17 @@ export function getMonthLabels(
       // Labels should only be shown if there is "enough" space (data).
       // This is a naive implementation that does not take the block size,
       // font size etc. into account.
-      const minWeeks = 2;
+      const minWeeks = 3;
 
       // Skip the first month label if there is not enough space to the next one.
       if (index === 0) {
-        return labels[1] && labels[1].weekIndex - weekIndex > minWeeks;
+        return labels[1] && labels[1].weekIndex - weekIndex >= minWeeks;
       }
 
       // Skip the last month label the there is not enough data in that month to
       // avoid overflowing the calendar on the right.
       if (index === labels.length - 1) {
-        return weeks.slice(weekIndex).length > minWeeks;
+        return weeks.slice(weekIndex).length >= minWeeks;
       }
 
       return true;

@@ -26,7 +26,7 @@ describe('getMonthLabels', () => {
     ]);
   });
 
-  test('skips label for first month if it does not contain at least two full weeks', () => {
+  test('skips label for first month if it does not contain at least three weeks of data', () => {
     const weeks = groupByWeeks(
       generateData({
         start: new Date(2023, 9, 22),
@@ -40,7 +40,7 @@ describe('getMonthLabels', () => {
     ]);
   });
 
-  test('skips label for last month if it does not contain at least two full weeks', () => {
+  test('skips label for last month if it does not contain at least three weeks of data', () => {
     const weeks = groupByWeeks(
       generateData({
         start: new Date(2023, 3, 1),
@@ -51,7 +51,7 @@ describe('getMonthLabels', () => {
     expect(getMonthLabels(weeks)).toEqual([{ label: 'Apr', weekIndex: 0 }]);
   });
 
-  test('skips first and last label if both months do not contain at least two full weeks', () => {
+  test('skips first and last label if both months do not contain at least three weeks of data', () => {
     const weeks = groupByWeeks(
       generateData({
         start: new Date(2023, 1, 22),
