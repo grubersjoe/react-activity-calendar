@@ -1,4 +1,5 @@
 .container {
+  max-width: 100%; /* Do not remove - flexbox parents */
   display: flex;
   flex-direction: column;
   gap: 8px;
