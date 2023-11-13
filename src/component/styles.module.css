@@ -25,6 +25,7 @@
 
 .calendar {
   display: block; /* SVGs are inline-block by default */
+  overflow: visible; /* Weekday labels are rendered left of the container */
 }
 
 .calendar text {

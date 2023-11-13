@@ -361,7 +361,7 @@ export const WithoutLabels: Story = {
   },
 };
 
-export const WithDayLabels: Story = {
+export const WithWeekdayLabels: Story = {
   args: {
     ...defaultProps,
     showWeekdayLabels: true,

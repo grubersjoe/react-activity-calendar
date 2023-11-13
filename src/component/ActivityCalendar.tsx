@@ -3,7 +3,7 @@ import type { Day as WeekDay } from 'date-fns';
 import { getYear, parseISO } from 'date-fns';
 import React, { CSSProperties, Fragment, FunctionComponent, ReactElement } from 'react';
 
-import { DEFAULT_LABELS, DEFAULT_WEEKDAY_LABELS, LEVEL_COUNT, NAMESPACE } from '../constants';
+import { DEFAULT_LABELS, LABEL_MARGIN, LEVEL_COUNT, NAMESPACE } from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import {
@@ -15,7 +15,13 @@ import {
   SVGRectEventHandler,
   ThemeInput,
 } from '../types';
-import { generateEmptyData, getClassName, getMonthLabels, groupByWeeks } from '../utils/calendar';
+import {
+  generateEmptyData,
+  getClassName,
+  getMonthLabels,
+  groupByWeeks,
+  maxWeekdayLabelLength,
+} from '../utils/calendar';
 import { createTheme } from '../utils/theme';
 import styles from './styles.module.css';
 
@@ -175,12 +181,16 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   const weeks = groupByWeeks(data, weekStart);
 
   const labels = Object.assign({}, DEFAULT_LABELS, labelsProp);
-  const textHeight = hideMonthLabels ? 0 : fontSize + 8;
+  const labelHeight = hideMonthLabels ? 0 : fontSize + LABEL_MARGIN;
+
+  const weekdayLabelOffset = showWeekdayLabels
+    ? maxWeekdayLabelLength(weeks[0], weekStart, labels.weekdays, fontSize) + LABEL_MARGIN
+    : undefined;
 
   function getDimensions() {
     return {
       width: weeks.length * (blockSize + blockMargin) - blockMargin,
-      height: textHeight + (blockSize + blockMargin) * 7 - blockMargin,
+      height: labelHeight + (blockSize + blockMargin) * 7 - blockMargin,
     };
   }
 
@@ -216,7 +226,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
             <rect
               {...getEventHandlers(activity)}
               x={0}
-              y={textHeight + (blockSize + blockMargin) * dayIndex}
+              y={labelHeight + (blockSize + blockMargin) * dayIndex}
               width={blockSize}
               height={blockSize}
               rx={blockRadius}
@@ -252,7 +262,10 @@ const ActivityCalendar: FunctionComponent<Props> = ({
         : data.reduce((sum, activity) => sum + activity.count, 0);
 
     return (
-      <footer className={getClassName('footer', styles.footer)}>
+      <footer
+        className={getClassName('footer', styles.footer)}
+        style={{ marginLeft: weekdayLabelOffset }}
+      >
         {/* Placeholder */}
         {loading && <div>&nbsp;</div>}
 
@@ -307,12 +320,13 @@ const ActivityCalendar: FunctionComponent<Props> = ({
 
               return (
                 <text
-                  x={-2 * blockMargin}
-                  y={textHeight + (fontSize / 2 + blockMargin) + (blockSize + blockMargin) * index}
+                  x={-LABEL_MARGIN}
+                  y={labelHeight + (blockSize + blockMargin) * index + blockSize / 2}
+                  dominantBaseline="middle"
                   textAnchor="end"
                   key={index}
                 >
-                  {labels.weekdays ? labels.weekdays[dayIndex] : DEFAULT_WEEKDAY_LABELS[dayIndex]}
+                  {labels.weekdays[dayIndex]}
                 </text>
               );
             })}
@@ -365,6 +379,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
           height={height}
           viewBox={`0 0 ${width} ${height}`}
           className={getClassName('calendar', styles.calendar)}
+          style={{ marginLeft: weekdayLabelOffset }}
         >
           {!loading && renderLabels()}
           {renderCalendar()}

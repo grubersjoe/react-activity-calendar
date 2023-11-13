@@ -1,6 +1,6 @@
 export const NAMESPACE = 'react-activity-calendar';
-
 export const LEVEL_COUNT = 5;
+export const LABEL_MARGIN = 8; // px
 
 export const DEFAULT_MONTH_LABELS = [
   'Jan',
@@ -16,11 +16,10 @@ export const DEFAULT_MONTH_LABELS = [
   'Nov',
   'Dec',
 ];
-export const DEFAULT_WEEKDAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export const DEFAULT_LABELS = {
   months: DEFAULT_MONTH_LABELS,
-  weekdays: DEFAULT_WEEKDAY_LABELS,
+  weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
   totalCount: '{{count}} activities in {{year}}',
   legend: {
     less: 'Less',

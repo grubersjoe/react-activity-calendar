@@ -165,3 +165,54 @@ export function generateData(interval?: { start: Date; end: Date }): Array<Activ
     };
   });
 }
+
+export function maxWeekdayLabelLength(
+  firstWeek: Week,
+  weekStart: number,
+  labels: string[],
+  fontSize: number,
+): number {
+  return firstWeek.reduce((maxLength, _, index) => {
+    if (index % 2 !== 0) {
+      const dayIndex = (index + weekStart) % 7;
+      const curLength = Math.ceil(calcTextDimensions(labels[dayIndex], fontSize).width);
+
+      return Math.max(maxLength, curLength);
+    }
+
+    return maxLength;
+  }, 0);
+}
+
+function calcTextDimensions(text: string, fontSize: number) {
+  if (typeof document === 'undefined' || typeof window === 'undefined') {
+    throw new Error('calcTextDimensions() requires browser APIs');
+  }
+
+  if (fontSize < 1) {
+    throw new RangeError('fontSize must be positive');
+  }
+
+  if (text.length === 0) {
+    return { width: 0, height: 0 };
+  }
+
+  const namespace = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(namespace, 'svg');
+
+  svg.style.position = 'absolute';
+  svg.style.visibility = 'hidden';
+  svg.style.fontFamily = window.getComputedStyle(document.body).fontFamily;
+  svg.style.fontSize = `${fontSize}px`;
+
+  const textNode = document.createElementNS(namespace, 'text');
+  textNode.textContent = text;
+
+  svg.appendChild(textNode);
+  document.body.appendChild(svg);
+  const boundingBox = textNode.getBBox();
+
+  document.body.removeChild(svg);
+
+  return { width: boundingBox.width, height: boundingBox.height };
+}
