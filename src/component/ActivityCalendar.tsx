@@ -175,7 +175,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   const weeks = groupByWeeks(data, weekStart);
 
   const labels = Object.assign({}, DEFAULT_LABELS, labelsProp);
-  const textHeight = hideMonthLabels ? 0 : fontSize + 2 * blockMargin;
+  const textHeight = hideMonthLabels ? 0 : fontSize + 8;
 
   function getDimensions() {
     return {
