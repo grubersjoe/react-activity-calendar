@@ -33,26 +33,6 @@
   fill: currentColor;
 }
 
-.calendar [data-level='0'] {
-  fill: var(--react-activity-calendar-level-0);
-}
-
-.calendar [data-level='1'] {
-  fill: var(--react-activity-calendar-level-1);
-}
-
-.calendar [data-level='2'] {
-  fill: var(--react-activity-calendar-level-2);
-}
-
-.calendar [data-level='3'] {
-  fill: var(--react-activity-calendar-level-3);
-}
-
-.calendar [data-level='4'] {
-  fill: var(--react-activity-calendar-level-4);
-}
-
 .footer {
   display: flex;
   flex-wrap: wrap;

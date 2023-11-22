@@ -12,7 +12,7 @@ import {
   subWeeks,
 } from 'date-fns';
 
-import { DEFAULT_MONTH_LABELS, LEVEL_COUNT, NAMESPACE } from '../constants';
+import { DEFAULT_MONTH_LABELS, NAMESPACE } from '../constants';
 import { Activity, Level, Week } from '../types';
 
 interface MonthLabel {
@@ -143,20 +143,26 @@ export function generateEmptyData(): Array<Activity> {
   }));
 }
 
-export function generateData(interval?: { start: Date; end: Date }): Array<Activity> {
-  const max = 10;
+export function generateData(args: {
+  interval?: { start: Date; end: Date };
+  maxLevel?: number;
+}): Array<Activity> {
+  const maxCount = 20;
+  const maxLevel = args.maxLevel ? Math.max(1, args.maxLevel) : 4;
   const now = new Date();
 
   const days = eachDayOfInterval(
-    interval ?? {
+    args.interval ?? {
       start: startOfYear(now),
       end: endOfYear(now),
     },
   );
 
   return days.map(date => {
-    const count = Math.max(0, Math.round(Math.random() * max - Math.random() * (0.8 * max)));
-    const level = Math.floor((count / max) * LEVEL_COUNT) as Level;
+    // The random activity count is shifted by up to 80% towards zero.
+    const c = Math.round(Math.random() * maxCount - Math.random() * (0.8 * maxCount));
+    const count = Math.max(0, c);
+    const level = Math.ceil((count / maxCount) * maxLevel) as Level;
 
     return {
       date: formatISO(date, { representation: 'date' }),

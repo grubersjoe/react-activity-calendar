@@ -27,17 +27,11 @@ export type Labels = Partial<{
 }>;
 
 export type Color = string;
-export type ColorScale = [
-  level0: Color,
-  level1: Color,
-  level2: Color,
-  level3: Color,
-  level4: Color,
-];
+export type ColorScale = Array<Color>;
 
 export interface Theme {
-  light: [string, string, string, string, string];
-  dark: [string, string, string, string, string];
+  light: ColorScale;
+  dark: ColorScale;
 }
 
 // Require that at least one color scheme is passed.

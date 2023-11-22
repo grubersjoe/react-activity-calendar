@@ -3,9 +3,10 @@ import type { Day as WeekDay } from 'date-fns';
 import { getYear, parseISO } from 'date-fns';
 import React, { CSSProperties, Fragment, FunctionComponent, ReactElement } from 'react';
 
-import { DEFAULT_LABELS, LABEL_MARGIN, LEVEL_COUNT, NAMESPACE } from '../constants';
+import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+import styles from '../styles/styles.module.css';
 import {
   Activity,
   BlockElement,
@@ -23,14 +24,13 @@ import {
   maxWeekdayLabelLength,
 } from '../utils/calendar';
 import { createTheme } from '../utils/theme';
-import styles from './styles.module.css';
 
 export interface Props {
   /**
    * List of calendar entries. Every `Activity` object requires an ISO 8601
    * `date` string in the format `yyyy-MM-dd`, a `count` property with the
-   * amount of tracked data and a `level` property in the range `0-4` to
-   * specify activity intensity.
+   * amount of tracked data and a `level` property in the range `0-maxLevel`
+   * to specify activity intensity. The `maxLevel` prop is 4 by default.
    *
    * For missing dates, no activity is assumed. This allows choosing the start
    * and end date of the calendar arbitrarily by passing empty entries as the
@@ -91,6 +91,10 @@ export interface Props {
    * `totalCount` supports the placeholders `{{count}}` and `{{year}}`.
    */
   labels?: Labels;
+  /**
+   * Maximum activity level (zero indexed).
+   */
+  maxLevel?: number;
   /**
    * Toggle for loading state. `data` property will be ignored if set.
    */
@@ -155,6 +159,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   hideMonthLabels = false,
   hideTotalCount = false,
   labels: labelsProp = undefined,
+  maxLevel = 4,
   loading = false,
   renderBlock = undefined,
   showWeekdayLabels = false,
@@ -163,7 +168,9 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   totalCount: totalCountProp = undefined,
   weekStart = 0, // Sunday
 }: Props) => {
-  const theme = createTheme(themeProp);
+  maxLevel = Math.max(1, maxLevel);
+
+  const theme = createTheme(themeProp, maxLevel + 1);
   const systemColorScheme = useColorScheme();
   const colorScale = theme[colorScheme ?? systemColorScheme];
 
@@ -214,6 +221,12 @@ const ActivityCalendar: FunctionComponent<Props> = ({
             return null;
           }
 
+          if (activity.level < 0 || activity.level > maxLevel) {
+            throw new RangeError(
+              `Provided activity level ${activity.level} for ${activity.date} is out of range. It must be between 0 and ${maxLevel}.`,
+            );
+          }
+
           const style =
             loading && useAnimation
               ? {
@@ -231,6 +244,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
               height={blockSize}
               rx={blockRadius}
               ry={blockRadius}
+              fill={colorScale[activity.level]}
               data-date={activity.date}
               data-level={activity.level}
               style={style}
@@ -282,7 +296,7 @@ const ActivityCalendar: FunctionComponent<Props> = ({
         {!loading && !hideColorLegend && (
           <div className={getClassName('legend-colors', styles.legendColors)}>
             <span style={{ marginRight: '0.4em' }}>{labels?.legend?.less ?? 'Less'}</span>
-            {Array(LEVEL_COUNT)
+            {Array(maxLevel + 1)
               .fill(undefined)
               .map((_, level) => (
                 <svg width={blockSize} height={blockSize} key={level}>
@@ -353,12 +367,6 @@ const ActivityCalendar: FunctionComponent<Props> = ({
 
   const containerStyles = {
     fontSize,
-    [`--${NAMESPACE}-level-0`]: colorScale[0],
-    [`--${NAMESPACE}-level-1`]: colorScale[1],
-    [`--${NAMESPACE}-level-2`]: colorScale[2],
-    [`--${NAMESPACE}-level-3`]: colorScale[3],
-    [`--${NAMESPACE}-level-4`]: colorScale[4],
-
     ...(useAnimation && {
       [`--${NAMESPACE}-loading`]: colorScale[0],
       [`--${NAMESPACE}-loading-active`]:

@@ -58,6 +58,9 @@ const meta: Meta<Props> = {
     fontSize: {
       control: { type: 'range', min: 6, max: 32, step: 2 },
     },
+    maxLevel: {
+      control: { type: 'range', min: 1, max: 9 },
+    },
     style: {
       control: false,
     },
@@ -81,7 +84,6 @@ const meta: Meta<Props> = {
 
 // Storybook does not initialize the controls for some reason
 const defaultProps = {
-  data: generateData(),
   blockMargin: 4,
   blockRadius: 2,
   blockSize: 12,
@@ -90,9 +92,10 @@ const defaultProps = {
   hideMonthLabels: false,
   hideTotalCount: false,
   loading: false,
+  maxLevel: 4,
   showWeekdayLabels: false,
   weekStart: 0, // Sunday
-} satisfies Props;
+} satisfies Omit<Props, 'data'>;
 
 export default meta;
 const explicitTheme: Theme = {
@@ -102,6 +105,7 @@ const explicitTheme: Theme = {
 
 export const Default: Story = {
   args: defaultProps,
+  render: args => <ActivityCalendar {...args} data={generateData({ maxLevel: args.maxLevel })} />,
   parameters: {
     docs: {
       source: {
@@ -114,12 +118,70 @@ export const Default: Story = {
 export const Loading: Story = {
   args: {
     ...defaultProps,
+    data: [],
     loading: true,
   },
   parameters: {
     docs: {
       source: {
         code: '<ActivityCalendar data={data} loading />',
+      },
+    },
+  },
+};
+
+export const WithSpecificLevelRange: Story = {
+  args: {
+    ...defaultProps,
+    maxLevel: 2,
+  },
+  render: args => (
+    <Container>
+      <ActivityCalendar
+        {...args}
+        theme={{ light: ['hsl(0, 0%, 92%)', '#980043'] }}
+        data={generateData({ maxLevel: args.maxLevel })}
+        style={{ marginBottom: '2rem' }}
+      />
+
+      <p>
+        Use the{' '}
+        <code>
+          <b>maxLevel</b>
+        </code>{' '}
+        property to set the maximum activity level (zero indexed).
+        <br />
+        If set, each passed activity level must be in the interval from 0 to <code>maxLevel</code>.
+      </p>
+    </Container>
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: '<ActivityCalendar data={data} maxLevel={2} loading />',
+      },
+    },
+  },
+};
+
+export const WithSpecificDateRange: Story = {
+  args: defaultProps,
+  render: args => (
+    <ActivityCalendar
+      {...args}
+      data={generateData({
+        maxLevel: args.maxLevel,
+        interval: {
+          start: new Date(2023, 2, 8),
+          end: new Date(2023, 7, 1),
+        },
+      })}
+    />
+  ),
+  parameters: {
+    docs: {
+      source: {
+        code: '<ActivityCalendar data={selectDateRange(data)} />',
       },
     },
   },
@@ -143,9 +205,11 @@ export const WithTheme: Story = {
   render: args => (
     <Container>
       <h1>Color themes</h1>
-      <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
-
-      <h2>Usage</h2>
+      <ActivityCalendar
+        {...args}
+        data={generateData({ maxLevel: args.maxLevel })}
+        style={{ margin: '2rem 0' }}
+      />
       <p>
         Use the <code>theme</code> prop to set the calendar colors for the light and dark system{' '}
         <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme">color scheme</a>.
@@ -176,6 +240,8 @@ export const WithExplicitTheme: Story = {
     theme: explicitTheme,
   },
   parameters: {
+    // maxLevel cannot be used for a static explicit theme
+    controls: { exclude: ['maxLevel'] },
     docs: {
       source: {
         code: exampleThemeExplicit,
@@ -193,7 +259,11 @@ export const WithExplicitTheme: Story = {
         </LinkTo>{' '}
         story for details how to use the <code>theme</code> prop.
       </p>
-      <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
+      <ActivityCalendar
+        {...args}
+        data={generateData({ maxLevel: 4 })}
+        style={{ marginTop: '2rem' }}
+      />
     </Container>
   ),
 };
@@ -207,7 +277,10 @@ export const WithCustomizedLook: Story = {
     fontSize: 16,
     theme: explicitTheme,
   },
+  render: args => <ActivityCalendar {...args} data={generateData({ maxLevel: args.maxLevel })} />,
   parameters: {
+    // maxLevel cannot be used for a static explicit theme
+    controls: { exclude: ['maxLevel'] },
     docs: {
       source: {
         code: exampleCustomized,
@@ -221,27 +294,11 @@ export const WithMondayAsWeekStart: Story = {
     ...defaultProps,
     weekStart: 1,
   },
+  render: args => <ActivityCalendar {...args} data={generateData({ maxLevel: args.maxLevel })} />,
   parameters: {
     docs: {
       source: {
         code: '<ActivityCalendar data={data} weekStart={1} />',
-      },
-    },
-  },
-};
-
-export const WithSpecificDateRange: Story = {
-  args: {
-    ...defaultProps,
-    data: generateData({
-      start: new Date(2023, 2, 8),
-      end: new Date(2023, 7, 1),
-    }),
-  },
-  parameters: {
-    docs: {
-      source: {
-        code: '<ActivityCalendar data={selectDateRange(data)} />',
       },
     },
   },
@@ -273,6 +330,7 @@ export const WithLittleData: Story = {
       },
     ],
   },
+  render: args => <ActivityCalendar {...args} data={generateData({ maxLevel: args.maxLevel })} />,
 };
 
 export const WithNarrowScreen: Story = {
@@ -286,7 +344,7 @@ export const WithNarrowScreen: Story = {
   },
   render: args => (
     <div style={{ width: 480, maxWidth: '100%', border: 'dashed 1px #929292' }}>
-      <ActivityCalendar {...args} />
+      <ActivityCalendar {...args} data={generateData({ maxLevel: args.maxLevel })} />
     </div>
   ),
 };
@@ -317,6 +375,7 @@ export const WithTooltips: Story = {
       <Source code={exampleTooltipsMui} />
       <ActivityCalendar
         {...args}
+        data={generateData({ maxLevel: args.maxLevel })}
         renderBlock={(block, activity) => (
           <MuiTooltip title={`${activity.count} activities on ${activity.date}`}>
             {block}
@@ -333,6 +392,7 @@ export const WithTooltips: Story = {
       <Source code={exampleTooltipsReact} />
       <ActivityCalendar
         {...args}
+        data={generateData({ maxLevel: args.maxLevel })}
         renderBlock={(block, activity) =>
           cloneElement(block, {
             'data-tooltip-id': 'react-tooltip',
@@ -352,6 +412,7 @@ export const WithoutLabels: Story = {
     hideColorLegend: true,
     hideTotalCount: true,
   },
+  render: args => <ActivityCalendar {...args} data={generateData({ maxLevel: args.maxLevel })} />,
   parameters: {
     docs: {
       source: {
@@ -366,6 +427,7 @@ export const WithWeekdayLabels: Story = {
     ...defaultProps,
     showWeekdayLabels: true,
   },
+  render: args => <ActivityCalendar {...args} data={generateData({ maxLevel: args.maxLevel })} />,
   parameters: {
     docs: {
       source: {
@@ -400,7 +462,11 @@ export const WithLocalizedLabels: Story = {
     <Container>
       <h1>Localization</h1>
       <p>(Example in German)</p>
-      <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
+      <ActivityCalendar
+        {...args}
+        data={generateData({ maxLevel: args.maxLevel })}
+        style={{ margin: '2rem 0' }}
+      />
       <Source code={exampleLabelsShape} language="jsx" />
     </Container>
   ),
@@ -432,7 +498,11 @@ export const EventHandlers: Story = {
       </p>
       <Source code={exampleEventHandlersInterface} />
       <p>Click on any block below to see it in action:</p>
-      <ActivityCalendar {...args} style={{ margin: '2rem 0' }} />
+      <ActivityCalendar
+        {...args}
+        data={generateData({ maxLevel: args.maxLevel })}
+        style={{ margin: '2rem 0' }}
+      />
       <Source code={exampleEventHandlers} />
     </Container>
   ),

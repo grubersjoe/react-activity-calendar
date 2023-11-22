@@ -1,50 +1,50 @@
-import { LEVEL_COUNT } from '../constants';
 import { Theme, ThemeInput } from '../types';
-import { createTheme, defaultTheme } from './theme';
+import { createTheme } from './theme';
 
 describe('createTheme', () => {
+  const defaultTheme = {
+    light: ['#ebebeb', '#bdbdbd', '#929292', '#696969', '#424242'],
+    dark: ['#333333', '#5c5c5c', '#898989', '#b9b9b9', '#ebebeb'],
+  };
+
   const explicitTheme: Theme = {
     light: ['#f0f0f0', '#c4edde', '#7ac7c4', '#f73859', '#384259'],
     dark: ['hsl(0, 0%, 22%)', '#4D455D', '#7DB9B6', '#F5E9CF', '#E96479'],
   };
 
   test('returns the default theme if no input is passed', () => {
-    expect(createTheme()).toEqual(defaultTheme);
+    expect(createTheme()).toStrictEqual(defaultTheme);
   });
 
   test('throws an error if input is not an object', () => {
-    expect(() =>
-      createTheme(
-        // @ts-ignore
-        'invalid',
-      ),
-    ).toThrow();
+    // @ts-ignore
+    expect(() => createTheme('invalid')).toThrow();
   });
 
   test('throws an error if neither "light" or "dark" inputs are set', () => {
-    expect(() =>
-      createTheme(
-        // @ts-ignore
-        {},
-      ),
-    ).toThrow();
+    // @ts-ignore
+    expect(() => createTheme({})).toThrow();
   });
 
   test('throws an error if too few colors are passed', () => {
     expect(() =>
-      createTheme({
-        // @ts-ignore
-        light: ['blue'],
-      }),
+      createTheme(
+        {
+          light: ['blue'],
+        },
+        2,
+      ),
     ).toThrow();
   });
 
   test('throws an error if too many colors are passed', () => {
     expect(() =>
-      createTheme({
-        // @ts-ignore
-        dark: Array(LEVEL_COUNT + 1).fill('blue'),
-      }),
+      createTheme(
+        {
+          dark: Array(4).fill('green'),
+        },
+        3,
+      ),
     ).toThrow();
   });
 
@@ -53,7 +53,7 @@ describe('createTheme', () => {
       createTheme({
         light: explicitTheme.light,
       }),
-    ).toEqual<Theme>({
+    ).toStrictEqual<Theme>({
       light: explicitTheme.light,
       dark: defaultTheme.dark,
     });
@@ -64,7 +64,7 @@ describe('createTheme', () => {
       createTheme({
         dark: explicitTheme.dark,
       }),
-    ).toEqual<Theme>({
+    ).toStrictEqual<Theme>({
       light: defaultTheme.light,
       dark: explicitTheme.dark,
     });
@@ -79,7 +79,7 @@ describe('createTheme', () => {
   });
 
   test('returns the same value for explicit inputs', () => {
-    expect(createTheme(explicitTheme)).toEqual(explicitTheme);
+    expect(createTheme(explicitTheme)).toStrictEqual(explicitTheme);
   });
 
   test('calculates color scales for minimal input', () => {
@@ -89,7 +89,18 @@ describe('createTheme', () => {
     };
 
     const actual = createTheme(input);
-    expect(actual.light).toHaveLength(LEVEL_COUNT);
-    expect(actual.dark).toHaveLength(LEVEL_COUNT);
+    expect(actual.light).toHaveLength(5);
+    expect(actual.dark).toHaveLength(5);
+  });
+
+  test('calculates color scales with correct size', () => {
+    const input: ThemeInput = {
+      light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
+      dark: ['hsl(0, 0%, 20%)', 'hsl(0, 0%, 92%)'],
+    };
+
+    const actual = createTheme(input, 3);
+    expect(actual.light).toHaveLength(3);
+    expect(actual.dark).toHaveLength(3);
   });
 });
