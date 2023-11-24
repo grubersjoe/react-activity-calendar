@@ -8,7 +8,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 import { useDarkMode } from 'storybook-dark-mode';
 
 import Container from '../../.storybook/components/Container';
-import exampleCustomized from '../../examples/customization?raw';
+import exampleCustomization from '../../examples/customization?raw';
 import exampleEventHandlersInterface from '../../examples/event-handlers-type?raw';
 import exampleEventHandlers from '../../examples/event-handlers?raw';
 import exampleLabelsShape from '../../examples/labels-shape?raw';
@@ -130,7 +130,7 @@ export const Loading: Story = {
   },
 };
 
-export const WithSpecificLevelRange: Story = {
+export const ActivityLevels: Story = {
   args: {
     ...defaultProps,
     maxLevel: 2,
@@ -149,9 +149,10 @@ export const WithSpecificLevelRange: Story = {
         <code>
           <b>maxLevel</b>
         </code>{' '}
-        property to set the maximum activity level (zero indexed).
-        <br />
-        If set, each passed activity level must be in the interval from 0 to <code>maxLevel</code>.
+        prop to control the number of activity levels. This value is zero indexed (0 represents no
+        activity), so for example a <code>maxLevel</code> of 2 will total in 3 levels as above. The
+        level of each passed must be in the interval from 0 to <code>maxLevel</code> which is 4 per
+        default.
       </p>
     </Container>
   ),
@@ -164,30 +165,71 @@ export const WithSpecificLevelRange: Story = {
   },
 };
 
-export const WithSpecificDateRange: Story = {
+export const DateRanges: Story = {
   args: defaultProps,
-  render: args => (
-    <ActivityCalendar
-      {...args}
-      data={generateData({
-        maxLevel: args.maxLevel,
-        interval: {
-          start: new Date(2023, 2, 8),
-          end: new Date(2023, 7, 1),
-        },
-      })}
-    />
-  ),
   parameters: {
-    docs: {
-      source: {
-        code: '<ActivityCalendar data={selectDateRange(data)} />',
-      },
-    },
+    // maxLevel cannot be used for static data
+    controls: { exclude: ['maxLevel'] },
   },
+  render: args => (
+    <>
+      <ActivityCalendar
+        {...args}
+        data={generateData({
+          maxLevel: args.maxLevel,
+          interval: {
+            start: new Date(2022, 5, 1),
+            end: new Date(2023, 4, 31),
+          },
+        })}
+        labels={{
+          totalCount: '{{count}} activities in 2022 & 2023',
+        }}
+      />
+      <br />
+      <br />
+      <ActivityCalendar
+        {...args}
+        data={generateData({
+          maxLevel: args.maxLevel,
+          interval: {
+            start: new Date(2023, 2, 8),
+            end: new Date(2023, 7, 1),
+          },
+        })}
+      />
+      <br />
+      <br />
+      <ActivityCalendar
+        {...args}
+        data={[
+          {
+            date: '2023-06-14',
+            count: 2,
+            level: 1,
+          },
+          {
+            date: '2023-06-22',
+            count: 16,
+            level: 3,
+          },
+          {
+            date: '2023-07-05',
+            count: 3,
+            level: 1,
+          },
+          {
+            date: '2023-07-17',
+            count: 10,
+            level: 2,
+          },
+        ]}
+      />
+    </>
+  ),
 };
 
-export const WithTheme: Story = {
+export const ColorThemes: Story = {
   args: {
     ...defaultProps,
     theme: {
@@ -211,14 +253,23 @@ export const WithTheme: Story = {
         style={{ margin: '2rem 0' }}
       />
       <p>
-        Use the <code>theme</code> prop to set the calendar colors for the light and dark system{' '}
+        Use the{' '}
+        <code>
+          <b>theme</b>
+        </code>{' '}
+        prop to configure the calendar colors for the light and dark system{' '}
         <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme">color scheme</a>.
         Define each color scale{' '}
-        <LinkTo kind="react-activity-calendar" name="with-explicit-theme">
+        <LinkTo kind="react-activity-calendar" name="explicit-theme">
           explicitly
         </LinkTo>{' '}
-        with five colors or pass exactly two colors (the lowest and highest intensity) to calculate
-        a single-hue scale. Colors can be specified in any valid CSS format.
+        by settings all colors (5 per default) or pass exactly two colors (the lowest and highest
+        intensity) to calculate a single-hue scale. For explicit themes the color count must match
+        the number of activity levels, which is controlled by the{' '}
+        <LinkTo kind="react-activity-calendar" name="date-ranges">
+          <code>maxLevel</code>
+        </LinkTo>{' '}
+        prop. Colors can be specified in any valid CSS format.
       </p>
       <p>
         The colors for at least one scheme must be set. If undefined, the default theme is used. By
@@ -234,7 +285,7 @@ export const WithTheme: Story = {
   ),
 };
 
-export const WithExplicitTheme: Story = {
+export const ExplicitThemes: Story = {
   args: {
     ...defaultProps,
     theme: explicitTheme,
@@ -254,7 +305,7 @@ export const WithExplicitTheme: Story = {
       <p></p>
       <p>
         See the{' '}
-        <LinkTo kind="react-activity-calendar" name="with-theme">
+        <LinkTo kind="react-activity-calendar" name="color-themes">
           WithTheme
         </LinkTo>{' '}
         story for details how to use the <code>theme</code> prop.
@@ -268,7 +319,7 @@ export const WithExplicitTheme: Story = {
   ),
 };
 
-export const WithCustomizedLook: Story = {
+export const Customization: Story = {
   args: {
     ...defaultProps,
     blockSize: 14,
@@ -283,73 +334,49 @@ export const WithCustomizedLook: Story = {
     controls: { exclude: ['maxLevel'] },
     docs: {
       source: {
-        code: exampleCustomized,
+        code: exampleCustomization,
       },
     },
   },
 };
 
-export const WithMondayAsWeekStart: Story = {
+export const EventHandlers: Story = {
   args: {
     ...defaultProps,
-    weekStart: 1,
-  },
-  render: args => <ActivityCalendar {...args} data={generateData({ maxLevel: args.maxLevel })} />,
-  parameters: {
-    docs: {
-      source: {
-        code: '<ActivityCalendar data={data} weekStart={1} />',
-      },
+    eventHandlers: {
+      onClick: () => activity => alert(JSON.stringify(activity)),
+      onMouseEnter: () => () => console.log('on mouse enter'),
     },
   },
-};
-
-export const WithLittleData: Story = {
-  args: {
-    ...defaultProps,
-    data: [
-      {
-        date: '2023-06-14',
-        count: 2,
-        level: 1,
-      },
-      {
-        date: '2023-06-22',
-        count: 16,
-        level: 3,
-      },
-      {
-        date: '2023-07-05',
-        count: 3,
-        level: 1,
-      },
-      {
-        date: '2023-07-17',
-        count: 10,
-        level: 2,
-      },
-    ],
-  },
-  render: args => <ActivityCalendar {...args} data={generateData({ maxLevel: args.maxLevel })} />,
-};
-
-export const WithNarrowScreen: Story = {
-  args: defaultProps,
   parameters: {
     docs: {
       source: {
-        code: '<ActivityCalendar data={data} />',
+        code: exampleEventHandlers,
       },
     },
   },
   render: args => (
-    <div style={{ width: 480, maxWidth: '100%', border: 'dashed 1px #929292' }}>
-      <ActivityCalendar {...args} data={generateData({ maxLevel: args.maxLevel })} />
-    </div>
+    <Container>
+      <h1>Event Handlers</h1>
+      <p>
+        You can register event handlers for the SVG <code>&lt;rect/&gt;</code> elements that are
+        used to render the calendar days. This way you can control the behaviour on click, hover,
+        etc. All event listeners have the following signature, so you can use the activity data of
+        the block inside the handler:
+      </p>
+      <Source code={exampleEventHandlersInterface} />
+      <p>Click on any block below to see it in action:</p>
+      <ActivityCalendar
+        {...args}
+        data={generateData({ maxLevel: args.maxLevel })}
+        style={{ margin: '2rem 0' }}
+      />
+      <Source code={exampleEventHandlers} />
+    </Container>
   ),
 };
 
-export const WithTooltips: Story = {
+export const Tooltips: Story = {
   args: defaultProps,
   parameters: {
     docs: {
@@ -363,7 +390,7 @@ export const WithTooltips: Story = {
       <h1>Tooltip Examples</h1>
       <p>
         To add a 3rd party tooltip component to the calendar you can use the{' '}
-        <code>renderBlock</code> property.
+        <code>renderBlock</code> prop.
       </p>
       <h2>
         <a href="https://mui.com/material-ui/react-tooltip/">Material UI</a>
@@ -422,7 +449,7 @@ export const WithoutLabels: Story = {
   },
 };
 
-export const WithWeekdayLabels: Story = {
+export const WeekdayLabels: Story = {
   args: {
     ...defaultProps,
     showWeekdayLabels: true,
@@ -437,7 +464,7 @@ export const WithWeekdayLabels: Story = {
   },
 };
 
-export const WithLocalizedLabels: Story = {
+export const LocalizedLabels: Story = {
   args: {
     ...defaultProps,
     showWeekdayLabels: true,
@@ -472,39 +499,34 @@ export const WithLocalizedLabels: Story = {
   ),
 };
 
-export const EventHandlers: Story = {
+export const MondayAsWeekStart: Story = {
   args: {
     ...defaultProps,
-    eventHandlers: {
-      onClick: () => activity => alert(JSON.stringify(activity)),
-      onMouseEnter: () => () => console.log('on mouse enter'),
-    },
+    weekStart: 1,
   },
+  render: args => <ActivityCalendar {...args} data={generateData({ maxLevel: args.maxLevel })} />,
   parameters: {
     docs: {
       source: {
-        code: exampleEventHandlers,
+        code: '<ActivityCalendar data={data} weekStart={1} />',
+      },
+    },
+  },
+};
+
+export const NarrowScreens: Story = {
+  args: defaultProps,
+  parameters: {
+    docs: {
+      source: {
+        code: '<ActivityCalendar data={data} />',
       },
     },
   },
   render: args => (
-    <Container>
-      <h1>Event Handlers</h1>
-      <p>
-        You can register event handlers for the SVG <code>&lt;rect/&gt;</code> elements that are
-        used to render the calendar days. This way you can control the behaviour on click, hover,
-        etc. All event listeners have the following signature, so you can use the activity data of
-        the block inside the handler:
-      </p>
-      <Source code={exampleEventHandlersInterface} />
-      <p>Click on any block below to see it in action:</p>
-      <ActivityCalendar
-        {...args}
-        data={generateData({ maxLevel: args.maxLevel })}
-        style={{ margin: '2rem 0' }}
-      />
-      <Source code={exampleEventHandlers} />
-    </Container>
+    <div style={{ width: 480, maxWidth: '100%', border: 'dashed 1px #929292' }}>
+      <ActivityCalendar {...args} data={generateData({ maxLevel: args.maxLevel })} />
+    </div>
   ),
 };
 
