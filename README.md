@@ -4,13 +4,9 @@
 
 A flexible React component to display activity data in a calendar (heatmap).
 
-_April 2023: v2 has been released. See the
-[release notes](https://github.com/grubersjoe/react-activity-calendar/releases/tag/2.0) for breaking
-changes._
-
-## [Documentation (Storybook)](https://grubersjoe.github.io/react-activity-calendar)
-
 ![Screenshot](screenshot.png?v5)
+
+**[Documentation (Storybook)](https://grubersjoe.github.io/react-activity-calendar)**
 
 ## Development
 
@@ -20,7 +16,7 @@ changes._
 npm run storybook
 ```
 
-### Update documentation
+### Update the documentation
 
 ```shell
 npm run build:storybook
