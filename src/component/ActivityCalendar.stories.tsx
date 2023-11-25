@@ -150,8 +150,8 @@ export const ActivityLevels: Story = {
           <b>maxLevel</b>
         </code>{' '}
         prop to control the number of activity levels. This value is zero indexed (0 represents no
-        activity), so for example a <code>maxLevel</code> of 2 will total in 3 levels as above. The
-        level of each passed must be in the interval from 0 to <code>maxLevel</code> which is 4 per
+        activity), so for example a <code>maxLevel</code> of 2 will total in 3 levels as above. Each
+        activity level must be in the interval from 0 to <code>maxLevel</code> which is 4 per
         default.
       </p>
     </Container>
