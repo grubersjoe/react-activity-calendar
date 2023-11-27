@@ -115,9 +115,9 @@ export interface Props {
   style?: CSSProperties;
   /**
    * Set the calendar colors for the light and dark system color scheme.
-   * Define each color scale explicitly with five colors or pass exactly two
-   * colors (the lowest and highest intensity) to calculate a single-hue scale.
-   * Colors can be specified in any valid CSS format.
+   * Define each color scale explicitly by settings all colors (5 per default)
+   * or pass exactly two colors (the lowest and highest intensity) to calculate
+   * a single-hue scale. Colors can be specified in any valid CSS format.
    *
    * The colors for at least one scheme must be set. If undefined, the default
    * theme is used. By default, the calendar will select the current system color
