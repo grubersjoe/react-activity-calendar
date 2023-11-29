@@ -75,7 +75,7 @@
     "rollup-plugin-postcss": "^4.0.2",
     "sass": "^1.64.1",
     "sass-loader": "^13.3.2",
-    "storybook": "~7.5.3",
+    "storybook": "~7.6.0",
     "storybook-dark-mode": "^3.0.3",
     "string-replace-loader": "^3.1.0",
     "style-loader": "^3.3.3",
