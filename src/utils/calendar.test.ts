@@ -1,4 +1,4 @@
-import { generateData, getMonthLabels, groupByWeeks } from './calendar';
+import { generateTestData, getMonthLabels, groupByWeeks } from "./calendar";
 
 describe('getMonthLabels', () => {
   test('returns empty list for empty input', () => {
@@ -13,7 +13,7 @@ describe('getMonthLabels', () => {
 
   test('returns correct month labels', () => {
     const weeks = groupByWeeks(
-      generateData({
+      generateTestData({
         interval: {
           start: new Date(2023, 2, 12),
           end: new Date(2023, 5, 1),
@@ -30,7 +30,7 @@ describe('getMonthLabels', () => {
 
   test('skips label for first month if it does not contain at least three weeks of data', () => {
     const weeks = groupByWeeks(
-      generateData({
+      generateTestData({
         interval: {
           start: new Date(2023, 9, 22),
           end: new Date(2023, 11, 31),
@@ -46,7 +46,7 @@ describe('getMonthLabels', () => {
 
   test('skips label for last month if it does not contain at least three weeks of data', () => {
     const weeks = groupByWeeks(
-      generateData({
+      generateTestData({
         interval: {
           start: new Date(2023, 3, 1),
           end: new Date(2023, 4, 20),
@@ -59,7 +59,7 @@ describe('getMonthLabels', () => {
 
   test('skips first and last label if both months do not contain at least three weeks of data', () => {
     const weeks = groupByWeeks(
-      generateData({
+      generateTestData({
         interval: {
           start: new Date(2023, 1, 22),
           end: new Date(2023, 4, 10),

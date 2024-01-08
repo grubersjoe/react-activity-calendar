@@ -143,7 +143,7 @@ export function generateEmptyData(): Array<Activity> {
   }));
 }
 
-export function generateData(args: {
+export function generateTestData(args: {
   interval?: { start: Date; end: Date };
   maxLevel?: number;
 }): Array<Activity> {
