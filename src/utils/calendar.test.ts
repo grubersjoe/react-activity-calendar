@@ -1,4 +1,4 @@
-import { generateTestData, getMonthLabels, groupByWeeks } from "./calendar";
+import { generateTestData, getMonthLabels, groupByWeeks } from './calendar';
 
 describe('getMonthLabels', () => {
   test('returns empty list for empty input', () => {

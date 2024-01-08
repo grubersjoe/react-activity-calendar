@@ -5,14 +5,14 @@ import filesize from 'rollup-plugin-filesize';
 import postcss from 'rollup-plugin-postcss';
 import resolve from '@rollup/plugin-node-resolve';
 
-import pkg from './package.json' assert { type: "json" };
+import pkg from './package.json' assert { type: 'json' };
 
-const extensions = [ '.ts', '.tsx'];
+const extensions = ['.ts', '.tsx'];
 
 export default {
   input: 'src/index.ts',
   output: {
-    file: pkg.main,
+    file: pkg.browser,
     format: 'cjs',
     sourcemap: true,
     exports: 'named',
@@ -30,7 +30,7 @@ export default {
     babel({
       extensions,
       exclude: 'node_modules/**',
-      babelHelpers: 'bundled'
+      babelHelpers: 'bundled',
     }),
     resolve({
       extensions,
