@@ -12,7 +12,7 @@ const extensions = ['.ts', '.tsx'];
 export default {
   input: 'src/index.ts',
   output: {
-    file: pkg.browser,
+    file: pkg.main,
     format: 'cjs',
     sourcemap: true,
     exports: 'named',
