@@ -6,12 +6,10 @@ import React, {
   SVGAttributes,
 } from 'react';
 
-export type Level = 0 | 1 | 2 | 3 | 4;
-
 export interface Activity {
   date: string;
   count: number;
-  level: Level;
+  level: number;
 }
 
 export type Week = Array<Activity | undefined>;
@@ -46,6 +44,7 @@ export type ThemeInput =
     };
 
 interface BlockAttributes extends SVGAttributes<SVGRectElement>, HTMLAttributes<SVGRectElement> {}
+
 export type BlockElement = ReactElement<BlockAttributes, JSXElementConstructor<SVGRectElement>>;
 
 export type SVGRectEventHandler = Omit<

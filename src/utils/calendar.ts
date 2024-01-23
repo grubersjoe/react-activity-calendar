@@ -13,7 +13,7 @@ import {
 } from 'date-fns';
 
 import { DEFAULT_MONTH_LABELS, NAMESPACE } from '../constants';
-import { Activity, Level, Week } from '../types';
+import { Activity, Week } from '../types';
 
 interface MonthLabel {
   weekIndex: number;
@@ -162,7 +162,7 @@ export function generateTestData(args: {
     // The random activity count is shifted by up to 80% towards zero.
     const c = Math.round(Math.random() * maxCount - Math.random() * (0.8 * maxCount));
     const count = Math.max(0, c);
-    const level = Math.ceil((count / maxCount) * maxLevel) as Level;
+    const level = Math.ceil((count / maxCount) * maxLevel);
 
     return {
       date: formatISO(date, { representation: 'date' }),
