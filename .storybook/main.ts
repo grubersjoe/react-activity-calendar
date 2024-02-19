@@ -1,5 +1,4 @@
 import { StorybookConfig } from '@storybook/react-webpack5';
-import { RuleSetRule } from 'webpack';
 
 const config: StorybookConfig = {
   addons: [
@@ -26,8 +25,10 @@ const config: StorybookConfig = {
   webpackFinal: config => {
     if (config.module?.rules) {
       // Replace shipped CSS rule to support CSS modules and SCSS
-      config.module.rules = config.module.rules.map(r => {
-        const rule = r as RuleSetRule;
+      config.module.rules = config.module.rules.map(rule => {
+        if (!rule || rule === '...') {
+          return rule;
+        }
 
         if (rule.test?.toString() === '/\\.css$/') {
           return {
