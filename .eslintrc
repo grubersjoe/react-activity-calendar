@@ -6,13 +6,22 @@
     "plugin:react-hooks/recommended"
   ],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
-  "ignorePatterns": ["*.css", "examples"],
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "ignorePatterns": [
+    "*.css",
+    "examples"
+  ],
   "rules": {
-    "@typescript-eslint/ban-types": ["error"],
-    "@typescript-eslint/ban-ts-comment": ["off"],
-    "arrow-body-style": ["error", "as-needed"],
-    "react/prop-types": ["off"]
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/ban-types": "error",
+    "arrow-body-style": [
+      "error",
+      "as-needed"
+    ],
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off"
   },
   "settings": {
     "react": {

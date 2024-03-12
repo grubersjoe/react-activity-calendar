@@ -3,7 +3,7 @@
 import chroma from 'chroma-js';
 import type { Day as WeekDay } from 'date-fns';
 import { getYear, parseISO } from 'date-fns';
-import React, { CSSProperties, Fragment, FunctionComponent, ReactElement } from 'react';
+import { CSSProperties, Fragment, ReactElement } from 'react';
 
 import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
@@ -150,7 +150,7 @@ export interface Props {
   weekStart?: WeekDay;
 }
 
-const ActivityCalendar: FunctionComponent<Props> = ({
+const ActivityCalendar = ({
   data,
   blockMargin = 4,
   blockRadius = 2,
@@ -408,8 +408,6 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   );
 };
 
-export const Skeleton: FunctionComponent<Omit<Props, 'data'>> = props => (
-  <ActivityCalendar data={[]} {...props} />
-);
+export const Skeleton = (props: Omit<Props, 'data'>) => <ActivityCalendar data={[]} {...props} />;
 
 export default ActivityCalendar;

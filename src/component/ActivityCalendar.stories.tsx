@@ -1,8 +1,8 @@
 import { Tooltip as MuiTooltip } from '@mui/material';
 import LinkTo from '@storybook/addon-links/react';
-import { Source as StorybookSource } from '@storybook/blocks';
 import { Meta, StoryObj } from '@storybook/react';
-import React, { cloneElement } from 'react';
+import { Highlight, themes } from 'prism-react-renderer';
+import { cloneElement } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { useDarkMode } from 'storybook-dark-mode';
@@ -502,7 +502,7 @@ export const LocalizedLabels: Story = {
         data={generateTestData({ maxLevel: args.maxLevel })}
         style={{ margin: '2rem 0' }}
       />
-      <Source code={exampleLabelsShape} language="jsx" />
+      <Source code={exampleLabelsShape} />
     </Container>
   ),
 };
@@ -540,6 +540,30 @@ export const NarrowScreens: Story = {
   ),
 };
 
-const Source = ({ code, language = 'tsx' }: { code: string; language?: string }) => (
-  <StorybookSource code={code} dark={useDarkMode()} language={language} />
-);
+const Source = ({ code, language = 'tsx' }: { code: string; language?: string }) => {
+  const darkMode = useDarkMode();
+  return (
+    <Highlight
+      code={code.trim()}
+      language={language}
+      theme={darkMode ? themes.vsDark : themes.vsLight}
+    >
+      {({ style, tokens, getLineProps, getTokenProps }) => (
+        <pre
+          style={Object.assign({}, style, {
+            margin: '1rem 0 2rem',
+            whiteSpace: 'pre-wrap',
+          })}
+        >
+          {tokens.map((line, i) => (
+            <div key={i} {...getLineProps({ line })}>
+              {line.map((token, key) => (
+                <span key={key} {...getTokenProps({ token })} />
+              ))}
+            </div>
+          ))}
+        </pre>
+      )}
+    </Highlight>
+  );
+};
