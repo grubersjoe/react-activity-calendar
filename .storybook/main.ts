@@ -9,8 +9,10 @@ const config: StorybookConfig = {
       },
     },
     '@storybook/addon-links',
+    '@storybook/addon-webpack5-compiler-babel',
     'storybook-dark-mode',
   ],
+
   framework: {
     name: '@storybook/react-webpack5',
     options: {},

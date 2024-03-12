@@ -1,6 +1,6 @@
 import { Tooltip as MuiTooltip } from '@mui/material';
 import LinkTo from '@storybook/addon-links/react';
-import { Source as StorybookSource } from '@storybook/blocks';
+import { SourceProps, Source as StorybookSource } from '@storybook/blocks';
 import { Meta, StoryObj } from '@storybook/react';
 import React, { cloneElement } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
@@ -540,6 +540,10 @@ export const NarrowScreens: Story = {
   ),
 };
 
-const Source = ({ code, language = 'tsx' }: { code: string; language?: string }) => (
-  <StorybookSource code={code} dark={useDarkMode()} language={language} />
-);
+const Source = ({
+  code,
+  language = 'tsx',
+}: {
+  code: string;
+  language?: SourceProps['language'];
+}) => <StorybookSource code={code} dark={useDarkMode()} language={language} />;
