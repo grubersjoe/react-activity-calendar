@@ -8,6 +8,7 @@ import { type CSSProperties, Fragment, type ReactElement } from 'react';
 import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
 import { useIsClient } from '../hooks/useIsClient';
+import { useDataTheme } from '../hooks/useDataTheme';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import styles from '../styles/styles.module.css';
 import type {
@@ -177,7 +178,8 @@ const ActivityCalendar = ({
 
   const theme = createTheme(themeProp, maxLevel + 1);
   const systemColorScheme = useColorScheme();
-  const colorScale = theme[colorScheme ?? systemColorScheme];
+  const dataTheme = useDataTheme();
+  const colorScale = theme[colorScheme ?? dataTheme ?? systemColorScheme];
 
   const useAnimation = !usePrefersReducedMotion();
 
