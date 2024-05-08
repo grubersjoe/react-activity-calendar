@@ -10,13 +10,14 @@ A flexible React component to display activity data in a calendar (heatmap).
 
 ## Features
 
+- any number of activity levels 📈
 - color themes 🌈
 - dark & light mode ✨
 - tooltips 🪧
 - event handlers ⁉️
 - localization 🌍
 
-The component expects activity data with the following structure. Each activity level must be in the
+The component expects activity data in the following structure. Each activity level must be in the
 interval from 0 to `maxLevel`, which is 4 per default (see
 [documentation](https://grubersjoe.github.io/react-activity-calendar/?path=/story/react-activity-calendar--activity-levels)).
 
