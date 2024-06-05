@@ -7,6 +7,7 @@ import React, { CSSProperties, Fragment, FunctionComponent, ReactElement } from 
 
 import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
+import { useIsClient } from '../hooks/useIsClient';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import styles from '../styles/styles.module.css';
 import {
@@ -177,6 +178,13 @@ const ActivityCalendar: FunctionComponent<Props> = ({
   const colorScale = theme[colorScheme ?? systemColorScheme];
 
   const useAnimation = !usePrefersReducedMotion();
+
+  // Calculating the weekday label offset only works in the browser.
+  // So disable SSR in this case.
+  const isClient = useIsClient();
+  if (showWeekdayLabels && !isClient) {
+    return null;
+  }
 
   if (loading) {
     data = generateEmptyData();
