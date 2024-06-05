@@ -1,3 +1,5 @@
+'use client';
+
 import chroma from 'chroma-js';
 import type { Day as WeekDay } from 'date-fns';
 import { getYear, parseISO } from 'date-fns';
