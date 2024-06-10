@@ -15,12 +15,12 @@
     "build": "rollup -c",
     "build:storybook": "storybook build -o docs/ && touch docs/.nojekyll",
     "ci": "npx tsc && npm run lint && npm run test",
+    "dev": "storybook dev -p 9000",
     "format": "prettier --write './*' 'src/**/*' '.storybook/**/*'",
     "lint": "eslint 'src/**/*' --max-warnings=0",
     "postbuild": "dts-bundle-generator src/index.ts -o build/index.d.ts --no-check --no-banner --external-imports react tinycolor2 date-fns",
     "prepublishOnly": "npx tsc && npm run lint && npm run build",
     "start": "rollup -c -w",
-    "storybook": "storybook dev -p 9000",
     "test": "jest"
   },
   "dependencies": {
