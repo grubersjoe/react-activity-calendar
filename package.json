@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "build:storybook": "storybook build -o docs/",
+    "build:storybook": "storybook build -o docs/ && touch docs/.nojekyll",
     "ci": "npx tsc && npm run lint && npm run test",
     "format": "prettier --write './*' 'src/**/*' '.storybook/**/*'",
     "lint": "eslint 'src/**/*' --max-warnings=0",
