@@ -552,6 +552,7 @@ const Source = ({ code, language = 'tsx' }: { code: string; language?: string })
         <pre
           style={Object.assign({}, style, {
             margin: '1rem 0 2rem',
+            backgroundColor: 'transparent',
             whiteSpace: 'pre-wrap',
           })}
         >
