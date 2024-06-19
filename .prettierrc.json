@@ -6,5 +6,13 @@
   "importOrderSortSpecifiers": true,
   "printWidth": 100,
   "proseWrap": "always",
-  "singleQuote": true
+  "singleQuote": true,
+  "overrides": [
+    {
+      "files": "*.d.ts",
+      "options": {
+        "importOrderParserPlugins": ["[\"typescript\", { \"dts\": true }]"]
+      }
+    }
+  ]
 }

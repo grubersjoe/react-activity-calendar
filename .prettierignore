@@ -1,13 +1,4 @@
-LICENSE
+build/
+docs/
+examples/
 pnpm-lock.yaml
-examples
-
-.*
-!.storybook
-
-*.mjs
-*.d.ts
-*.ico
-*.png
-
-**/build/**/*

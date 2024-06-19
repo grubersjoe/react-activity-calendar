@@ -5,14 +5,12 @@ import filesize from 'rollup-plugin-filesize';
 import external from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
 
-import pkg from './package.json' assert { type: 'json' };
-
 const extensions = ['.ts', '.tsx'];
 
 export default {
   input: 'src/index.ts',
   output: {
-    file: pkg.main,
+    file: 'build/index.js',
     format: 'cjs',
     sourcemap: true,
     exports: 'named',
@@ -21,37 +19,32 @@ export default {
     interop: 'auto',
     // Rollup does not support this React Server Components directive yet.
     // https://github.com/rollup/rollup/issues/4699
-    banner: `'use client';`
+    banner: `'use client';`,
   },
   plugins: [
     external({
-      includeDependencies: true
+      includeDependencies: true,
     }),
     postcss({
-      modules: true
+      modules: true,
     }),
     babel({
       extensions,
       exclude: 'node_modules/**',
-      babelHelpers: 'bundled'
+      babelHelpers: 'bundled',
     }),
     resolve({
-      extensions
+      extensions,
     }),
     copy({
-      targets: [
-        { src: 'src/*.d.ts', dest: 'build/' }
-      ]
+      targets: [{ src: 'src/*.d.ts', dest: 'build/' }],
     }),
-    filesize()
+    filesize(),
   ],
   onwarn(warning, warn) {
-    if (
-      warning.code === 'MODULE_LEVEL_DIRECTIVE' &&
-      warning.message.includes('use client')
-    ) {
+    if (warning.code === 'MODULE_LEVEL_DIRECTIVE' && warning.message.includes('use client')) {
       return; // ignore the error for now
     }
     warn(warning);
-  }
+  },
 };
