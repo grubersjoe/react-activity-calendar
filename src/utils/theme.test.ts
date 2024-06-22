@@ -1,4 +1,4 @@
-import { Theme, ThemeInput } from '../types';
+import type { Theme, ThemeInput } from '../types';
 import { createTheme } from './theme';
 
 describe('createTheme', () => {
@@ -17,12 +17,12 @@ describe('createTheme', () => {
   });
 
   test('throws an error if input is not an object', () => {
-    // @ts-ignore
+    // @ts-expect-error test invalid input
     expect(() => createTheme('invalid')).toThrow();
   });
 
   test('throws an error if neither "light" or "dark" inputs are set', () => {
-    // @ts-ignore
+    // @ts-expect-error test invalid input
     expect(() => createTheme({})).toThrow();
   });
 

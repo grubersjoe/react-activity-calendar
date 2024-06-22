@@ -1,3 +1,4 @@
+import type { Week } from '../types';
 import { generateTestData, getMonthLabels, groupByWeeks } from './calendar';
 
 describe('getMonthLabels', () => {
@@ -6,9 +7,11 @@ describe('getMonthLabels', () => {
   });
 
   test('throws if a week has no activity defined', () => {
-    const weeks = [Array(7).fill(undefined)];
+    const weeks = [Array(7).fill(undefined)] as Array<Week>;
 
-    expect(() => expect(getMonthLabels(weeks)).toStrictEqual([])).toThrow();
+    expect(() => {
+      expect(getMonthLabels(weeks)).toStrictEqual([]);
+    }).toThrow();
   });
 
   test('returns correct month labels', () => {

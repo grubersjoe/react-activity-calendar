@@ -1,6 +1,6 @@
 import chroma from 'chroma-js';
 
-import { Color, ColorScale, Theme, ThemeInput } from '../types';
+import type { Color, ColorScale, Theme, ThemeInput } from '../types';
 
 export function createTheme(input?: ThemeInput, size: number = 5): Theme {
   const defaultTheme = createDefaultTheme(size);
@@ -37,18 +37,14 @@ function validateTheme(input: ThemeInput, size: number) {
   if (input.light) {
     const { length } = input.light;
     if (length !== 2 && length !== size) {
-      throw new Error(
-        `theme.light must contain exactly 2 or ${size} colors, ${length as number} passed.`,
-      );
+      throw new Error(`theme.light must contain exactly 2 or ${size} colors, ${length} passed.`);
     }
   }
 
   if (input.dark) {
     const { length } = input.dark;
     if (length !== 2 && length !== size) {
-      throw new Error(
-        `theme.dark must contain exactly 2 or ${size} colors, ${length as number} passed.`,
-      );
+      throw new Error(`theme.dark must contain exactly 2 or ${size} colors, ${length} passed.`);
     }
   }
 }
@@ -57,7 +53,9 @@ function isColorScale(colors: Array<unknown>, size: number): colors is ColorScal
   const invalidColor = colors.find(color => !chroma.valid(color));
 
   if (invalidColor) {
-    throw new Error(`Invalid color "${invalidColor}" passed. All CSS color formats are accepted.`);
+    throw new Error(
+      `Invalid color "${String(invalidColor)}" passed. All CSS color formats are accepted.`,
+    );
   }
 
   return colors.length === size;

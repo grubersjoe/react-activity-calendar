@@ -10,7 +10,14 @@ export default typescript.config(
   eslint.configs.recommended,
   ...typescript.configs.strictTypeChecked,
   {
-    ignores: ['build/', 'docs/', 'examples/', 'eslint.config.mjs', 'rollup.config.mjs'],
+    ignores: [
+      'build/',
+      'docs/',
+      'examples/',
+      'eslint.config.mjs',
+      'rollup.config.mjs',
+      'vite.config.mts',
+    ],
   },
   {
     rules: {

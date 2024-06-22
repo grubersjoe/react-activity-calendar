@@ -13,7 +13,7 @@ import {
 } from 'date-fns';
 
 import { DEFAULT_MONTH_LABELS, NAMESPACE } from '../constants';
-import { Activity, Week } from '../types';
+import type { Activity, Week } from '../types';
 
 interface MonthLabel {
   weekIndex: number;
@@ -32,14 +32,17 @@ export function groupByWeeks(
 
   // Determine the first date of the calendar. If the first date is not the
   // set start weekday, the selected weekday one week earlier is used.
-  const firstDate = parseISO(normalizedActivities[0].date);
+  const firstActivity = normalizedActivities[0] as Activity;
+  const firstDate = parseISO(firstActivity.date);
   const firstCalendarDate =
     getDay(firstDate) === weekStart ? firstDate : subWeeks(nextDay(firstDate, weekStart), 1);
 
   // To correctly group activities by week, it is necessary to left-pad the list
   // because the first date might not be set start weekday.
   const paddedActivities = [
-    ...Array(differenceInCalendarDays(firstDate, firstCalendarDate)).fill(undefined),
+    ...(Array(differenceInCalendarDays(firstDate, firstCalendarDate)).fill(
+      undefined,
+    ) as Array<Activity>),
     ...normalizedActivities,
   ];
 
@@ -56,19 +59,22 @@ export function groupByWeeks(
  * so fill gaps with empty activity data.
  */
 function fillHoles(activities: Array<Activity>): Array<Activity> {
-  const dateMap: Record<string, Activity> = {};
-  for (const activity of activities) {
-    dateMap[activity.date] = activity;
+  if (activities.length === 0) {
+    return [];
   }
 
+  const calendar = new Map<string, Activity>(activities.map(a => [a.date, a]));
+  const firstActivity = activities[0] as Activity;
+  const lastActivity = activities[activities.length - 1] as Activity;
+
   return eachDayOfInterval({
-    start: parseISO(activities[0].date),
-    end: parseISO(activities[activities.length - 1].date),
+    start: parseISO(firstActivity.date),
+    end: parseISO(lastActivity.date),
   }).map(day => {
     const date = formatISO(day, { representation: 'date' });
 
-    if (dateMap[date]) {
-      return dateMap[date];
+    if (calendar.has(date)) {
+      return calendar.get(date) as Activity;
     }
 
     return {
@@ -92,9 +98,15 @@ export function getMonthLabels(
       }
 
       const month = monthNames[getMonth(parseISO(firstActivity.date))];
+
+      if (!month) {
+        const monthName = new Date(firstActivity.date).toLocaleString('en-US', { month: 'short' });
+        throw new Error(`Unexpected error: undefined month label for ${monthName}.`);
+      }
+
       const prevLabel = labels[labels.length - 1];
 
-      if (weekIndex === 0 || prevLabel.label !== month) {
+      if (weekIndex === 0 || !prevLabel || prevLabel.label !== month) {
         return [...labels, { weekIndex, label: month }];
       }
 
@@ -103,7 +115,7 @@ export function getMonthLabels(
     .filter(({ weekIndex }, index, labels) => {
       // Labels should only be shown if there is "enough" space (data).
       // This is a naive implementation that does not take the block size,
-      // font size etc. into account.
+      // font size, etc. into account.
       const minWeeks = 3;
 
       // Skip the first month label if there is not enough space to the next one.
@@ -111,8 +123,8 @@ export function getMonthLabels(
         return labels[1] && labels[1].weekIndex - weekIndex >= minWeeks;
       }
 
-      // Skip the last month label the there is not enough data in that month to
-      // avoid overflowing the calendar on the right.
+      // Skip the last month label if there is not enough data in that month
+      // to avoid overflowing the calendar on the right.
       if (index === labels.length - 1) {
         return weeks.slice(weekIndex).length >= minWeeks;
       }
@@ -178,10 +190,15 @@ export function maxWeekdayLabelLength(
   labels: string[],
   fontSize: number,
 ): number {
+  if (labels.length !== 7) {
+    throw new Error('Exactly 7 labels, one for each weekday must be passed.');
+  }
+
   return firstWeek.reduce((maxLength, _, index) => {
     if (index % 2 !== 0) {
       const dayIndex = (index + weekStart) % 7;
-      const curLength = Math.ceil(calcTextDimensions(labels[dayIndex], fontSize).width);
+      const label = labels[dayIndex] as string;
+      const curLength = Math.ceil(calcTextDimensions(label, fontSize).width);
 
       return Math.max(maxLength, curLength);
     }
@@ -192,7 +209,9 @@ export function maxWeekdayLabelLength(
 
 function calcTextDimensions(text: string, fontSize: number) {
   if (typeof document === 'undefined' || typeof window === 'undefined') {
-    throw new Error('calcTextDimensions() requires browser APIs');
+    throw new Error(
+      'Unexpected error: text dimensions can only be calculated on the client, not the server.',
+    );
   }
 
   if (fontSize < 1) {

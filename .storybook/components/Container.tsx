@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 const Container = ({ children }: { children: ReactNode }) => {
   return <div style={{ margin: '1rem 0 2rem' }}>{children}</div>;

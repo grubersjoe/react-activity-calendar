@@ -3,21 +3,23 @@
 import chroma from 'chroma-js';
 import type { Day as WeekDay } from 'date-fns';
 import { getYear, parseISO } from 'date-fns';
-import { CSSProperties, Fragment, ReactElement } from 'react';
+import { type CSSProperties, Fragment, type ReactElement } from 'react';
 
 import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
 import { useIsClient } from '../hooks/useIsClient';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import styles from '../styles/styles.module.css';
-import {
+import type {
   Activity,
   BlockElement,
+  Color,
   EventHandlerMap,
   Labels,
   ReactEvent,
   SVGRectEventHandler,
   ThemeInput,
+  Week,
 } from '../types';
 import {
   generateEmptyData,
@@ -151,7 +153,7 @@ export interface Props {
 }
 
 const ActivityCalendar = ({
-  data,
+  data: activities,
   blockMargin = 4,
   blockRadius = 2,
   blockSize = 12,
@@ -187,21 +189,23 @@ const ActivityCalendar = ({
   }
 
   if (loading) {
-    data = generateEmptyData();
+    activities = generateEmptyData();
   }
 
-  if (data.length === 0) {
+  if (activities.length === 0) {
     return null;
   }
 
-  const year = getYear(parseISO(data[0]?.date));
-  const weeks = groupByWeeks(data, weekStart);
+  const firstActivity = activities[0] as Activity;
+  const year = getYear(parseISO(firstActivity.date));
+  const weeks = groupByWeeks(activities, weekStart);
+  const firstWeek = weeks[0] as Week;
 
   const labels = Object.assign({}, DEFAULT_LABELS, labelsProp);
   const labelHeight = hideMonthLabels ? 0 : fontSize + LABEL_MARGIN;
 
   const weekdayLabelOffset = showWeekdayLabels
-    ? maxWeekdayLabelLength(weeks[0], weekStart, labels.weekdays, fontSize) + LABEL_MARGIN
+    ? maxWeekdayLabelLength(firstWeek, weekStart, labels.weekdays, fontSize) + LABEL_MARGIN
     : undefined;
 
   function getDimensions() {
@@ -283,7 +287,7 @@ const ActivityCalendar = ({
     const totalCount =
       typeof totalCountProp === 'number'
         ? totalCountProp
-        : data.reduce((sum, activity) => sum + activity.count, 0);
+        : activities.reduce((sum, activity) => sum + activity.count, 0);
 
     return (
       <footer
@@ -305,7 +309,7 @@ const ActivityCalendar = ({
 
         {!loading && !hideColorLegend && (
           <div className={getClassName('legend-colors', styles.legendColors)}>
-            <span style={{ marginRight: '0.4em' }}>{labels?.legend?.less ?? 'Less'}</span>
+            <span style={{ marginRight: '0.4em' }}>{labels.legend.less}</span>
             {Array(maxLevel + 1)
               .fill(undefined)
               .map((_, level) => (
@@ -319,7 +323,7 @@ const ActivityCalendar = ({
                   />
                 </svg>
               ))}
-            <span style={{ marginLeft: '0.4em' }}>{labels?.legend?.more ?? 'More'}</span>
+            <span style={{ marginLeft: '0.4em' }}>{labels.legend.more}</span>
           </div>
         )}
       </footer>
@@ -333,7 +337,7 @@ const ActivityCalendar = ({
 
     return (
       <>
-        {showWeekdayLabels && (
+        {showWeekdayLabels && weeks[0] && (
           <g className={getClassName('legend-weekday')}>
             {weeks[0].map((_, index) => {
               if (index % 2 === 0) {
@@ -375,14 +379,15 @@ const ActivityCalendar = ({
 
   const { width, height } = getDimensions();
 
+  const zeroColor = colorScale[0] as Color;
   const containerStyles = {
     fontSize,
     ...(useAnimation && {
-      [`--${NAMESPACE}-loading`]: colorScale[0],
+      [`--${NAMESPACE}-loading`]: zeroColor,
       [`--${NAMESPACE}-loading-active`]:
         colorScheme === 'light'
-          ? chroma(colorScale[0]).darken(0.3).hex()
-          : chroma(colorScale[0]).brighten(0.25).hex(),
+          ? chroma(zeroColor).darken(0.3).hex()
+          : chroma(zeroColor).brighten(0.25).hex(),
     }),
   };
 

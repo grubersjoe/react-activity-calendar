@@ -1,7 +1,7 @@
 import { Tooltip as MuiTooltip } from '@mui/material';
 import LinkTo from '@storybook/addon-links/react';
-import { Meta, StoryObj } from '@storybook/react';
-import { Highlight, themes } from 'prism-react-renderer';
+import type { Meta, StoryObj } from '@storybook/react';
+import { Highlight, themes as prismThemes } from 'prism-react-renderer';
 import { cloneElement } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
@@ -17,11 +17,13 @@ import exampleThemeExplicit from '../../examples/themes-explicit?raw';
 import exampleTheme from '../../examples/themes?raw';
 import exampleTooltipsMui from '../../examples/tooltips-mui?raw';
 import exampleTooltipsReact from '../../examples/tooltips-react?raw';
-import { Theme } from '../types';
+import type { Theme } from '../types';
 import { generateTestData } from '../utils/calendar';
-import ActivityCalendar, { Props } from './ActivityCalendar';
+import ActivityCalendar, { type Props } from './ActivityCalendar';
 
 type Story = StoryObj<Props>;
+
+/* eslint-disable react-hooks/rules-of-hooks */
 
 const meta: Meta<Props> = {
   title: 'React Activity Calendar',
@@ -282,7 +284,7 @@ export const ColorThemes: Story = {
         </a>{' '}
         prop.
       </p>
-      <Source code={exampleTheme} />
+      <Source code={exampleTheme} isDarkMode={useDarkMode()} />
     </Container>
   ),
 };
@@ -348,8 +350,12 @@ export const EventHandlers: Story = {
   args: {
     ...defaultProps,
     eventHandlers: {
-      onClick: () => activity => alert(JSON.stringify(activity)),
-      onMouseEnter: () => () => console.log('on mouse enter'),
+      onClick: () => activity => {
+        alert(JSON.stringify(activity));
+      },
+      onMouseEnter: () => () => {
+        console.log('on mouse enter');
+      },
     },
   },
   parameters: {
@@ -368,14 +374,14 @@ export const EventHandlers: Story = {
         etc. All event listeners have the following signature, so you can use the activity data of
         the block inside the handler:
       </p>
-      <Source code={exampleEventHandlersInterface} />
+      <Source code={exampleEventHandlersInterface} isDarkMode={useDarkMode()} />
       <p>Click on any block below to see it in action:</p>
       <ActivityCalendar
         {...args}
         data={generateTestData({ maxLevel: args.maxLevel })}
         style={{ margin: '2rem 0' }}
       />
-      <Source code={exampleEventHandlers} />
+      <Source code={exampleEventHandlers} isDarkMode={useDarkMode()} />
     </Container>
   ),
 };
@@ -403,7 +409,7 @@ export const Tooltips: Story = {
         In the simplest case, each block only needs to be wrapped with a{' '}
         <code>&lt;Tooltip/&gt;</code> component, as shown here for Material UI:
       </p>
-      <Source code={exampleTooltipsMui} />
+      <Source code={exampleTooltipsMui} isDarkMode={useDarkMode()} />
       <ActivityCalendar
         {...args}
         data={generateTestData({ maxLevel: args.maxLevel })}
@@ -420,7 +426,7 @@ export const Tooltips: Story = {
         Some libraries, like <code>react-tooltip</code>, require that additional props are passed to
         the block elements. You can achieve this using the <code>React.cloneElement</code> function:
       </p>
-      <Source code={exampleTooltipsReact} />
+      <Source code={exampleTooltipsReact} isDarkMode={useDarkMode()} />
       <ActivityCalendar
         {...args}
         data={generateTestData({ maxLevel: args.maxLevel })}
@@ -502,7 +508,7 @@ export const LocalizedLabels: Story = {
         data={generateTestData({ maxLevel: args.maxLevel })}
         style={{ margin: '2rem 0' }}
       />
-      <Source code={exampleLabelsShape} />
+      <Source code={exampleLabelsShape} isDarkMode={useDarkMode()} />
     </Container>
   ),
 };
@@ -540,31 +546,40 @@ export const NarrowScreens: Story = {
   ),
 };
 
-const Source = ({ code, language = 'tsx' }: { code: string; language?: string }) => {
-  const darkMode = useDarkMode();
+const Source = ({
+  code,
+  isDarkMode,
+  language = 'tsx',
+}: {
+  code: string;
+  isDarkMode: boolean;
+  language?: string;
+}) => {
   return (
-    <Highlight
-      code={code.trim()}
-      language={language}
-      theme={darkMode ? themes.vsDark : themes.vsLight}
-    >
-      {({ style, tokens, getLineProps, getTokenProps }) => (
-        <pre
-          style={Object.assign({}, style, {
-            margin: '1rem 0 2rem',
-            backgroundColor: 'transparent',
-            whiteSpace: 'pre-wrap',
-          })}
-        >
-          {tokens.map((line, i) => (
-            <div key={i} {...getLineProps({ line })}>
-              {line.map((token, key) => (
-                <span key={key} {...getTokenProps({ token })} />
-              ))}
-            </div>
-          ))}
-        </pre>
-      )}
-    </Highlight>
+    <div>
+      <Highlight
+        code={code.trim()}
+        language={language}
+        theme={isDarkMode ? prismThemes.vsDark : prismThemes.vsLight}
+      >
+        {({ style, tokens, getLineProps, getTokenProps }) => (
+          <pre
+            style={Object.assign({}, style, {
+              margin: '1rem 0 2rem',
+              backgroundColor: 'transparent',
+              whiteSpace: 'pre-wrap',
+            })}
+          >
+            {tokens.map((line, i) => (
+              <div key={i} {...getLineProps({ line })}>
+                {line.map((token, key) => (
+                  <span key={key} {...getTokenProps({ token })} />
+                ))}
+              </div>
+            ))}
+          </pre>
+        )}
+      </Highlight>
+    </div>
   );
 };
