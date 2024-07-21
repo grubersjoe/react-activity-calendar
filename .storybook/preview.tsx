@@ -2,6 +2,7 @@ import { DocsContainer, type DocsContainerProps } from '@storybook/blocks';
 import type { Preview } from '@storybook/react';
 import { type ThemeVarsPartial, themes } from '@storybook/theming';
 import { useEffect, useState } from 'react';
+import { DARK_MODE_EVENT_NAME } from 'storybook-dark-mode';
 
 import './storybook.scss';
 
@@ -12,30 +13,23 @@ const baseTheme: ThemeVarsPartial = {
 };
 
 const Container = (props: DocsContainerProps) => {
-  // We can't simply use `useDarkMode()` because Storybook sucks:
-  // "Storybook preview hooks can only be called inside decorators and story functions."
-  const [theme, setTheme] = useState(
-    document.body.classList.contains('dark') ? themes.dark : themes.light,
-  );
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const [theme, setTheme] = useState(prefersDark ? themes.dark : themes.light);
 
+  // useDarkMode() cannot be used for doc pages anymore:
+  // https://github.com/hipstersmoothie/storybook-dark-mode/issues/282
+  // Workaround:
   useEffect(() => {
-    const observer = new MutationObserver(mutations => {
-      for (const mutation of mutations) {
-        if (mutation.attributeName === 'class') {
-          setTheme(document.body.classList.contains('dark') ? themes.dark : themes.light);
-        }
-      }
-    });
+    const listener = (isDark: boolean) => {
+      setTheme(isDark ? themes.dark : themes.light);
+    };
 
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
+    props.context.channel.on(DARK_MODE_EVENT_NAME, listener);
 
     return () => {
-      observer.disconnect();
+      props.context.channel.removeListener(DARK_MODE_EVENT_NAME, listener);
     };
-  }, []);
+  }, [props.context.channel]);
 
   return (
     <DocsContainer
