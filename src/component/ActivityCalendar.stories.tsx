@@ -2,7 +2,7 @@ import { Tooltip as MuiTooltip } from '@mui/material';
 import LinkTo from '@storybook/addon-links/react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Highlight, themes as prismThemes } from 'prism-react-renderer';
-import { cloneElement } from 'react';
+import { cloneElement, useMemo } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { useDarkMode } from 'storybook-dark-mode';
@@ -107,9 +107,10 @@ const explicitTheme: Theme = {
 
 export const Default: Story = {
   args: defaultProps,
-  render: args => (
-    <ActivityCalendar {...args} data={generateTestData({ maxLevel: args.maxLevel })} />
-  ),
+  render: args => {
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+    return <ActivityCalendar {...args} data={data} />;
+  },
   parameters: {
     docs: {
       source: {
@@ -139,27 +140,31 @@ export const ActivityLevels: Story = {
     ...defaultProps,
     maxLevel: 2,
   },
-  render: args => (
-    <Container>
-      <ActivityCalendar
-        {...args}
-        theme={{ light: ['hsl(0, 0%, 92%)', '#980043'] }}
-        data={generateTestData({ maxLevel: args.maxLevel })}
-        style={{ marginBottom: '2rem' }}
-      />
+  render: args => {
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
 
-      <p>
-        Use the{' '}
-        <code>
-          <b>maxLevel</b>
-        </code>{' '}
-        prop to control the number of activity levels. This value is zero indexed (0 represents no
-        activity), so for example a <code>maxLevel</code> of 2 will total in 3 levels as above. Each
-        activity level must be in the interval from 0 to <code>maxLevel</code>, which is 4 per
-        default.
-      </p>
-    </Container>
-  ),
+    return (
+      <Container>
+        <ActivityCalendar
+          {...args}
+          theme={{ light: ['hsl(0, 0%, 92%)', '#980043'] }}
+          data={data}
+          style={{ marginBottom: '2rem' }}
+        />
+
+        <p>
+          Use the{' '}
+          <code>
+            <b>maxLevel</b>
+          </code>{' '}
+          prop to control the number of activity levels. This value is zero indexed (0 represents no
+          activity), so for example a <code>maxLevel</code> of 2 will total in 3 levels as above.
+          Each activity level must be in the interval from 0 to <code>maxLevel</code>, which is 4
+          per default.
+        </p>
+      </Container>
+    );
+  },
   parameters: {
     docs: {
       source: {
@@ -171,66 +176,61 @@ export const ActivityLevels: Story = {
 
 export const DateRanges: Story = {
   args: defaultProps,
-  parameters: {
-    // maxLevel cannot be used for static data
-    controls: { exclude: ['maxLevel'] },
-  },
-  render: args => (
-    <>
-      <ActivityCalendar
-        {...args}
-        data={generateTestData({
+  render: args => {
+    const dataLong = useMemo(
+      () =>
+        generateTestData({
           maxLevel: args.maxLevel,
           interval: {
             start: new Date(2022, 5, 1),
             end: new Date(2023, 4, 31),
           },
-        })}
-        labels={{
-          totalCount: '{{count}} activities in 2022 & 2023',
-        }}
-      />
-      <br />
-      <br />
-      <ActivityCalendar
-        {...args}
-        data={generateTestData({
+        }),
+      [args.maxLevel],
+    );
+
+    const dataMedium = useMemo(
+      () =>
+        generateTestData({
           maxLevel: args.maxLevel,
           interval: {
             start: new Date(2023, 2, 8),
             end: new Date(2023, 7, 1),
           },
-        })}
-      />
-      <br />
-      <br />
-      <ActivityCalendar
-        {...args}
-        data={[
-          {
-            date: '2023-06-14',
-            count: 2,
-            level: 1,
+        }),
+      [args.maxLevel],
+    );
+
+    const dataShort = useMemo(
+      () =>
+        generateTestData({
+          maxLevel: args.maxLevel,
+          interval: {
+            start: new Date(2023, 5, 14),
+            end: new Date(2023, 6, 17),
           },
-          {
-            date: '2023-06-22',
-            count: 16,
-            level: 3,
-          },
-          {
-            date: '2023-07-05',
-            count: 3,
-            level: 1,
-          },
-          {
-            date: '2023-07-17',
-            count: 10,
-            level: 2,
-          },
-        ]}
-      />
-    </>
-  ),
+        }),
+      [args.maxLevel],
+    );
+
+    return (
+      <>
+        <ActivityCalendar
+          {...args}
+          data={dataLong}
+          labels={{
+            totalCount: '{{count}} activities in 2022 & 2023',
+          }}
+        />
+        <br />
+        <br />
+        <ActivityCalendar {...args} data={dataMedium} />
+        <br />
+        <br />
+        <ActivityCalendar {...args} data={dataShort} />
+      </>
+    );
+  },
 };
 
 export const ColorThemes: Story = {
@@ -248,45 +248,45 @@ export const ColorThemes: Story = {
       },
     },
   },
-  render: args => (
-    <Container>
-      <h1>Color themes</h1>
-      <ActivityCalendar
-        {...args}
-        data={generateTestData({ maxLevel: args.maxLevel })}
-        style={{ margin: '2rem 0' }}
-      />
-      <p>
-        Use the{' '}
-        <code>
-          <b>theme</b>
-        </code>{' '}
-        prop to configure the calendar colors for the light and dark system{' '}
-        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme">color scheme</a>.
-        Define each color scale{' '}
-        <LinkTo kind="react-activity-calendar" name="explicit-theme">
-          explicitly
-        </LinkTo>{' '}
-        by settings all colors (5 per default) or pass exactly two colors (the lowest and highest
-        intensity) to calculate a single-hue scale. For explicit themes the color count must match
-        the number of activity levels, which is controlled by the{' '}
-        <LinkTo kind="react-activity-calendar" name="date-ranges">
-          <code>maxLevel</code>
-        </LinkTo>{' '}
-        prop. Colors can be specified in any valid CSS format.
-      </p>
-      <p>
-        The colors for at least one scheme must be set. If undefined, the default theme is used. By
-        default, the calendar will select the current system color scheme, but you can enforce a
-        specific scheme with the{' '}
-        <a href="/?path=/docs/react-activity-calendar--docs">
-          <code>colorScheme</code>
-        </a>{' '}
-        prop.
-      </p>
-      <Source code={exampleTheme} isDarkMode={useDarkMode()} />
-    </Container>
-  ),
+  render: args => {
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+
+    return (
+      <Container>
+        <h1>Color themes</h1>
+        <ActivityCalendar {...args} data={data} style={{ margin: '2rem 0' }} />
+        <p>
+          Use the{' '}
+          <code>
+            <b>theme</b>
+          </code>{' '}
+          prop to configure the calendar colors for the light and dark system{' '}
+          <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme">color scheme</a>.
+          Define each color scale{' '}
+          <LinkTo kind="react-activity-calendar" name="explicit-theme">
+            explicitly
+          </LinkTo>{' '}
+          by settings all colors (5 per default) or pass exactly two colors (the lowest and highest
+          intensity) to calculate a single-hue scale. For explicit themes the color count must match
+          the number of activity levels, which is controlled by the{' '}
+          <LinkTo kind="react-activity-calendar" name="date-ranges">
+            <code>maxLevel</code>
+          </LinkTo>{' '}
+          prop. Colors can be specified in any valid CSS format.
+        </p>
+        <p>
+          The colors for at least one scheme must be set. If undefined, the default theme is used.
+          By default, the calendar will select the current system color scheme, but you can enforce
+          a specific scheme with the{' '}
+          <a href="/?path=/docs/react-activity-calendar--docs">
+            <code>colorScheme</code>
+          </a>{' '}
+          prop.
+        </p>
+        <Source code={exampleTheme} isDarkMode={useDarkMode()} />
+      </Container>
+    );
+  },
 };
 
 export const ExplicitThemes: Story = {
@@ -303,24 +303,24 @@ export const ExplicitThemes: Story = {
       },
     },
   },
-  render: args => (
-    <Container>
-      <h1>Explicit theme</h1>
-      <p></p>
-      <p>
-        See the{' '}
-        <LinkTo kind="react-activity-calendar" name="color-themes">
-          WithTheme
-        </LinkTo>{' '}
-        story for details how to use the <code>theme</code> prop.
-      </p>
-      <ActivityCalendar
-        {...args}
-        data={generateTestData({ maxLevel: 4 })}
-        style={{ marginTop: '2rem' }}
-      />
-    </Container>
-  ),
+  render: args => {
+    const data = useMemo(() => generateTestData({ maxLevel: 4 }), []);
+
+    return (
+      <Container>
+        <h1>Explicit theme</h1>
+        <p></p>
+        <p>
+          See the{' '}
+          <LinkTo kind="react-activity-calendar" name="color-themes">
+            WithTheme
+          </LinkTo>{' '}
+          story for details how to use the <code>theme</code> prop.
+        </p>
+        <ActivityCalendar {...args} data={data} style={{ marginTop: '2rem' }} />
+      </Container>
+    );
+  },
 };
 
 export const Customization: Story = {
@@ -332,9 +332,10 @@ export const Customization: Story = {
     fontSize: 16,
     theme: explicitTheme,
   },
-  render: args => (
-    <ActivityCalendar {...args} data={generateTestData({ maxLevel: args.maxLevel })} />
-  ),
+  render: args => {
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+    return <ActivityCalendar {...args} data={data} />;
+  },
   parameters: {
     // maxLevel cannot be used for a static explicit theme
     controls: { exclude: ['maxLevel'] },
@@ -365,25 +366,25 @@ export const EventHandlers: Story = {
       },
     },
   },
-  render: args => (
-    <Container>
-      <h1>Event Handlers</h1>
-      <p>
-        You can register event handlers for the SVG <code>&lt;rect/&gt;</code> elements that are
-        used to render the calendar days. This way you can control the behaviour on click, hover,
-        etc. All event listeners have the following signature, so you can use the activity data of
-        the block inside the handler:
-      </p>
-      <Source code={exampleEventHandlersInterface} isDarkMode={useDarkMode()} />
-      <p>Click on any block below to see it in action:</p>
-      <ActivityCalendar
-        {...args}
-        data={generateTestData({ maxLevel: args.maxLevel })}
-        style={{ margin: '2rem 0' }}
-      />
-      <Source code={exampleEventHandlers} isDarkMode={useDarkMode()} />
-    </Container>
-  ),
+  render: args => {
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+
+    return (
+      <Container>
+        <h1>Event Handlers</h1>
+        <p>
+          You can register event handlers for the SVG <code>&lt;rect/&gt;</code> elements that are
+          used to render the calendar days. This way you can control the behaviour on click, hover,
+          etc. All event listeners have the following signature, so you can use the activity data of
+          the block inside the handler:
+        </p>
+        <Source code={exampleEventHandlersInterface} isDarkMode={useDarkMode()} />
+        <p>Click on any block below to see it in action:</p>
+        <ActivityCalendar {...args} data={data} style={{ margin: '2rem 0' }} />
+        <Source code={exampleEventHandlers} isDarkMode={useDarkMode()} />
+      </Container>
+    );
+  },
 };
 
 export const Tooltips: Story = {
@@ -395,51 +396,56 @@ export const Tooltips: Story = {
       },
     },
   },
-  render: args => (
-    <Container>
-      <h1>Tooltip Examples</h1>
-      <p>
-        To add a 3rd party tooltip component to the calendar you can use the{' '}
-        <code>renderBlock</code> prop.
-      </p>
-      <h2>
-        <a href="https://mui.com/material-ui/react-tooltip/">Material UI</a>
-      </h2>
-      <p>
-        In the simplest case, each block only needs to be wrapped with a{' '}
-        <code>&lt;Tooltip/&gt;</code> component, as shown here for Material UI:
-      </p>
-      <Source code={exampleTooltipsMui} isDarkMode={useDarkMode()} />
-      <ActivityCalendar
-        {...args}
-        data={generateTestData({ maxLevel: args.maxLevel })}
-        renderBlock={(block, activity) => (
-          <MuiTooltip title={`${activity.count} activities on ${activity.date}`}>
-            {block}
-          </MuiTooltip>
-        )}
-      />
-      <h2>
-        <a href="https://github.com/ReactTooltip/react-tooltip">react-tooltip</a>
-      </h2>
-      <p>
-        Some libraries, like <code>react-tooltip</code>, require that additional props are passed to
-        the block elements. You can achieve this using the <code>React.cloneElement</code> function:
-      </p>
-      <Source code={exampleTooltipsReact} isDarkMode={useDarkMode()} />
-      <ActivityCalendar
-        {...args}
-        data={generateTestData({ maxLevel: args.maxLevel })}
-        renderBlock={(block, activity) =>
-          cloneElement(block, {
-            'data-tooltip-id': 'react-tooltip',
-            'data-tooltip-html': `${activity.count} activities on ${activity.date}`,
-          })
-        }
-      />
-      <ReactTooltip id="react-tooltip" />
-    </Container>
-  ),
+  render: args => {
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+
+    return (
+      <Container>
+        <h1>Tooltip Examples</h1>
+        <p>
+          To add a 3rd party tooltip component to the calendar you can use the{' '}
+          <code>renderBlock</code> prop.
+        </p>
+        <h2>
+          <a href="https://mui.com/material-ui/react-tooltip/">Material UI</a>
+        </h2>
+        <p>
+          In the simplest case, each block only needs to be wrapped with a{' '}
+          <code>&lt;Tooltip/&gt;</code> component, as shown here for Material UI:
+        </p>
+        <Source code={exampleTooltipsMui} isDarkMode={useDarkMode()} />
+        <ActivityCalendar
+          {...args}
+          data={data}
+          renderBlock={(block, activity) => (
+            <MuiTooltip title={`${activity.count} activities on ${activity.date}`}>
+              {block}
+            </MuiTooltip>
+          )}
+        />
+        <h2>
+          <a href="https://github.com/ReactTooltip/react-tooltip">react-tooltip</a>
+        </h2>
+        <p>
+          Some libraries, like <code>react-tooltip</code>, require that additional props are passed
+          to the block elements. You can achieve this using the <code>React.cloneElement</code>{' '}
+          function:
+        </p>
+        <Source code={exampleTooltipsReact} isDarkMode={useDarkMode()} />
+        <ActivityCalendar
+          {...args}
+          data={data}
+          renderBlock={(block, activity) =>
+            cloneElement(block, {
+              'data-tooltip-id': 'react-tooltip',
+              'data-tooltip-html': `${activity.count} activities on ${activity.date}`,
+            })
+          }
+        />
+        <ReactTooltip id="react-tooltip" />
+      </Container>
+    );
+  },
 };
 
 export const WithoutLabels: Story = {
@@ -449,9 +455,10 @@ export const WithoutLabels: Story = {
     hideColorLegend: true,
     hideTotalCount: true,
   },
-  render: args => (
-    <ActivityCalendar {...args} data={generateTestData({ maxLevel: args.maxLevel })} />
-  ),
+  render: args => {
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+    return <ActivityCalendar {...args} data={data} />;
+  },
   parameters: {
     docs: {
       source: {
@@ -466,9 +473,10 @@ export const WeekdayLabels: Story = {
     ...defaultProps,
     showWeekdayLabels: true,
   },
-  render: args => (
-    <ActivityCalendar {...args} data={generateTestData({ maxLevel: args.maxLevel })} />
-  ),
+  render: args => {
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+    return <ActivityCalendar {...args} data={data} />;
+  },
   parameters: {
     docs: {
       source: {
@@ -499,18 +507,18 @@ export const LocalizedLabels: Story = {
       },
     },
   },
-  render: args => (
-    <Container>
-      <h1>Localization</h1>
-      <p>(Example in German)</p>
-      <ActivityCalendar
-        {...args}
-        data={generateTestData({ maxLevel: args.maxLevel })}
-        style={{ margin: '2rem 0' }}
-      />
-      <Source code={exampleLabelsShape} isDarkMode={useDarkMode()} />
-    </Container>
-  ),
+  render: args => {
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+
+    return (
+      <Container>
+        <h1>Localization</h1>
+        <p>(Example in German)</p>
+        <ActivityCalendar {...args} data={data} style={{ margin: '2rem 0' }} />
+        <Source code={exampleLabelsShape} isDarkMode={useDarkMode()} />
+      </Container>
+    );
+  },
 };
 
 export const MondayAsWeekStart: Story = {
@@ -518,9 +526,10 @@ export const MondayAsWeekStart: Story = {
     ...defaultProps,
     weekStart: 1,
   },
-  render: args => (
-    <ActivityCalendar {...args} data={generateTestData({ maxLevel: args.maxLevel })} />
-  ),
+  render: args => {
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+    return <ActivityCalendar {...args} data={data} />;
+  },
   parameters: {
     docs: {
       source: {
@@ -539,11 +548,15 @@ export const NarrowScreens: Story = {
       },
     },
   },
-  render: args => (
-    <div style={{ width: 480, maxWidth: '100%', border: 'dashed 1px #929292' }}>
-      <ActivityCalendar {...args} data={generateTestData({ maxLevel: args.maxLevel })} />
-    </div>
-  ),
+  render: args => {
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+
+    return (
+      <div style={{ width: 480, maxWidth: '100%', border: 'dashed 1px #929292' }}>
+        <ActivityCalendar {...args} data={data} />
+      </div>
+    );
+  },
 };
 
 const Source = ({
