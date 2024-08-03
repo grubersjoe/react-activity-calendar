@@ -16,9 +16,6 @@ const config: StorybookConfig = {
     '@storybook/addon-links',
     'storybook-dark-mode',
   ],
-  docs: {
-    autodocs: true,
-  },
   typescript: {
     reactDocgen: 'react-docgen',
   },

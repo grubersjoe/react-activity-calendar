@@ -3,7 +3,13 @@
 import chroma from 'chroma-js';
 import type { Day as WeekDay } from 'date-fns';
 import { getYear, parseISO } from 'date-fns';
-import { type CSSProperties, Fragment, type ReactElement } from 'react';
+import {
+  type CSSProperties,
+  type ForwardedRef,
+  Fragment,
+  type ReactElement,
+  forwardRef,
+} from 'react';
 
 import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
@@ -105,6 +111,10 @@ export interface Props {
    */
   loading?: boolean;
   /**
+   * Ref to access the calendar DOM node.
+   */
+  ref?: ForwardedRef<HTMLElement>;
+  /**
    * Render prop for calendar blocks (activities). For example, useful to wrap
    * the element with a tooltip component. Use `React.cloneElement` to pass
    * additional props to the element if necessary.
@@ -152,266 +162,272 @@ export interface Props {
   weekStart?: WeekDay;
 }
 
-const ActivityCalendar = ({
-  data: activities,
-  blockMargin = 4,
-  blockRadius = 2,
-  blockSize = 12,
-  colorScheme = undefined,
-  eventHandlers = {},
-  fontSize = 14,
-  hideColorLegend = false,
-  hideMonthLabels = false,
-  hideTotalCount = false,
-  labels: labelsProp = undefined,
-  maxLevel = 4,
-  loading = false,
-  renderBlock = undefined,
-  showWeekdayLabels = false,
-  style: styleProp = {},
-  theme: themeProp = undefined,
-  totalCount: totalCountProp = undefined,
-  weekStart = 0, // Sunday
-}: Props) => {
-  maxLevel = Math.max(1, maxLevel);
+const ActivityCalendar = forwardRef<HTMLElement, Props>(
+  (
+    {
+      data: activities,
+      blockMargin = 4,
+      blockRadius = 2,
+      blockSize = 12,
+      colorScheme = undefined,
+      eventHandlers = {},
+      fontSize = 14,
+      hideColorLegend = false,
+      hideMonthLabels = false,
+      hideTotalCount = false,
+      labels: labelsProp = undefined,
+      maxLevel = 4,
+      loading = false,
+      renderBlock = undefined,
+      showWeekdayLabels = false,
+      style: styleProp = {},
+      theme: themeProp = undefined,
+      totalCount: totalCountProp = undefined,
+      weekStart = 0, // Sunday
+    }: Props, // Required for react-docgen
+    ref,
+  ) => {
+    maxLevel = Math.max(1, maxLevel);
 
-  const theme = createTheme(themeProp, maxLevel + 1);
-  const systemColorScheme = useColorScheme();
-  const colorScale = theme[colorScheme ?? systemColorScheme];
+    const theme = createTheme(themeProp, maxLevel + 1);
+    const systemColorScheme = useColorScheme();
+    const colorScale = theme[colorScheme ?? systemColorScheme];
 
-  const useAnimation = !usePrefersReducedMotion();
+    const useAnimation = !usePrefersReducedMotion();
 
-  // Calculating the weekday label offset only works in the browser.
-  // So disable SSR in this case.
-  const isClient = useIsClient();
-  if (showWeekdayLabels && !isClient) {
-    return null;
-  }
+    // Calculating the weekday label offset only works in the browser.
+    // So disable SSR in this case.
+    const isClient = useIsClient();
+    if (showWeekdayLabels && !isClient) {
+      return null;
+    }
 
-  if (loading) {
-    activities = generateEmptyData();
-  }
+    if (loading) {
+      activities = generateEmptyData();
+    }
 
-  if (activities.length === 0) {
-    return null;
-  }
+    if (activities.length === 0) {
+      return null;
+    }
 
-  const firstActivity = activities[0] as Activity;
-  const year = getYear(parseISO(firstActivity.date));
-  const weeks = groupByWeeks(activities, weekStart);
-  const firstWeek = weeks[0] as Week;
+    const firstActivity = activities[0] as Activity;
+    const year = getYear(parseISO(firstActivity.date));
+    const weeks = groupByWeeks(activities, weekStart);
+    const firstWeek = weeks[0] as Week;
 
-  const labels = Object.assign({}, DEFAULT_LABELS, labelsProp);
-  const labelHeight = hideMonthLabels ? 0 : fontSize + LABEL_MARGIN;
+    const labels = Object.assign({}, DEFAULT_LABELS, labelsProp);
+    const labelHeight = hideMonthLabels ? 0 : fontSize + LABEL_MARGIN;
 
-  const weekdayLabelOffset = showWeekdayLabels
-    ? maxWeekdayLabelLength(firstWeek, weekStart, labels.weekdays, fontSize) + LABEL_MARGIN
-    : undefined;
+    const weekdayLabelOffset = showWeekdayLabels
+      ? maxWeekdayLabelLength(firstWeek, weekStart, labels.weekdays, fontSize) + LABEL_MARGIN
+      : undefined;
 
-  function getDimensions() {
-    return {
-      width: weeks.length * (blockSize + blockMargin) - blockMargin,
-      height: labelHeight + (blockSize + blockMargin) * 7 - blockMargin,
-    };
-  }
+    function getDimensions() {
+      return {
+        width: weeks.length * (blockSize + blockMargin) - blockMargin,
+        height: labelHeight + (blockSize + blockMargin) * 7 - blockMargin,
+      };
+    }
 
-  function getEventHandlers(activity: Activity): SVGRectEventHandler {
-    return (
-      Object.keys(eventHandlers) as Array<keyof SVGRectEventHandler>
-    ).reduce<SVGRectEventHandler>(
-      (handlers, key) => ({
-        ...handlers,
-        [key]: (event: ReactEvent<SVGRectElement>) => eventHandlers[key]?.(event)(activity),
-      }),
-      {},
-    );
-  }
-
-  function renderCalendar() {
-    return weeks
-      .map((week, weekIndex) =>
-        week.map((activity, dayIndex) => {
-          if (!activity) {
-            return null;
-          }
-
-          if (activity.level < 0 || activity.level > maxLevel) {
-            throw new RangeError(
-              `Provided activity level ${activity.level} for ${activity.date} is out of range. It must be between 0 and ${maxLevel}.`,
-            );
-          }
-
-          const style =
-            loading && useAnimation
-              ? {
-                  animation: `${styles.loadingAnimation} 1.75s ease-in-out infinite`,
-                  animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
-                }
-              : undefined;
-
-          const block = (
-            <rect
-              {...getEventHandlers(activity)}
-              x={0}
-              y={labelHeight + (blockSize + blockMargin) * dayIndex}
-              width={blockSize}
-              height={blockSize}
-              rx={blockRadius}
-              ry={blockRadius}
-              fill={colorScale[activity.level]}
-              data-date={activity.date}
-              data-level={activity.level}
-              style={style}
-            />
-          );
-
-          return (
-            <Fragment key={activity.date}>
-              {renderBlock ? renderBlock(block, activity) : block}
-            </Fragment>
-          );
+    function getEventHandlers(activity: Activity): SVGRectEventHandler {
+      return (
+        Object.keys(eventHandlers) as Array<keyof SVGRectEventHandler>
+      ).reduce<SVGRectEventHandler>(
+        (handlers, key) => ({
+          ...handlers,
+          [key]: (event: ReactEvent<SVGRectElement>) => eventHandlers[key]?.(event)(activity),
         }),
-      )
-      .map((week, x) => (
-        <g key={x} transform={`translate(${(blockSize + blockMargin) * x}, 0)`}>
-          {week}
-        </g>
-      ));
-  }
-
-  function renderFooter() {
-    if (hideTotalCount && hideColorLegend) {
-      return null;
+        {},
+      );
     }
 
-    const totalCount =
-      typeof totalCountProp === 'number'
-        ? totalCountProp
-        : activities.reduce((sum, activity) => sum + activity.count, 0);
+    function renderCalendar() {
+      return weeks
+        .map((week, weekIndex) =>
+          week.map((activity, dayIndex) => {
+            if (!activity) {
+              return null;
+            }
 
-    return (
-      <footer
-        className={getClassName('footer', styles.footer)}
-        style={{ marginLeft: weekdayLabelOffset }}
-      >
-        {/* Placeholder */}
-        {loading && <div>&nbsp;</div>}
-
-        {!loading && !hideTotalCount && (
-          <div className={getClassName('count')}>
-            {labels.totalCount
-              ? labels.totalCount
-                  .replace('{{count}}', String(totalCount))
-                  .replace('{{year}}', String(year))
-              : `${totalCount} activities in ${year}`}
-          </div>
-        )}
-
-        {!loading && !hideColorLegend && (
-          <div className={getClassName('legend-colors', styles.legendColors)}>
-            <span style={{ marginRight: '0.4em' }}>{labels.legend.less}</span>
-            {Array(maxLevel + 1)
-              .fill(undefined)
-              .map((_, level) => (
-                <svg width={blockSize} height={blockSize} key={level}>
-                  <rect
-                    width={blockSize}
-                    height={blockSize}
-                    fill={colorScale[level]}
-                    rx={blockRadius}
-                    ry={blockRadius}
-                  />
-                </svg>
-              ))}
-            <span style={{ marginLeft: '0.4em' }}>{labels.legend.more}</span>
-          </div>
-        )}
-      </footer>
-    );
-  }
-
-  function renderLabels() {
-    if (!showWeekdayLabels && hideMonthLabels) {
-      return null;
-    }
-
-    return (
-      <>
-        {showWeekdayLabels && weeks[0] && (
-          <g className={getClassName('legend-weekday')}>
-            {weeks[0].map((_, index) => {
-              if (index % 2 === 0) {
-                return null;
-              }
-
-              const dayIndex = (index + weekStart) % 7;
-
-              return (
-                <text
-                  x={-LABEL_MARGIN}
-                  y={labelHeight + (blockSize + blockMargin) * index + blockSize / 2}
-                  dominantBaseline="middle"
-                  textAnchor="end"
-                  key={index}
-                >
-                  {labels.weekdays[dayIndex]}
-                </text>
+            if (activity.level < 0 || activity.level > maxLevel) {
+              throw new RangeError(
+                `Provided activity level ${activity.level} for ${activity.date} is out of range. It must be between 0 and ${maxLevel}.`,
               );
-            })}
+            }
+
+            const style =
+              loading && useAnimation
+                ? {
+                    animation: `${styles.loadingAnimation} 1.75s ease-in-out infinite`,
+                    animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
+                  }
+                : undefined;
+
+            const block = (
+              <rect
+                {...getEventHandlers(activity)}
+                x={0}
+                y={labelHeight + (blockSize + blockMargin) * dayIndex}
+                width={blockSize}
+                height={blockSize}
+                rx={blockRadius}
+                ry={blockRadius}
+                fill={colorScale[activity.level]}
+                data-date={activity.date}
+                data-level={activity.level}
+                style={style}
+              />
+            );
+
+            return (
+              <Fragment key={activity.date}>
+                {renderBlock ? renderBlock(block, activity) : block}
+              </Fragment>
+            );
+          }),
+        )
+        .map((week, x) => (
+          <g key={x} transform={`translate(${(blockSize + blockMargin) * x}, 0)`}>
+            {week}
           </g>
-        )}
-        {!hideMonthLabels && (
-          <g className={getClassName('legend-month')}>
-            {getMonthLabels(weeks, labels.months).map(({ label, weekIndex }) => (
-              <text
-                x={(blockSize + blockMargin) * weekIndex}
-                dominantBaseline="hanging"
-                key={weekIndex}
-              >
-                {label}
-              </text>
-            ))}
-          </g>
-        )}
-      </>
-    );
-  }
+        ));
+    }
 
-  const { width, height } = getDimensions();
+    function renderFooter() {
+      if (hideTotalCount && hideColorLegend) {
+        return null;
+      }
 
-  const zeroColor = colorScale[0] as Color;
-  const containerStyles = {
-    fontSize,
-    ...(useAnimation && {
-      [`--${NAMESPACE}-loading`]: zeroColor,
-      [`--${NAMESPACE}-loading-active`]:
-        colorScheme === 'light'
-          ? chroma(zeroColor).darken(0.3).hex()
-          : chroma(zeroColor).brighten(0.25).hex(),
-    }),
-  };
+      const totalCount =
+        typeof totalCountProp === 'number'
+          ? totalCountProp
+          : activities.reduce((sum, activity) => sum + activity.count, 0);
 
-  return (
-    <article
-      className={`${NAMESPACE} ${styles.container}`}
-      style={{ ...styleProp, ...containerStyles }}
-    >
-      <div className={getClassName('scroll-container', styles.scrollContainer)}>
-        <svg
-          width={width}
-          height={height}
-          viewBox={`0 0 ${width} ${height}`}
-          className={getClassName('calendar', styles.calendar)}
+      return (
+        <footer
+          className={getClassName('footer', styles.footer)}
           style={{ marginLeft: weekdayLabelOffset }}
         >
-          {!loading && renderLabels()}
-          {renderCalendar()}
-        </svg>
-      </div>
-      {renderFooter()}
-    </article>
-  );
-};
+          {/* Placeholder */}
+          {loading && <div>&nbsp;</div>}
+
+          {!loading && !hideTotalCount && (
+            <div className={getClassName('count')}>
+              {labels.totalCount
+                ? labels.totalCount
+                    .replace('{{count}}', String(totalCount))
+                    .replace('{{year}}', String(year))
+                : `${totalCount} activities in ${year}`}
+            </div>
+          )}
+
+          {!loading && !hideColorLegend && (
+            <div className={getClassName('legend-colors', styles.legendColors)}>
+              <span style={{ marginRight: '0.4em' }}>{labels.legend.less}</span>
+              {Array(maxLevel + 1)
+                .fill(undefined)
+                .map((_, level) => (
+                  <svg width={blockSize} height={blockSize} key={level}>
+                    <rect
+                      width={blockSize}
+                      height={blockSize}
+                      fill={colorScale[level]}
+                      rx={blockRadius}
+                      ry={blockRadius}
+                    />
+                  </svg>
+                ))}
+              <span style={{ marginLeft: '0.4em' }}>{labels.legend.more}</span>
+            </div>
+          )}
+        </footer>
+      );
+    }
+
+    function renderLabels() {
+      if (!showWeekdayLabels && hideMonthLabels) {
+        return null;
+      }
+
+      return (
+        <>
+          {showWeekdayLabels && weeks[0] && (
+            <g className={getClassName('legend-weekday')}>
+              {weeks[0].map((_, index) => {
+                if (index % 2 === 0) {
+                  return null;
+                }
+
+                const dayIndex = (index + weekStart) % 7;
+
+                return (
+                  <text
+                    x={-LABEL_MARGIN}
+                    y={labelHeight + (blockSize + blockMargin) * index + blockSize / 2}
+                    dominantBaseline="middle"
+                    textAnchor="end"
+                    key={index}
+                  >
+                    {labels.weekdays[dayIndex]}
+                  </text>
+                );
+              })}
+            </g>
+          )}
+          {!hideMonthLabels && (
+            <g className={getClassName('legend-month')}>
+              {getMonthLabels(weeks, labels.months).map(({ label, weekIndex }) => (
+                <text
+                  x={(blockSize + blockMargin) * weekIndex}
+                  dominantBaseline="hanging"
+                  key={weekIndex}
+                >
+                  {label}
+                </text>
+              ))}
+            </g>
+          )}
+        </>
+      );
+    }
+
+    const { width, height } = getDimensions();
+
+    const zeroColor = colorScale[0] as Color;
+    const containerStyles = {
+      fontSize,
+      ...(useAnimation && {
+        [`--${NAMESPACE}-loading`]: zeroColor,
+        [`--${NAMESPACE}-loading-active`]:
+          colorScheme === 'light'
+            ? chroma(zeroColor).darken(0.3).hex()
+            : chroma(zeroColor).brighten(0.25).hex(),
+      }),
+    };
+
+    return (
+      <article
+        ref={ref}
+        className={`${NAMESPACE} ${styles.container}`}
+        style={{ ...styleProp, ...containerStyles }}
+      >
+        <div className={getClassName('scroll-container', styles.scrollContainer)}>
+          <svg
+            width={width}
+            height={height}
+            viewBox={`0 0 ${width} ${height}`}
+            className={getClassName('calendar', styles.calendar)}
+            style={{ marginLeft: weekdayLabelOffset }}
+          >
+            {!loading && renderLabels()}
+            {renderCalendar()}
+          </svg>
+        </div>
+        {renderFooter()}
+      </article>
+    );
+  },
+);
 
 export const Skeleton = (props: Omit<Props, 'data'>) => <ActivityCalendar data={[]} {...props} />;
 

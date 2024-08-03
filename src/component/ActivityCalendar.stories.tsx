@@ -2,7 +2,7 @@ import { Tooltip as MuiTooltip } from '@mui/material';
 import LinkTo from '@storybook/addon-links/react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Highlight, themes as prismThemes } from 'prism-react-renderer';
-import { cloneElement, useMemo } from 'react';
+import { type ForwardedRef, cloneElement, useMemo, useRef } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { useDarkMode } from 'storybook-dark-mode';
@@ -13,6 +13,7 @@ import exampleEventHandlersInterface from '../../examples/event-handlers-type?ra
 import exampleEventHandlers from '../../examples/event-handlers?raw';
 import exampleLabelsShape from '../../examples/labels-shape?raw';
 import exampleLabels from '../../examples/labels?raw';
+import exampleRef from '../../examples/ref?raw';
 import exampleThemeExplicit from '../../examples/themes-explicit?raw';
 import exampleTheme from '../../examples/themes?raw';
 import exampleTooltipsMui from '../../examples/tooltips-mui?raw';
@@ -25,22 +26,9 @@ type Story = StoryObj<Props>;
 
 /* eslint-disable react-hooks/rules-of-hooks */
 
-const meta: Meta<Props> = {
+const meta: Meta<ForwardedRef<Props>> = {
   title: 'React Activity Calendar',
   component: ActivityCalendar,
-  decorators: [
-    (Story, { args }) => {
-      args.colorScheme = useDarkMode() ? 'dark' : 'light';
-
-      return <Story />;
-    },
-  ],
-  parameters: {
-    controls: {
-      sort: 'requiredFirst',
-    },
-    layout: 'centered',
-  },
   argTypes: {
     data: {
       control: false,
@@ -63,6 +51,9 @@ const meta: Meta<Props> = {
     maxLevel: {
       control: { type: 'range', min: 1, max: 9 },
     },
+    ref: {
+      control: false,
+    },
     style: {
       control: false,
     },
@@ -82,6 +73,21 @@ const meta: Meta<Props> = {
       },
     },
   },
+  decorators: [
+    (Story, { args }) => {
+      // @ts-expect-error unsure if typing forward refs correctly is possible
+      args.colorScheme = useDarkMode() ? 'dark' : 'light';
+
+      return <Story />;
+    },
+  ],
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
 };
 
 // Storybook does not initialize the controls for some reason
@@ -555,6 +561,30 @@ export const NarrowScreens: Story = {
       <div style={{ width: 480, maxWidth: '100%', border: 'dashed 1px #929292' }}>
         <ActivityCalendar {...args} data={data} />
       </div>
+    );
+  },
+};
+
+export const ContainerRef: Story = {
+  args: defaultProps,
+  parameters: {
+    docs: {
+      source: {
+        code: exampleRef,
+      },
+    },
+  },
+  render: args => {
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+    const calendarRef = useRef<HTMLElement>(null);
+    console.log('calendar ref', calendarRef);
+
+    return (
+      <>
+        <ActivityCalendar {...args} data={data} ref={calendarRef} />
+        <br />
+        <p>Check the JavaScript console to see the ref logged.</p>
+      </>
     );
   },
 };
