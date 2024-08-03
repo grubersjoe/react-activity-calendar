@@ -78,7 +78,8 @@
     "storybook-dark-mode": "^4.0.2",
     "typescript": "^5.5.4",
     "typescript-eslint": "^7.17.0",
-    "vite": "^5.3.5"
+    "vite": "^5.3.5",
+    "vite-plugin-replace": "^0.1.1"
   },
   "peerDependencies": {
     "react": "^18.0.0",
