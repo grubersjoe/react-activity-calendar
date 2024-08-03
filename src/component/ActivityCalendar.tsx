@@ -429,6 +429,8 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
   },
 );
 
+ActivityCalendar.displayName = 'ActivityCalendar';
+
 export const Skeleton = (props: Omit<Props, 'data'>) => <ActivityCalendar data={[]} {...props} />;
 
 export default ActivityCalendar;

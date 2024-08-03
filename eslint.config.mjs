@@ -44,7 +44,8 @@ export default typescript.config(
       },
     },
     rules: {
-      'react/react-in-jsx-scope': 'off',
+      'react/display-name': 1,
+      'react/react-in-jsx-scope': 0,
     },
   },
   {
