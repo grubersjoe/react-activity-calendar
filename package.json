@@ -1,6 +1,6 @@
 {
   "name": "react-activity-calendar",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "description": "React component to display activity data in calendar",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
@@ -8,7 +8,9 @@
   "repository": "grubersjoe/react-activity-calendar",
   "main": "build/index.js",
   "types": "build/index.d.ts",
-  "files": ["build"],
+  "files": [
+    "build"
+  ],
   "scripts": {
     "build": "rollup -c",
     "build:storybook": "storybook build -o docs/ && touch docs/.nojekyll",
@@ -83,5 +85,9 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
-  "browserslist": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+  "browserslist": [
+    "last 1 chrome version",
+    "last 1 firefox version",
+    "last 1 safari version"
+  ]
 }
