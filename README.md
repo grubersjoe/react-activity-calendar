@@ -4,7 +4,7 @@
 
 A flexible React component to display activity data in a calendar (heatmap).
 
-![Screenshot](screenshot.png?v5)
+![Screenshot](screenshot.png)
 
 **[Documentation (Storybook)](https://grubersjoe.github.io/react-activity-calendar)**
 
@@ -37,6 +37,14 @@ It is up to you how to generate and classify your data.
   }
 ]
 ```
+
+## Caveats
+
+Server side rendering (SSR) is not supported because the component relies on various browser APIs.
+For example, `window.matchMedia()` is used to detect the user's preferred color scheme. Likewise,
+the `use client` directive is used as preparation for
+[React Server Components](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components).
+On the server `null` will be rendered instead of the calendar.
 
 ## Development
 
