@@ -2,7 +2,7 @@ import { Tooltip as MuiTooltip } from '@mui/material';
 import LinkTo from '@storybook/addon-links/react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Highlight, themes as prismThemes } from 'prism-react-renderer';
-import { type ForwardedRef, cloneElement, useMemo, useRef } from 'react';
+import { type ForwardedRef, type ReactElement, cloneElement, useMemo, useRef } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { useDarkMode } from 'storybook-dark-mode';
@@ -53,6 +53,9 @@ const meta: Meta<ForwardedRef<Props>> = {
     },
     ref: {
       control: false,
+    },
+    showWeekdayLabels: {
+      control: 'boolean',
     },
     style: {
       control: false,
@@ -220,7 +223,7 @@ export const DateRanges: Story = {
     );
 
     return (
-      <>
+      <Stack>
         <ActivityCalendar
           {...args}
           data={dataLong}
@@ -228,13 +231,9 @@ export const DateRanges: Story = {
             totalCount: '{{count}} activities in 2022 & 2023',
           }}
         />
-        <br />
-        <br />
         <ActivityCalendar {...args} data={dataMedium} />
-        <br />
-        <br />
         <ActivityCalendar {...args} data={dataShort} />
-      </>
+      </Stack>
     );
   },
 };
@@ -495,7 +494,30 @@ export const WeekdayLabels: Story = {
   },
   render: args => {
     const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
-    return <ActivityCalendar {...args} data={data} />;
+    return (
+      <Stack>
+        <div>
+          <StackHeading code="true">Show every second weekday</StackHeading>
+          <ActivityCalendar {...args} data={data} />
+        </div>
+
+        <div>
+          <StackHeading code="['mon', 'fri']">Show specific days</StackHeading>
+          <ActivityCalendar {...args} data={data} showWeekdayLabels={['mon', 'fri']} />
+        </div>
+
+        <div>
+          <StackHeading code="['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']">
+            Show every day
+          </StackHeading>
+          <ActivityCalendar
+            {...args}
+            data={data}
+            showWeekdayLabels={['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']}
+          />
+        </div>
+      </Stack>
+    );
   },
   parameters: {
     docs: {
@@ -602,6 +624,27 @@ export const ContainerRef: Story = {
     );
   },
 };
+
+const Stack = ({ children }: { children: Array<ReactElement> }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>{children}</div>
+);
+
+const StackHeading = ({ children, code }: { children: string; code?: string }) => (
+  <div
+    role="heading"
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 12,
+      marginBottom: 16,
+      fontSize: 14,
+      fontWeight: 'bolder',
+    }}
+  >
+    {children}
+    {code && <code style={{ fontSize: 12, fontWeight: 'normal' }}>{code}</code>}
+  </div>
+);
 
 const Source = ({
   code,

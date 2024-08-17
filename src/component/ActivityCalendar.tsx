@@ -1,7 +1,6 @@
 'use client';
 
 import chroma from 'chroma-js';
-import type { Day as WeekDay } from 'date-fns';
 import { getYear, parseISO } from 'date-fns';
 import {
   type CSSProperties,
@@ -19,20 +18,16 @@ import type {
   Activity,
   BlockElement,
   Color,
+  DayIndex,
+  DayName,
   EventHandlerMap,
   Labels,
   ReactEvent,
   SVGRectEventHandler,
   ThemeInput,
-  Week,
 } from '../types';
-import {
-  generateEmptyData,
-  getClassName,
-  getMonthLabels,
-  groupByWeeks,
-  maxWeekdayLabelLength,
-} from '../utils/calendar';
+import { generateEmptyData, getClassName, groupByWeeks, range } from '../utils/calendar';
+import { getMonthLabels, initWeekdayLabels, maxWeekdayLabelWidth } from '../utils/label';
 import { createTheme } from '../utils/theme';
 
 export interface Props {
@@ -127,8 +122,10 @@ export interface Props {
   renderColorLegend?: (block: BlockElement, level: number) => ReactElement;
   /**
    * Toggle to show weekday labels left to the calendar.
+   * Alternatively, pass a list of ISO 8601 weekday names to show.
+   * For example `['mon', 'wed', 'fri']`.
    */
-  showWeekdayLabels?: boolean;
+  showWeekdayLabels?: boolean | Array<DayName>;
   /**
    * Style object to pass to component container.
    */
@@ -164,7 +161,7 @@ export interface Props {
   /**
    * Index of day to be used as start of week. 0 represents Sunday.
    */
-  weekStart?: WeekDay;
+  weekStart?: DayIndex;
 }
 
 const ActivityCalendar = forwardRef<HTMLElement, Props>(
@@ -212,13 +209,13 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
     const firstActivity = activities[0] as Activity;
     const year = getYear(parseISO(firstActivity.date));
     const weeks = groupByWeeks(activities, weekStart);
-    const firstWeek = weeks[0] as Week;
 
     const labels = Object.assign({}, DEFAULT_LABELS, labelsProp);
     const labelHeight = hideMonthLabels ? 0 : fontSize + LABEL_MARGIN;
 
-    const weekdayLabelOffset = showWeekdayLabels
-      ? maxWeekdayLabelLength(firstWeek, weekStart, labels.weekdays, fontSize) + LABEL_MARGIN
+    const weekdayLabels = initWeekdayLabels(showWeekdayLabels, weekStart);
+    const weekdayLabelOffset = weekdayLabels.shouldShow
+      ? maxWeekdayLabelWidth(labels.weekdays, weekdayLabels, fontSize) + LABEL_MARGIN
       : undefined;
 
     function getDimensions() {
@@ -323,23 +320,21 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
           {!loading && !hideColorLegend && (
             <div className={getClassName('legend-colors', styles.legendColors)}>
               <span style={{ marginRight: '0.4em' }}>{labels.legend.less}</span>
-              {Array(maxLevel + 1)
-                .fill(undefined)
-                .map((_, level) => {
-                  const block = (
-                    <svg width={blockSize} height={blockSize} key={level}>
-                      <rect
-                        width={blockSize}
-                        height={blockSize}
-                        fill={colorScale[level]}
-                        rx={blockRadius}
-                        ry={blockRadius}
-                      />
-                    </svg>
-                  );
+              {range(maxLevel + 1).map(level => {
+                const block = (
+                  <svg width={blockSize} height={blockSize} key={level}>
+                    <rect
+                      width={blockSize}
+                      height={blockSize}
+                      fill={colorScale[level]}
+                      rx={blockRadius}
+                      ry={blockRadius}
+                    />
+                  </svg>
+                );
 
-                  return renderColorLegend ? renderColorLegend(block, level) : block;
-                })}
+                return renderColorLegend ? renderColorLegend(block, level) : block;
+              })}
               <span style={{ marginLeft: '0.4em' }}>{labels.legend.more}</span>
             </div>
           )}
@@ -347,50 +342,53 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
       );
     }
 
-    function renderLabels() {
-      if (!showWeekdayLabels && hideMonthLabels) {
+    function renderWeekdayLabels() {
+      if (!weekdayLabels.shouldShow) {
         return null;
       }
 
       return (
-        <>
-          {showWeekdayLabels && weeks[0] && (
-            <g className={getClassName('legend-weekday')}>
-              {weeks[0].map((_, index) => {
-                if (index % 2 === 0) {
-                  return null;
-                }
+        <g className={getClassName('legend-weekday')}>
+          {range(7).map(index => {
+            const dayIndex = ((index + weekStart) % 7) as DayIndex;
 
-                const dayIndex = (index + weekStart) % 7;
+            if (!weekdayLabels.byDayIndex(dayIndex)) {
+              return null;
+            }
 
-                return (
-                  <text
-                    x={-LABEL_MARGIN}
-                    y={labelHeight + (blockSize + blockMargin) * index + blockSize / 2}
-                    dominantBaseline="central"
-                    textAnchor="end"
-                    key={index}
-                  >
-                    {labels.weekdays[dayIndex]}
-                  </text>
-                );
-              })}
-            </g>
-          )}
-          {!hideMonthLabels && (
-            <g className={getClassName('legend-month')}>
-              {getMonthLabels(weeks, labels.months).map(({ label, weekIndex }) => (
-                <text
-                  x={(blockSize + blockMargin) * weekIndex}
-                  dominantBaseline="hanging"
-                  key={weekIndex}
-                >
-                  {label}
-                </text>
-              ))}
-            </g>
-          )}
-        </>
+            return (
+              <text
+                x={-LABEL_MARGIN}
+                y={labelHeight + (blockSize + blockMargin) * index + blockSize / 2}
+                dominantBaseline="central"
+                textAnchor="end"
+                key={index}
+              >
+                {labels.weekdays[dayIndex]}
+              </text>
+            );
+          })}
+        </g>
+      );
+    }
+
+    function renderMonthLabels() {
+      if (hideMonthLabels) {
+        return null;
+      }
+
+      return (
+        <g className={getClassName('legend-month')}>
+          {getMonthLabels(weeks, labels.months).map(({ label, weekIndex }) => (
+            <text
+              x={(blockSize + blockMargin) * weekIndex}
+              dominantBaseline="hanging"
+              key={weekIndex}
+            >
+              {label}
+            </text>
+          ))}
+        </g>
       );
     }
 
@@ -422,7 +420,8 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
             className={getClassName('calendar', styles.calendar)}
             style={{ marginLeft: weekdayLabelOffset }}
           >
-            {!loading && renderLabels()}
+            {!loading && renderWeekdayLabels()}
+            {!loading && renderMonthLabels()}
             {renderCalendar()}
           </svg>
         </div>

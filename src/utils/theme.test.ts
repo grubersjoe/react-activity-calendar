@@ -12,21 +12,21 @@ describe('createTheme', () => {
     dark: ['hsl(0, 0%, 22%)', '#4D455D', '#7DB9B6', '#F5E9CF', '#E96479'],
   };
 
-  test('returns the default theme if no input is passed', () => {
+  it('returns the default theme if no input is passed', () => {
     expect(createTheme()).toStrictEqual(defaultTheme);
   });
 
-  test('throws an error if input is not an object', () => {
+  it('throws an error if input is not an object', () => {
     // @ts-expect-error test invalid input
     expect(() => createTheme('invalid')).toThrow();
   });
 
-  test('throws an error if neither "light" or "dark" inputs are set', () => {
+  it('throws an error if neither "light" or "dark" inputs are set', () => {
     // @ts-expect-error test invalid input
     expect(() => createTheme({})).toThrow();
   });
 
-  test('throws an error if too few colors are passed', () => {
+  it('throws an error if too few colors are passed', () => {
     expect(() =>
       createTheme(
         {
@@ -37,7 +37,7 @@ describe('createTheme', () => {
     ).toThrow();
   });
 
-  test('throws an error if too many colors are passed', () => {
+  it('throws an error if too many colors are passed', () => {
     expect(() =>
       createTheme(
         {
@@ -48,7 +48,7 @@ describe('createTheme', () => {
     ).toThrow();
   });
 
-  test('uses default dark color scale if undefined in input', () => {
+  it('uses default dark color scale if undefined in input', () => {
     expect(
       createTheme({
         light: explicitTheme.light,
@@ -59,7 +59,7 @@ describe('createTheme', () => {
     });
   });
 
-  test('uses default light color scale if undefined in input', () => {
+  it('uses default light color scale if undefined in input', () => {
     expect(
       createTheme({
         dark: explicitTheme.dark,
@@ -70,7 +70,7 @@ describe('createTheme', () => {
     });
   });
 
-  test('throws if an invalid color is passed', () => {
+  it('throws if an invalid color is passed', () => {
     expect(() =>
       createTheme({
         dark: ['#333', '🙃'],
@@ -78,11 +78,11 @@ describe('createTheme', () => {
     ).toThrow();
   });
 
-  test('returns the same value for explicit inputs', () => {
+  it('returns the same value for explicit inputs', () => {
     expect(createTheme(explicitTheme)).toStrictEqual(explicitTheme);
   });
 
-  test('calculates color scales for minimal input', () => {
+  it('calculates color scales for minimal input', () => {
     const input: ThemeInput = {
       light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
       dark: ['hsl(0, 0%, 20%)', 'hsl(0, 0%, 92%)'],
@@ -93,7 +93,7 @@ describe('createTheme', () => {
     expect(actual.dark).toHaveLength(5);
   });
 
-  test('calculates color scales with correct size', () => {
+  it('calculates color scales with correct size', () => {
     const input: ThemeInput = {
       light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
       dark: ['hsl(0, 0%, 20%)', 'hsl(0, 0%, 92%)'],

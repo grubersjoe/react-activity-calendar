@@ -13,6 +13,13 @@ export interface Activity {
 }
 
 export type Week = Array<Activity | undefined>;
+export type DayIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6; // 0 = Sunday, 1 = Monday etc.
+export type DayName = 'sun' | 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat';
+
+export type WeekdayLabels = {
+  byDayIndex: (index: DayIndex) => boolean;
+  shouldShow: boolean;
+};
 
 export type Labels = Partial<{
   months: Array<string>;
