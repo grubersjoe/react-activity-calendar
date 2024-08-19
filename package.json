@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@types/chroma-js": "^2.4.3",
-    "chroma-js": "^2.4.2",
+    "chroma-js": "^3.0.0",
     "date-fns": "^3.6.0"
   },
   "devDependencies": {
