@@ -429,6 +429,18 @@ export const Tooltips: Story = {
             </MuiTooltip>
           )}
         />
+        <p>
+          Using the <code>renderLegendBlock</code> prop, you can additionally add tooltips to the
+          color legend elements.
+        </p>
+        <ActivityCalendar
+          {...args}
+          data={data}
+          hideColorLegend={false}
+          renderLegendBlock={(block, legendElement) => (
+            <MuiTooltip title={`Level: ${legendElement.level}`}>{block}</MuiTooltip>
+          )}
+        />
         <h2>
           <a href="https://github.com/ReactTooltip/react-tooltip">react-tooltip</a>
         </h2>
