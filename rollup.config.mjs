@@ -4,6 +4,7 @@ import copy from 'rollup-plugin-copy';
 import filesize from 'rollup-plugin-filesize';
 import external from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 const extensions = ['.ts', '.tsx'];
 
@@ -17,11 +18,13 @@ export default {
     // Use 'auto' instead of 'default' for better interoperability with CRA etc.
     // https://rollupjs.org/guide/en/#outputinterop
     interop: 'auto',
-    // Rollup does not support this React Server Components directive yet.
+    // Rollup does not support this React Server Components directive yet:
     // https://github.com/rollup/rollup/issues/4699
     banner: `'use client';`,
   },
   plugins: [
+    // Add commonjs() from @rollup/plugin-commonjs here and comment out the
+    // external to see the real bundle size.
     external({
       includeDependencies: true,
     }),
@@ -40,6 +43,9 @@ export default {
       targets: [{ src: 'src/*.d.ts', dest: 'build/' }],
     }),
     filesize(),
+    visualizer({
+      filename: 'bundle.html',
+    }),
   ],
   onwarn(warning, warn) {
     if (warning.code === 'MODULE_LEVEL_DIRECTIVE' && warning.message.includes('use client')) {
