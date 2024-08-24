@@ -21,6 +21,7 @@ import type {
   Color,
   EventHandlerMap,
   Labels,
+  LegendElement,
   ReactEvent,
   SVGRectEventHandler,
   ThemeInput,
@@ -120,6 +121,12 @@ export interface Props {
    */
   renderBlock?: (block: BlockElement, activity: Activity) => ReactElement;
   /**
+   * Render prop for color legend blocks. For example, useful to wrap
+   * the element with a tooltip component. Use `React.cloneElement` to pass
+   * additional props to the element if necessary.
+   */
+  renderLegendBlock?: (block: BlockElement, legendElement: LegendElement) => ReactElement;
+  /**
    * Toggle to show weekday labels left to the calendar.
    */
   showWeekdayLabels?: boolean;
@@ -178,6 +185,7 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
       maxLevel = 4,
       loading = false,
       renderBlock = undefined,
+      renderLegendBlock = undefined,
       showWeekdayLabels = false,
       style: styleProp = {},
       theme: themeProp = undefined,
@@ -318,17 +326,21 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
               <span style={{ marginRight: '0.4em' }}>{labels.legend.less}</span>
               {Array(maxLevel + 1)
                 .fill(undefined)
-                .map((_, level) => (
-                  <svg width={blockSize} height={blockSize} key={level}>
-                    <rect
-                      width={blockSize}
-                      height={blockSize}
-                      fill={colorScale[level]}
-                      rx={blockRadius}
-                      ry={blockRadius}
-                    />
-                  </svg>
-                ))}
+                .map((_, level) => {
+                  const block = (
+                    <svg width={blockSize} height={blockSize} key={level}>
+                      <rect
+                        width={blockSize}
+                        height={blockSize}
+                        fill={colorScale[level]}
+                        rx={blockRadius}
+                        ry={blockRadius}
+                      />
+                    </svg>
+                  );
+
+                  return renderLegendBlock ? renderLegendBlock(block, { level }) : block;
+                })}
               <span style={{ marginLeft: '0.4em' }}>{labels.legend.more}</span>
             </div>
           )}
