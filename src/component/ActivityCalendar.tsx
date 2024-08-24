@@ -21,7 +21,6 @@ import type {
   Color,
   EventHandlerMap,
   Labels,
-  LegendElement,
   ReactEvent,
   SVGRectEventHandler,
   ThemeInput,
@@ -121,11 +120,11 @@ export interface Props {
    */
   renderBlock?: (block: BlockElement, activity: Activity) => ReactElement;
   /**
-   * Render prop for color legend blocks. For example, useful to wrap
-   * the element with a tooltip component. Use `React.cloneElement` to pass
+   * Render prop for color legend blocks. For example, useful to wrap the
+   * element with a tooltip component. Use `React.cloneElement` to pass
    * additional props to the element if necessary.
    */
-  renderLegendBlock?: (block: BlockElement, legendElement: LegendElement) => ReactElement;
+  renderColorLegend?: (block: BlockElement, level: number) => ReactElement;
   /**
    * Toggle to show weekday labels left to the calendar.
    */
@@ -185,7 +184,7 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
       maxLevel = 4,
       loading = false,
       renderBlock = undefined,
-      renderLegendBlock = undefined,
+      renderColorLegend = undefined,
       showWeekdayLabels = false,
       style: styleProp = {},
       theme: themeProp = undefined,
@@ -339,7 +338,7 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
                     </svg>
                   );
 
-                  return renderLegendBlock ? renderLegendBlock(block, { level }) : block;
+                  return renderColorLegend ? renderColorLegend(block, level) : block;
                 })}
               <span style={{ marginLeft: '0.4em' }}>{labels.legend.more}</span>
             </div>

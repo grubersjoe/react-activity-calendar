@@ -12,10 +12,6 @@ export interface Activity {
   level: number;
 }
 
-export interface LegendElement {
-  level: number;
-}
-
 export type Week = Array<Activity | undefined>;
 
 export type Labels = Partial<{

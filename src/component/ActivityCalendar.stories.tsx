@@ -407,17 +407,28 @@ export const Tooltips: Story = {
 
     return (
       <Container>
-        <h1>Tooltip Examples</h1>
+        <h1>Tooltips</h1>
         <p>
           To add a 3rd party tooltip component to the calendar you can use the{' '}
           <code>renderBlock</code> prop.
         </p>
+        <p>
+          <i>
+            Caveat: unfortunately not all tooltip components can be supported, currently. In the
+            future, the idea is to render{' '}
+            <a href="https://martinfowler.com/articles/headless-component.html">headless</a>{' '}
+            tooltips and let the users decide how to style them.
+          </i>
+        </p>
+
         <h2>
           <a href="https://mui.com/material-ui/react-tooltip/">Material UI</a>
         </h2>
         <p>
           In the simplest case, each block only needs to be wrapped with a{' '}
-          <code>&lt;Tooltip/&gt;</code> component, as shown here for Material UI:
+          <code>&lt;Tooltip/&gt;</code> component, as shown in the following for Material UI.
+          Additionally, you can add tooltips to the color legend below the calendar using the{' '}
+          <code>renderColorLegend</code> prop:
         </p>
         <Source code={exampleTooltipsMui} isDarkMode={useDarkMode()} />
         <ActivityCalendar
@@ -428,17 +439,8 @@ export const Tooltips: Story = {
               {block}
             </MuiTooltip>
           )}
-        />
-        <p>
-          Using the <code>renderLegendBlock</code> prop, you can additionally add tooltips to the
-          color legend elements.
-        </p>
-        <ActivityCalendar
-          {...args}
-          data={data}
-          hideColorLegend={false}
-          renderLegendBlock={(block, legendElement) => (
-            <MuiTooltip title={`Level: ${legendElement.level}`}>{block}</MuiTooltip>
+          renderColorLegend={(block, level) => (
+            <MuiTooltip title={`Level ${level}`}>{block}</MuiTooltip>
           )}
         />
         <h2>
