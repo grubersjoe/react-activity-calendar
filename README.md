@@ -57,8 +57,8 @@ On the server `null` will be rendered instead of the calendar.
 ### Create React App unsupported
 
 Create React App (CRA) is considered
-[abandoned](https://github.com/facebook/create-react-app/discussions/11086) now, and you probably
-should not use it anymore (more
+[abandoned](https://github.com/facebook/create-react-app/discussions/11086), and you probably should
+not use it anymore (more
 [background](https://github.com/facebook/create-react-app/issues/11180#issuecomment-874748552)).
 Using this component inside CRA will lead to errors for reasons described in issue
 [#105](https://github.com/grubersjoe/react-activity-calendar/issues/105). This repo is not for CRA
