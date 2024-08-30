@@ -367,7 +367,7 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
                   <text
                     x={-LABEL_MARGIN}
                     y={labelHeight + (blockSize + blockMargin) * index + blockSize / 2}
-                    dominantBaseline="middle"
+                    dominantBaseline="central"
                     textAnchor="end"
                     key={index}
                   >
