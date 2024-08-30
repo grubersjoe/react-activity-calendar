@@ -12,6 +12,7 @@ export default typescript.config(
   {
     ignores: [
       'build/',
+      'coverage/',
       'docs/',
       'examples/',
       'eslint.config.mjs',
