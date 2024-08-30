@@ -26,7 +26,13 @@ import type {
   SVGRectEventHandler,
   ThemeInput,
 } from '../types';
-import { generateEmptyData, getClassName, groupByWeeks, range } from '../utils/calendar';
+import {
+  generateEmptyData,
+  getClassName,
+  groupByWeeks,
+  range,
+  validateActivities,
+} from '../utils/calendar';
 import { getMonthLabels, initWeekdayLabels, maxWeekdayLabelWidth } from '../utils/label';
 import { createTheme } from '../utils/theme';
 
@@ -202,9 +208,7 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
       activities = generateEmptyData();
     }
 
-    if (activities.length === 0) {
-      return null;
-    }
+    validateActivities(activities, maxLevel);
 
     const firstActivity = activities[0] as Activity;
     const year = getYear(parseISO(firstActivity.date));
@@ -243,12 +247,6 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
           week.map((activity, dayIndex) => {
             if (!activity) {
               return null;
-            }
-
-            if (activity.level < 0 || activity.level > maxLevel) {
-              throw new RangeError(
-                `Provided activity level ${activity.level} for ${activity.date} is out of range. It must be between 0 and ${maxLevel}.`,
-              );
             }
 
             const style =

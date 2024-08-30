@@ -4,6 +4,7 @@ import {
   endOfYear,
   formatISO,
   getDay,
+  isValid,
   nextDay,
   parseISO,
   startOfYear,
@@ -13,18 +14,36 @@ import {
 import { NAMESPACE } from '../constants';
 import type { Activity, DayIndex, Week } from '../types';
 
+export function validateActivities(activities: Array<Activity>, maxLevel: number) {
+  if (activities.length === 0) {
+    throw new Error('Activity data must not be empty.');
+  }
+
+  for (const { date, level, count } of activities) {
+    if (!isValid(parseISO(date))) {
+      throw new Error(`Activity date '${date}' is not a valid ISO 8601 date string.`);
+    }
+
+    if (count < 0) {
+      throw new RangeError(`Activity count must not be negative, found ${count}.`);
+    }
+
+    if (level < 0 || level > maxLevel) {
+      throw new RangeError(
+        `Activity level ${level} for ${date} is out of range. It must be between 0 and ${maxLevel}.`,
+      );
+    }
+  }
+}
+
 export function groupByWeeks(
   activities: Array<Activity>,
   weekStart: DayIndex = 0, // 0 = Sunday
 ): Array<Week> {
-  if (activities.length === 0) {
-    return [];
-  }
-
   const normalizedActivities = fillHoles(activities);
 
   // Determine the first date of the calendar. If the first date is not the
-  // set start weekday, the selected weekday one week earlier is used.
+  // passed weekday, the respective weekday one week earlier is used.
   const firstActivity = normalizedActivities[0] as Activity;
   const firstDate = parseISO(firstActivity.date);
   const firstCalendarDate =
@@ -52,10 +71,6 @@ export function groupByWeeks(
  * so fill gaps with empty activity data.
  */
 function fillHoles(activities: Array<Activity>): Array<Activity> {
-  if (activities.length === 0) {
-    return [];
-  }
-
   const calendar = new Map<string, Activity>(activities.map(a => [a.date, a]));
   const firstActivity = activities[0] as Activity;
   const lastActivity = activities[activities.length - 1] as Activity;
