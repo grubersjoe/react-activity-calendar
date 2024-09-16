@@ -12,8 +12,8 @@ importers:
         specifier: ^2.4.3
         version: 2.4.4
       chroma-js:
-        specifier: ^2.4.2
-        version: 2.6.0
+        specifier: ^3.1.1
+        version: 3.1.1
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
@@ -2574,8 +2574,8 @@ packages:
     resolution: {integrity: sha512-bIomtDF5KGpdogkLd9VspvFzk9KfpyyGlS8YFVZl7TGPBHL5snIOnxeshwVgPteQ9b4Eydl+pVbIyE1DcvCWgQ==}
     engines: {node: '>=10'}
 
-  chroma-js@2.6.0:
-    resolution: {integrity: sha512-BLHvCB9s8Z1EV4ethr6xnkl/P2YRFOGqfgvuMG/MyCbZPrTA+NeiByY6XvgF0zP4/2deU2CXnWyMa3zu1LqQ3A==}
+  chroma-js@3.1.1:
+    resolution: {integrity: sha512-CGr6w73Gi86142RWqZ1RjED/CyduYw2vMTikQZUvr2jGIihnZlMo/Kzm9rYHWDP2pJc6eebwc8CkX0iteBon+A==}
 
   ci-info@3.9.0:
     resolution: {integrity: sha512-NIxF55hv4nSqQswkAeiOi1r83xy8JldOFDTWiug55KBu9Jnblncd2U6ViHmYgHf01TPZS77NJBhBMKdWj9HQMQ==}
@@ -8787,7 +8787,7 @@ snapshots:
 
   chownr@2.0.0: {}
 
-  chroma-js@2.6.0: {}
+  chroma-js@3.1.1: {}
 
   ci-info@3.9.0: {}
 
