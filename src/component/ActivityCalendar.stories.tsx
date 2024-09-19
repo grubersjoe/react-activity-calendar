@@ -154,13 +154,7 @@ export const ActivityLevels: Story = {
 
     return (
       <Container>
-        <ActivityCalendar
-          {...args}
-          theme={{ light: ['hsl(0, 0%, 92%)', '#980043'] }}
-          data={data}
-          style={{ marginBottom: '2rem' }}
-        />
-
+        <ActivityCalendar {...args} data={data} style={{ marginBottom: '2rem' }} />
         <p>
           Use the{' '}
           <code>
