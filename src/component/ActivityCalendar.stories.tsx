@@ -491,7 +491,7 @@ export const WeekdayLabels: Story = {
     return (
       <Stack>
         <div>
-          <StackHeading code="true">Show every second weekday</StackHeading>
+          <StackHeading code="true">Show every second weekday (default)</StackHeading>
           <ActivityCalendar {...args} data={data} />
         </div>
 
@@ -620,7 +620,7 @@ export const ContainerRef: Story = {
 };
 
 const Stack = ({ children }: { children: Array<ReactElement> }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>{children}</div>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>{children}</div>
 );
 
 const StackHeading = ({ children, code }: { children: string; code?: string }) => (
@@ -631,12 +631,12 @@ const StackHeading = ({ children, code }: { children: string; code?: string }) =
       alignItems: 'center',
       gap: 12,
       marginBottom: 16,
-      fontSize: 14,
+      fontSize: 16,
       fontWeight: 'bolder',
     }}
   >
     {children}
-    {code && <code style={{ fontSize: 12, fontWeight: 'normal' }}>{code}</code>}
+    {code && <code style={{ fontSize: 13, fontWeight: 'normal' }}>{code}</code>}
   </div>
 );
 
