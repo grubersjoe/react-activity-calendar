@@ -42,12 +42,12 @@ export interface Theme {
 // Require that at least one color scheme is passed.
 export type ThemeInput =
   | {
-      light: ColorScale | [from: Color, to: Color];
-      dark?: ColorScale | [from: Color, to: Color];
+      light: ColorScale;
+      dark?: ColorScale;
     }
   | {
-      light?: ColorScale | [from: Color, to: Color];
-      dark: ColorScale | [from: Color, to: Color];
+      light?: ColorScale;
+      dark: ColorScale;
     };
 
 interface BlockAttributes extends SVGAttributes<SVGRectElement>, HTMLAttributes<SVGRectElement> {}

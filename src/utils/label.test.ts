@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals';
+
 import type { DayIndex, Week } from '../types';
 import { generateTestData, groupByWeeks } from './calendar';
 import { getMonthLabels, initWeekdayLabels } from './label';
@@ -100,10 +102,10 @@ describe('initWeekdayLabels', () => {
     [4, [true, false, true, false, false, true, false]],
     [5, [false, true, false, true, false, false, true]],
     [6, [true, false, true, false, true, false, false]],
-  ] as const)(
+  ])(
     'should return true for every second weekday for `true` as input with %d as week start',
     (weekStart, expected) => {
-      const actual = initWeekdayLabels(true, weekStart);
+      const actual = initWeekdayLabels(true, weekStart as DayIndex);
 
       expect(actual.shouldShow).toBe(true);
       for (const weekStart of days) {

@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals';
+
 import type { Activity } from '../types';
 import { validateActivities } from './calendar';
 
