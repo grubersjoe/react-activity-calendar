@@ -1,6 +1,5 @@
 'use client';
 
-import chroma from 'chroma-js';
 import { getYear, parseISO } from 'date-fns';
 import {
   type CSSProperties,
@@ -17,7 +16,6 @@ import styles from '../styles/styles.module.css';
 import type {
   Activity,
   BlockElement,
-  Color,
   DayIndex,
   DayName,
   EventHandlerMap,
@@ -392,15 +390,14 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
     const { width, height } = getDimensions();
 
-    const zeroColor = colorScale[0] as Color;
     const containerStyles = {
       fontSize,
       ...(useAnimation && {
-        [`--${NAMESPACE}-loading`]: zeroColor,
+        [`--${NAMESPACE}-loading`]: colorScale[0],
         [`--${NAMESPACE}-loading-active`]:
           colorScheme === 'light'
-            ? chroma(zeroColor).darken(0.3).hex()
-            : chroma(zeroColor).brighten(0.25).hex(),
+            ? `oklab(from ${colorScale[0]} calc(l * 0.96) a b)`
+            : `oklab(from ${colorScale[0]} calc(l * 1.06) a b)`,
       }),
     };
 

@@ -1,16 +1,38 @@
+import { beforeEach, describe, expect, it } from '@jest/globals';
+
 import type { Theme, ThemeInput } from '../types';
 import { createTheme } from './theme';
 
 describe('createTheme', () => {
   const defaultTheme = {
-    light: ['#ebebeb', '#bdbdbd', '#929292', '#696969', '#424242'],
-    dark: ['#333333', '#5c5c5c', '#898989', '#b9b9b9', '#ebebeb'],
+    light: [
+      'color-mix(in oklab, hsl(0, 0%, 26%) 0%, hsl(0, 0%, 92%))',
+      'color-mix(in oklab, hsl(0, 0%, 26%) 25%, hsl(0, 0%, 92%))',
+      'color-mix(in oklab, hsl(0, 0%, 26%) 50%, hsl(0, 0%, 92%))',
+      'color-mix(in oklab, hsl(0, 0%, 26%) 75%, hsl(0, 0%, 92%))',
+      'color-mix(in oklab, hsl(0, 0%, 26%) 100%, hsl(0, 0%, 92%))',
+    ],
+    dark: [
+      'color-mix(in oklab, hsl(0, 0%, 92%) 0%, hsl(0, 0%, 22%))',
+      'color-mix(in oklab, hsl(0, 0%, 92%) 25%, hsl(0, 0%, 22%))',
+      'color-mix(in oklab, hsl(0, 0%, 92%) 50%, hsl(0, 0%, 22%))',
+      'color-mix(in oklab, hsl(0, 0%, 92%) 75%, hsl(0, 0%, 22%))',
+      'color-mix(in oklab, hsl(0, 0%, 92%) 100%, hsl(0, 0%, 22%))',
+    ],
   };
 
   const explicitTheme: Theme = {
     light: ['#f0f0f0', '#c4edde', '#7ac7c4', '#f73859', '#384259'],
     dark: ['hsl(0, 0%, 22%)', '#4D455D', '#7DB9B6', '#F5E9CF', '#E96479'],
   };
+
+  beforeEach(() => {
+    global.CSS = {
+      // @ts-expect-error No clue how to fix this
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      supports: (_k, _v) => true,
+    };
+  });
 
   it('returns the default theme if no input is passed', () => {
     expect(createTheme()).toStrictEqual(defaultTheme);
@@ -53,7 +75,7 @@ describe('createTheme', () => {
       createTheme({
         light: explicitTheme.light,
       }),
-    ).toStrictEqual<Theme>({
+    ).toStrictEqual({
       light: explicitTheme.light,
       dark: defaultTheme.dark,
     });
@@ -64,13 +86,18 @@ describe('createTheme', () => {
       createTheme({
         dark: explicitTheme.dark,
       }),
-    ).toStrictEqual<Theme>({
+    ).toStrictEqual({
       light: defaultTheme.light,
       dark: explicitTheme.dark,
     });
   });
 
   it('throws if an invalid color is passed', () => {
+    global.CSS = {
+      // @ts-expect-error No clue how to fix this
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      supports: (_k, _v) => false,
+    };
     expect(() =>
       createTheme({
         dark: ['#333', '🙃'],
