@@ -17,13 +17,13 @@
   "scripts": {
     "build": "rollup -c",
     "build:storybook": "storybook build -o docs/ && touch docs/.nojekyll",
-    "bundlesize": "EXTERNAL_DEPS=false npm run build && open bundle.html",
-    "ci": "tsc && npm run lint && npm run test",
+    "bundlesize": "pnpm install && EXTERNAL_DEPS=false pnpm build && open bundle.html",
+    "check": "tsc && pnpm lint && pnpm test",
     "dev": "storybook dev -p 9000",
     "format": "prettier --write .",
     "lint": "eslint .",
     "postbuild": "dts-bundle-generator src/index.tsx -o build/index.d.ts --no-check --no-banner --external-imports react tinycolor2 date-fns",
-    "prepublishOnly": "tsc && npm run lint && npm run build",
+    "prepublishOnly": "tsc && pnpm lint && pnpm build",
     "start": "rollup -c -w",
     "test": "jest"
   },
