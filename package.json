@@ -17,12 +17,13 @@
   "scripts": {
     "build": "rollup -c",
     "build:storybook": "storybook build -o docs/ && touch docs/.nojekyll",
-    "ci": "npx tsc && npm run lint && npm run test",
+    "bundlesize": "EXTERNAL_DEPS=false npm run build && open bundle.html",
+    "ci": "tsc && npm run lint && npm run test",
     "dev": "storybook dev -p 9000",
     "format": "prettier --write .",
     "lint": "eslint .",
     "postbuild": "dts-bundle-generator src/index.tsx -o build/index.d.ts --no-check --no-banner --external-imports react tinycolor2 date-fns",
-    "prepublishOnly": "npx tsc && npm run lint && npm run build",
+    "prepublishOnly": "tsc && npm run lint && npm run build",
     "start": "rollup -c -w",
     "test": "jest"
   },
@@ -42,6 +43,7 @@
     "@eslint/js": "^9.11.1",
     "@mui/material": "^6.1.1",
     "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^28.0.0",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@storybook/addon-docs": "^8.3.3",
     "@storybook/addon-essentials": "^8.3.3",
