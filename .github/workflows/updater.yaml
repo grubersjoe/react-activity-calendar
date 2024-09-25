@@ -1,4 +1,4 @@
-name: GitHub Actions Version Updater
+name: GitHub actions updater
 
 on:
   workflow_dispatch:
