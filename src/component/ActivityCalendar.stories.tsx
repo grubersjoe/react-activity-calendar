@@ -354,6 +354,7 @@ export const EventHandlers: Story = {
         alert(JSON.stringify(activity));
       },
       onMouseEnter: () => () => {
+        // eslint-disable-next-line no-console
         console.log('on mouse enter');
       },
     },
@@ -607,6 +608,8 @@ export const ContainerRef: Story = {
   render: args => {
     const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
     const calendarRef = useRef<HTMLElement>(null);
+
+    // eslint-disable-next-line no-console
     console.log('calendar ref', calendarRef);
 
     return (

@@ -23,6 +23,7 @@ export default typescript.config(
   {
     rules: {
       '@typescript-eslint/restrict-template-expressions': 'off',
+      'no-console': 'error',
     },
     languageOptions: {
       parserOptions: {

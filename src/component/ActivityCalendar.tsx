@@ -389,9 +389,6 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
     }
 
     const { width, height } = getDimensions();
-
-    console.log(colorScale[0]);
-
     const containerStyles = {
       fontSize,
       ...(useAnimation && {
