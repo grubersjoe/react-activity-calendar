@@ -390,14 +390,16 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
     const { width, height } = getDimensions();
 
+    console.log(colorScale[0]);
+
     const containerStyles = {
       fontSize,
       ...(useAnimation && {
-        [`--${NAMESPACE}-loading`]: colorScale[0],
+        [`--${NAMESPACE}-loading`]: `oklab(from ${colorScale[0]} l a b)`,
         [`--${NAMESPACE}-loading-active`]:
           colorScheme === 'light'
             ? `oklab(from ${colorScale[0]} calc(l * 0.96) a b)`
-            : `oklab(from ${colorScale[0]} calc(l * 1.06) a b)`,
+            : `oklab(from ${colorScale[0]} calc(l * 1.08) a b)`,
       }),
     };
 
