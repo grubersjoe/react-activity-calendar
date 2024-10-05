@@ -2,7 +2,14 @@ import { Tooltip as MuiTooltip } from '@mui/material';
 import LinkTo from '@storybook/addon-links/react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Highlight, themes as prismThemes } from 'prism-react-renderer';
-import { type ForwardedRef, type ReactElement, cloneElement, useMemo, useRef } from 'react';
+import {
+  type ForwardedRef,
+  type ReactElement,
+  cloneElement,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { useDarkMode } from 'storybook-dark-mode';
@@ -609,8 +616,10 @@ export const ContainerRef: Story = {
     const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
     const calendarRef = useRef<HTMLElement>(null);
 
-    // eslint-disable-next-line no-console
-    console.log('calendar ref', calendarRef);
+    useEffect(() => {
+      // eslint-disable-next-line no-console
+      console.log('calendar ref', calendarRef);
+    }, [calendarRef]);
 
     return (
       <>
