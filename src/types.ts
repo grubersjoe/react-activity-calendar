@@ -1,9 +1,23 @@
 import type {
+  AnimationEvent,
+  ClipboardEvent,
+  CompositionEvent,
   DOMAttributes,
+  DragEvent,
+  FocusEvent,
+  FormEvent,
   HTMLAttributes,
   JSXElementConstructor,
+  KeyboardEvent,
+  MouseEvent,
+  PointerEvent,
   ReactElement,
   SVGAttributes,
+  SyntheticEvent,
+  TouchEvent,
+  TransitionEvent,
+  UIEvent,
+  WheelEvent,
 } from 'react';
 
 export interface Activity {
@@ -65,17 +79,17 @@ export type EventHandlerMap = {
   ) => (activity: Activity) => void;
 };
 
-export type ReactEvent<E extends Element> = React.AnimationEvent<E> &
-  React.ClipboardEvent<E> &
-  React.CompositionEvent<E> &
-  React.DragEvent<E> &
-  React.FocusEvent<E> &
-  React.FormEvent<E> &
-  React.KeyboardEvent<E> &
-  React.MouseEvent<E> &
-  React.PointerEvent<E> &
-  React.SyntheticEvent<E> &
-  React.TouchEvent<E> &
-  React.TransitionEvent<E> &
-  React.UIEvent<E> &
-  React.WheelEvent<E>;
+export type ReactEvent<E extends Element> = AnimationEvent<E> &
+  ClipboardEvent<E> &
+  CompositionEvent<E> &
+  DragEvent<E> &
+  FocusEvent<E> &
+  FormEvent<E> &
+  KeyboardEvent<E> &
+  MouseEvent<E> &
+  PointerEvent<E> &
+  SyntheticEvent<E> &
+  TouchEvent<E> &
+  TransitionEvent<E> &
+  UIEvent<E> &
+  WheelEvent<E>;
