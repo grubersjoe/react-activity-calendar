@@ -32,7 +32,10 @@ jobs:
           restore-keys: ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install -r --ignore-scripts
+
+      - name: Check formatting (Prettier)
+        run: pnpm format -c
 
       - name: Run unit tests
         run: pnpm test
