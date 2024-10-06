@@ -1,5 +1,4 @@
 import { describe, expect, it } from '@jest/globals';
-
 import type { DayIndex, Week } from '../types';
 import { generateTestData, groupByWeeks } from './calendar';
 import { getMonthLabels, initWeekdayLabels } from './label';

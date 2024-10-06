@@ -1,19 +1,18 @@
-import { Tooltip as MuiTooltip } from '@mui/material';
-import LinkTo from '@storybook/addon-links/react';
-import type { Meta, StoryObj } from '@storybook/react';
-import { Highlight, themes as prismThemes } from 'prism-react-renderer';
 import {
-  type ForwardedRef,
-  type ReactElement,
   cloneElement,
   useEffect,
   useMemo,
   useRef,
+  type ForwardedRef,
+  type ReactElement,
 } from 'react';
+import { Tooltip as MuiTooltip } from '@mui/material';
+import LinkTo from '@storybook/addon-links/react';
+import type { Meta, StoryObj } from '@storybook/react';
+import { Highlight, themes as prismThemes } from 'prism-react-renderer';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { useDarkMode } from 'storybook-dark-mode';
-
 import Container from '../../.storybook/components/Container';
 import exampleCustomization from '../../examples/customization?raw';
 import exampleEventHandlersInterface from '../../examples/event-handlers-type?raw';

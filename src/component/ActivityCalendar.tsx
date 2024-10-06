@@ -1,14 +1,13 @@
 'use client';
 
-import { getYear, parseISO } from 'date-fns';
 import {
+  forwardRef,
+  Fragment,
   type CSSProperties,
   type ForwardedRef,
-  Fragment,
   type ReactElement,
-  forwardRef,
 } from 'react';
-
+import { getYear, parseISO } from 'date-fns';
 import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';

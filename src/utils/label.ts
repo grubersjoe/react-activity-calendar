@@ -1,5 +1,4 @@
 import { getMonth, parseISO } from 'date-fns';
-
 import type { Props } from '../component/ActivityCalendar';
 import { DEFAULT_MONTH_LABELS } from '../constants';
 import type { DayIndex, DayName, Week, WeekdayLabels } from '../types';

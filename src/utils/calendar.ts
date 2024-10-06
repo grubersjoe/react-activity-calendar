@@ -10,7 +10,6 @@ import {
   startOfYear,
   subWeeks,
 } from 'date-fns';
-
 import { NAMESPACE } from '../constants';
 import type { Activity, DayIndex, Week } from '../types';
 

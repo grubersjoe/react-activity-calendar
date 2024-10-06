@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-
-import Calendar, { type Props, Skeleton } from './component/ActivityCalendar';
+import Calendar, { Skeleton, type Props } from './component/ActivityCalendar';
 
 function ActivityCalendar(props: Props) {
   // This component relies on various client hooks,

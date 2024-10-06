@@ -1,9 +1,8 @@
+import { useEffect, useState } from 'react';
 import { DocsContainer, type DocsContainerProps } from '@storybook/blocks';
 import type { Preview } from '@storybook/react';
-import { type ThemeVarsPartial, themes } from '@storybook/theming';
-import { useEffect, useState } from 'react';
+import { themes, type ThemeVarsPartial } from '@storybook/theming';
 import { DARK_MODE_EVENT_NAME } from 'storybook-dark-mode';
-
 import './storybook.scss';
 
 const baseTheme: ThemeVarsPartial = {

@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
-
 import type { Theme, ThemeInput } from '../types';
 import { createTheme } from './theme';
 
