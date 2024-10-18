@@ -56,53 +56,6 @@ export function getMonthLabels(
     });
 }
 
-export function maxWeekdayLabelWidth(
-  labels: string[],
-  showWeekdayLabel: WeekdayLabels,
-  fontSize: number,
-): number {
-  if (labels.length !== 7) {
-    throw new Error('Exactly 7 labels, one for each weekday must be passed.');
-  }
-
-  return labels.reduce(
-    (maxWidth, label, index) =>
-      showWeekdayLabel.byDayIndex(index as DayIndex)
-        ? Math.max(maxWidth, Math.ceil(calcTextDimensions(label, fontSize).width))
-        : maxWidth,
-    0,
-  );
-}
-
-export function calcTextDimensions(text: string, fontSize: number) {
-  if (fontSize < 1) {
-    throw new RangeError('fontSize must be positive');
-  }
-
-  if (text.length === 0) {
-    return { width: 0, height: 0 };
-  }
-
-  const namespace = 'http://www.w3.org/2000/svg';
-  const svg = document.createElementNS(namespace, 'svg');
-
-  svg.style.position = 'absolute';
-  svg.style.visibility = 'hidden';
-  svg.style.fontFamily = window.getComputedStyle(document.body).fontFamily;
-  svg.style.fontSize = `${fontSize}px`;
-
-  const textNode = document.createElementNS(namespace, 'text');
-  textNode.textContent = text;
-
-  svg.appendChild(textNode);
-  document.body.appendChild(svg);
-  const boundingBox = textNode.getBBox();
-
-  document.body.removeChild(svg);
-
-  return { width: boundingBox.width, height: boundingBox.height };
-}
-
 export function initWeekdayLabels(
   input: Props['showWeekdayLabels'],
   weekStart: DayIndex,
