@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from '@jest/globals';
+import { renderHook } from '@testing-library/react';
 import type { Theme, ThemeInput } from '../types';
-import { createTheme } from './theme';
+import { useTheme } from './useTheme';
 
 describe('createTheme', () => {
   const defaultTheme = {
@@ -34,46 +35,52 @@ describe('createTheme', () => {
   });
 
   it('returns the default theme if no input is passed', () => {
-    expect(createTheme()).toStrictEqual(defaultTheme);
+    expect(renderHook(() => useTheme()).result.current).toStrictEqual(defaultTheme);
   });
 
   it('throws an error if input is not an object', () => {
     // @ts-expect-error test invalid input
-    expect(() => createTheme('invalid')).toThrow();
+    expect(() => renderHook(() => useTheme('invalid'))).toThrow();
   });
 
   it('throws an error if neither "light" or "dark" inputs are set', () => {
     // @ts-expect-error test invalid input
-    expect(() => createTheme({})).toThrow();
+    expect(() => renderHook(() => useTheme({}))).toThrow();
   });
 
   it('throws an error if too few colors are passed', () => {
     expect(() =>
-      createTheme(
-        {
-          light: ['blue'],
-        },
-        2,
+      renderHook(() =>
+        useTheme(
+          {
+            light: ['blue'],
+          },
+          2,
+        ),
       ),
     ).toThrow();
   });
 
   it('throws an error if too many colors are passed', () => {
     expect(() =>
-      createTheme(
-        {
-          dark: Array(4).fill('green'),
-        },
-        3,
+      renderHook(() =>
+        useTheme(
+          {
+            dark: Array(4).fill('green'),
+          },
+          3,
+        ),
       ),
     ).toThrow();
   });
 
   it('uses default dark color scale if undefined in input', () => {
     expect(
-      createTheme({
-        light: explicitTheme.light,
-      }),
+      renderHook(() =>
+        useTheme({
+          light: explicitTheme.light,
+        }),
+      ).result.current,
     ).toStrictEqual({
       light: explicitTheme.light,
       dark: defaultTheme.dark,
@@ -82,9 +89,11 @@ describe('createTheme', () => {
 
   it('uses default light color scale if undefined in input', () => {
     expect(
-      createTheme({
-        dark: explicitTheme.dark,
-      }),
+      renderHook(() =>
+        useTheme({
+          dark: explicitTheme.dark,
+        }),
+      ).result.current,
     ).toStrictEqual({
       light: defaultTheme.light,
       dark: explicitTheme.dark,
@@ -98,14 +107,16 @@ describe('createTheme', () => {
       supports: (_k, _v) => false,
     };
     expect(() =>
-      createTheme({
-        dark: ['#333', '🙃'],
-      }),
+      renderHook(() =>
+        useTheme({
+          dark: ['#333', '🙃'],
+        }),
+      ),
     ).toThrow();
   });
 
   it('returns the same value for explicit inputs', () => {
-    expect(createTheme(explicitTheme)).toStrictEqual(explicitTheme);
+    expect(renderHook(() => useTheme(explicitTheme)).result.current).toStrictEqual(explicitTheme);
   });
 
   it('calculates color scales for minimal input', () => {
@@ -114,7 +125,7 @@ describe('createTheme', () => {
       dark: ['hsl(0, 0%, 20%)', 'hsl(0, 0%, 92%)'],
     };
 
-    const actual = createTheme(input);
+    const actual = renderHook(() => useTheme(input)).result.current;
     expect(actual.light).toHaveLength(5);
     expect(actual.dark).toHaveLength(5);
   });
@@ -125,7 +136,7 @@ describe('createTheme', () => {
       dark: ['hsl(0, 0%, 20%)', 'hsl(0, 0%, 92%)'],
     };
 
-    const actual = createTheme(input, 3);
+    const actual = renderHook(() => useTheme(input, 3)).result.current;
     expect(actual.light).toHaveLength(3);
     expect(actual.dark).toHaveLength(3);
   });

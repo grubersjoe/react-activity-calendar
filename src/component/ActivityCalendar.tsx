@@ -11,6 +11,8 @@ import { getYear, parseISO } from 'date-fns';
 import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+import { useTheme } from '../hooks/useTheme';
+import { useWeekdayLabelWidth } from '../hooks/useWeekdayLabelWidth';
 import styles from '../styles/styles.module.css';
 import type {
   Activity,
@@ -30,8 +32,7 @@ import {
   range,
   validateActivities,
 } from '../utils/calendar';
-import { getMonthLabels, initWeekdayLabels, maxWeekdayLabelWidth } from '../utils/label';
-import { createTheme } from '../utils/theme';
+import { getMonthLabels, initWeekdayLabels } from '../utils/label';
 
 export interface Props {
   /**
@@ -195,7 +196,7 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
   ) => {
     maxLevel = Math.max(1, maxLevel);
 
-    const theme = createTheme(themeProp, maxLevel + 1);
+    const theme = useTheme(themeProp, maxLevel + 1);
     const systemColorScheme = useColorScheme();
     const colorScale = theme[colorScheme ?? systemColorScheme];
 
@@ -215,9 +216,9 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
     const labelHeight = hideMonthLabels ? 0 : fontSize + LABEL_MARGIN;
 
     const weekdayLabels = initWeekdayLabels(showWeekdayLabels, weekStart);
-    const weekdayLabelOffset = weekdayLabels.shouldShow
-      ? maxWeekdayLabelWidth(labels.weekdays, weekdayLabels, fontSize) + LABEL_MARGIN
-      : undefined;
+    const maxWeekdayLabelWidth =
+      useWeekdayLabelWidth(labels.weekdays, weekdayLabels, fontSize) + LABEL_MARGIN;
+    const weekdayLabelOffset = weekdayLabels.shouldShow ? maxWeekdayLabelWidth : undefined;
 
     function getDimensions() {
       return {
