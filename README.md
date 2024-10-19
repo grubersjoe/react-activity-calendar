@@ -48,11 +48,34 @@ It is up to you how to generate and classify your data.
 
 ### Server side rendering
 
-Server side rendering (SSR) is not supported because the component relies on various browser APIs.
-For example, `window.matchMedia()` is used to detect the user's preferred color scheme. Likewise,
-the `use client` directive is used as preparation for
-[React Server Components](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components).
-On the server `null` will be rendered instead of the calendar.
+Server side rendering (SSR) cannot be supported because the component relies on various browser
+APIs. For example, `window.matchMedia()` is used to detect the user's preferred color scheme. In
+preparation for
+[React Server Components](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components)
+the `use client` directive is used. See this
+[issue](https://github.com/grubersjoe/react-github-calendar/issues/66) for more background.
+
+#### Remix
+
+Using this component in Remix will fail unless you render the calendar on the client only. To
+achieve this the `<ClientOnly />` component provided by
+[`remix-utils`](https://github.com/sergiodxa/remix-utils?tab=readme-ov-file#clientonly) can be used.
+Alternatively, you can detect this with `useEffect()`:
+
+```typescript jsx
+const [isClient, setIsClient] = useState(false)
+
+useEffect(() => {
+  setIsClient(true) // only runs on the client
+}, []);
+
+return isClient && <ActivityCalendar data={data} />
+```
+
+#### Astro
+
+Use the [`client:only`](https://docs.astro.build/de/reference/directives-reference/#clientonly)
+directive in Astro to avoid SSR issues.
 
 ### Create React App unsupported
 
