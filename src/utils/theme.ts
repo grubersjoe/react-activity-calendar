@@ -40,7 +40,7 @@ function validateInput(input: ThemeInput, steps: number) {
     }
 
     for (const c of input.light) {
-      if (!CSS.supports('color', c)) {
+      if (typeof CSS !== 'undefined' && !CSS.supports('color', c)) {
         throw new Error(`Invalid color "${String(c)}" passed. All CSS color formats are accepted.`);
       }
     }
@@ -53,7 +53,7 @@ function validateInput(input: ThemeInput, steps: number) {
     }
 
     for (const c of input.dark) {
-      if (!CSS.supports('color', c)) {
+      if (typeof CSS !== 'undefined' && !CSS.supports('color', c)) {
         throw new Error(`Invalid color "${String(c)}" passed. All CSS color formats are accepted.`);
       }
     }
