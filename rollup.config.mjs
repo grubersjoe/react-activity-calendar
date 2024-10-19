@@ -20,9 +20,6 @@ export default {
     format: 'cjs',
     sourcemap: true,
     exports: 'named',
-    // Use 'auto' instead of 'default' for better interoperability with CRA etc.
-    // https://rollupjs.org/guide/en/#outputinterop
-    interop: 'auto',
     // Rollup does not support this React Server Components directive yet:
     // https://github.com/rollup/rollup/issues/4699
     banner: `'use client';`,

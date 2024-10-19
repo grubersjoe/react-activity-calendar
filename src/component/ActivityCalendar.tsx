@@ -167,7 +167,7 @@ export interface Props {
   weekStart?: DayIndex;
 }
 
-const ActivityCalendar = forwardRef<HTMLElement, Props>(
+export const ActivityCalendar = forwardRef<HTMLElement, Props>(
   (
     {
       data: activities,
@@ -193,6 +193,7 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
     }: Props, // Required for react-docgen
     ref,
   ) => {
+    console.log('derp');
     maxLevel = Math.max(1, maxLevel);
 
     const theme = createTheme(themeProp, maxLevel + 1);
@@ -426,8 +427,4 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
 ActivityCalendar.displayName = 'ActivityCalendar';
 
-// TODO: remove this in v3
 export const Skeleton = (props: Omit<Props, 'data'>) => <ActivityCalendar data={[]} {...props} />;
-
-// TODO: make this a named export in v3
-export default ActivityCalendar;

@@ -1,4 +1,3 @@
-import ActivityCalendar, { Skeleton } from './component/ActivityCalendar';
+import { ActivityCalendar, Skeleton } from './component/ActivityCalendar';
 
-export { Skeleton };
-export default ActivityCalendar;
+export { ActivityCalendar, Skeleton };
