@@ -22,7 +22,7 @@
     "dev": "storybook dev -p 9000",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "postbuild": "dts-bundle-generator src/index.tsx -o build/index.d.ts --no-check --no-banner --external-imports react tinycolor2 date-fns",
+    "postbuild": "dts-bundle-generator src/index.tsx -o build/index.d.ts --no-check --no-banner --external-imports react date-fns",
     "prepublishOnly": "tsc && pnpm lint && pnpm build",
     "start": "rollup -c -w",
     "test": "jest"
