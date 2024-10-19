@@ -75,6 +75,10 @@ export function maxWeekdayLabelWidth(
 }
 
 export function calcTextDimensions(text: string, fontSize: number) {
+  if (typeof document === 'undefined' || typeof window === 'undefined') {
+    return { width: 0, height: 0 };
+  }
+
   if (fontSize < 1) {
     throw new RangeError('fontSize must be positive');
   }
