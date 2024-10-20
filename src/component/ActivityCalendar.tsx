@@ -13,7 +13,7 @@ import { getYear, parseISO } from 'date-fns';
 import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
-import styles from '../styles/styles.module.css';
+import animStyles from '../styles/styles.module.css';
 import type {
   Activity,
   BlockElement,
@@ -34,6 +34,7 @@ import {
 } from '../utils/calendar';
 import { getMonthLabels, initWeekdayLabels, maxWeekdayLabelWidth } from '../utils/label';
 import { createTheme } from '../utils/theme';
+import { styles } from './styles';
 
 export interface Props {
   /**
@@ -176,7 +177,7 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
       blockMargin = 4,
       blockRadius = 2,
       blockSize = 12,
-      colorScheme = undefined,
+      colorScheme: colorSchemeProp = undefined,
       eventHandlers = {},
       fontSize = 14,
       hideColorLegend = false,
@@ -204,7 +205,8 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
     const theme = createTheme(themeProp, maxLevel + 1);
     const systemColorScheme = useColorScheme();
-    const colorScale = theme[colorScheme ?? systemColorScheme];
+    const colorScheme = colorSchemeProp ?? systemColorScheme;
+    const colorScale = theme[colorScheme];
 
     const useAnimation = !usePrefersReducedMotion();
 
@@ -257,10 +259,10 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
               return null;
             }
 
-            const style =
+            const loadingAnimation =
               loading && useAnimation
                 ? {
-                    animation: `${styles.loadingAnimation} 1.75s ease-in-out infinite`,
+                    animation: `${animStyles.loadingAnimation} 1.75s ease-in-out infinite`,
                     animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
                   }
                 : undefined;
@@ -277,7 +279,7 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
                 fill={colorScale[activity.level]}
                 data-date={activity.date}
                 data-level={activity.level}
-                style={style}
+                style={{ ...styles.rect(colorScheme), ...loadingAnimation }}
               />
             );
 
@@ -307,8 +309,8 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
       return (
         <footer
-          className={getClassName('footer', styles.footer)}
-          style={{ marginLeft: weekdayLabelOffset }}
+          className={getClassName('footer')}
+          style={{ ...styles.footer.container, marginLeft: weekdayLabelOffset }}
         >
           {/* Placeholder */}
           {loading && <div>&nbsp;</div>}
@@ -324,7 +326,7 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
           )}
 
           {!loading && !hideColorLegend && (
-            <div className={getClassName('legend-colors', styles.legendColors)}>
+            <div className={getClassName('legend-colors')} style={styles.footer.legend}>
               <span style={{ marginRight: '0.4em' }}>{labels.legend.less}</span>
               {range(maxLevel + 1).map(level => {
                 const block = (
@@ -335,6 +337,7 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
                       fill={colorScale[level]}
                       rx={blockRadius}
                       ry={blockRadius}
+                      style={styles.rect(colorScheme)}
                     />
                   </svg>
                 );
@@ -368,6 +371,7 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
                 y={labelHeight + (blockSize + blockMargin) * index + blockSize / 2}
                 dominantBaseline="central"
                 textAnchor="end"
+                fill="currentColor"
                 key={index}
               >
                 {labels.weekdays[dayIndex]}
@@ -389,6 +393,7 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
             <text
               x={(blockSize + blockMargin) * weekIndex}
               dominantBaseline="hanging"
+              fill="currentColor"
               key={weekIndex}
             >
               {label}
@@ -399,30 +404,29 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
     }
 
     const { width, height } = getDimensions();
-    const containerStyles = {
-      fontSize,
-      ...(useAnimation && {
-        [`--${NAMESPACE}-loading`]: `oklab(from ${colorScale[0]} l a b)`,
-        [`--${NAMESPACE}-loading-active`]:
-          colorScheme === 'light'
-            ? `oklab(from ${colorScale[0]} calc(l * 0.96) a b)`
-            : `oklab(from ${colorScale[0]} calc(l * 1.08) a b)`,
-      }),
-    };
+    const animationStyles = useAnimation
+      ? {
+          [`--${NAMESPACE}-loading`]: `oklab(from ${colorScale[0]} l a b)`,
+          [`--${NAMESPACE}-loading-active`]:
+            colorScheme === 'light'
+              ? `oklab(from ${colorScale[0]} calc(l * 0.96) a b)`
+              : `oklab(from ${colorScale[0]} calc(l * 1.08) a b)`,
+        }
+      : {};
 
     return (
       <article
         ref={ref}
-        className={`${NAMESPACE} ${styles.container}`}
-        style={{ ...styleProp, ...containerStyles }}
+        className={NAMESPACE}
+        style={{ ...styleProp, ...styles.container(fontSize), ...animationStyles }}
       >
-        <div className={getClassName('scroll-container', styles.scrollContainer)}>
+        <div className={getClassName('scroll-container')} style={styles.scrollContainer}>
           <svg
             width={width}
             height={height}
             viewBox={`0 0 ${width} ${height}`}
-            className={getClassName('calendar', styles.calendar)}
-            style={{ marginLeft: weekdayLabelOffset }}
+            className={getClassName('calendar')}
+            style={{ ...styles.calendar, marginLeft: weekdayLabelOffset }}
           >
             {!loading && renderWeekdayLabels()}
             {!loading && renderMonthLabels()}

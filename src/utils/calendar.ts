@@ -92,11 +92,7 @@ function fillHoles(activities: Array<Activity>): Array<Activity> {
   });
 }
 
-export function getClassName(name: string, styles?: string): string {
-  if (styles) {
-    return `${NAMESPACE}__${name} ${styles}`;
-  }
-
+export function getClassName(name: string) {
   return `${NAMESPACE}__${name}`;
 }
 
