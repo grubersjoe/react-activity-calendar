@@ -26,7 +26,7 @@ import exampleTooltipsMui from '../../examples/tooltips-mui?raw';
 import exampleTooltipsReact from '../../examples/tooltips-react?raw';
 import type { Theme } from '../types';
 import { generateTestData } from '../utils/calendar';
-import ActivityCalendar, { type Props } from './ActivityCalendar';
+import { ActivityCalendar, type Props } from './ActivityCalendar';
 
 type Story = StoryObj<Props>;
 
