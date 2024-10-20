@@ -24,8 +24,8 @@ import exampleThemeExplicit from '../../examples/themes-explicit?raw';
 import exampleTheme from '../../examples/themes?raw';
 import exampleTooltipsMui from '../../examples/tooltips-mui?raw';
 import exampleTooltipsReact from '../../examples/tooltips-react?raw';
+import { generateTestData } from '../lib/calendar';
 import type { Theme } from '../types';
-import { generateTestData } from '../utils/calendar';
 import { ActivityCalendar, type Props } from './ActivityCalendar';
 
 type Story = StoryObj<Props>;

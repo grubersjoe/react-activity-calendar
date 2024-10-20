@@ -13,6 +13,15 @@ import { getYear, parseISO } from 'date-fns';
 import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+import {
+  generateEmptyData,
+  getClassName,
+  groupByWeeks,
+  range,
+  validateActivities,
+} from '../lib/calendar';
+import { getMonthLabels, initWeekdayLabels, maxWeekdayLabelWidth } from '../lib/label';
+import { createTheme } from '../lib/theme';
 import animStyles from '../styles/styles.module.css';
 import type {
   Activity,
@@ -25,15 +34,6 @@ import type {
   SVGRectEventHandler,
   ThemeInput,
 } from '../types';
-import {
-  generateEmptyData,
-  getClassName,
-  groupByWeeks,
-  range,
-  validateActivities,
-} from '../utils/calendar';
-import { getMonthLabels, initWeekdayLabels, maxWeekdayLabelWidth } from '../utils/label';
-import { createTheme } from '../utils/theme';
 import { styles } from './styles';
 
 export interface Props {
