@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from '@jest/globals';
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import type { Theme, ThemeInput } from '../types';
 import { createTheme } from './theme';
 
@@ -25,11 +25,12 @@ describe('createTheme', () => {
     dark: ['hsl(0, 0%, 22%)', '#4D455D', '#7DB9B6', '#F5E9CF', '#E96479'],
   };
 
+  const cssSpy = jest.fn<typeof global.CSS.supports>();
+
   beforeEach(() => {
+    // @ts-expect-error only this method needs to be mocked
     global.CSS = {
-      // @ts-expect-error No clue how to fix this
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      supports: (_k, _v) => true,
+      supports: cssSpy.mockReturnValue(true),
     };
   });
 
@@ -92,11 +93,7 @@ describe('createTheme', () => {
   });
 
   it('throws if an invalid color is passed', () => {
-    global.CSS = {
-      // @ts-expect-error No clue how to fix this
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      supports: (_k, _v) => false,
-    };
+    cssSpy.mockReturnValue(false);
     expect(() =>
       createTheme({
         dark: ['#333', '🙃'],
