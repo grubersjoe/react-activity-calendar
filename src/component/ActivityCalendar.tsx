@@ -12,6 +12,7 @@ import {
 import { getYear, parseISO } from 'date-fns';
 import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants';
 import { useColorScheme } from '../hooks/useColorScheme';
+import { loadingAnimationName, useLoadingAnimation } from '../hooks/useLoadingAnimation';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import {
   generateEmptyData,
@@ -22,7 +23,6 @@ import {
 } from '../lib/calendar';
 import { getMonthLabels, initWeekdayLabels, maxWeekdayLabelWidth } from '../lib/label';
 import { createTheme } from '../lib/theme';
-import animStyles from '../styles/styles.module.css';
 import type {
   Activity,
   BlockElement,
@@ -208,6 +208,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     const colorScheme = colorSchemeProp ?? systemColorScheme;
     const colorScale = theme[colorScheme];
 
+    useLoadingAnimation(colorScale[0] as string, colorScheme);
     const useAnimation = !usePrefersReducedMotion();
 
     if (loading) {
@@ -262,7 +263,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
             const loadingAnimation =
               loading && useAnimation
                 ? {
-                    animation: `${animStyles.loadingAnimation} 1.75s ease-in-out infinite`,
+                    animation: `${loadingAnimationName} 1.75s ease-in-out infinite`,
                     animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
                   }
                 : undefined;
@@ -404,21 +405,12 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     }
 
     const { width, height } = getDimensions();
-    const animationStyles = useAnimation
-      ? {
-          [`--${NAMESPACE}-loading`]: `oklab(from ${colorScale[0]} l a b)`,
-          [`--${NAMESPACE}-loading-active`]:
-            colorScheme === 'light'
-              ? `oklab(from ${colorScale[0]} calc(l * 0.96) a b)`
-              : `oklab(from ${colorScale[0]} calc(l * 1.08) a b)`,
-        }
-      : {};
 
     return (
       <article
         ref={ref}
         className={NAMESPACE}
-        style={{ ...styleProp, ...styles.container(fontSize), ...animationStyles }}
+        style={{ ...styleProp, ...styles.container(fontSize) }}
       >
         <div className={getClassName('scroll-container')} style={styles.scrollContainer}>
           <svg

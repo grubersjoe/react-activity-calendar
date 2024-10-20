@@ -4,7 +4,6 @@ import resolve from '@rollup/plugin-node-resolve';
 import copy from 'rollup-plugin-copy';
 import filesize from 'rollup-plugin-filesize';
 import externalDeps from 'rollup-plugin-peer-deps-external';
-import postcss from 'rollup-plugin-postcss';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 const extensions = ['.ts', '.tsx'];
@@ -29,9 +28,6 @@ export default {
   },
   plugins: [
     ...(useExternal ? [externalDeps({ includeDependencies: true })] : [commonjs()]),
-    postcss({
-      modules: true,
-    }),
     babel({
       extensions,
       exclude: 'node_modules/**',
