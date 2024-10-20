@@ -3,6 +3,8 @@
 import {
   forwardRef,
   Fragment,
+  useEffect,
+  useState,
   type CSSProperties,
   type ForwardedRef,
   type ReactElement,
@@ -193,6 +195,11 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
     }: Props, // Required for react-docgen
     ref,
   ) => {
+    const [isClient, setIsClient] = useState(false);
+    useEffect(() => {
+      setIsClient(true);
+    }, []);
+
     maxLevel = Math.max(1, maxLevel);
 
     const theme = createTheme(themeProp, maxLevel + 1);
@@ -215,9 +222,13 @@ const ActivityCalendar = forwardRef<HTMLElement, Props>(
     const labelHeight = hideMonthLabels ? 0 : fontSize + LABEL_MARGIN;
 
     const weekdayLabels = initWeekdayLabels(showWeekdayLabels, weekStart);
-    const weekdayLabelOffset = weekdayLabels.shouldShow
-      ? maxWeekdayLabelWidth(labels.weekdays, weekdayLabels, fontSize) + LABEL_MARGIN
-      : undefined;
+
+    // Must be calculated on the client or SSR hydration errors will occur
+    // because server and client HTML would not match.
+    const weekdayLabelOffset =
+      isClient && weekdayLabels.shouldShow
+        ? maxWeekdayLabelWidth(labels.weekdays, weekdayLabels, fontSize) + LABEL_MARGIN
+        : undefined;
 
     function getDimensions() {
       return {
