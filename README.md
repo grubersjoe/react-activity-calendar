@@ -26,22 +26,30 @@ npm install react-activity-calendar
 The component expects activity data in the following structure. Each activity level must be in the
 interval from 0 to `maxLevel`, which is 4 per default (see
 [documentation](https://grubersjoe.github.io/react-activity-calendar/?path=/story/react-activity-calendar--activity-levels)).
-
 It is up to you how to generate and classify your data.
 
-```json
-[
+```tsx
+import { ActivityCalendar } from 'react-actitivy-calendar';
+
+const data = [
   {
-    "date": "2023-06-14",
-    "count": 2,
-    "level": 1
+    date: '2024-06-23',
+    count: 2,
+    level: 1,
   },
   {
-    "date": "2023-06-22",
-    "count": 16,
-    "level": 3
-  }
-]
+    date: '2024-08-02',
+    count: 16,
+    level: 4,
+  },
+  {
+    date: '2024-11-29',
+    count: 11,
+    level: 3,
+  },
+];
+
+const App = () => <ActivityCalendar data={data} />;
 ```
 
 ## FAQ
