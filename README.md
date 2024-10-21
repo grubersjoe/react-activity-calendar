@@ -44,40 +44,17 @@ It is up to you how to generate and classify your data.
 ]
 ```
 
-## Known issues
+## FAQ
 
-### Server side rendering
+### Why does the calendar not render in environment x?
 
-Server side rendering (SSR) cannot be supported because the component relies on various browser
-APIs. For example, `window.matchMedia()` is used to detect the user's preferred color scheme. In
-preparation for
-[React Server Components](https://react.dev/blog/2023/03/22/react-labs-what-we-have-been-working-on-march-2023#react-server-components)
-the `use client` directive is used. See this
-[issue](https://github.com/grubersjoe/react-github-calendar/issues/66) for more background.
+If you encounter issues rendering this component in a specific React framework, please refer to the
+following repository. It contains working examples for Astro, Next.js, Remix and Vite. Server side
+rendering (SSR) is supported.
 
-#### Remix
+[Framework examples](https://github.com/grubersjoe/react-activity-calendar-tests)
 
-Using this component in Remix will fail unless you render the calendar on the client only. To
-achieve this the `<ClientOnly />` component provided by
-[`remix-utils`](https://github.com/sergiodxa/remix-utils?tab=readme-ov-file#clientonly) can be used.
-Alternatively, you can detect this with `useEffect()`:
-
-```typescript jsx
-const [isClient, setIsClient] = useState(false)
-
-useEffect(() => {
-  setIsClient(true) // only runs on the client
-}, []);
-
-return isClient && <ActivityCalendar data={data} />
-```
-
-#### Astro
-
-Use the [`client:only`](https://docs.astro.build/de/reference/directives-reference/#clientonly)
-directive in Astro to avoid SSR issues.
-
-### Create React App unsupported
+### Why is Create React App not supported?
 
 Create React App (CRA) is considered
 [abandoned](https://github.com/facebook/create-react-app/discussions/11086), and you probably should
@@ -87,6 +64,14 @@ Using this component inside CRA will lead to errors for reasons described in iss
 [#105](https://github.com/grubersjoe/react-activity-calendar/issues/105). This repo is not for CRA
 support questions. If you encounter issues, you need to fix those yourself given the maintenance
 state of CRA. Personally, I would recommend using [Vite](https://vitejs.dev/) instead of CRA.
+
+### Why is the tooltip library x not supported?
+
+See this [issue](https://github.com/grubersjoe/react-activity-calendar/issues/32) and especially
+this
+[comment](https://github.com/grubersjoe/react-activity-calendar/issues/32#issuecomment-1735208729).
+The next major version will be based on a headless approach for tooltips, so that styling is
+completely up to the user.
 
 ## Development
 
