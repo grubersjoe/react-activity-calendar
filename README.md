@@ -2,8 +2,7 @@
 
 [![CI](https://github.com/grubersjoe/react-activity-calendar/actions/workflows/test.yml/badge.svg)](https://github.com/grubersjoe/react-activity-calendar/actions/workflows/test.yml)
 
-A flexible React component to display activity data in a calendar (heatmap).
-
+A flexible React component to display activity data in a calendar (heatmap). <br>
 **[Documentation (Storybook)](https://grubersjoe.github.io/react-activity-calendar)**
 
 ![Screenshot](screenshot.png)
@@ -62,7 +61,7 @@ rendering (SSR) is supported.
 
 [Framework examples](https://github.com/grubersjoe/react-activity-calendar-tests)
 
-### Why is Create React App not supported?
+### Why is Create React App unsupported?
 
 Create React App (CRA) is considered
 [abandoned](https://github.com/facebook/create-react-app/discussions/11086), and you probably should
@@ -73,10 +72,11 @@ Using this component inside CRA will lead to errors for reasons described in iss
 support questions. If you encounter issues, you need to fix those yourself given the maintenance
 state of CRA. Personally, I would recommend using [Vite](https://vitejs.dev/) instead of CRA.
 
-### Why is the tooltip library x not supported?
+### Why is the tooltip library x unsupported?
 
-See this [issue](https://github.com/grubersjoe/react-activity-calendar/issues/32) and especially
-this
+It seems impossible to support all kinds of tooltip libraries since they are all implemented
+differently. See this [issue](https://github.com/grubersjoe/react-activity-calendar/issues/32) and
+especially this
 [comment](https://github.com/grubersjoe/react-activity-calendar/issues/32#issuecomment-1735208729).
 The next major version will be based on a headless approach for tooltips, so that styling is
 completely up to the user.
