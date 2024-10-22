@@ -11,19 +11,22 @@
   },
   "main": "build/index.js",
   "types": "build/index.d.ts",
-  "files": ["build"],
+  "files": [
+    "build"
+  ],
   "scripts": {
     "build": "rollup -c",
     "build:storybook": "storybook build -o docs/ && touch docs/.nojekyll",
     "bundlesize": "pnpm install && EXTERNAL_DEPS=false pnpm build && open bundle.html",
-    "check": "tsc && pnpm lint && pnpm test",
+    "check": "pnpx prettier -c . && pnpm exec tsc && pnpm lint",
     "dev": "storybook dev -p 9000",
     "format": "prettier --write .",
     "lint": "eslint .",
     "postbuild": "dts-bundle-generator src/index.tsx -o build/index.d.ts --no-check --no-banner --external-imports react date-fns",
-    "prepublishOnly": "tsc && pnpm lint && pnpm build",
+    "prepublishOnly": "pnpm check && pnpm build",
     "start": "rollup -c -w",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky"
   },
   "dependencies": {
     "date-fns": "^4.1.0"
@@ -62,6 +65,7 @@
     "eslint-plugin-react": "^7.37.1",
     "eslint-plugin-react-hooks": "^5.0.0",
     "globals": "^15.10.0",
+    "husky": "^9.1.6",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.3.2",
@@ -90,5 +94,9 @@
   "jest": {
     "testEnvironment": "jsdom"
   },
-  "browserslist": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+  "browserslist": [
+    "last 1 chrome version",
+    "last 1 firefox version",
+    "last 1 safari version"
+  ]
 }
