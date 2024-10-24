@@ -48,7 +48,7 @@ const data = [
   },
 ];
 
-const App = () => <ActivityCalendar data={data} />;
+<ActivityCalendar data={data} />;
 ```
 
 ## FAQ
