@@ -1,6 +1,7 @@
 import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
 import copy from 'rollup-plugin-copy';
 import filesize from 'rollup-plugin-filesize';
 import externalDeps from 'rollup-plugin-peer-deps-external';
@@ -27,6 +28,9 @@ export default {
     banner: `'use client';`,
   },
   plugins: [
+    replace({
+      'process.env.NODE_ENV': JSON.stringify('production'),
+    }),
     ...(useExternal ? [externalDeps({ includeDependencies: true })] : [commonjs()]),
     babel({
       extensions,
