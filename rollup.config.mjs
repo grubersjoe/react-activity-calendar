@@ -16,7 +16,7 @@ const useExternal = process.env.EXTERNAL_DEPS?.toLowerCase() !== 'false'
 export default {
   input: 'src/index.tsx',
   output: {
-    file: 'build/index.js',
+    file: 'dist/index.js',
     format: 'cjs',
     sourcemap: true,
     exports: 'named',
@@ -42,7 +42,10 @@ export default {
       extensions,
     }),
     copy({
-      targets: [{ src: 'src/*.d.ts', dest: 'build/' }],
+      targets: [
+        { src: 'src/*.d.ts', dest: 'dist/' },
+        { src: 'src/styles/tooltips.css', dest: 'dist/' },
+      ],
     }),
     filesize(),
     visualizer({
