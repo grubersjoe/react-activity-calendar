@@ -9,10 +9,10 @@
     "type": "git",
     "url": "git+https://github.com/grubersjoe/react-activity-calendar.git"
   },
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "build"
+    "dist"
   ],
   "scripts": {
     "build": "rollup -c",
@@ -22,13 +22,14 @@
     "dev": "storybook dev -p 9000",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "postbuild": "dts-bundle-generator src/index.tsx -o build/index.d.ts --no-check --no-banner --external-imports react date-fns",
+    "postbuild": "dts-bundle-generator src/index.tsx -o dist/index.d.ts --no-check --no-banner --external-imports react date-fns @floating-ui/react",
     "prepublishOnly": "pnpm check && pnpm build",
     "start": "rollup -c -w",
     "test": "jest",
     "prepare": "husky"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.12",
     "date-fns": "^4.1.0"
   },
   "devDependencies": {
@@ -42,7 +43,6 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
     "@jest/globals": "^30.0.3",
     "@jest/types": "^30.0.1",
-    "@mui/material": "^7.2.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-node-resolve": "^16.0.1",
@@ -51,6 +51,7 @@
     "@storybook/addon-links": "^9.0.14",
     "@storybook/react-vite": "^9.0.14",
     "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
     "@vueless/storybook-dark-mode": "^9.0.5",
     "dts-bundle-generator": "^9.5.1",
@@ -66,9 +67,7 @@
     "prism-react-renderer": "^2.4.1",
     "react": "^19.1.0",
     "react-docgen": "^8.0.0",
-    "react-dom": "^19.1.0",
     "react-ga4": "^2.1.0",
-    "react-tooltip": "^5.29.1",
     "rollup": "^4.44.1",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-filesize": "^10.0.0",

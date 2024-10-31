@@ -25,6 +25,11 @@ h1 {
 
 p {
   margin: 0 0 1.25em;
+
+  & + ul,
+  & + ol {
+    margin-top: -0.75em;
+  }
 }
 
 p,
