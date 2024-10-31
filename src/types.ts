@@ -1,24 +1,4 @@
-import type {
-  AnimationEvent,
-  ClipboardEvent,
-  CompositionEvent,
-  DOMAttributes,
-  DragEvent,
-  FocusEvent,
-  FormEvent,
-  HTMLAttributes,
-  JSXElementConstructor,
-  KeyboardEvent,
-  MouseEvent,
-  PointerEvent,
-  ReactElement,
-  SVGAttributes,
-  SyntheticEvent,
-  TouchEvent,
-  TransitionEvent,
-  UIEvent,
-  WheelEvent,
-} from 'react'
+import type { HTMLAttributes, JSXElementConstructor, ReactElement, SVGAttributes } from 'react'
 
 export type Activity = {
   date: string
@@ -64,32 +44,9 @@ export type ThemeInput =
       dark: ColorScale
     }
 
-type BlockAttributes = SVGAttributes<SVGRectElement> & HTMLAttributes<SVGRectElement>
+export type ColorScheme = 'light' | 'dark'
 
-export type BlockElement = ReactElement<BlockAttributes, JSXElementConstructor<SVGRectElement>>
-
-export type SVGRectEventHandler = Omit<
-  DOMAttributes<SVGRectElement>,
-  'css' | 'children' | 'dangerouslySetInnerHTML'
+export type BlockElement = ReactElement<
+  SVGAttributes<SVGRectElement> & HTMLAttributes<SVGRectElement>,
+  JSXElementConstructor<SVGRectElement>
 >
-
-export type EventHandlerMap = {
-  [key in keyof SVGRectEventHandler]: (
-    ...event: Parameters<NonNullable<SVGRectEventHandler[keyof SVGRectEventHandler]>>
-  ) => (activity: Activity) => void
-}
-
-export type ReactEvent<E extends Element> = AnimationEvent<E> &
-  ClipboardEvent<E> &
-  CompositionEvent<E> &
-  DragEvent<E> &
-  FocusEvent<E> &
-  FormEvent<E> &
-  KeyboardEvent<E> &
-  MouseEvent<E> &
-  PointerEvent<E> &
-  SyntheticEvent<E> &
-  TouchEvent<E> &
-  TransitionEvent<E> &
-  UIEvent<E> &
-  WheelEvent<E>

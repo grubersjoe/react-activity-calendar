@@ -1,5 +1,5 @@
 import { getMonth, parseISO } from 'date-fns'
-import type { Props } from '../component/ActivityCalendar'
+import type { Props } from '../components/ActivityCalendar'
 import { DEFAULT_MONTH_LABELS } from '../constants'
 import type { DayIndex, DayName, Week, WeekdayLabels } from '../types'
 
@@ -41,7 +41,7 @@ export function getMonthLabels(
       // font size, etc. into account.
       const minWeeks = 3
 
-      // Skip the first month label if there is not enough space to the next one.
+      // Skip the first month label if there is not enough space for the next one.
       if (index === 0) {
         return labels[1] && labels[1].weekIndex - weekIndex >= minWeeks
       }

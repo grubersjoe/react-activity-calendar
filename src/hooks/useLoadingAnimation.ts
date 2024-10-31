@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
 import { NAMESPACE } from '../constants'
+import type { ColorScheme } from '../types'
 
 export const loadingAnimationName = `${NAMESPACE}--loading-animation`
 
-export function useLoadingAnimation(zeroColor: string, colorScheme: 'light' | 'dark') {
+export function useLoadingAnimation(zeroColor: string, colorScheme: ColorScheme) {
   useEffect(() => {
     const colorLoading = `oklab(from ${zeroColor} l a b)`
     const colorActive =
