@@ -49,7 +49,7 @@ export function groupByWeeks(
     getDay(firstDate) === weekStart ? firstDate : subWeeks(nextDay(firstDate, weekStart), 1)
 
   // To correctly group activities by week, it is necessary to left-pad the list
-  // because the first date might not be set start weekday.
+  // because the first date might not be the set start weekday.
   const paddedActivities = [
     ...(Array(differenceInCalendarDays(firstDate, firstCalendarDate)).fill(
       undefined,
@@ -92,8 +92,12 @@ function fillHoles(activities: Array<Activity>): Array<Activity> {
   })
 }
 
-export function getClassName(name: string) {
-  return `${NAMESPACE}__${name}`
+/**
+ * Following the BEM (block, element, modifier) naming convention
+ * https://getbem.com/naming/
+ */
+export function getClassName(element: string) {
+  return `${NAMESPACE}__${element}`
 }
 
 export function generateEmptyData(): Array<Activity> {

@@ -20,6 +20,7 @@ export default typescript.config(
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/non-nullable-type-assertion-style': 'off',
       '@typescript-eslint/restrict-template-expressions': 'off',
+      'react/no-unescaped-entities': 'off',
     },
     languageOptions: {
       globals: {
