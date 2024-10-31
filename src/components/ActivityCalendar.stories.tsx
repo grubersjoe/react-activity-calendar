@@ -7,28 +7,26 @@ import {
   type ForwardedRef,
   type ReactElement,
 } from 'react'
-import { Tooltip as MuiTooltip } from '@mui/material'
 import LinkTo from '@storybook/addon-links/react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Highlight, themes as prismThemes } from 'prism-react-renderer'
-import { Tooltip as ReactTooltip } from 'react-tooltip'
-import { themes } from 'storybook/theming'
-import 'react-tooltip/dist/react-tooltip.css'
 import { useDarkMode } from '@vueless/storybook-dark-mode'
+import { Highlight, themes as prismThemes } from 'prism-react-renderer'
 import Container from '../../.storybook/components/Container'
 import exampleCustomization from '../../examples/customization?raw'
-import exampleEventHandlersInterface from '../../examples/event-handlers-type?raw'
 import exampleEventHandlers from '../../examples/event-handlers?raw'
 import exampleLabelsShape from '../../examples/labels-shape?raw'
 import exampleLabels from '../../examples/labels?raw'
 import exampleRef from '../../examples/ref?raw'
 import exampleThemeExplicit from '../../examples/themes-explicit?raw'
 import exampleTheme from '../../examples/themes?raw'
-import exampleTooltipsMui from '../../examples/tooltips-mui?raw'
-import exampleTooltipsReact from '../../examples/tooltips-react?raw'
+import exampleTooltipsProps from '../../examples/tooltips-props?raw'
+import exampleTooltips from '../../examples/tooltips?raw'
+import exampleTooltipsCSS from '../../src/styles/tooltips.css?raw'
 import { generateTestData } from '../lib/calendar'
 import type { Theme } from '../types'
 import { ActivityCalendar, type Props } from './ActivityCalendar'
+import '../styles/tooltips.css'
+import { themes } from 'storybook/theming'
 
 type Story = StoryObj<Props>
 
@@ -64,6 +62,9 @@ const meta: Meta<ForwardedRef<Props>> = {
       control: 'boolean',
     },
     style: {
+      control: false,
+    },
+    tooltips: {
       control: false,
     },
     weekStart: {
@@ -160,16 +161,17 @@ export const ActivityLevels: Story = {
 
     return (
       <Container>
-        <ActivityCalendar {...args} data={data} style={{ marginBottom: '2rem' }} />
+        <h1>Activity levels</h1>
+        <ActivityCalendar {...args} data={data} style={{ margin: '1rem 0' }} />
         <p>
           Use the{' '}
           <code>
             <b>maxLevel</b>
           </code>{' '}
-          prop to control the number of activity levels. This value is zero indexed (0 represents no
-          activity), so for example a <code>maxLevel</code> of 2 will total in 3 levels as above.
-          Each activity level must be in the interval from 0 to <code>maxLevel</code>, which is 4
-          per default.
+          prop to control the number of activity levels. This value is zero indexed, where 0
+          represents no activity. <code>maxLevel</code> is 4 per default, so this results in 5
+          activity levels. Each activity level must be in the interval from 0 to{' '}
+          <code>maxLevel</code>.
         </p>
       </Container>
     )
@@ -355,15 +357,16 @@ export const Customization: Story = {
 export const EventHandlers: Story = {
   args: {
     ...defaultProps,
-    eventHandlers: {
-      onClick: () => activity => {
-        alert(JSON.stringify(activity))
-      },
-      onMouseEnter: () => () => {
-        // eslint-disable-next-line no-console
-        console.log('on mouse enter')
-      },
-    },
+    renderBlock: (block, activity) =>
+      cloneElement(block, {
+        onClick: () => {
+          alert(JSON.stringify(activity))
+        },
+        onMouseEnter: () => {
+          // eslint-disable-next-line no-console
+          console.log('on mouse enter')
+        },
+      }),
   },
   parameters: {
     docs: {
@@ -379,14 +382,17 @@ export const EventHandlers: Story = {
       <Container>
         <h1>Event Handlers</h1>
         <p>
-          You can register event handlers for the SVG <code>&lt;rect/&gt;</code> elements that are
-          used to render the calendar days. This way you can control the behaviour on click, hover,
-          etc. All event listeners have the following signature, so you can use the activity data of
-          the block inside the handler:
+          Use the{' '}
+          <code>
+            <b>renderBlock</b>
+          </code>{' '}
+          prop to attach event handlers to the SVG <code>rect</code> elements that represent
+          calendar days. Click on any block below to see it in action.
         </p>
-        <Source code={exampleEventHandlersInterface} isDarkMode={useDarkMode()} />
-        <p>Click on any block below to see it in action:</p>
         <ActivityCalendar {...args} data={data} style={{ margin: '2rem 0' }} />
+        <p>
+          Use the <code>React.cloneElement()</code> function to assign the handlers:
+        </p>
         <Source code={exampleEventHandlers} isDarkMode={useDarkMode()} />
       </Container>
     )
@@ -394,11 +400,14 @@ export const EventHandlers: Story = {
 }
 
 export const Tooltips: Story = {
-  args: defaultProps,
-  parameters: {
-    docs: {
-      source: {
-        code: exampleTooltipsReact,
+  args: {
+    ...defaultProps,
+    tooltips: {
+      activity: {
+        text: activity => `${activity.level} activities on ${activity.date}`,
+      },
+      colorLegend: {
+        text: level => `Activity level ${level + 1}`,
       },
     },
   },
@@ -409,62 +418,78 @@ export const Tooltips: Story = {
       <Container>
         <h1>Tooltips</h1>
         <p>
-          To add a 3rd party tooltip component to the calendar you can use the{' '}
-          <code>renderBlock</code> prop.
+          Use the{' '}
+          <code>
+            <b>tooltips</b>
+          </code>{' '}
+          prop to show tooltips when hovering the calendar days or the color legend. The tooltip
+          text is set by a respective callback function that receives the activity or level of the
+          hovered element.
         </p>
+        <ActivityCalendar {...args} data={data} style={{ margin: '2rem 0' }} />
         <p>
-          <i>
-            Caveat: unfortunately not all tooltip components can be supported, currently. In the
-            future, the idea is to render{' '}
-            <a href="https://martinfowler.com/articles/headless-component.html">headless</a>{' '}
-            tooltips and let the users decide how to style them.
-          </i>
+          Tooltips are implemented using the <a href="https://floating-ui.com/">Floating UI</a>{' '}
+          library. They are &ldquo;headless&rdquo;, meaning they are <b>not styled</b>, so you have
+          full control over their look. You can either import the provided CSS file with default
+          styles as follow or write CSS yourself if you need more flexibility.
         </p>
+        <Source
+          code="import 'react-activity-calendar/dist/tooltips.css';"
+          isDarkMode={useDarkMode()}
+        />
+        <Source code={exampleTooltipsCSS} isDarkMode={useDarkMode()} />
 
-        <h2>
-          <a href="https://mui.com/material-ui/react-tooltip/">Material UI</a>
-        </h2>
-        <p>
-          In the simplest case, each block only needs to be wrapped with a{' '}
-          <code>&lt;Tooltip/&gt;</code> component, as shown in the following for Material UI.
-          Additionally, you can add tooltips to the color legend below the calendar using the{' '}
-          <code>renderColorLegend</code> prop:
-        </p>
-        <Source code={exampleTooltipsMui} isDarkMode={useDarkMode()} />
+        <h2>Tooltip configuration</h2>
+        <p>For each type of tooltip you can control the following. All fields are optional.</p>
+        <ul>
+          <li>
+            <a href="https://floating-ui.com/docs/useFloating#placement">placement</a> of the
+            tooltip
+          </li>
+          <li>
+            <a href="https://floating-ui.com/docs/offset#options">offset</a> to the element in
+            pixels (4 per default)
+          </li>
+          <li>
+            the cursor &ldquo;<a href="https://floating-ui.com/docs/useHover#restms">rest time</a>
+            &rdquo; before showing the tooltip (150ms per default)
+          </li>
+          <li>
+            <a href="https://floating-ui.com/docs/useTransition#usetransitionstyles-props">
+              transition styles
+            </a>{' '}
+            to fine-tune CSS animations
+          </li>
+          <li>whether to draw an arrow (false per default)</li>
+        </ul>
+        <Source code={exampleTooltipsProps} isDarkMode={useDarkMode()} />
         <ActivityCalendar
           {...args}
           data={data}
-          renderBlock={(block, activity) => (
-            <MuiTooltip title={`${activity.count} activities on ${activity.date}`}>
-              {block}
-            </MuiTooltip>
-          )}
-          renderColorLegend={(block, level) => (
-            <MuiTooltip title={`Level ${level}`}>{block}</MuiTooltip>
-          )}
+          tooltips={{
+            activity: {
+              text: activity => `${activity.level} activities on ${activity.date}`,
+              placement: 'right',
+              offset: 6,
+              transitionStyles: {
+                duration: 100,
+                common: { fontFamily: 'monospace' },
+              },
+              restMs: 300,
+              withArrow: true,
+            },
+          }}
+          style={{ margin: '2rem 0' }}
         />
-        <h2>
-          <a href="https://github.com/ReactTooltip/react-tooltip">react-tooltip</a>
-        </h2>
-        <p>
-          Some libraries, like <code>react-tooltip</code>, require that additional props are passed
-          to the block elements. You can achieve this using the <code>React.cloneElement</code>{' '}
-          function:
-        </p>
-        <Source code={exampleTooltipsReact} isDarkMode={useDarkMode()} />
-        <ActivityCalendar
-          {...args}
-          data={data}
-          renderBlock={(block, activity) =>
-            cloneElement(block, {
-              'data-tooltip-id': 'react-tooltip',
-              'data-tooltip-html': `${activity.count} activities on ${activity.date}`,
-            })
-          }
-        />
-        <ReactTooltip id="react-tooltip" />
       </Container>
     )
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: exampleTooltips,
+      },
+    },
   },
 }
 
@@ -556,7 +581,7 @@ export const LocalizedLabels: Story = {
     return (
       <Container>
         <h1>Localization</h1>
-        <p>Example in German.</p>
+        <p>Example in German:</p>
         <ActivityCalendar {...args} data={data} style={{ margin: '2rem 0' }} />
         <Source code={exampleLabelsShape} isDarkMode={useDarkMode()} />
       </Container>
