@@ -9,6 +9,7 @@ import {
   type ForwardedRef,
   type ReactElement,
 } from 'react'
+import type { Placement } from '@floating-ui/react'
 import { getYear, parseISO } from 'date-fns'
 import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants'
 import { useColorScheme } from '../hooks/useColorScheme'
@@ -23,18 +24,17 @@ import {
 } from '../lib/calendar'
 import { getMonthLabels, initWeekdayLabels, maxWeekdayLabelWidth } from '../lib/label'
 import { createTheme } from '../lib/theme'
+import { styles } from '../styles/styles'
 import type {
   Activity,
   BlockElement,
+  ColorScheme,
   DayIndex,
   DayName,
-  EventHandlerMap,
   Labels,
-  ReactEvent,
-  SVGRectEventHandler,
   ThemeInput,
 } from '../types'
-import { styles } from './styles'
+import { Tooltip } from './Tooltip'
 
 export type Props = {
   /**
@@ -49,7 +49,7 @@ export type Props = {
    *
    * Example object:
    *
-   * ```json
+   * ```
    * {
    *   date: "2021-02-20",
    *   count: 16,
@@ -74,12 +74,7 @@ export type Props = {
    * Use a specific color scheme instead of the system one. Supported values
    * are `'light'` and `'dark'`.
    */
-  colorScheme?: 'light' | 'dark'
-  /**
-   * Event handlers to register for the SVG `<rect>` elements that are used to
-   * render the calendar days. Handler signature: `event => activity => void`
-   */
-  eventHandlers?: EventHandlerMap
+  colorScheme?: ColorScheme
   /**
    * Font size for text in pixels.
    */
@@ -116,8 +111,8 @@ export type Props = {
   ref?: ForwardedRef<HTMLElement>
   /**
    * Render prop for calendar blocks (activities). For example, useful to wrap
-   * the element with a tooltip component. Use `React.cloneElement` to pass
-   * additional props to the element if necessary.
+   * the element with a link. Use `React.cloneElement` to pass additional props
+   * to the element if necessary.
    */
   renderBlock?: (block: BlockElement, activity: Activity) => ReactElement
   /**
@@ -129,7 +124,7 @@ export type Props = {
   /**
    * Toggle to show weekday labels left to the calendar.
    * Alternatively, pass a list of ISO 8601 weekday names to show.
-   * For example `['mon', 'wed', 'fri']`.
+   * For example: `['mon', 'wed', 'fri']`.
    */
   showWeekdayLabels?: boolean | Array<DayName>
   /**
@@ -162,6 +157,22 @@ export type Props = {
    */
   theme?: ThemeInput
   /**
+   * Tooltips to show when hovering the activity blocks or the color legend
+   * below the calendar.
+   */
+  tooltips?: {
+    activity?: {
+      text: (activity: Activity) => string
+      withArrow?: boolean
+      placement?: Placement
+    }
+    colorLegend?: {
+      text: (level: number) => string
+      withArrow?: boolean
+      placement?: Placement
+    }
+  }
+  /**
    * Overwrite the total activity count.
    */
   totalCount?: number
@@ -179,7 +190,6 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       blockRadius = 2,
       blockSize = 12,
       colorScheme: colorSchemeProp = undefined,
-      eventHandlers = {},
       fontSize = 14,
       hideColorLegend = false,
       hideMonthLabels = false,
@@ -192,6 +202,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       showWeekdayLabels = false,
       style: styleProp = {},
       theme: themeProp = undefined,
+      tooltips = {},
       totalCount: totalCountProp = undefined,
       weekStart = 0, // Sunday
     }: Props, // Required for react-docgen
@@ -241,18 +252,6 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       }
     }
 
-    function getEventHandlers(activity: Activity): SVGRectEventHandler {
-      return (
-        Object.keys(eventHandlers) as Array<keyof SVGRectEventHandler>
-      ).reduce<SVGRectEventHandler>(
-        (handlers, key) => ({
-          ...handlers,
-          [key]: (event: ReactEvent<SVGRectElement>) => eventHandlers[key]?.(event)(activity),
-        }),
-        {},
-      )
-    }
-
     function renderCalendar() {
       return weeks
         .map((week, weekIndex) =>
@@ -271,7 +270,6 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
             const block = (
               <rect
-                {...getEventHandlers(activity)}
                 x={0}
                 y={labelHeight + (blockSize + blockMargin) * dayIndex}
                 width={blockSize}
@@ -281,13 +279,29 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                 fill={colorScale[activity.level]}
                 data-date={activity.date}
                 data-level={activity.level}
-                style={{ ...styles.rect(colorScheme), ...loadingAnimation }}
+                style={{
+                  ...styles.rect(colorScheme),
+                  ...loadingAnimation,
+                }}
               />
             )
 
+            const renderedBlock = renderBlock ? renderBlock(block, activity) : block
+
             return (
               <Fragment key={activity.date}>
-                {renderBlock ? renderBlock(block, activity) : block}
+                {tooltips.activity ? (
+                  <Tooltip
+                    text={tooltips.activity.text(activity)}
+                    placement={tooltips.activity.placement ?? 'top'}
+                    withArrow={tooltips.activity.withArrow}
+                    colorScheme={colorScheme}
+                  >
+                    {renderedBlock}
+                  </Tooltip>
+                ) : (
+                  renderedBlock
+                )}
               </Fragment>
             )
           }),
@@ -331,8 +345,8 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
             <div className={getClassName('legend-colors')} style={styles.footer.legend}>
               <span style={{ marginRight: '0.4em' }}>{labels.legend.less}</span>
               {range(maxLevel + 1).map(level => {
-                const block = (
-                  <svg width={blockSize} height={blockSize}>
+                const colorLegend = (
+                  <svg width={blockSize} height={blockSize} key={level}>
                     <rect
                       width={blockSize}
                       height={blockSize}
@@ -344,9 +358,24 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                   </svg>
                 )
 
+                const renderedColorLegend = renderColorLegend
+                  ? renderColorLegend(colorLegend, level)
+                  : colorLegend
+
                 return (
                   <Fragment key={level}>
-                    {renderColorLegend ? renderColorLegend(block, level) : block}
+                    {tooltips.colorLegend ? (
+                      <Tooltip
+                        text={tooltips.colorLegend.text(level)}
+                        placement={tooltips.colorLegend.placement ?? 'bottom'}
+                        withArrow={tooltips.colorLegend.withArrow}
+                        colorScheme={colorScheme}
+                      >
+                        {renderedColorLegend}
+                      </Tooltip>
+                    ) : (
+                      renderedColorLegend
+                    )}
                   </Fragment>
                 )
               })}
