@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
+import type { ColorScheme } from '../types'
 
 export function useColorScheme() {
-  const [colorScheme, setColorScheme] = useState<'light' | 'dark'>('light')
+  const [colorScheme, setColorScheme] = useState<ColorScheme>('light')
 
   const onChange = (event: MediaQueryListEvent) => {
     setColorScheme(event.matches ? 'dark' : 'light')
