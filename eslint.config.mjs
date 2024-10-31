@@ -39,6 +39,6 @@ export default typescript.config(
   },
   {
     // Note: there must be no other properties in this object
-    ignores: ['build/', 'coverage/', 'docs/', 'examples/', 'rollup.config.mjs'],
+    ignores: ['dist/', 'coverage/', 'docs/', 'examples/', 'rollup.config.mjs'],
   },
 )
