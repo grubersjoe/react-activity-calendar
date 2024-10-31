@@ -11,8 +11,8 @@ export default typescript.config(
   ...typescript.configs.strictTypeChecked,
   {
     ignores: [
-      'build/',
       'coverage/',
+      'dist/',
       'docs/',
       'examples/',
       'eslint.config.mjs',
@@ -22,6 +22,7 @@ export default typescript.config(
   },
   {
     rules: {
+      '@typescript-eslint/no-confusing-void-expression': ['error', { ignoreArrowShorthand: true }],
       '@typescript-eslint/restrict-template-expressions': 'off',
       'no-console': 'error',
     },

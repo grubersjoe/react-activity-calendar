@@ -9,10 +9,10 @@
     "type": "git",
     "url": "git+https://github.com/grubersjoe/react-activity-calendar.git"
   },
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "build"
+    "dist"
   ],
   "scripts": {
     "build": "rollup -c",
@@ -22,13 +22,14 @@
     "dev": "storybook dev -p 9000",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "postbuild": "dts-bundle-generator src/index.tsx -o build/index.d.ts --no-check --no-banner --external-imports react date-fns",
+    "postbuild": "dts-bundle-generator src/index.tsx -o dist/index.d.ts --no-check --no-banner --external-imports react date-fns @floating-ui/react",
     "prepublishOnly": "pnpm check && pnpm build",
     "start": "rollup -c -w",
     "test": "jest",
     "prepare": "husky"
   },
   "dependencies": {
+    "@floating-ui/react-dom": "^2.1.2",
     "date-fns": "^4.1.0"
   },
   "devDependencies": {
