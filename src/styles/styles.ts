@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import type { ColorScheme } from '../types'
 
 export const styles = {
   container: (fontSize: number) =>
@@ -21,7 +22,7 @@ export const styles = {
     display: 'block', // SVGs are inline-block by default
     overflow: 'visible', // Weekday labels are rendered left of the container
   } satisfies CSSProperties,
-  rect: (colorScheme: 'light' | 'dark') =>
+  rect: (colorScheme: ColorScheme) =>
     ({
       stroke: colorScheme === 'light' ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.04)',
     }) satisfies CSSProperties,
