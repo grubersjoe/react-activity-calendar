@@ -1,6 +1,6 @@
 {
   "name": "react-activity-calendar",
-  "version": "2.7.15",
+  "version": "3.0.0-alpha.0",
   "description": "React component to display activity data in calendar",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
@@ -22,7 +22,7 @@
     "dev": "storybook dev -p 9000",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "postbuild": "dts-bundle-generator src/index.tsx -o build/index.d.ts --no-check --no-banner --external-imports react date-fns",
+    "postbuild": "dts-bundle-generator src/index.tsx -o build/index.d.ts --no-check --no-banner --external-imports react date-fns @floating-ui/react",
     "prepublishOnly": "pnpm check && pnpm build",
     "start": "rollup -c -w",
     "test": "pnpm test:unit && pnpm test:visual",
@@ -32,6 +32,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.12",
     "date-fns": "^4.1.0"
   },
   "devDependencies": {
@@ -39,13 +40,10 @@
     "@babel/preset-env": "^7.27.2",
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
     "@eslint/js": "^9.30.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
     "@jest/globals": "^30.0.3",
     "@jest/types": "^30.0.1",
-    "@mui/material": "^7.2.0",
     "@playwright/test": "^1.56.1",
     "@rollup/plugin-babel": "^6.1.0",
     "@rollup/plugin-commonjs": "^28.0.6",
@@ -70,9 +68,7 @@
     "prism-react-renderer": "^2.4.1",
     "react": "^19.1.0",
     "react-docgen": "^8.0.2",
-    "react-dom": "^19.1.0",
     "react-ga4": "^2.1.0",
-    "react-tooltip": "^5.30.0",
     "rollup": "^4.44.1",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-filesize": "^10.0.0",

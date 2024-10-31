@@ -92,8 +92,12 @@ function fillHoles(activities: Array<Activity>): Array<Activity> {
   })
 }
 
-export function getClassName(name: string) {
-  return `${NAMESPACE}__${name}`
+/**
+ * Following the BEM (block, element, modifier) naming convention
+ * https://getbem.com/naming/
+ */
+export function getClassName(element: string) {
+  return `${NAMESPACE}__${element}`
 }
 
 export function range(n: number) {
