@@ -6,13 +6,9 @@ import type {
   DragEvent,
   FocusEvent,
   FormEvent,
-  HTMLAttributes,
-  JSXElementConstructor,
   KeyboardEvent,
   MouseEvent,
   PointerEvent,
-  ReactElement,
-  SVGAttributes,
   SyntheticEvent,
   TouchEvent,
   TransitionEvent,
@@ -64,9 +60,7 @@ export type ThemeInput =
       dark: ColorScale;
     };
 
-interface BlockAttributes extends SVGAttributes<SVGRectElement>, HTMLAttributes<SVGRectElement> {}
-
-export type BlockElement = ReactElement<BlockAttributes, JSXElementConstructor<SVGRectElement>>;
+export type ColorScheme = 'light' | 'dark';
 
 export type SVGRectEventHandler = Omit<
   DOMAttributes<SVGRectElement>,
