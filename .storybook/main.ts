@@ -13,7 +13,6 @@ const config: StorybookConfig = {
         actions: false,
       },
     },
-    '@storybook/addon-google-analytics',
     '@storybook/addon-links',
     'storybook-dark-mode',
   ],
