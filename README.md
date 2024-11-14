@@ -28,7 +28,7 @@ interval from 0 to `maxLevel`, which is 4 per default (see
 It is up to you how to generate and classify your data.
 
 ```tsx
-import { ActivityCalendar } from 'react-actitivy-calendar';
+import { ActivityCalendar } from 'react-activity-calendar';
 
 const data = [
   {
