@@ -5,11 +5,16 @@ import { themes, type ThemeVarsPartial } from '@storybook/theming';
 import { DARK_MODE_EVENT_NAME } from 'storybook-dark-mode';
 import './storybook.scss';
 
-const baseTheme: ThemeVarsPartial = {
+const baseTheme = {
   base: 'light',
   brandTitle: 'React Activity Calendar',
   brandUrl: 'https://github.com/grubersjoe/react-activity-calendar',
-};
+} satisfies ThemeVarsPartial;
+
+const themeOverride = {
+  fontBase: 'ui-sans-serif, sans-serif',
+  fontCode: 'ui-monospace, monospace',
+} satisfies Omit<ThemeVarsPartial, 'base'>;
 
 const Container = (props: DocsContainerProps) => {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -36,6 +41,7 @@ const Container = (props: DocsContainerProps) => {
       theme={{
         ...baseTheme,
         ...theme,
+        ...themeOverride,
       }}
     />
   );
@@ -52,8 +58,8 @@ export const preview: Preview = {
     },
     darkMode: {
       stylePreview: true,
-      dark: { ...baseTheme, ...themes.dark },
-      light: { ...baseTheme, ...themes.light },
+      dark: { ...baseTheme, ...themes.dark, ...themeOverride },
+      light: { ...baseTheme, ...themes.light, ...themeOverride },
     },
   },
 };

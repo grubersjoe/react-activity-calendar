@@ -9,7 +9,7 @@ import {
 import { Tooltip as MuiTooltip } from '@mui/material';
 import LinkTo from '@storybook/addon-links/react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Highlight, themes as prismThemes } from 'prism-react-renderer';
+import { themes } from '@storybook/theming';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 import { useDarkMode } from 'storybook-dark-mode';
@@ -556,7 +556,7 @@ export const LocalizedLabels: Story = {
     return (
       <Container>
         <h1>Localization</h1>
-        <p>(Example in German)</p>
+        <p>Example in German.</p>
         <ActivityCalendar {...args} data={data} style={{ margin: '2rem 0' }} />
         <Source code={exampleLabelsShape} isDarkMode={useDarkMode()} />
       </Container>
@@ -651,40 +651,23 @@ const StackHeading = ({ children, code }: { children: string; code?: string }) =
   </div>
 );
 
-const Source = ({
-  code,
-  isDarkMode,
-  language = 'tsx',
-}: {
-  code: string;
-  isDarkMode: boolean;
-  language?: string;
-}) => {
+const Source = ({ code, isDarkMode }: { code: string; isDarkMode: boolean }) => {
+  const theme = isDarkMode ? themes.dark : themes.light;
+
   return (
-    <div>
-      <Highlight
-        code={code.trim()}
-        language={language}
-        theme={isDarkMode ? prismThemes.vsDark : prismThemes.vsLight}
-      >
-        {({ style, tokens, getLineProps, getTokenProps }) => (
-          <pre
-            style={Object.assign({}, style, {
-              margin: '1rem 0 2rem',
-              backgroundColor: 'transparent',
-              whiteSpace: 'pre-wrap',
-            })}
-          >
-            {tokens.map((line, i) => (
-              <div key={i} {...getLineProps({ line })}>
-                {line.map((token, key) => (
-                  <span key={key} {...getTokenProps({ token })} />
-                ))}
-              </div>
-            ))}
-          </pre>
-        )}
-      </Highlight>
-    </div>
+    <pre
+      style={{
+        margin: '1rem 0 2rem',
+        padding: '0.75em',
+        whiteSpace: 'pre-wrap',
+        backgroundColor: theme.appBg,
+        border: `1px solid ${theme.appBorderColor}`,
+        borderRadius: theme.appBorderRadius,
+        color: theme.textColor,
+        lineHeight: 1.3,
+      }}
+    >
+      <code>{code.trim()}</code>
+    </pre>
   );
 };
