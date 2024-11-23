@@ -29,6 +29,7 @@ export default {
   },
   plugins: [
     replace({
+      preventAssignment: true, // recommended to set this to true, will be default in the next major version
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
     ...(useExternal ? [externalDeps({ includeDependencies: true })] : [commonjs()]),
