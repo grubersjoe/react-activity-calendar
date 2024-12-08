@@ -90,9 +90,6 @@ importers:
       '@types/react':
         specifier: ^18.3.11
         version: 18.3.12
-      '@types/react-dom':
-        specifier: ^18.3.0
-        version: 18.3.1
       '@types/react-syntax-highlighter':
         specifier: ^15.5.13
         version: 15.5.13
@@ -132,9 +129,6 @@ importers:
       react-docgen:
         specifier: ^7.1.0
         version: 7.1.0
-      react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
       react-ga4:
         specifier: ^2.1.0
         version: 2.1.0
@@ -7027,6 +7021,7 @@ snapshots:
   '@types/react-dom@18.3.1':
     dependencies:
       '@types/react': 18.3.12
+    optional: true
 
   '@types/react-syntax-highlighter@15.5.13':
     dependencies:

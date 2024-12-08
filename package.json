@@ -1,6 +1,6 @@
 {
   "name": "react-activity-calendar",
-  "version": "2.7.2",
+  "version": "2.7.3",
   "description": "React component to display activity data in calendar",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
@@ -58,7 +58,6 @@
     "@storybook/theming": "^8.4.7",
     "@types/eslint__js": "^8.42.3",
     "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.0",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@vitejs/plugin-react": "^4.3.4",
     "dts-bundle-generator": "^9.5.1",
@@ -72,7 +71,6 @@
     "prettier": "^3.4.2",
     "react": "^18.3.1",
     "react-docgen": "^7.1.0",
-    "react-dom": "^18.3.1",
     "react-ga4": "^2.1.0",
     "react-syntax-highlighter": "^15.6.1",
     "react-tooltip": "^5.27.0",
@@ -89,8 +87,7 @@
     "vite-plugin-replace": "^0.1.1"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^18.0.0"
   },
   "jest": {
     "testEnvironment": "jsdom"
