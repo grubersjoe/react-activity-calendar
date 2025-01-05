@@ -60,10 +60,10 @@ function validateInput(input: ThemeInput, steps: number) {
   }
 }
 
-function calcColorScale(colors: [from: Color, to: Color], steps: number): ColorScale {
+function calcColorScale([start, end]: [Color, Color], steps: number): ColorScale {
   return range(steps).map(i => {
-    const mixFactor = (i / (steps - 1)) * 100;
-    return `color-mix(in oklab, ${colors[1]} ${parseFloat(mixFactor.toFixed(2))}%, ${colors[0]})`;
+    const pos = (i / (steps - 1)) * 100;
+    return `color-mix(in oklab, ${end} ${parseFloat(pos.toFixed(2))}%, ${start})`;
   });
 }
 
