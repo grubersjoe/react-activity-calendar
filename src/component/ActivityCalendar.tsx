@@ -393,6 +393,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
           {getMonthLabels(weeks, labels.months).map(({ label, weekIndex }) => (
             <text
               x={(blockSize + blockMargin) * weekIndex}
+              y={0}
               dominantBaseline="hanging"
               fill="currentColor"
               key={weekIndex}
@@ -412,7 +413,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
         className={NAMESPACE}
         style={{ ...styleProp, ...styles.container(fontSize) }}
       >
-        <div className={getClassName('scroll-container')} style={styles.scrollContainer}>
+        <div className={getClassName('scroll-container')} style={styles.scrollContainer(fontSize)}>
           <svg
             width={width}
             height={height}

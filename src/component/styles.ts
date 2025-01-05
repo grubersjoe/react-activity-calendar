@@ -10,11 +10,13 @@ export const styles = {
       gap: '8px',
       fontSize: `${fontSize}px`,
     }) satisfies CSSProperties,
-  scrollContainer: {
-    maxWidth: '100%',
-    overflowX: 'auto',
-    overflowY: 'hidden',
-  } satisfies CSSProperties,
+  scrollContainer: (fontSize: number) =>
+    ({
+      maxWidth: '100%',
+      overflowX: 'auto',
+      overflowY: 'hidden',
+      paddingTop: Math.ceil(0.1 * fontSize), // SVG <text> overflows in Firefox at y=0
+    }) satisfies CSSProperties,
   calendar: {
     display: 'block', // SVGs are inline-block by default
     overflow: 'visible', // Weekday labels are rendered left of the container
