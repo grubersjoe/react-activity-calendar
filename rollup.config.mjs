@@ -1,17 +1,17 @@
-import babel from '@rollup/plugin-babel';
-import commonjs from '@rollup/plugin-commonjs';
-import resolve from '@rollup/plugin-node-resolve';
-import replace from '@rollup/plugin-replace';
-import copy from 'rollup-plugin-copy';
-import filesize from 'rollup-plugin-filesize';
-import externalDeps from 'rollup-plugin-peer-deps-external';
-import { visualizer } from 'rollup-plugin-visualizer';
+import babel from '@rollup/plugin-babel'
+import commonjs from '@rollup/plugin-commonjs'
+import resolve from '@rollup/plugin-node-resolve'
+import replace from '@rollup/plugin-replace'
+import copy from 'rollup-plugin-copy'
+import filesize from 'rollup-plugin-filesize'
+import externalDeps from 'rollup-plugin-peer-deps-external'
+import { visualizer } from 'rollup-plugin-visualizer'
 
-const extensions = ['.ts', '.tsx'];
+const extensions = ['.ts', '.tsx']
 
 // Pass EXTERNAL_DEPS=false to bundle this project including all dependencies.
 // Useful to analyze the bundle size.
-const useExternal = process.env.EXTERNAL_DEPS?.toLowerCase() !== 'false';
+const useExternal = process.env.EXTERNAL_DEPS?.toLowerCase() !== 'false'
 
 export default {
   input: 'src/index.tsx',
@@ -51,8 +51,8 @@ export default {
   ],
   onwarn(warning, warn) {
     if (warning.code === 'MODULE_LEVEL_DIRECTIVE' && warning.message.includes('use client')) {
-      return; // ignore the error for now
+      return // ignore the error for now
     }
-    warn(warning);
+    warn(warning)
   },
-};
+}

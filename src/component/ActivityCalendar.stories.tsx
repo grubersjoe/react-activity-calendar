@@ -5,30 +5,30 @@ import {
   useRef,
   type ForwardedRef,
   type ReactElement,
-} from 'react';
-import { Tooltip as MuiTooltip } from '@mui/material';
-import LinkTo from '@storybook/addon-links/react';
-import type { Meta, StoryObj } from '@storybook/react';
-import { themes } from '@storybook/theming';
-import { Tooltip as ReactTooltip } from 'react-tooltip';
-import 'react-tooltip/dist/react-tooltip.css';
-import { useDarkMode } from 'storybook-dark-mode';
-import Container from '../../.storybook/components/Container';
-import exampleCustomization from '../../examples/customization?raw';
-import exampleEventHandlersInterface from '../../examples/event-handlers-type?raw';
-import exampleEventHandlers from '../../examples/event-handlers?raw';
-import exampleLabelsShape from '../../examples/labels-shape?raw';
-import exampleLabels from '../../examples/labels?raw';
-import exampleRef from '../../examples/ref?raw';
-import exampleThemeExplicit from '../../examples/themes-explicit?raw';
-import exampleTheme from '../../examples/themes?raw';
-import exampleTooltipsMui from '../../examples/tooltips-mui?raw';
-import exampleTooltipsReact from '../../examples/tooltips-react?raw';
-import { generateTestData } from '../lib/calendar';
-import type { Theme } from '../types';
-import { ActivityCalendar, type Props } from './ActivityCalendar';
+} from 'react'
+import { Tooltip as MuiTooltip } from '@mui/material'
+import LinkTo from '@storybook/addon-links/react'
+import type { Meta, StoryObj } from '@storybook/react'
+import { themes } from '@storybook/theming'
+import { Tooltip as ReactTooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+import { useDarkMode } from 'storybook-dark-mode'
+import Container from '../../.storybook/components/Container'
+import exampleCustomization from '../../examples/customization?raw'
+import exampleEventHandlersInterface from '../../examples/event-handlers-type?raw'
+import exampleEventHandlers from '../../examples/event-handlers?raw'
+import exampleLabelsShape from '../../examples/labels-shape?raw'
+import exampleLabels from '../../examples/labels?raw'
+import exampleRef from '../../examples/ref?raw'
+import exampleThemeExplicit from '../../examples/themes-explicit?raw'
+import exampleTheme from '../../examples/themes?raw'
+import exampleTooltipsMui from '../../examples/tooltips-mui?raw'
+import exampleTooltipsReact from '../../examples/tooltips-react?raw'
+import { generateTestData } from '../lib/calendar'
+import type { Theme } from '../types'
+import { ActivityCalendar, type Props } from './ActivityCalendar'
 
-type Story = StoryObj<Props>;
+type Story = StoryObj<Props>
 
 /* eslint-disable react-hooks/rules-of-hooks */
 
@@ -85,9 +85,9 @@ const meta: Meta<ForwardedRef<Props>> = {
   decorators: [
     (Story, { args }) => {
       // @ts-expect-error unsure if typing forward refs correctly is possible
-      args.colorScheme = useDarkMode() ? 'dark' : 'light';
+      args.colorScheme = useDarkMode() ? 'dark' : 'light'
 
-      return <Story />;
+      return <Story />
     },
   ],
   parameters: {
@@ -97,7 +97,7 @@ const meta: Meta<ForwardedRef<Props>> = {
     layout: 'centered',
   },
   tags: ['autodocs'],
-};
+}
 
 // Storybook does not initialize the controls for some reason
 const defaultProps = {
@@ -112,19 +112,19 @@ const defaultProps = {
   maxLevel: 4,
   showWeekdayLabels: false,
   weekStart: 0, // Sunday
-} satisfies Omit<Props, 'data'>;
+} satisfies Omit<Props, 'data'>
 
-export default meta;
+export default meta
 const explicitTheme: Theme = {
   light: ['#f0f0f0', '#c4edde', '#7ac7c4', '#f73859', '#384259'],
   dark: ['hsl(0, 0%, 22%)', '#4D455D', '#7DB9B6', '#F5E9CF', '#E96479'],
-};
+}
 
 export const Default: Story = {
   args: defaultProps,
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
-    return <ActivityCalendar {...args} data={data} />;
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    return <ActivityCalendar {...args} data={data} />
   },
   parameters: {
     docs: {
@@ -133,7 +133,7 @@ export const Default: Story = {
       },
     },
   },
-};
+}
 
 export const Loading: Story = {
   args: {
@@ -148,7 +148,7 @@ export const Loading: Story = {
       },
     },
   },
-};
+}
 
 export const ActivityLevels: Story = {
   args: {
@@ -156,7 +156,7 @@ export const ActivityLevels: Story = {
     maxLevel: 2,
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
 
     return (
       <Container>
@@ -172,7 +172,7 @@ export const ActivityLevels: Story = {
           per default.
         </p>
       </Container>
-    );
+    )
   },
   parameters: {
     docs: {
@@ -181,7 +181,7 @@ export const ActivityLevels: Story = {
       },
     },
   },
-};
+}
 
 export const DateRanges: Story = {
   args: defaultProps,
@@ -196,7 +196,7 @@ export const DateRanges: Story = {
           },
         }),
       [args.maxLevel],
-    );
+    )
 
     const dataMedium = useMemo(
       () =>
@@ -208,7 +208,7 @@ export const DateRanges: Story = {
           },
         }),
       [args.maxLevel],
-    );
+    )
 
     const dataShort = useMemo(
       () =>
@@ -220,7 +220,7 @@ export const DateRanges: Story = {
           },
         }),
       [args.maxLevel],
-    );
+    )
 
     return (
       <Stack>
@@ -234,9 +234,9 @@ export const DateRanges: Story = {
         <ActivityCalendar {...args} data={dataMedium} />
         <ActivityCalendar {...args} data={dataShort} />
       </Stack>
-    );
+    )
   },
-};
+}
 
 export const ColorThemes: Story = {
   args: {
@@ -254,7 +254,7 @@ export const ColorThemes: Story = {
     },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
 
     return (
       <Container>
@@ -290,9 +290,9 @@ export const ColorThemes: Story = {
         </p>
         <Source code={exampleTheme} isDarkMode={useDarkMode()} />
       </Container>
-    );
+    )
   },
-};
+}
 
 export const ExplicitThemes: Story = {
   args: {
@@ -309,7 +309,7 @@ export const ExplicitThemes: Story = {
     },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: 4 }), []);
+    const data = useMemo(() => generateTestData({ maxLevel: 4 }), [])
 
     return (
       <Container>
@@ -324,9 +324,9 @@ export const ExplicitThemes: Story = {
         </p>
         <ActivityCalendar {...args} data={data} style={{ marginTop: '2rem' }} />
       </Container>
-    );
+    )
   },
-};
+}
 
 export const Customization: Story = {
   args: {
@@ -338,8 +338,8 @@ export const Customization: Story = {
     theme: explicitTheme,
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
-    return <ActivityCalendar {...args} data={data} />;
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    return <ActivityCalendar {...args} data={data} />
   },
   parameters: {
     // maxLevel cannot be used for a static explicit theme
@@ -350,18 +350,18 @@ export const Customization: Story = {
       },
     },
   },
-};
+}
 
 export const EventHandlers: Story = {
   args: {
     ...defaultProps,
     eventHandlers: {
       onClick: () => activity => {
-        alert(JSON.stringify(activity));
+        alert(JSON.stringify(activity))
       },
       onMouseEnter: () => () => {
         // eslint-disable-next-line no-console
-        console.log('on mouse enter');
+        console.log('on mouse enter')
       },
     },
   },
@@ -373,7 +373,7 @@ export const EventHandlers: Story = {
     },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
 
     return (
       <Container>
@@ -389,9 +389,9 @@ export const EventHandlers: Story = {
         <ActivityCalendar {...args} data={data} style={{ margin: '2rem 0' }} />
         <Source code={exampleEventHandlers} isDarkMode={useDarkMode()} />
       </Container>
-    );
+    )
   },
-};
+}
 
 export const Tooltips: Story = {
   args: defaultProps,
@@ -403,7 +403,7 @@ export const Tooltips: Story = {
     },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
 
     return (
       <Container>
@@ -464,9 +464,9 @@ export const Tooltips: Story = {
         />
         <ReactTooltip id="react-tooltip" />
       </Container>
-    );
+    )
   },
-};
+}
 
 export const WithoutLabels: Story = {
   args: {
@@ -476,8 +476,8 @@ export const WithoutLabels: Story = {
     hideTotalCount: true,
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
-    return <ActivityCalendar {...args} data={data} />;
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    return <ActivityCalendar {...args} data={data} />
   },
   parameters: {
     docs: {
@@ -486,7 +486,7 @@ export const WithoutLabels: Story = {
       },
     },
   },
-};
+}
 
 export const WeekdayLabels: Story = {
   args: {
@@ -494,7 +494,7 @@ export const WeekdayLabels: Story = {
     showWeekdayLabels: true,
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
     return (
       <Stack>
         <div>
@@ -518,7 +518,7 @@ export const WeekdayLabels: Story = {
           />
         </div>
       </Stack>
-    );
+    )
   },
   parameters: {
     docs: {
@@ -527,7 +527,7 @@ export const WeekdayLabels: Story = {
       },
     },
   },
-};
+}
 
 export const LocalizedLabels: Story = {
   args: {
@@ -551,7 +551,7 @@ export const LocalizedLabels: Story = {
     },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
 
     return (
       <Container>
@@ -560,9 +560,9 @@ export const LocalizedLabels: Story = {
         <ActivityCalendar {...args} data={data} style={{ margin: '2rem 0' }} />
         <Source code={exampleLabelsShape} isDarkMode={useDarkMode()} />
       </Container>
-    );
+    )
   },
-};
+}
 
 export const MondayAsWeekStart: Story = {
   args: {
@@ -570,8 +570,8 @@ export const MondayAsWeekStart: Story = {
     weekStart: 1,
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
-    return <ActivityCalendar {...args} data={data} />;
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    return <ActivityCalendar {...args} data={data} />
   },
   parameters: {
     docs: {
@@ -580,7 +580,7 @@ export const MondayAsWeekStart: Story = {
       },
     },
   },
-};
+}
 
 export const NarrowScreens: Story = {
   args: defaultProps,
@@ -592,15 +592,15 @@ export const NarrowScreens: Story = {
     },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
 
     return (
       <div style={{ width: 480, maxWidth: '100%', border: 'dashed 1px #929292' }}>
         <ActivityCalendar {...args} data={data} />
       </div>
-    );
+    )
   },
-};
+}
 
 export const ContainerRef: Story = {
   args: defaultProps,
@@ -612,13 +612,13 @@ export const ContainerRef: Story = {
     },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel]);
-    const calendarRef = useRef<HTMLElement>(null);
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    const calendarRef = useRef<HTMLElement>(null)
 
     useEffect(() => {
       // eslint-disable-next-line no-console
-      console.log('calendar ref', calendarRef);
-    }, [calendarRef]);
+      console.log('calendar ref', calendarRef)
+    }, [calendarRef])
 
     return (
       <>
@@ -626,13 +626,13 @@ export const ContainerRef: Story = {
         <br />
         <p>Check the JavaScript console to see the ref logged.</p>
       </>
-    );
+    )
   },
-};
+}
 
 const Stack = ({ children }: { children: Array<ReactElement> }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>{children}</div>
-);
+)
 
 const StackHeading = ({ children, code }: { children: string; code?: string }) => (
   <div
@@ -649,10 +649,10 @@ const StackHeading = ({ children, code }: { children: string; code?: string }) =
     {children}
     {code && <code style={{ fontSize: 13, fontWeight: 'normal' }}>{code}</code>}
   </div>
-);
+)
 
 const Source = ({ code, isDarkMode }: { code: string; isDarkMode: boolean }) => {
-  const theme = isDarkMode ? themes.dark : themes.light;
+  const theme = isDarkMode ? themes.dark : themes.light
 
   return (
     <pre
@@ -669,5 +669,5 @@ const Source = ({ code, isDarkMode }: { code: string; isDarkMode: boolean }) => 
     >
       <code>{code.trim()}</code>
     </pre>
-  );
-};
+  )
+}

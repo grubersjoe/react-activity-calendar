@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
   forwardRef,
@@ -8,21 +8,21 @@ import {
   type CSSProperties,
   type ForwardedRef,
   type ReactElement,
-} from 'react';
-import { getYear, parseISO } from 'date-fns';
-import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants';
-import { useColorScheme } from '../hooks/useColorScheme';
-import { loadingAnimationName, useLoadingAnimation } from '../hooks/useLoadingAnimation';
-import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
+} from 'react'
+import { getYear, parseISO } from 'date-fns'
+import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants'
+import { useColorScheme } from '../hooks/useColorScheme'
+import { loadingAnimationName, useLoadingAnimation } from '../hooks/useLoadingAnimation'
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 import {
   generateEmptyData,
   getClassName,
   groupByWeeks,
   range,
   validateActivities,
-} from '../lib/calendar';
-import { getMonthLabels, initWeekdayLabels, maxWeekdayLabelWidth } from '../lib/label';
-import { createTheme } from '../lib/theme';
+} from '../lib/calendar'
+import { getMonthLabels, initWeekdayLabels, maxWeekdayLabelWidth } from '../lib/label'
+import { createTheme } from '../lib/theme'
 import type {
   Activity,
   BlockElement,
@@ -33,8 +33,8 @@ import type {
   ReactEvent,
   SVGRectEventHandler,
   ThemeInput,
-} from '../types';
-import { styles } from './styles';
+} from '../types'
+import { styles } from './styles'
 
 export interface Props {
   /**
@@ -57,85 +57,85 @@ export interface Props {
    * }
    * ```
    */
-  data: Array<Activity>;
+  data: Array<Activity>
   /**
    * Margin between blocks in pixels.
    */
-  blockMargin?: number;
+  blockMargin?: number
   /**
    * Border radius of blocks in pixels.
    */
-  blockRadius?: number;
+  blockRadius?: number
   /**
    * Block size in pixels.
    */
-  blockSize?: number;
+  blockSize?: number
   /**
    * Use a specific color scheme instead of the system one. Supported values
    * are `'light'` and `'dark'`.
    */
-  colorScheme?: 'light' | 'dark';
+  colorScheme?: 'light' | 'dark'
   /**
    * Event handlers to register for the SVG `<rect>` elements that are used to
    * render the calendar days. Handler signature: `event => activity => void`
    */
-  eventHandlers?: EventHandlerMap;
+  eventHandlers?: EventHandlerMap
   /**
    * Font size for text in pixels.
    */
-  fontSize?: number;
+  fontSize?: number
   /**
    * Toggle to hide color legend below calendar.
    */
-  hideColorLegend?: boolean;
+  hideColorLegend?: boolean
   /**
    * Toggle to hide month labels above calendar.
    */
-  hideMonthLabels?: boolean;
+  hideMonthLabels?: boolean
   /**
    * Toggle to hide the total count below calendar.
    */
-  hideTotalCount?: boolean;
+  hideTotalCount?: boolean
   /**
    * Localization strings for all calendar labels.
    *
    * `totalCount` supports the placeholders `{{count}}` and `{{year}}`.
    */
-  labels?: Labels;
+  labels?: Labels
   /**
    * Maximum activity level (zero indexed).
    */
-  maxLevel?: number;
+  maxLevel?: number
   /**
    * Toggle for loading state. `data` property will be ignored if set.
    */
-  loading?: boolean;
+  loading?: boolean
   /**
    * Ref to access the calendar DOM node.
    */
-  ref?: ForwardedRef<HTMLElement>;
+  ref?: ForwardedRef<HTMLElement>
   /**
    * Render prop for calendar blocks (activities). For example, useful to wrap
    * the element with a tooltip component. Use `React.cloneElement` to pass
    * additional props to the element if necessary.
    */
-  renderBlock?: (block: BlockElement, activity: Activity) => ReactElement;
+  renderBlock?: (block: BlockElement, activity: Activity) => ReactElement
   /**
    * Render prop for color legend blocks. For example, useful to wrap the
    * element with a tooltip component. Use `React.cloneElement` to pass
    * additional props to the element if necessary.
    */
-  renderColorLegend?: (block: BlockElement, level: number) => ReactElement;
+  renderColorLegend?: (block: BlockElement, level: number) => ReactElement
   /**
    * Toggle to show weekday labels left to the calendar.
    * Alternatively, pass a list of ISO 8601 weekday names to show.
    * For example `['mon', 'wed', 'fri']`.
    */
-  showWeekdayLabels?: boolean | Array<DayName>;
+  showWeekdayLabels?: boolean | Array<DayName>
   /**
    * Style object to pass to component container.
    */
-  style?: CSSProperties;
+  style?: CSSProperties
   /**
    * Set the calendar colors for the light and dark system color scheme.
    * Define each color scale explicitly by settings all colors (5 per default)
@@ -159,15 +159,15 @@ export interface Props {
    * ```
    *
    */
-  theme?: ThemeInput;
+  theme?: ThemeInput
   /**
    * Overwrite the total activity count.
    */
-  totalCount?: number;
+  totalCount?: number
   /**
    * Index of day to be used as start of week. 0 represents Sunday.
    */
-  weekStart?: DayIndex;
+  weekStart?: DayIndex
 }
 
 export const ActivityCalendar = forwardRef<HTMLElement, Props>(
@@ -196,48 +196,48 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     }: Props, // Required for react-docgen
     ref,
   ) => {
-    const [isClient, setIsClient] = useState(false);
+    const [isClient, setIsClient] = useState(false)
     useEffect(() => {
-      setIsClient(true);
-    }, []);
+      setIsClient(true)
+    }, [])
 
-    maxLevel = Math.max(1, maxLevel);
+    maxLevel = Math.max(1, maxLevel)
 
-    const theme = createTheme(themeProp, maxLevel + 1);
-    const systemColorScheme = useColorScheme();
-    const colorScheme = colorSchemeProp ?? systemColorScheme;
-    const colorScale = theme[colorScheme];
+    const theme = createTheme(themeProp, maxLevel + 1)
+    const systemColorScheme = useColorScheme()
+    const colorScheme = colorSchemeProp ?? systemColorScheme
+    const colorScale = theme[colorScheme]
 
-    useLoadingAnimation(colorScale[0] as string, colorScheme);
-    const useAnimation = !usePrefersReducedMotion();
+    useLoadingAnimation(colorScale[0] as string, colorScheme)
+    const useAnimation = !usePrefersReducedMotion()
 
     if (loading) {
-      activities = generateEmptyData();
+      activities = generateEmptyData()
     }
 
-    validateActivities(activities, maxLevel);
+    validateActivities(activities, maxLevel)
 
-    const firstActivity = activities[0] as Activity;
-    const year = getYear(parseISO(firstActivity.date));
-    const weeks = groupByWeeks(activities, weekStart);
+    const firstActivity = activities[0] as Activity
+    const year = getYear(parseISO(firstActivity.date))
+    const weeks = groupByWeeks(activities, weekStart)
 
-    const labels = Object.assign({}, DEFAULT_LABELS, labelsProp);
-    const labelHeight = hideMonthLabels ? 0 : fontSize + LABEL_MARGIN;
+    const labels = Object.assign({}, DEFAULT_LABELS, labelsProp)
+    const labelHeight = hideMonthLabels ? 0 : fontSize + LABEL_MARGIN
 
-    const weekdayLabels = initWeekdayLabels(showWeekdayLabels, weekStart);
+    const weekdayLabels = initWeekdayLabels(showWeekdayLabels, weekStart)
 
     // Must be calculated on the client or SSR hydration errors will occur
     // because server and client HTML would not match.
     const weekdayLabelOffset =
       isClient && weekdayLabels.shouldShow
         ? maxWeekdayLabelWidth(labels.weekdays, weekdayLabels, fontSize) + LABEL_MARGIN
-        : undefined;
+        : undefined
 
     function getDimensions() {
       return {
         width: weeks.length * (blockSize + blockMargin) - blockMargin,
         height: labelHeight + (blockSize + blockMargin) * 7 - blockMargin,
-      };
+      }
     }
 
     function getEventHandlers(activity: Activity): SVGRectEventHandler {
@@ -249,7 +249,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
           [key]: (event: ReactEvent<SVGRectElement>) => eventHandlers[key]?.(event)(activity),
         }),
         {},
-      );
+      )
     }
 
     function renderCalendar() {
@@ -257,7 +257,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
         .map((week, weekIndex) =>
           week.map((activity, dayIndex) => {
             if (!activity) {
-              return null;
+              return null
             }
 
             const loadingAnimation =
@@ -266,7 +266,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                     animation: `${loadingAnimationName} 1.75s ease-in-out infinite`,
                     animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
                   }
-                : undefined;
+                : undefined
 
             const block = (
               <rect
@@ -282,31 +282,31 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                 data-level={activity.level}
                 style={{ ...styles.rect(colorScheme), ...loadingAnimation }}
               />
-            );
+            )
 
             return (
               <Fragment key={activity.date}>
                 {renderBlock ? renderBlock(block, activity) : block}
               </Fragment>
-            );
+            )
           }),
         )
         .map((week, x) => (
           <g key={x} transform={`translate(${(blockSize + blockMargin) * x}, 0)`}>
             {week}
           </g>
-        ));
+        ))
     }
 
     function renderFooter() {
       if (hideTotalCount && hideColorLegend) {
-        return null;
+        return null
       }
 
       const totalCount =
         typeof totalCountProp === 'number'
           ? totalCountProp
-          : activities.reduce((sum, activity) => sum + activity.count, 0);
+          : activities.reduce((sum, activity) => sum + activity.count, 0)
 
       return (
         <footer
@@ -341,29 +341,29 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                       style={styles.rect(colorScheme)}
                     />
                   </svg>
-                );
+                )
 
-                return renderColorLegend ? renderColorLegend(block, level) : block;
+                return renderColorLegend ? renderColorLegend(block, level) : block
               })}
               <span style={{ marginLeft: '0.4em' }}>{labels.legend.more}</span>
             </div>
           )}
         </footer>
-      );
+      )
     }
 
     function renderWeekdayLabels() {
       if (!weekdayLabels.shouldShow) {
-        return null;
+        return null
       }
 
       return (
         <g className={getClassName('legend-weekday')}>
           {range(7).map(index => {
-            const dayIndex = ((index + weekStart) % 7) as DayIndex;
+            const dayIndex = ((index + weekStart) % 7) as DayIndex
 
             if (!weekdayLabels.byDayIndex(dayIndex)) {
-              return null;
+              return null
             }
 
             return (
@@ -377,15 +377,15 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
               >
                 {labels.weekdays[dayIndex]}
               </text>
-            );
+            )
           })}
         </g>
-      );
+      )
     }
 
     function renderMonthLabels() {
       if (hideMonthLabels) {
-        return null;
+        return null
       }
 
       return (
@@ -402,10 +402,10 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
             </text>
           ))}
         </g>
-      );
+      )
     }
 
-    const { width, height } = getDimensions();
+    const { width, height } = getDimensions()
 
     return (
       <article
@@ -428,10 +428,10 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
         </div>
         {renderFooter()}
       </article>
-    );
+    )
   },
-);
+)
 
-ActivityCalendar.displayName = 'ActivityCalendar';
+ActivityCalendar.displayName = 'ActivityCalendar'
 
-export const Skeleton = (props: Omit<Props, 'data'>) => <ActivityCalendar data={[]} {...props} />;
+export const Skeleton = (props: Omit<Props, 'data'>) => <ActivityCalendar data={[]} {...props} />

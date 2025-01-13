@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties } from 'react'
 
 export const styles = {
   container: (fontSize: number) =>
@@ -39,4 +39,4 @@ export const styles = {
       gap: '3px',
     } satisfies CSSProperties,
   },
-};
+}

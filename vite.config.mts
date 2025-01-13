@@ -1,6 +1,6 @@
-import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
-import { replaceCodePlugin as replace } from 'vite-plugin-replace';
+import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
+import { replaceCodePlugin as replace } from 'vite-plugin-replace'
 
 export default defineConfig({
   plugins: [
@@ -16,4 +16,4 @@ export default defineConfig({
       ],
     }),
   ],
-});
+})

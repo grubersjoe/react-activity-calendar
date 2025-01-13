@@ -1,5 +1,5 @@
-export const NAMESPACE = 'react-activity-calendar';
-export const LABEL_MARGIN = 8; // px
+export const NAMESPACE = 'react-activity-calendar'
+export const LABEL_MARGIN = 8 // px
 
 export const DEFAULT_MONTH_LABELS = [
   'Jan',
@@ -14,7 +14,7 @@ export const DEFAULT_MONTH_LABELS = [
   'Oct',
   'Nov',
   'Dec',
-];
+]
 
 export const DEFAULT_LABELS = {
   months: DEFAULT_MONTH_LABELS,
@@ -24,4 +24,4 @@ export const DEFAULT_LABELS = {
     less: 'Less',
     more: 'More',
   },
-};
+}

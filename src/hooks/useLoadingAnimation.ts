@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
-import { NAMESPACE } from '../constants';
+import { useEffect } from 'react'
+import { NAMESPACE } from '../constants'
 
-export const loadingAnimationName = `${NAMESPACE}--loading-animation`;
+export const loadingAnimationName = `${NAMESPACE}--loading-animation`
 
 export function useLoadingAnimation(zeroColor: string, colorScheme: 'light' | 'dark') {
   useEffect(() => {
-    const colorLoading = `oklab(from ${zeroColor} l a b)`;
+    const colorLoading = `oklab(from ${zeroColor} l a b)`
     const colorActive =
       colorScheme === 'light'
         ? `oklab(from ${zeroColor} calc(l * 0.96) a b)`
-        : `oklab(from ${zeroColor} calc(l * 1.08) a b)`;
+        : `oklab(from ${zeroColor} calc(l * 1.08) a b)`
 
-    const style = document.createElement('style');
+    const style = document.createElement('style')
     style.innerHTML = `
       @keyframes ${loadingAnimationName} {
         0% {
@@ -24,11 +24,11 @@ export function useLoadingAnimation(zeroColor: string, colorScheme: 'light' | 'd
           fill: ${colorLoading};
         }
       }
-    `;
-    document.head.appendChild(style);
+    `
+    document.head.appendChild(style)
 
     return () => {
-      document.head.removeChild(style);
-    };
-  }, [zeroColor, colorScheme]);
+      document.head.removeChild(style)
+    }
+  }, [zeroColor, colorScheme])
 }

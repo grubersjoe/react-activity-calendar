@@ -1,6 +1,6 @@
-import { describe, expect, it } from '@jest/globals';
-import type { Activity } from '../types';
-import { validateActivities } from './calendar';
+import { describe, expect, it } from '@jest/globals'
+import type { Activity } from '../types'
+import { validateActivities } from './calendar'
 
 describe('validateActivities', () => {
   it.each([
@@ -14,10 +14,10 @@ describe('validateActivities', () => {
     'should throw error for invalid input: %s',
     (_, activities, maxLevel) => {
       expect(() => {
-        validateActivities(activities, maxLevel);
-      }).toThrow();
+        validateActivities(activities, maxLevel)
+      }).toThrow()
     },
-  );
+  )
 
   it.each([
     [[{ date: '2024-01-01', count: 0, level: 0 }], 4],
@@ -25,7 +25,7 @@ describe('validateActivities', () => {
     [[{ date: '2024-12-31', count: 10, level: 10 }], 10],
   ] as Array<[Array<Activity>, number]>)('should accept valid input', (activities, maxLevel) => {
     expect(() => {
-      validateActivities(activities, maxLevel);
-    }).not.toThrow();
-  });
-});
+      validateActivities(activities, maxLevel)
+    }).not.toThrow()
+  })
+})
