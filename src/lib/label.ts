@@ -17,7 +17,7 @@ export function getMonthLabels(
       const firstActivity = week.find(activity => activity !== undefined);
 
       if (!firstActivity) {
-        throw new Error(`Unexpected error: Week ${weekIndex + 1} is empty: [${week}].`);
+        throw new Error(`Unexpected error: Week ${weekIndex + 1} is empty.`);
       }
 
       const month = monthNames[getMonth(parseISO(firstActivity.date))];
