@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { NAMESPACE } from '../constants'
+import { getClassName } from '../lib/calendar'
 
-export const loadingAnimationName = `${NAMESPACE}--loading-animation`
+const animationName = `${NAMESPACE}--loading-animation`
 
 export function useLoadingAnimation(zeroColor: string, colorScheme: 'light' | 'dark') {
   useEffect(() => {
@@ -13,7 +14,7 @@ export function useLoadingAnimation(zeroColor: string, colorScheme: 'light' | 'd
 
     const style = document.createElement('style')
     style.innerHTML = `
-      @keyframes ${loadingAnimationName} {
+      @keyframes ${animationName} {
         0% {
           fill: ${colorLoading};
         }
@@ -23,6 +24,10 @@ export function useLoadingAnimation(zeroColor: string, colorScheme: 'light' | 'd
         100% {
           fill: ${colorLoading};
         }
+      }
+      
+      .${getClassName('calendar')} rect {
+        animation: ${animationName} 1.75s ease-in-out infinite;
       }
     `
     document.head.appendChild(style)
