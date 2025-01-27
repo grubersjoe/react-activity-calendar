@@ -5,18 +5,18 @@ import { createTheme } from './theme'
 describe('createTheme', () => {
   const defaultTheme = {
     light: [
-      'color-mix(in oklab, hsl(0, 0%, 26%) 0%, hsl(0, 0%, 92%))',
+      'hsl(0, 0%, 92%)',
       'color-mix(in oklab, hsl(0, 0%, 26%) 25%, hsl(0, 0%, 92%))',
       'color-mix(in oklab, hsl(0, 0%, 26%) 50%, hsl(0, 0%, 92%))',
       'color-mix(in oklab, hsl(0, 0%, 26%) 75%, hsl(0, 0%, 92%))',
-      'color-mix(in oklab, hsl(0, 0%, 26%) 100%, hsl(0, 0%, 92%))',
+      'hsl(0, 0%, 26%)',
     ],
     dark: [
-      'color-mix(in oklab, hsl(0, 0%, 92%) 0%, hsl(0, 0%, 22%))',
+      'hsl(0, 0%, 22%)',
       'color-mix(in oklab, hsl(0, 0%, 92%) 25%, hsl(0, 0%, 22%))',
       'color-mix(in oklab, hsl(0, 0%, 92%) 50%, hsl(0, 0%, 22%))',
       'color-mix(in oklab, hsl(0, 0%, 92%) 75%, hsl(0, 0%, 22%))',
-      'color-mix(in oklab, hsl(0, 0%, 92%) 100%, hsl(0, 0%, 22%))',
+      'hsl(0, 0%, 92%)',
     ],
   }
 

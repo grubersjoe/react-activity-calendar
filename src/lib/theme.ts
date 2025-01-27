@@ -62,8 +62,21 @@ function validateInput(input: ThemeInput, steps: number) {
 
 function calcColorScale([start, end]: [Color, Color], steps: number): ColorScale {
   return range(steps).map(i => {
-    const pos = (i / (steps - 1)) * 100
-    return `color-mix(in oklab, ${end} ${parseFloat(pos.toFixed(2))}%, ${start})`
+    // In the loading animation the zero color is used.
+    // However, Safari 16 crashes if a CSS color-mix expression like below is
+    // combined with relative color syntax to calculate a hue variation for the
+    // animation. Since the start and end colors do not need to be mixed, they
+    // can be returned directly to work around this issue.
+    switch (i) {
+      case 0:
+        return start
+      case steps - 1:
+        return end
+      default: {
+        const pos = (i / (steps - 1)) * 100
+        return `color-mix(in oklab, ${end} ${parseFloat(pos.toFixed(2))}%, ${start})`
+      }
+    }
   })
 }
 
