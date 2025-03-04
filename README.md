@@ -48,7 +48,9 @@ const data = [
   },
 ]
 
-;<ActivityCalendar data={data} />
+function Calendar() {
+  return <ActivityCalendar data={data} />
+}
 ```
 
 ## FAQ
