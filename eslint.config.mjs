@@ -1,13 +1,16 @@
 import eslint from '@eslint/js'
-import pluginReact from 'eslint-plugin-react'
-import pluginReactHooks from 'eslint-plugin-react-hooks'
+import react from 'eslint-plugin-react'
+import reactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
-import pluginTypeScript from 'typescript-eslint'
+import typescript from 'typescript-eslint'
 
-export default pluginTypeScript.config(
+export default typescript.config(
   eslint.configs.recommended,
-  pluginTypeScript.configs.strictTypeChecked,
-  pluginTypeScript.configs.stylisticTypeChecked,
+  typescript.configs.strictTypeChecked,
+  typescript.configs.stylisticTypeChecked,
+  react.configs.flat.recommended,
+  react.configs.flat['jsx-runtime'],
+  reactHooks.configs['recommended-latest'],
   {
     rules: {
       'no-console': 'error',
@@ -31,14 +34,6 @@ export default pluginTypeScript.config(
         version: 'detect',
       },
     },
-  },
-  pluginReact.configs.flat.recommended,
-  pluginReact.configs.flat['jsx-runtime'],
-  {
-    plugins: {
-      'react-hooks': pluginReactHooks,
-    },
-    rules: pluginReactHooks.configs.recommended.rules,
   },
   {
     // Note: there must be no other properties in this object
