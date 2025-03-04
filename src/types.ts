@@ -20,7 +20,7 @@ import type {
   WheelEvent,
 } from 'react'
 
-export interface Activity {
+export type Activity = {
   date: string
   count: number
   level: number
@@ -48,7 +48,7 @@ export type Labels = Partial<{
 export type Color = string
 export type ColorScale = Array<Color>
 
-export interface Theme {
+export type Theme = {
   light: ColorScale
   dark: ColorScale
 }
@@ -64,7 +64,7 @@ export type ThemeInput =
       dark: ColorScale
     }
 
-interface BlockAttributes extends SVGAttributes<SVGRectElement>, HTMLAttributes<SVGRectElement> {}
+type BlockAttributes = SVGAttributes<SVGRectElement> & HTMLAttributes<SVGRectElement>
 
 export type BlockElement = ReactElement<BlockAttributes, JSXElementConstructor<SVGRectElement>>
 

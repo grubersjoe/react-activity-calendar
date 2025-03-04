@@ -1,43 +1,30 @@
-// @ts-check
-import { fixupPluginRules } from '@eslint/compat'
+/* eslint-disable @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access */
 import eslint from '@eslint/js'
-import reactHooks from 'eslint-plugin-react-hooks'
-import react from 'eslint-plugin-react/configs/recommended.js'
+import pluginReact from 'eslint-plugin-react'
+import pluginReactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
-import typescript from 'typescript-eslint'
+import pluginTypeScript from 'typescript-eslint'
 
-export default typescript.config(
+export default pluginTypeScript.config(
   eslint.configs.recommended,
-  ...typescript.configs.strictTypeChecked,
-  {
-    ignores: [
-      'build/',
-      'coverage/',
-      'docs/',
-      'examples/',
-      'eslint.config.mjs',
-      'rollup.config.mjs',
-      'vite.config.mts',
-    ],
-  },
+  pluginTypeScript.configs.strictTypeChecked,
+  pluginTypeScript.configs.stylisticTypeChecked,
   {
     rules: {
-      '@typescript-eslint/restrict-template-expressions': 'off',
       'no-console': 'error',
+      '@typescript-eslint/array-type': ['error', { default: 'generic' }],
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+      '@typescript-eslint/non-nullable-type-assertion-style': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
     },
     languageOptions: {
-      parserOptions: {
-        project: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  },
-  {
-    ...react,
-    languageOptions: {
-      ...react.languageOptions,
       globals: {
         ...globals.browser,
+        ...globals.node,
+      },
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     settings: {
@@ -45,17 +32,17 @@ export default typescript.config(
         version: 'detect',
       },
     },
-    rules: {
-      'react/display-name': 1,
-      'react/react-in-jsx-scope': 0,
-    },
   },
+  pluginReact.configs.flat.recommended,
+  pluginReact.configs.flat['jsx-runtime'],
   {
     plugins: {
-      'react-hooks': fixupPluginRules(reactHooks),
+      'react-hooks': pluginReactHooks,
     },
-    rules: {
-      ...reactHooks.configs.recommended.rules,
-    },
+    rules: pluginReactHooks.configs.recommended.rules,
+  },
+  {
+    // Note: there must be no other properties in this object
+    ignores: ['build/', 'coverage/', 'docs/', 'examples/', 'rollup.config.mjs'],
   },
 )
