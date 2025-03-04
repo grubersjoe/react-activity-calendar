@@ -36,7 +36,7 @@ import type {
 } from '../types'
 import { styles } from './styles'
 
-export interface Props {
+export type Props = {
   /**
    * List of calendar entries. Every `Activity` object requires an ISO 8601
    * `date` string in the format `yyyy-MM-dd`, a `count` property with the

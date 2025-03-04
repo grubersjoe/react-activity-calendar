@@ -29,4 +29,4 @@ const labels = {
     less: 'Less',
     more: 'More',
   },
-};
+}

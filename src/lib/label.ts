@@ -3,7 +3,7 @@ import type { Props } from '../component/ActivityCalendar'
 import { DEFAULT_MONTH_LABELS } from '../constants'
 import type { DayIndex, DayName, Week, WeekdayLabels } from '../types'
 
-interface MonthLabel {
+type MonthLabel = {
   weekIndex: number
   label: string
 }
@@ -57,7 +57,7 @@ export function getMonthLabels(
 }
 
 export function maxWeekdayLabelWidth(
-  labels: string[],
+  labels: Array<string>,
   showWeekdayLabel: WeekdayLabels,
   fontSize: number,
 ): number {
@@ -139,9 +139,7 @@ export function initWeekdayLabels(
   }
 }
 
-const dayNameToIndex: {
-  [name in DayName]: DayIndex
-} = {
+const dayNameToIndex: Record<DayName, DayIndex> = {
   sun: 0,
   mon: 1,
   tue: 2,

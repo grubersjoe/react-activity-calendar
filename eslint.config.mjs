@@ -1,43 +1,32 @@
-// @ts-check
-import { fixupPluginRules } from '@eslint/compat'
 import eslint from '@eslint/js'
+import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
-import react from 'eslint-plugin-react/configs/recommended.js'
 import globals from 'globals'
 import typescript from 'typescript-eslint'
 
 export default typescript.config(
   eslint.configs.recommended,
-  ...typescript.configs.strictTypeChecked,
-  {
-    ignores: [
-      'build/',
-      'coverage/',
-      'docs/',
-      'examples/',
-      'eslint.config.mjs',
-      'rollup.config.mjs',
-      'vite.config.mts',
-    ],
-  },
+  typescript.configs.strictTypeChecked,
+  typescript.configs.stylisticTypeChecked,
+  react.configs.flat.recommended,
+  react.configs.flat['jsx-runtime'],
+  reactHooks.configs['recommended-latest'],
   {
     rules: {
-      '@typescript-eslint/restrict-template-expressions': 'off',
       'no-console': 'error',
+      '@typescript-eslint/array-type': ['error', { default: 'generic' }],
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+      '@typescript-eslint/non-nullable-type-assertion-style': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
     },
     languageOptions: {
-      parserOptions: {
-        project: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  },
-  {
-    ...react,
-    languageOptions: {
-      ...react.languageOptions,
       globals: {
         ...globals.browser,
+        ...globals.node,
+      },
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     settings: {
@@ -45,17 +34,9 @@ export default typescript.config(
         version: 'detect',
       },
     },
-    rules: {
-      'react/display-name': 1,
-      'react/react-in-jsx-scope': 0,
-    },
   },
   {
-    plugins: {
-      'react-hooks': fixupPluginRules(reactHooks),
-    },
-    rules: {
-      ...reactHooks.configs.recommended.rules,
-    },
+    // Note: there must be no other properties in this object
+    ignores: ['build/', 'coverage/', 'docs/', 'examples/', 'rollup.config.mjs'],
   },
 )

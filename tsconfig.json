@@ -1,5 +1,5 @@
 {
-  "include": ["src/**/*", ".storybook/**/*", "declarations.d.ts"],
+  "include": ["src/**/*", ".storybook/**/*", "./*"],
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,

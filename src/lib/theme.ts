@@ -1,7 +1,7 @@
 import type { Color, ColorScale, Theme, ThemeInput } from '../types'
 import { range } from './calendar'
 
-export function createTheme(input?: ThemeInput, steps: number = 5): Theme {
+export function createTheme(input?: ThemeInput, steps = 5): Theme {
   const defaultTheme = createDefaultTheme(steps)
 
   if (input) {
@@ -80,6 +80,6 @@ function calcColorScale([start, end]: [Color, Color], steps: number): ColorScale
   })
 }
 
-function isPair<T>(val: T[]): val is [T, T] {
+function isPair<T>(val: Array<T>): val is [T, T] {
   return val.length === 2
 }
