@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { Tooltip as MuiTooltip } from '@mui/material';
+import { Tooltip as MuiTooltip } from '@mui/material'
 
 <ActivityCalendar
   data={data}
