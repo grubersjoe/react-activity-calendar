@@ -1,3 +1,8 @@
+import {
+  ActivityCalendar,
+  Props as CalendarProps,
+} from 'react-activity-calendar'
+
 // Shape of `labels` property (default values).
 // All properties are optional.
 const labels = {
@@ -29,4 +34,6 @@ const labels = {
     less: 'Less',
     more: 'More',
   },
-}
+} satisfies CalendarProps['labels']
+
+<ActivityCalendar data={data} labels={labels} showWeekdayLabels />
