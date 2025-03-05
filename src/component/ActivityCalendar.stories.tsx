@@ -3,6 +3,7 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
   type ForwardedRef,
   type ReactElement,
 } from 'react'
@@ -10,6 +11,7 @@ import { Tooltip as MuiTooltip } from '@mui/material'
 import LinkTo from '@storybook/addon-links/react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { themes } from '@storybook/theming'
+import { Highlight, themes as prismThemes } from 'prism-react-renderer'
 import { Tooltip as ReactTooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 import { useDarkMode } from 'storybook-dark-mode'
@@ -268,7 +270,7 @@ export const ColorThemes: Story = {
           prop to configure the calendar colors for the light and dark system{' '}
           <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme">color scheme</a>.
           Define each color scale{' '}
-          <LinkTo kind="react-activity-calendar" name="explicit-theme">
+          <LinkTo kind="react-activity-calendar" name="explicit-themes">
             explicitly
           </LinkTo>{' '}
           by settings all colors (5 per default) or pass exactly two colors (the lowest and highest
@@ -318,9 +320,9 @@ export const ExplicitThemes: Story = {
         <p>
           See the{' '}
           <LinkTo kind="react-activity-calendar" name="color-themes">
-            WithTheme
+            color themes
           </LinkTo>{' '}
-          story for details how to use the <code>theme</code> prop.
+          page for details how to use the <code>theme</code> prop.
         </p>
         <ActivityCalendar {...args} data={data} style={{ marginTop: '2rem' }} />
       </Container>
@@ -651,23 +653,74 @@ const StackHeading = ({ children, code }: { children: string; code?: string }) =
   </div>
 )
 
-const Source = ({ code, isDarkMode }: { code: string; isDarkMode: boolean }) => {
+const Source = ({
+  code,
+  isDarkMode,
+  language = 'tsx',
+}: {
+  code: string
+  isDarkMode: boolean
+  language?: string
+}) => {
+  const [copied, setCopied] = useState(false)
   const theme = isDarkMode ? themes.dark : themes.light
 
   return (
-    <pre
-      style={{
-        margin: '1rem 0 2rem',
-        padding: '0.75em',
-        whiteSpace: 'pre-wrap',
-        backgroundColor: theme.appBg,
-        border: `1px solid ${theme.appBorderColor}`,
-        borderRadius: theme.appBorderRadius,
-        color: theme.textColor,
-        lineHeight: 1.3,
-      }}
-    >
-      <code>{code.trim()}</code>
-    </pre>
+    <div>
+      <Highlight
+        code={code.trim()}
+        language={language}
+        theme={isDarkMode ? prismThemes.vsDark : prismThemes.vsLight}
+      >
+        {({ style, tokens, getLineProps, getTokenProps }) => (
+          <pre
+            style={Object.assign({}, style, {
+              position: 'relative',
+              margin: '1rem 0 1.5rem',
+              padding: '1em',
+              whiteSpace: 'pre-wrap',
+              backgroundColor: isDarkMode ? theme.appBg : 'hsl(210,50%,99%)', // slightly lighter than theme.appBg
+              border: `1px solid ${theme.appBorderColor}`,
+              borderRadius: theme.appBorderRadius,
+            })}
+          >
+            <button
+              type="button"
+              onClick={() => {
+                void navigator.clipboard.writeText(code).then(() => {
+                  setCopied(true)
+                  setTimeout(() => {
+                    setCopied(false)
+                  }, 1500)
+                })
+              }}
+              style={{
+                position: 'absolute',
+                bottom: -1,
+                right: -1,
+                padding: '4px 10px',
+                backgroundColor: theme.buttonBg,
+                border: `1px solid ${theme.appBorderColor}`,
+                borderTopLeftRadius: theme.appBorderRadius,
+                borderBottomRightRadius: theme.appBorderRadius,
+                color: theme.textColor,
+                fontWeight: 700,
+                fontSize: 12,
+                cursor: 'pointer',
+              }}
+            >
+              {copied ? 'Copied!' : 'Copy'}
+            </button>
+            {tokens.map((line, i) => (
+              <div key={i} {...getLineProps({ line })}>
+                {line.map((token, key) => (
+                  <span key={key} {...getTokenProps({ token })} />
+                ))}
+              </div>
+            ))}
+          </pre>
+        )}
+      </Highlight>
+    </div>
   )
 }

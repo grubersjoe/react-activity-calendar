@@ -1,4 +1,6 @@
-type EventHandler = (event: React.SyntheticEvent) => (activity: Activity) => void
+import { SyntheticEvent } from 'react'
+
+type EventHandler = (event: SyntheticEvent) => (activity: Activity) => void
 
 interface Activity {
   date: string

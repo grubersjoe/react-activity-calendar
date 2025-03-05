@@ -33,6 +33,7 @@ pre {
   max-width: 720px;
 }
 
+pre,
 code {
   font-family: ui-monospace, monospace;
   font-size: 14px;
@@ -56,6 +57,10 @@ a {
   &.sb-show-main {
     color: #fff;
     background-color: hsl(0, 0%, 12%);
+  }
+
+  .docblock-source {
+    background: hsl(0, 0%, 12%);
   }
 }
 
