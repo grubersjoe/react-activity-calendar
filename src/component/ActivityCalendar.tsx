@@ -168,6 +168,10 @@ export type Props = {
    * Index of day to be used as start of week. 0 represents Sunday.
    */
   weekStart?: DayIndex
+  /**
+   * Additional class name to apply to the scrollbar container.
+   */
+  scrollbarClassName?: string;
 }
 
 export const ActivityCalendar = forwardRef<HTMLElement, Props>(
@@ -193,6 +197,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       theme: themeProp = undefined,
       totalCount: totalCountProp = undefined,
       weekStart = 0, // Sunday
+      scrollbarClassName,
     }: Props, // Required for react-docgen
     ref,
   ) => {
@@ -417,7 +422,10 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
         className={NAMESPACE}
         style={{ ...styleProp, ...styles.container(fontSize) }}
       >
-        <div className={getClassName('scroll-container')} style={styles.scrollContainer(fontSize)}>
+        <div
+          className={`${getClassName('scroll-container')} ${scrollbarClassName}`}
+          style={styles.scrollContainer(fontSize)}
+        >
           <svg
             width={width}
             height={height}
