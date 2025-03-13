@@ -171,7 +171,7 @@ export type Props = {
   /**
    * Additional class name to apply to the scrollbar container.
    */
-  scrollbarClassName?: string;
+  scrollbarClassName?: string
 }
 
 export const ActivityCalendar = forwardRef<HTMLElement, Props>(
