@@ -42,7 +42,7 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
     "@jest/globals": "^29.7.0",
     "@jest/types": "^29.6.3",
-    "@mui/material": "^6.4.6",
+    "@mui/material": "^7.0.1",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-node-resolve": "^16.0.0",
