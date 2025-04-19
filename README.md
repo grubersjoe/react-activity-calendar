@@ -3,7 +3,7 @@
 [![CI](https://github.com/grubersjoe/react-activity-calendar/actions/workflows/test.yml/badge.svg)](https://github.com/grubersjoe/react-activity-calendar/actions/workflows/test.yml)
 [![npm version](https://badge.fury.io/js/react-activity-calendar.svg)](https://www.npmjs.com/package/react-activity-calendar)
 
-A flexible React component to display activity data in a calendar (heatmap). <br>
+A React component to display activity data in a calendar (heatmap).<br>
 **[Documentation (Storybook)](https://grubersjoe.github.io/react-activity-calendar)**
 
 ![Screenshot](screenshot.png)
