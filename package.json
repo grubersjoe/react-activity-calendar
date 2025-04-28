@@ -68,7 +68,7 @@
     "prettier": "^3.5.3",
     "prism-react-renderer": "^2.4.1",
     "react": "^19.0.0",
-    "react-docgen": "^7.1.0",
+    "react-docgen": "^8.0.0",
     "react-ga4": "^2.1.0",
     "react-tooltip": "^5.27.0",
     "rollup": "^4.34.9",
