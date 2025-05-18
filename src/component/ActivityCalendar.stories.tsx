@@ -269,14 +269,14 @@ export const ColorThemes: Story = {
           </code>{' '}
           prop to configure the calendar colors for the light and dark system{' '}
           <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme">color scheme</a>.
-          Define each color scale{' '}
+          Pass all colors per scheme{' '}
           <LinkTo kind="react-activity-calendar" name="explicit-themes">
             explicitly
           </LinkTo>{' '}
-          by settings all colors (5 per default) or pass exactly two colors (the lowest and highest
-          intensity) to calculate a single-hue scale. For explicit themes the color count must match
-          the number of activity levels, which is controlled by the{' '}
-          <LinkTo kind="react-activity-calendar" name="date-ranges">
+          (5 per default) or set exactly two colors (the lowest and highest intensity) to calculate
+          a single-hue scale. For explicit themes the color count must match the number of activity
+          levels, which is controlled by the{' '}
+          <LinkTo kind="react-activity-calendar" name="activity-levels">
             <code>maxLevel</code>
           </LinkTo>{' '}
           prop. Colors can be specified in any valid CSS format.

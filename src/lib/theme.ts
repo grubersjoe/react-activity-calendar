@@ -5,7 +5,7 @@ export function createTheme(input?: ThemeInput, steps = 5): Theme {
   const defaultTheme = createDefaultTheme(steps)
 
   if (input) {
-    validateInput(input, steps)
+    validateThemeInput(input, steps)
 
     input.light = input.light ?? defaultTheme.light
     input.dark = input.dark ?? defaultTheme.dark
@@ -26,17 +26,21 @@ function createDefaultTheme(steps: number): Theme {
   }
 }
 
-function validateInput(input: ThemeInput, steps: number) {
+function validateThemeInput(input: ThemeInput, steps: number) {
+  const maxLevelHint = 'The number of colors is controlled by the "maxLevel" property.'
+
   if (typeof input !== 'object' || (input.light === undefined && input.dark === undefined)) {
     throw new Error(
-      `The theme object must contain at least one of the fields "light" and "dark" with exactly 2 or ${steps} colors respectively.`,
+      `The theme object must contain at least one of the fields "light" and "dark" with exactly 2 or ${steps} colors respectively. ${maxLevelHint}`,
     )
   }
 
   if (input.light) {
     const { length } = input.light
     if (length !== 2 && length !== steps) {
-      throw new Error(`theme.light must contain exactly 2 or ${steps} colors, ${length} passed.`)
+      throw new Error(
+        `theme.light must contain exactly 2 or ${steps} colors, ${length} passed. ${maxLevelHint}`,
+      )
     }
 
     for (const c of input.light) {
@@ -49,7 +53,9 @@ function validateInput(input: ThemeInput, steps: number) {
   if (input.dark) {
     const { length } = input.dark
     if (length !== 2 && length !== steps) {
-      throw new Error(`theme.dark must contain exactly 2 or ${steps} colors, ${length} passed.`)
+      throw new Error(
+        `theme.dark must contain exactly 2 or ${steps} colors, ${length} passed. ${maxLevelHint}`,
+      )
     }
 
     for (const c of input.dark) {

@@ -103,7 +103,7 @@ export type Props = {
    */
   labels?: Labels
   /**
-   * Maximum activity level (zero indexed).
+   * Maximum activity level (zero-indexed). 4 per default, 0 means "no activity".
    */
   maxLevel?: number
   /**
@@ -137,10 +137,11 @@ export type Props = {
    */
   style?: CSSProperties
   /**
-   * Set the calendar colors for the light and dark system color scheme.
-   * Define each color scale explicitly by settings all colors (5 per default)
-   * or pass exactly two colors (the lowest and highest intensity) to calculate
-   * a single-hue scale. Colors can be specified in any valid CSS format.
+   * Set the calendar colors for the light and dark system color scheme. Pass
+   * all colors per scheme explicitly (5 per default) or set exactly two colors
+   * (the lowest and highest intensity) to calculate a single-hue scale. The
+   * number of colors is controlled by the `maxLevel` property. Colors can be
+   * specified in any valid CSS format.
    *
    * The colors for at least one scheme must be set. If undefined, the default
    * theme is used. By default, the calendar will select the current system color
