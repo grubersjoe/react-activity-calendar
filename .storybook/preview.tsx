@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { DocsContainer, type DocsContainerProps } from '@storybook/blocks'
-import type { Preview } from '@storybook/react'
-import { themes, type ThemeVarsPartial } from '@storybook/theming'
-import { DARK_MODE_EVENT_NAME } from 'storybook-dark-mode'
+import { DocsContainer, type DocsContainerProps } from '@storybook/addon-docs/blocks'
+import type { Preview } from '@storybook/react-vite'
+import { DARK_MODE_EVENT_NAME } from '@vueless/storybook-dark-mode'
+import { themes, type ThemeVarsPartial } from 'storybook/theming'
 import './storybook.scss'
 
 const baseTheme = {
@@ -16,13 +16,12 @@ const themeOverride = {
   fontCode: 'ui-monospace, monospace',
 } satisfies Omit<ThemeVarsPartial, 'base'>
 
+// This component is a workaround for the dark mode addon not being available on
+// docs pages: https://github.com/hipstersmoothie/storybook-dark-mode/issues/282
 const Container = (props: DocsContainerProps) => {
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
   const [theme, setTheme] = useState(prefersDark ? themes.dark : themes.light)
 
-  // useDarkMode() cannot be used for doc pages anymore:
-  // https://github.com/hipstersmoothie/storybook-dark-mode/issues/282
-  // Workaround:
   useEffect(() => {
     const listener = (isDark: boolean) => {
       setTheme(isDark ? themes.dark : themes.light)
@@ -51,6 +50,7 @@ export const preview: Preview = {
   parameters: {
     docs: {
       toc: true,
+      codePanel: true,
       container: Container,
       source: {
         language: 'tsx',
