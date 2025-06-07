@@ -9,12 +9,12 @@ import {
 } from 'react'
 import { Tooltip as MuiTooltip } from '@mui/material'
 import LinkTo from '@storybook/addon-links/react'
-import type { Meta, StoryObj } from '@storybook/react'
-import { themes } from '@storybook/theming'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Highlight, themes as prismThemes } from 'prism-react-renderer'
 import { Tooltip as ReactTooltip } from 'react-tooltip'
+import { themes } from 'storybook/theming'
 import 'react-tooltip/dist/react-tooltip.css'
-import { useDarkMode } from 'storybook-dark-mode'
+import { useDarkMode } from '@vueless/storybook-dark-mode'
 import Container from '../../.storybook/components/Container'
 import exampleCustomization from '../../examples/customization?raw'
 import exampleEventHandlersInterface from '../../examples/event-handlers-type?raw'
@@ -31,8 +31,6 @@ import type { Theme } from '../types'
 import { ActivityCalendar, type Props } from './ActivityCalendar'
 
 type Story = StoryObj<Props>
-
-/* eslint-disable react-hooks/rules-of-hooks */
 
 const meta: Meta<ForwardedRef<Props>> = {
   title: 'React Activity Calendar',
