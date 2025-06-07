@@ -13,14 +13,14 @@ import { useDarkMode } from '@vueless/storybook-dark-mode'
 import { Highlight, themes as prismThemes } from 'prism-react-renderer'
 import Container from '../../.storybook/components/Container'
 import exampleCustomization from '../../examples/customization?raw'
-import exampleEventHandlersInterface from '../../examples/event-handlers-type?raw'
 import exampleEventHandlers from '../../examples/event-handlers?raw'
 import exampleLabelsShape from '../../examples/labels-shape?raw'
 import exampleLabels from '../../examples/labels?raw'
 import exampleRef from '../../examples/ref?raw'
 import exampleThemeExplicit from '../../examples/themes-explicit?raw'
 import exampleTheme from '../../examples/themes?raw'
-import exampleTooltips from '../../examples/toolttips?raw'
+import exampleTooltipsProps from '../../examples/tooltips-props?raw'
+import exampleTooltips from '../../examples/tooltips?raw'
 import exampleTooltipsCSS from '../../src/styles/tooltips.css?raw'
 import { generateTestData } from '../lib/calendar'
 import type { Theme } from '../types'
@@ -379,14 +379,17 @@ export const EventHandlers: Story = {
       <Container>
         <h1>Event Handlers</h1>
         <p>
-          You can register event handlers for the SVG <code>&lt;rect/&gt;</code> elements that are
-          used to render the calendar days. This way you can control the behaviour on click, hover,
-          etc. All event listeners have the following signature, so you can use the activity data of
-          the block inside the handler:
+          Use the{' '}
+          <code>
+            <b>renderBlock</b>
+          </code>{' '}
+          prop to attach event handlers to the SVG <code>rect</code> elements that represent
+          calendar days. Click on any block below to see it in action.
         </p>
-        <Source code={exampleEventHandlersInterface} isDarkMode={useDarkMode()} />
-        <p>Click on any block below to see it in action:</p>
         <ActivityCalendar {...args} data={data} style={{ margin: '2rem 0' }} />
+        <p>
+          Use the <code>React.cloneElement()</code> function to assign the handlers:
+        </p>
         <Source code={exampleEventHandlers} isDarkMode={useDarkMode()} />
       </Container>
     )
@@ -397,8 +400,12 @@ export const Tooltips: Story = {
   args: {
     ...defaultProps,
     tooltips: {
-      block: activity => `${activity.level} activities on ${activity.date}`,
-      colorLegend: level => `Activity level ${level + 1}`,
+      activity: {
+        text: activity => `${activity.level} activities on ${activity.date}`,
+      },
+      colorLegend: {
+        text: level => `Activity level ${level + 1}`,
+      },
     },
   },
   render: args => {
@@ -412,20 +419,26 @@ export const Tooltips: Story = {
           <code>
             <b>tooltips</b>
           </code>{' '}
-          prop to show tooltips when hovering the calendar days or the color legend below.
+          prop to show tooltips when hovering the calendar days or the color legend.
         </p>
         <ActivityCalendar {...args} data={data} style={{ margin: '2rem 0' }} />
         <p>
           Tooltips are implemented using the <a href="https://floating-ui.com/">Floating UI</a>{' '}
           library. They are &ldquo;headless&ldquo;, meaning they are <b>not styled</b>, so you have
-          full control. You can either write CSS yourself (see example below) or you can import the
-          provided CSS file with default styles if you do not need this flexibility:
+          full control. You can either import the provided CSS file with default styles or write CSS
+          yourself if you need more flexibility:
         </p>
         <Source
           code="import 'react-activity-calendar/dist/tooltips.css';"
           isDarkMode={useDarkMode()}
         />
         <Source code={exampleTooltipsCSS} isDarkMode={useDarkMode()} />
+        <p>
+          For each type of tooltip you can optionally set the{' '}
+          <a href="https://floating-ui.com/docs/useFloating#placement">placement</a> and whether to
+          draw an arrow:
+        </p>
+        <Source code={exampleTooltipsProps} isDarkMode={useDarkMode()} />
       </Container>
     )
   },

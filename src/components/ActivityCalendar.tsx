@@ -2,12 +2,14 @@
 
 import {
   forwardRef,
+  Fragment,
   useEffect,
   useState,
   type CSSProperties,
   type ForwardedRef,
   type ReactElement,
 } from 'react'
+import type { Placement } from '@floating-ui/react'
 import { getYear, parseISO } from 'date-fns'
 import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants'
 import { useColorScheme } from '../hooks/useColorScheme'
@@ -32,7 +34,7 @@ import type {
   Labels,
   ThemeInput,
 } from '../types'
-import { Block } from './Block'
+import { Tooltip } from './Tooltip'
 
 export type Props = {
   /**
@@ -47,7 +49,7 @@ export type Props = {
    *
    * Example object:
    *
-   * ```json
+   * ```
    * {
    *   date: "2021-02-20",
    *   count: 16,
@@ -109,8 +111,8 @@ export type Props = {
   ref?: ForwardedRef<HTMLElement>
   /**
    * Render prop for calendar blocks (activities). For example, useful to wrap
-   * the element with a tooltip component. Use `React.cloneElement` to pass
-   * additional props to the element if necessary.
+   * the element with a link. Use `React.cloneElement` to pass additional props
+   * to the element if necessary.
    */
   renderBlock?: (block: BlockElement, activity: Activity) => ReactElement
   /**
@@ -159,8 +161,16 @@ export type Props = {
    * below the calendar.
    */
   tooltips?: {
-    block?: (activity: Activity) => string
-    colorLegend?: (level: number) => string
+    activity?: {
+      text: (activity: Activity) => string
+      withArrow?: boolean
+      placement?: Placement
+    }
+    colorLegend?: {
+      text: (level: number) => string
+      withArrow?: boolean
+      placement?: Placement
+    }
   }
   /**
    * Overwrite the total activity count.
@@ -192,7 +202,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       showWeekdayLabels = false,
       style: styleProp = {},
       theme: themeProp = undefined,
-      tooltips = undefined,
+      tooltips = {},
       totalCount: totalCountProp = undefined,
       weekStart = 0, // Sunday
     }: Props, // Required for react-docgen
@@ -212,8 +222,6 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
     useLoadingAnimation(colorScale[0] as string, colorScheme)
     const useAnimation = !usePrefersReducedMotion()
-
-    const [activeTooltipId, setActiveTooltipId] = useState<string | null>(null)
 
     if (loading) {
       activities = generateEmptyData()
@@ -260,10 +268,8 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                   }
                 : undefined
 
-            return (
-              <Block
-                id={activity.date}
-                key={activity.date}
+            const block = (
+              <rect
                 x={0}
                 y={labelHeight + (blockSize + blockMargin) * dayIndex}
                 width={blockSize}
@@ -271,18 +277,6 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                 rx={blockRadius}
                 ry={blockRadius}
                 fill={colorScale[activity.level]}
-                colorScheme={colorScheme}
-                renderBlock={
-                  renderBlock ? (block: BlockElement) => renderBlock(block, activity) : undefined
-                }
-                {...(tooltips?.block && {
-                  tooltip: {
-                    content: tooltips.block(activity),
-                    placement: 'top',
-                    activeId: activeTooltipId,
-                    setActiveId: setActiveTooltipId,
-                  },
-                })}
                 data-date={activity.date}
                 data-level={activity.level}
                 style={{
@@ -290,6 +284,25 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                   ...loadingAnimation,
                 }}
               />
+            )
+
+            const renderedBlock = renderBlock ? renderBlock(block, activity) : block
+
+            return (
+              <Fragment key={activity.date}>
+                {tooltips.activity ? (
+                  <Tooltip
+                    text={tooltips.activity.text(activity)}
+                    placement={tooltips.activity.placement ?? 'top'}
+                    withArrow={tooltips.activity.withArrow}
+                    colorScheme={colorScheme}
+                  >
+                    {renderedBlock}
+                  </Tooltip>
+                ) : (
+                  renderedBlock
+                )}
+              </Fragment>
             )
           }),
         )
@@ -332,34 +345,40 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
             <div className={getClassName('legend-colors')} style={styles.footer.legend}>
               <span style={{ marginRight: '0.4em' }}>{labels.legend.less}</span>
               {range(maxLevel + 1).map(level => {
-                const block = (
+                const colorLegend = (
                   <svg width={blockSize} height={blockSize} key={level}>
-                    <Block
-                      id={String(level)}
+                    <rect
                       width={blockSize}
                       height={blockSize}
                       fill={colorScale[level]}
                       rx={blockRadius}
                       ry={blockRadius}
-                      colorScheme={colorScheme}
                       fontSize={fontSize}
-                      {...(tooltips?.colorLegend && {
-                        tooltip: {
-                          content: tooltips.colorLegend(level),
-                          placement: 'bottom',
-                          activeId: activeTooltipId,
-                          setActiveId: setActiveTooltipId,
-                        },
-                        onMouseLeave: () => {
-                          setActiveTooltipId(null)
-                        },
-                      })}
                       style={styles.rect(colorScheme)}
                     />
                   </svg>
                 )
 
-                return renderColorLegend ? renderColorLegend(block, level) : block
+                const renderedColorLegend = renderColorLegend
+                  ? renderColorLegend(colorLegend, level)
+                  : colorLegend
+
+                return (
+                  <Fragment key={level}>
+                    {tooltips.colorLegend ? (
+                      <Tooltip
+                        text={tooltips.colorLegend.text(level)}
+                        placement={tooltips.colorLegend.placement ?? 'bottom'}
+                        withArrow={tooltips.colorLegend.withArrow}
+                        colorScheme={colorScheme}
+                      >
+                        {renderedColorLegend}
+                      </Tooltip>
+                    ) : (
+                      renderedColorLegend
+                    )}
+                  </Fragment>
+                )
               })}
               <span style={{ marginLeft: '0.4em' }}>{labels.legend.more}</span>
             </div>
@@ -436,11 +455,6 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
             viewBox={`0 0 ${width} ${height}`}
             className={getClassName('calendar')}
             style={{ ...styles.calendar, marginLeft: weekdayLabelOffset }}
-            {...(tooltips?.block && {
-              onMouseLeave: () => {
-                setActiveTooltipId(null)
-              },
-            })}
           >
             {!loading && renderWeekdayLabels()}
             {!loading && renderMonthLabels()}
