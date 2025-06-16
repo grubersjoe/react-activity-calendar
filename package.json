@@ -41,7 +41,7 @@
     "@eslint/js": "^9.28.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
     "@jest/globals": "^29.7.0",
-    "@jest/types": "^29.6.3",
+    "@jest/types": "^30.0.0",
     "@mui/material": "^7.1.1",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^28.0.3",
