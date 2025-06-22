@@ -163,13 +163,15 @@ export type Props = {
   tooltips?: {
     activity?: {
       text: (activity: Activity) => string
-      withArrow?: boolean
       placement?: Placement
+      offset?: number
+      withArrow?: boolean
     }
     colorLegend?: {
       text: (level: number) => string
-      withArrow?: boolean
       placement?: Placement
+      offset?: number
+      withArrow?: boolean
     }
   }
   /**
@@ -294,6 +296,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                   <Tooltip
                     text={tooltips.activity.text(activity)}
                     placement={tooltips.activity.placement ?? 'top'}
+                    offset={tooltips.activity.offset ?? 4}
                     withArrow={tooltips.activity.withArrow}
                     colorScheme={colorScheme}
                   >
@@ -368,6 +371,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                       <Tooltip
                         text={tooltips.colorLegend.text(level)}
                         placement={tooltips.colorLegend.placement ?? 'bottom'}
+                        offset={tooltips.colorLegend.offset ?? 4}
                         withArrow={tooltips.colorLegend.withArrow}
                         colorScheme={colorScheme}
                       >

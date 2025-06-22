@@ -24,11 +24,19 @@ export type Props = {
   children: ReactElement<{ ref: Ref<unknown> }>
   text: string
   placement: Placement
+  offset: number
   withArrow?: boolean
   colorScheme: ColorScheme
 }
 
-export function Tooltip({ children, text, placement, withArrow, colorScheme }: Props) {
+export function Tooltip({
+  children,
+  text,
+  placement,
+  withArrow,
+  colorScheme,
+  offset: offsetArg,
+}: Props) {
   const [isOpen, setIsOpen] = useState(false)
   const arrowRef = useRef(null)
 
@@ -38,7 +46,7 @@ export function Tooltip({ children, text, placement, withArrow, colorScheme }: P
     placement,
     middleware: [
       flip(),
-      offset(4),
+      offset(offsetArg),
       shift({ padding: 8 }),
       withArrow ? arrow({ element: arrowRef }) : null,
     ],
@@ -54,7 +62,7 @@ export function Tooltip({ children, text, placement, withArrow, colorScheme }: P
 
   return (
     <>
-      {cloneElement(children, { ref: refs.setReference, ...getReferenceProps() })}
+      {cloneElement(children, { ref: refs.setReference, ...getReferenceProps() })}{' '}
       {
         <FloatingPortal>
           {isMounted && (
