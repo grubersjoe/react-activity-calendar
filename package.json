@@ -1,6 +1,6 @@
 {
   "name": "react-activity-calendar",
-  "version": "3.0.0-alpha.0",
+  "version": "3.0.0-alpha.1",
   "description": "React component to display activity data in calendar",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
@@ -9,11 +9,18 @@
     "type": "git",
     "url": "git+https://github.com/grubersjoe/react-activity-calendar.git"
   },
-  "main": "build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./tooltips.css": "./build/tooltips.css"
+  },
+  "type": "module",
   "types": "build/index.d.ts",
   "files": [
     "build"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "rollup -c",
     "build:storybook": "storybook build -o docs/ && touch docs/.nojekyll",
