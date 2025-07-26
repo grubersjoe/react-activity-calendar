@@ -17,10 +17,10 @@ export default {
   input: 'src/index.tsx',
   output: {
     file: 'build/index.js',
-    format: 'cjs',
+    format: 'es',
     sourcemap: true,
     exports: 'named',
-    // Use 'auto' instead of 'default' for better interoperability with CRA etc.
+    // Use 'auto' instead of 'default' to support more environments.
     // https://rollupjs.org/guide/en/#outputinterop
     interop: 'auto',
     // Rollup does not support this React Server Components directive yet:
