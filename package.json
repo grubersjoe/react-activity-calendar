@@ -9,11 +9,18 @@
     "type": "git",
     "url": "git+https://github.com/grubersjoe/react-activity-calendar.git"
   },
-  "main": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./tooltips.css": "./dist/tooltips.css"
+  },
+  "type": "module",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "rollup -c",
     "build:storybook": "storybook build -o docs/ && touch docs/.nojekyll",
