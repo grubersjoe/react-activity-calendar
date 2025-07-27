@@ -6,6 +6,11 @@ export type Activity = {
   level: number
 }
 
+export type LevelBounds = {
+  min: number
+  max: number
+}
+
 export type Week = Array<Activity | undefined>
 export type DayIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6 // 0 = Sunday, 1 = Monday etc.
 export type DayName = 'sun' | 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat'
@@ -36,12 +41,12 @@ export type Theme = {
 // Require that at least one color scheme is passed.
 export type ThemeInput =
   | {
-      light: ColorScale
-      dark?: ColorScale
+      light: Array<Color>
+      dark?: Array<Color>
     }
   | {
-      light?: ColorScale
-      dark: ColorScale
+      light?: Array<Color>
+      dark: Array<Color>
     }
 
 export type ColorScheme = 'light' | 'dark'

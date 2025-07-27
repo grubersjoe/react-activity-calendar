@@ -20,6 +20,7 @@ import {
   groupByWeeks,
   range,
   validateActivities,
+  validateLevelBounds,
 } from '../lib/calendar'
 import { getMonthLabels, initWeekdayLabels, maxWeekdayLabelWidth } from '../lib/label'
 import { createTheme } from '../lib/theme'
@@ -31,6 +32,7 @@ import type {
   DayIndex,
   DayName,
   Labels,
+  LevelBounds,
   ThemeInput,
 } from '../types'
 import { Tooltip, type TooltipConfig } from './Tooltip'
@@ -39,8 +41,8 @@ export type Props = {
   /**
    * List of calendar entries. Every `Activity` object requires an ISO 8601
    * `date` string in the format `yyyy-MM-dd`, a `count` property with the
-   * amount of tracked data and a `level` property in the range `0-maxLevel`
-   * to specify activity intensity. The `maxLevel` prop is 4 by default.
+   * amount of tracked data and a `level` property in the given level bounds
+   * to specify activity intensity. The `levelBounds` are [0, 4] per default.
    *
    * For missing dates, no activity is assumed. This allows choosing the start
    * and end date of the calendar arbitrarily by passing empty entries as the
@@ -97,9 +99,12 @@ export type Props = {
    */
   labels?: Labels
   /**
-   * Maximum activity level (zero-indexed). 4 per default, 0 means "no activity".
+   * Minimum and maximum activity level.
+   * 0 usually means "no activity", but you can also use negative levels.
+   * All activity data must fall within the specified bounds.
+   * Default: `{min: 0, max: 4}`.
    */
-  maxLevel?: number
+  levelBounds?: LevelBounds
   /**
    * Toggle for loading state. `data` property will be ignored if set.
    */
@@ -134,8 +139,8 @@ export type Props = {
    * Set the calendar colors for the light and dark system color scheme. Pass
    * all colors per scheme explicitly (5 per default) or set exactly two colors
    * (the lowest and highest intensity) to calculate a single-hue scale. The
-   * number of colors is controlled by the `maxLevel` property. Colors can be
-   * specified in any valid CSS format.
+   * number of colors is controlled by the `levelBounds` property. Colors can
+   * be specified in any valid CSS format.
    *
    * The colors for at least one scheme must be set. If undefined, the default
    * theme is used. By default, the calendar will select the current system color
@@ -190,7 +195,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       hideMonthLabels = false,
       hideTotalCount = false,
       labels: labelsProp = undefined,
-      maxLevel = 4,
+      levelBounds: levelBoundsProp = { min: 0, max: 4 },
       loading = false,
       renderBlock = undefined,
       renderColorLegend = undefined,
@@ -208,9 +213,8 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       setIsClient(true)
     }, [])
 
-    maxLevel = Math.max(1, maxLevel)
-
-    const theme = createTheme(themeProp, maxLevel + 1)
+    const levelBounds = validateLevelBounds(levelBoundsProp)
+    const theme = createTheme(themeProp, levelBounds)
     const systemColorScheme = useColorScheme()
     const colorScheme = colorSchemeProp ?? systemColorScheme
     const colorScale = theme[colorScheme]
@@ -222,7 +226,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       activities = generateEmptyData()
     }
 
-    validateActivities(activities, maxLevel)
+    validateActivities(activities, levelBounds)
 
     const firstActivity = activities[0] as Activity
     const year = getYear(parseISO(firstActivity.date))
@@ -271,7 +275,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                 height={blockSize}
                 rx={blockRadius}
                 ry={blockRadius}
-                fill={colorScale[activity.level]}
+                fill={colorForLevel(activity.level)}
                 data-date={activity.date}
                 data-level={activity.level}
                 style={{
@@ -328,7 +332,6 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
         >
           {/* Placeholder */}
           {loading && <div>&nbsp;</div>}
-
           {!loading && !hideTotalCount && (
             <div className={getClassName('count')}>
               {labels.totalCount
@@ -342,13 +345,13 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
           {!loading && !hideColorLegend && (
             <div className={getClassName('legend-colors')} style={styles.footer.legend}>
               <span style={{ marginRight: '0.4em' }}>{labels.legend.less}</span>
-              {range(maxLevel + 1).map(level => {
+              {range(levelBounds.min, levelBounds.max + 1).map(level => {
                 const colorLegend = (
                   <svg width={blockSize} height={blockSize} key={level}>
                     <rect
                       width={blockSize}
                       height={blockSize}
-                      fill={colorScale[level]}
+                      fill={colorForLevel(level)}
                       rx={blockRadius}
                       ry={blockRadius}
                       style={styles.rect(colorScheme)}
@@ -438,6 +441,10 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
           ))}
         </g>
       )
+    }
+
+    function colorForLevel(level: number) {
+      return colorScale[level + levelBounds.min * -1] // shift to zero-based index
     }
 
     const { width, height } = getDimensions()

@@ -1,8 +1,12 @@
-import type { Color, ColorScale, Theme, ThemeInput } from '../types'
+import type { Color, ColorScale, LevelBounds, Theme, ThemeInput } from '../types'
 import { range } from './calendar'
 
-export function createTheme(input?: ThemeInput, steps = 5): Theme {
-  const defaultTheme = createDefaultTheme(steps)
+export function createTheme(
+  input?: ThemeInput,
+  levelBounds: LevelBounds = { min: 0, max: 4 },
+): Theme {
+  const defaultTheme = createDefaultTheme(levelBounds)
+  const steps = levelBounds.max - levelBounds.min + 1
 
   if (input) {
     validateThemeInput(input, steps)
@@ -11,27 +15,28 @@ export function createTheme(input?: ThemeInput, steps = 5): Theme {
     input.dark = input.dark ?? defaultTheme.dark
 
     return {
-      light: isPair(input.light) ? calcColorScale(input.light, steps) : input.light,
-      dark: isPair(input.dark) ? calcColorScale(input.dark, steps) : input.dark,
+      light: isPair(input.light) ? calcColorScale(input.light, levelBounds) : input.light,
+      dark: isPair(input.dark) ? calcColorScale(input.dark, levelBounds) : input.dark,
     }
   }
 
   return defaultTheme
 }
 
-function createDefaultTheme(steps: number): Theme {
+function createDefaultTheme(levelBounds: LevelBounds): Theme {
   return {
-    light: calcColorScale(['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'], steps),
-    dark: calcColorScale(['hsl(0, 0%, 22%)', 'hsl(0, 0%, 92%)'], steps),
+    light: calcColorScale(['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'], levelBounds),
+    dark: calcColorScale(['hsl(0, 0%, 22%)', 'hsl(0, 0%, 92%)'], levelBounds),
   }
 }
 
 function validateThemeInput(input: ThemeInput, steps: number) {
-  const maxLevelHint = 'The number of colors is controlled by the "maxLevel" property.'
+  const levelBoundsHint =
+    'The number of colors must match the number of activity levels controlled by the `levelBounds` prop.'
 
   if (typeof input !== 'object' || (input.light === undefined && input.dark === undefined)) {
     throw new Error(
-      `The theme object must contain at least one of the fields "light" and "dark" with exactly 2 or ${steps} colors respectively. ${maxLevelHint}`,
+      `The theme object must contain at least one of the fields "light" and "dark" with exactly 2 or ${steps} colors respectively. ${levelBoundsHint}`,
     )
   }
 
@@ -39,7 +44,7 @@ function validateThemeInput(input: ThemeInput, steps: number) {
     const { length } = input.light
     if (length !== 2 && length !== steps) {
       throw new Error(
-        `theme.light must contain exactly 2 or ${steps} colors, ${length} passed. ${maxLevelHint}`,
+        `theme.light must contain exactly 2 or ${steps} colors, ${length} passed. ${levelBoundsHint}`,
       )
     }
 
@@ -54,7 +59,7 @@ function validateThemeInput(input: ThemeInput, steps: number) {
     const { length } = input.dark
     if (length !== 2 && length !== steps) {
       throw new Error(
-        `theme.dark must contain exactly 2 or ${steps} colors, ${length} passed. ${maxLevelHint}`,
+        `theme.dark must contain exactly 2 or ${steps} colors, ${length} passed. ${levelBoundsHint}`,
       )
     }
 
@@ -66,8 +71,11 @@ function validateThemeInput(input: ThemeInput, steps: number) {
   }
 }
 
-function calcColorScale([start, end]: [Color, Color], steps: number): ColorScale {
-  return range(steps).map(i => {
+function calcColorScale([start, end]: [Color, Color], levelBounds: LevelBounds): ColorScale {
+  const maxIndex = levelBounds.max + levelBounds.min * -1
+  const steps = levelBounds.max - levelBounds.min + 1
+
+  return range(0, maxIndex + 1).map(i => {
     // In the loading animation the zero color is used.
     // However, Safari 16 crashes if a CSS color-mix expression like below is
     // combined with relative color syntax to calculate a hue variation for the
@@ -76,7 +84,7 @@ function calcColorScale([start, end]: [Color, Color], steps: number): ColorScale
     switch (i) {
       case 0:
         return start
-      case steps - 1:
+      case maxIndex:
         return end
       default: {
         const pos = (i / (steps - 1)) * 100

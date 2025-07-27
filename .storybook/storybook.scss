@@ -30,6 +30,10 @@ p {
   & + ol {
     margin-top: -0.75em;
   }
+
+  code {
+    white-space: nowrap;
+  }
 }
 
 p,

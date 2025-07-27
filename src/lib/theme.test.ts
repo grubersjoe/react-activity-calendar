@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals'
-import type { Theme, ThemeInput } from '../types'
+import type { LevelBounds, Theme, ThemeInput } from '../types'
 import { createTheme } from './theme'
 
 describe('createTheme', () => {
@@ -54,7 +54,7 @@ describe('createTheme', () => {
         {
           light: ['blue'],
         },
-        2,
+        { min: 0, max: 2 },
       ),
     ).toThrow()
   })
@@ -63,9 +63,9 @@ describe('createTheme', () => {
     expect(() =>
       createTheme(
         {
-          dark: Array(4).fill('green'),
+          dark: Array(5).fill('green'),
         },
-        3,
+        { min: 0, max: 3 },
       ),
     ).toThrow()
   })
@@ -101,7 +101,7 @@ describe('createTheme', () => {
     ).toThrow()
   })
 
-  it('returns the same value for explicit inputs', () => {
+  it('returns the same theme for explicit inputs', () => {
     expect(createTheme(explicitTheme)).toStrictEqual(explicitTheme)
   })
 
@@ -116,14 +116,73 @@ describe('createTheme', () => {
     expect(actual.dark).toHaveLength(5)
   })
 
-  it('calculates color scales with correct size', () => {
-    const input: ThemeInput = {
-      light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
-      dark: ['hsl(0, 0%, 20%)', 'hsl(0, 0%, 92%)'],
-    }
-
-    const actual = createTheme(input, 3)
-    expect(actual.light).toHaveLength(3)
-    expect(actual.dark).toHaveLength(3)
-  })
+  it.each([
+    [
+      { min: 0, max: 3 },
+      {
+        light: [
+          'hsl(0, 0%, 92%)',
+          'color-mix(in oklab, hsl(0, 0%, 26%) 33.33%, hsl(0, 0%, 92%))',
+          'color-mix(in oklab, hsl(0, 0%, 26%) 66.67%, hsl(0, 0%, 92%))',
+          'hsl(0, 0%, 26%)',
+        ],
+        dark: [
+          'hsl(0, 0%, 20%)',
+          'color-mix(in oklab, hsl(0, 0%, 92%) 33.33%, hsl(0, 0%, 20%))',
+          'color-mix(in oklab, hsl(0, 0%, 92%) 66.67%, hsl(0, 0%, 20%))',
+          'hsl(0, 0%, 92%)',
+        ],
+      },
+    ],
+    [
+      { min: 1, max: 5 },
+      {
+        dark: [
+          'hsl(0, 0%, 20%)',
+          'color-mix(in oklab, hsl(0, 0%, 92%) 25%, hsl(0, 0%, 20%))',
+          'color-mix(in oklab, hsl(0, 0%, 92%) 50%, hsl(0, 0%, 20%))',
+          'color-mix(in oklab, hsl(0, 0%, 92%) 75%, hsl(0, 0%, 20%))',
+          'hsl(0, 0%, 92%)',
+        ],
+        light: [
+          'hsl(0, 0%, 92%)',
+          'color-mix(in oklab, hsl(0, 0%, 26%) 25%, hsl(0, 0%, 92%))',
+          'color-mix(in oklab, hsl(0, 0%, 26%) 50%, hsl(0, 0%, 92%))',
+          'color-mix(in oklab, hsl(0, 0%, 26%) 75%, hsl(0, 0%, 92%))',
+          'hsl(0, 0%, 26%)',
+        ],
+      },
+    ],
+    [
+      { min: -8, max: -7 },
+      {
+        dark: ['hsl(0, 0%, 20%)', 'hsl(0, 0%, 92%)'],
+        light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
+      },
+    ],
+    [
+      { min: -1, max: 1 },
+      {
+        dark: [
+          'hsl(0, 0%, 20%)',
+          'color-mix(in oklab, hsl(0, 0%, 92%) 50%, hsl(0, 0%, 20%))',
+          'hsl(0, 0%, 92%)',
+        ],
+        light: [
+          'hsl(0, 0%, 92%)',
+          'color-mix(in oklab, hsl(0, 0%, 26%) 50%, hsl(0, 0%, 92%))',
+          'hsl(0, 0%, 26%)',
+        ],
+      },
+    ],
+  ] satisfies Array<[LevelBounds, Theme]>)(
+    'calculates correct color scales for different level bounds %s',
+    (bounds, expected) => {
+      const input: ThemeInput = {
+        light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
+        dark: ['hsl(0, 0%, 20%)', 'hsl(0, 0%, 92%)'],
+      }
+      expect(createTheme(input, bounds)).toStrictEqual(expected)
+    },
+  )
 })

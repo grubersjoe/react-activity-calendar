@@ -11,28 +11,33 @@ import {
   subWeeks,
 } from 'date-fns'
 import { NAMESPACE } from '../constants'
-import type { Activity, DayIndex, Week } from '../types'
+import type { Activity, DayIndex, LevelBounds, Week } from '../types'
 
-export function validateActivities(activities: Array<Activity>, maxLevel: number) {
+export function validateActivities(activities: Array<Activity>, levelBounds: LevelBounds) {
   if (activities.length === 0) {
     throw new Error('Activity data must not be empty.')
   }
 
-  for (const { date, level, count } of activities) {
+  for (const { date, level } of activities) {
     if (!isValid(parseISO(date))) {
       throw new Error(`Activity date '${date}' is not a valid ISO 8601 date string.`)
     }
 
-    if (count < 0) {
-      throw new RangeError(`Activity count must not be negative, found ${count}.`)
-    }
-
-    if (level < 0 || level > maxLevel) {
+    if (level < levelBounds.min || level > levelBounds.max) {
       throw new RangeError(
-        `Activity level ${level} for ${date} is out of range. It must be between 0 and ${maxLevel}.`,
+        `Activity level ${level} for ${date} is out of range. It must be between ${levelBounds.min} and ${levelBounds.max}.`,
       )
     }
   }
+}
+
+export function validateLevelBounds(bounds: LevelBounds): LevelBounds {
+  if (bounds.min >= bounds.max) {
+    throw new RangeError(
+      `Minimum level must be less than maximum level. Got ${bounds.min} and ${bounds.max}.`,
+    )
+  }
+  return bounds
 }
 
 export function groupByWeeks(
@@ -70,7 +75,7 @@ export function groupByWeeks(
  * so fill gaps with empty activity data.
  */
 function fillHoles(activities: Array<Activity>): Array<Activity> {
-  const calendar = new Map<string, Activity>(activities.map(a => [a.date, a]))
+  const calendar = new Map(activities.map(a => [a.date, a]))
   const firstActivity = activities[0] as Activity
   const lastActivity = activities[activities.length - 1] as Activity
 
@@ -114,16 +119,32 @@ export function generateEmptyData(): Array<Activity> {
   }))
 }
 
-export function generateTestData(args: {
+/**
+ * Returns the sequence of numbers in range.
+ * @example range(3) -> [0, 1, 2]
+ * @example range(2, 5) -> [2, 3, 4]
+ */
+export function range(fromArg: number, toArg?: number) {
+  const from = toArg === undefined ? 0 : fromArg
+  const to = toArg ?? fromArg
+
+  if (to <= from) {
+    throw new RangeError('Invalid range: to must be greater than from')
+  }
+
+  return Array.from({ length: to - from }, (_, i) => from + i)
+}
+
+export function generateTestData(args?: {
   interval?: { start: Date; end: Date }
-  maxLevel?: number
+  levelBounds?: LevelBounds
 }): Array<Activity> {
   const maxCount = 20
-  const maxLevel = args.maxLevel ? Math.max(1, args.maxLevel) : 4
+  const { min: minLevel, max: maxLevel } = args?.levelBounds ?? { min: 0, max: 4 }
   const now = new Date()
 
   const days = eachDayOfInterval(
-    args.interval ?? {
+    args?.interval ?? {
       start: startOfYear(now),
       end: endOfYear(now),
     },
@@ -133,7 +154,7 @@ export function generateTestData(args: {
     // The random activity count is shifted by up to 80% towards zero.
     const c = Math.round(Math.random() * maxCount - Math.random() * (0.8 * maxCount))
     const count = Math.max(0, c)
-    const level = Math.ceil((count / maxCount) * maxLevel)
+    const level = Math.ceil((count / maxCount) * (maxLevel - minLevel)) + minLevel
 
     return {
       date: formatISO(date, { representation: 'date' }),
@@ -141,8 +162,4 @@ export function generateTestData(args: {
       level,
     }
   })
-}
-
-export function range(n: number) {
-  return [...Array(n).keys()]
 }
