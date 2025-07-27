@@ -11,28 +11,33 @@ import {
   subWeeks,
 } from 'date-fns'
 import { NAMESPACE } from '../constants'
-import type { Activity, DayIndex, Week } from '../types'
+import type { Activity, DayIndex, Levels, Week } from '../types'
 
-export function validateActivities(activities: Array<Activity>, maxLevel: number) {
+export function validateActivities(activities: Array<Activity>, levels: Levels) {
   if (activities.length === 0) {
     throw new Error('Activity data must not be empty.')
   }
 
-  for (const { date, level, count } of activities) {
+  for (const { date, level } of activities) {
     if (!isValid(parseISO(date))) {
       throw new Error(`Activity date '${date}' is not a valid ISO 8601 date string.`)
     }
 
-    if (count < 0) {
-      throw new RangeError(`Activity count must not be negative, found ${count}.`)
-    }
-
-    if (level < 0 || level > maxLevel) {
+    if (level < levels.min || level > levels.max) {
       throw new RangeError(
-        `Activity level ${level} for ${date} is out of range. It must be between 0 and ${maxLevel}.`,
+        `Activity level ${level} for ${date} is out of range. It must be between ${levels.min} and ${levels.max}.`,
       )
     }
   }
+}
+
+export function validateLevels(levels: Levels): Levels {
+  if (levels.min >= levels.max) {
+    throw new RangeError(
+      `Minimum level must be less than maximum level. Got ${levels.min} and ${levels.max}.`,
+    )
+  }
+  return levels
 }
 
 export function groupByWeeks(
@@ -70,7 +75,7 @@ export function groupByWeeks(
  * so fill gaps with empty activity data.
  */
 function fillHoles(activities: Array<Activity>): Array<Activity> {
-  const calendar = new Map<string, Activity>(activities.map(a => [a.date, a]))
+  const calendar = new Map(activities.map(a => [a.date, a]))
   const firstActivity = activities[0] as Activity
   const lastActivity = activities[activities.length - 1] as Activity
 
@@ -100,10 +105,6 @@ export function getClassName(element: string) {
   return `${NAMESPACE}__${element}`
 }
 
-export function range(n: number) {
-  return [...Array(n).keys()]
-}
-
 export function generateEmptyData(): Array<Activity> {
   const year = new Date().getFullYear()
   const days = eachDayOfInterval({
@@ -118,22 +119,39 @@ export function generateEmptyData(): Array<Activity> {
   }))
 }
 
-export function generateTestData(args: {
+/**
+ * Returns the sequence of numbers in range.
+ * @example range(3) -> [0, 1, 2]
+ * @example range(2, 5) -> [2, 3, 4]
+ */
+export function range(fromArg: number, toArg?: number) {
+  const from = toArg === undefined ? 0 : fromArg
+  const to = toArg ?? fromArg
+
+  if (to <= from) {
+    throw new RangeError('Invalid range: to must be greater than from')
+  }
+
+  return Array.from({ length: to - from }, (_, i) => from + i)
+}
+
+export function generateTestData(args?: {
   interval?: { start: Date; end: Date }
-  maxLevel?: number
+  levels?: Levels
 }): Array<Activity> {
   const maxCount = 20
-  const maxLevel = args.maxLevel ? Math.max(1, args.maxLevel) : 4
+  const { min: minLevel, max: maxLevel } = args?.levels ?? { min: 0, max: 4 }
   const now = new Date()
 
   const days = eachDayOfInterval(
-    args.interval ?? {
+    args?.interval ?? {
       start: startOfYear(now),
       end: endOfYear(now),
     },
   )
 
-  const noise = whiteNoise(days.length, maxLevel, v => 0.9 * Math.pow(v, 2))
+  // FIXME
+  const noise = whiteNoise(days.length, Math.abs(minLevel) + maxLevel, v => 0.9 * Math.pow(v, 2))
 
   return days.map((date, i) => {
     const level = noise[i] as number

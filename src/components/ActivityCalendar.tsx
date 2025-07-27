@@ -22,6 +22,7 @@ import {
   groupByWeeks,
   range,
   validateActivities,
+  validateLevels,
 } from '../lib/calendar'
 import { getMonthLabels, initWeekdayLabels, maxWeekdayLabelWidth } from '../lib/label'
 import { createTheme } from '../lib/theme'
@@ -33,6 +34,7 @@ import type {
   DayIndex,
   DayName,
   Labels,
+  Levels,
   ThemeInput,
 } from '../types'
 import { type TooltipConfig } from './Tooltip'
@@ -43,8 +45,8 @@ export type Props = {
   /**
    * List of calendar entries. Each `Activity` object requires an ISO 8601
    * `date` string in the format `yyyy-MM-dd`, a `count` property with the
-   * amount of tracked data, and a `level` property in the range `0-maxLevel`
-   * to specify activity intensity. The `maxLevel` prop defaults to 4.
+   * amount of tracked data, and a `level` property in the given level bounds
+   * to specify activity intensity. The `levels` are [0, 4] by default.
    *
    * Dates without corresponding entries are assumed to have no activity. This
    * allows you to set arbitrary start and end dates for the calendar by passing
@@ -92,9 +94,21 @@ export type Props = {
    */
   labels?: Labels
   /**
+   * Minimum and maximum activity level.
+   * 0 usually means "no activity", but you can also use negative levels.
+   * All activity data must fall within the specified bounds.
+   * Default: `{min: 0, max: 4}`.
+   */
+  levels?: Levels
+  /**
    * Maximum activity level (zero-indexed). 4 by default, 0 means "no activity".
+   * @deprecated: Use `levels` instead.
    */
   maxLevel?: number
+  /**
+   * Minimum activity level. 0 by default.
+   */
+  minLevel?: number
   /**
    * Toggle to display the calendar loading state. The `data` property is
    * ignored if set.
@@ -141,7 +155,7 @@ export type Props = {
    * Set the calendar colors for the light and dark color schemes. Provide
    * all colors per scheme explicitly (5 by default) or specify exactly two colors
    * (the lowest and highest intensity) to calculate a single-hue scale. The
-   * number of colors is controlled by the `maxLevel` property. Colors can be
+   * number of colors is controlled by the `levels` property. Colors can be
    * specified in any valid CSS format.
    *
    * At least one scheme's colors must be set. If undefined, the default
@@ -175,7 +189,7 @@ export type Props = {
     }
   }
   /**
-   * Index of day to be used as start of week. 0 represents Sunday.
+   * Index of day to be used as the week start. 0 represents Sunday.
    */
   weekStart?: DayIndex
 }
@@ -191,8 +205,9 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       colorScheme: colorSchemeProp,
       fontSize = 14,
       labels: labelsProp,
+      levels: levelsProp = { min: 0, max: 4 },
       loading = false,
-      maxLevel = 4,
+      maxLevel = 4, // eslint-disable-line @typescript-eslint/no-deprecated
       renderBlock,
       renderColorLegend,
       showColorLegend = true,
@@ -211,9 +226,8 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       setIsClient(true)
     }, [])
 
-    maxLevel = Math.max(1, maxLevel)
-
-    const theme = createTheme(themeProp, maxLevel + 1)
+    const levels = maxLevel ? { min: 0, max: maxLevel } : validateLevels(levelsProp)
+    const theme = createTheme(themeProp, levels)
     const systemColorScheme = useColorScheme()
     const colorScheme = colorSchemeProp ?? systemColorScheme
     const colorScale = theme[colorScheme]
@@ -231,7 +245,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       activities = generateEmptyData()
     }
 
-    validateActivities(activities, maxLevel)
+    validateActivities(activities, levels)
 
     const firstActivity = activities[0] as Activity
     const year = getYear(parseISO(firstActivity.date))
@@ -280,7 +294,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                 height={blockSize}
                 rx={blockRadius}
                 ry={blockRadius}
-                fill={colorScale[activity.level]}
+                fill={colorForLevel(activity.level)}
                 data-date={activity.date}
                 data-level={activity.level}
                 style={{
@@ -353,13 +367,13 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                 <span style={{ marginRight: '0.4em' }}>{labels.legend.less}</span>
               )}
 
-              {range(maxLevel + 1).map(level => {
+              {range(levels.min, levels.max + 1).map(level => {
                 const colorLegend = (
                   <svg width={blockSize} height={blockSize} key={level}>
                     <rect
                       width={blockSize}
                       height={blockSize}
-                      fill={colorScale[level]}
+                      fill={colorForLevel(level)}
                       rx={blockRadius}
                       ry={blockRadius}
                       style={styles.rect(colorScheme)}
@@ -454,6 +468,10 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
           ))}
         </g>
       )
+    }
+
+    function colorForLevel(level: number) {
+      return colorScale[level + levels.min * -1] // shift to zero-based index
     }
 
     const { width, height } = getDimensions()

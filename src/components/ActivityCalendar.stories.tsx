@@ -42,16 +42,13 @@ const meta: Meta<ForwardedRef<Props>> = {
       control: { type: 'range', min: 0, max: 20 },
     },
     blockSize: {
-      control: { type: 'range', min: 4, max: 30, step: 1 },
+      control: { type: 'range', min: 4, max: 30 },
     },
     colorScheme: {
       control: false,
     },
     fontSize: {
       control: { type: 'range', min: 6, max: 32, step: 2 },
-    },
-    maxLevel: {
-      control: { type: 'range', min: 1, max: 10 },
     },
     ref: {
       control: false,
@@ -105,7 +102,7 @@ const defaultProps = {
   blockSize: 12,
   fontSize: 14,
   loading: false,
-  maxLevel: 4,
+  levels: { min: 0, max: 4 },
   showColorLegend: true,
   showMonthLabels: true,
   showTotalCount: true,
@@ -122,7 +119,7 @@ const explicitTheme: Theme = {
 export const Default: Story = {
   args: defaultProps,
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    const data = useMemo(() => generateTestData({ levels: args.levels }), [args.levels])
     return <ActivityCalendar {...args} data={data} />
   },
   parameters: {
@@ -152,10 +149,10 @@ export const Loading: Story = {
 export const ActivityLevels: Story = {
   args: {
     ...defaultProps,
-    maxLevel: 2,
+    levels: { min: 0, max: 2 },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    const data = useMemo(() => generateTestData({ levels: args.levels }), [args.levels])
 
     return (
       <Container>
@@ -164,12 +161,12 @@ export const ActivityLevels: Story = {
         <p>
           Use the{' '}
           <code>
-            <b>maxLevel</b>
+            <b>levels</b>
           </code>{' '}
-          prop to control the number of activity levels. This value is zero indexed, where 0
-          represents no activity. <code>maxLevel</code> is 4 by default, so this results in 5
-          activity levels. Each activity level must be in the interval from 0 to{' '}
-          <code>maxLevel</code>.
+          prop to control the range of activity levels. By default, the range is <code>[0, 4]</code>
+          , which results in 5 activity levels (0 through 4, inclusive). You can also specify a
+          negative interval like <code>[-3, 3]</code>. All activity data must fall within the
+          specified bounds.
         </p>
       </Container>
     )
@@ -177,7 +174,7 @@ export const ActivityLevels: Story = {
   parameters: {
     docs: {
       source: {
-        code: '<ActivityCalendar data={data} maxLevel={2} loading />',
+        code: '<ActivityCalendar data={data} levels={{min: 0, max: 2}} />',
       },
     },
   },
@@ -189,37 +186,37 @@ export const DateRanges: Story = {
     const dataLong = useMemo(
       () =>
         generateTestData({
-          maxLevel: args.maxLevel,
+          levels: args.levels,
           interval: {
             start: new Date(2022, 5, 1),
             end: new Date(2023, 4, 31),
           },
         }),
-      [args.maxLevel],
+      [args.levels],
     )
 
     const dataMedium = useMemo(
       () =>
         generateTestData({
-          maxLevel: args.maxLevel,
+          levels: args.levels,
           interval: {
             start: new Date(2023, 2, 8),
             end: new Date(2023, 7, 1),
           },
         }),
-      [args.maxLevel],
+      [args.levels],
     )
 
     const dataShort = useMemo(
       () =>
         generateTestData({
-          maxLevel: args.maxLevel,
+          levels: args.levels,
           interval: {
             start: new Date(2023, 5, 14),
             end: new Date(2023, 6, 17),
           },
         }),
-      [args.maxLevel],
+      [args.levels],
     )
 
     return (
@@ -254,7 +251,7 @@ export const ColorThemes: Story = {
     },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    const data = useMemo(() => generateTestData({ levels: args.levels }), [args.levels])
 
     return (
       <Container>
@@ -275,7 +272,7 @@ export const ColorThemes: Story = {
           single-hue scale. For explicit themes the color count must match the number of activity
           levels, which is controlled by the{' '}
           <LinkTo kind="react-activity-calendar" name="activity-levels">
-            <code>maxLevel</code>
+            <code>levels</code>
           </LinkTo>{' '}
           prop. Colors can be specified in any valid CSS format.
         </p>
@@ -300,8 +297,8 @@ export const ExplicitThemes: Story = {
     theme: explicitTheme,
   },
   parameters: {
-    // maxLevel cannot be used for a static explicit theme
-    controls: { exclude: ['maxLevel'] },
+    // Levels  must not be set when using a static theme
+    controls: { exclude: ['levels'] },
     docs: {
       source: {
         code: exampleThemeExplicit,
@@ -309,7 +306,7 @@ export const ExplicitThemes: Story = {
     },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: 4 }), [])
+    const data = useMemo(() => generateTestData(), [])
 
     return (
       <Container>
@@ -338,12 +335,12 @@ export const Customization: Story = {
     theme: explicitTheme,
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    const data = useMemo(() => generateTestData({ levels: args.levels }), [args.levels])
     return <ActivityCalendar {...args} data={data} />
   },
   parameters: {
-    // maxLevel cannot be used for a static explicit theme
-    controls: { exclude: ['maxLevel'] },
+    // Levels must not be set when using a static theme
+    controls: { exclude: ['levels'] },
     docs: {
       source: {
         code: exampleCustomization,
@@ -374,7 +371,7 @@ export const EventHandlers: Story = {
     },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    const data = useMemo(() => generateTestData({ levels: args.levels }), [args.levels])
 
     return (
       <Container>
@@ -402,15 +399,15 @@ export const Tooltips: Story = {
     ...defaultProps,
     tooltips: {
       activity: {
-        text: activity => `${activity.level} activities on ${activity.date}`,
+        text: ({ count, date }) => `${count} activities on ${date}`,
       },
       colorLegend: {
-        text: level => `Activity level ${level + 1}`,
+        text: level => `Activity level ${level}`,
       },
     },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    const data = useMemo(() => generateTestData({ levels: args.levels }), [args.levels])
 
     return (
       <Container>
@@ -507,7 +504,7 @@ export const WithoutLabels: Story = {
     showTotalCount: false,
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    const data = useMemo(() => generateTestData({ levels: args.levels }), [args.levels])
     return <ActivityCalendar {...args} data={data} />
   },
   parameters: {
@@ -525,7 +522,7 @@ export const WeekdayLabels: Story = {
     showWeekdayLabels: true,
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    const data = useMemo(() => generateTestData({ levels: args.levels }), [args.levels])
     return (
       <Stack>
         <div>
@@ -582,7 +579,7 @@ export const LocalizedLabels: Story = {
     },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    const data = useMemo(() => generateTestData({ levels: args.levels }), [args.levels])
 
     return (
       <Container>
@@ -601,7 +598,7 @@ export const MondayAsWeekStart: Story = {
     weekStart: 1,
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    const data = useMemo(() => generateTestData({ levels: args.levels }), [args.levels])
     return <ActivityCalendar {...args} data={data} />
   },
   parameters: {
@@ -623,7 +620,7 @@ export const NarrowScreens: Story = {
     },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    const data = useMemo(() => generateTestData({ levels: args.levels }), [args.levels])
 
     return (
       <div style={{ width: 480, maxWidth: '100%', border: 'dashed 1px #929292' }}>
@@ -643,7 +640,7 @@ export const ContainerRef: Story = {
     },
   },
   render: args => {
-    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    const data = useMemo(() => generateTestData({ levels: args.levels }), [args.levels])
     const calendarRef = useRef<HTMLElement>(null)
 
     useEffect(() => {
