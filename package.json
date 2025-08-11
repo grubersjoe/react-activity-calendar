@@ -51,7 +51,7 @@
     "@storybook/addon-links": "^9.0.14",
     "@storybook/react-vite": "^9.0.14",
     "@types/react": "^19.1.8",
-    "@vitejs/plugin-react": "^4.6.0",
+    "@vitejs/plugin-react": "^5.0.0",
     "@vueless/storybook-dark-mode": "^9.0.5",
     "dts-bundle-generator": "^9.5.1",
     "eslint": "^9.30.0",
