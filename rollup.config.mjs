@@ -4,7 +4,6 @@ import resolve from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import copy from 'rollup-plugin-copy'
 import filesize from 'rollup-plugin-filesize'
-import externalDeps from 'rollup-plugin-peer-deps-external'
 import { visualizer } from 'rollup-plugin-visualizer'
 
 const extensions = ['.ts', '.tsx']
@@ -16,8 +15,9 @@ const useExternal = process.env.EXTERNAL_DEPS?.toLowerCase() !== 'false'
 export default {
   input: 'src/index.tsx',
   output: {
-    file: 'build/index.js',
+    dir: 'build',
     format: 'es',
+    chunkFileNames: 'chunks/[name]-[hash].js',
     sourcemap: true,
     exports: 'named',
     // Use 'auto' instead of 'default' to support more environments.
@@ -27,12 +27,14 @@ export default {
     // https://github.com/rollup/rollup/issues/4699
     banner: `'use client';`,
   },
+  external: useExternal ? ['react', 'react/jsx-runtime', 'date-fns', '@floating-ui/react'] : [],
+  inlineDynamicImports: false,
   plugins: [
     replace({
       preventAssignment: true, // recommended to set this to true, will be default in the next major version
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
-    ...(useExternal ? [externalDeps({ includeDependencies: true })] : [commonjs()]),
+    ...(useExternal ? [] : [commonjs()]),
     babel({
       extensions,
       exclude: 'node_modules/**',
