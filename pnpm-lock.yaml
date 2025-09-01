@@ -133,9 +133,6 @@ importers:
       rollup-plugin-filesize:
         specifier: ^10.0.0
         version: 10.0.0
-      rollup-plugin-peer-deps-external:
-        specifier: ^2.2.4
-        version: 2.2.4(rollup@4.53.2)
       rollup-plugin-visualizer:
         specifier: ^6.0.3
         version: 6.0.5(rollup@4.53.2)
@@ -4164,11 +4161,6 @@ packages:
   rollup-plugin-filesize@10.0.0:
     resolution: {integrity: sha512-JAYYhzCcmGjmCzo3LEHSDE3RAPHKIeBdpqRhiyZSv5o/3wFhktUOzYAWg/uUKyEu5dEaVaql6UOmaqHx1qKrZA==}
     engines: {node: '>=16.0.0'}
-
-  rollup-plugin-peer-deps-external@2.2.4:
-    resolution: {integrity: sha512-AWdukIM1+k5JDdAqV/Cxd+nejvno2FVLVeZ74NKggm3Q5s9cbbcOgUPGdbxPi4BXu7xGaZ8HG12F+thImYu/0g==}
-    peerDependencies:
-      rollup: '*'
 
   rollup-plugin-visualizer@6.0.5:
     resolution: {integrity: sha512-9+HlNgKCVbJDs8tVtjQ43US12eqaiHyyiLMdBwQ7vSZPiHMysGNo2E88TAp1si5wx8NAoYriI2A5kuKfIakmJg==}
@@ -9651,10 +9643,6 @@ snapshots:
     transitivePeerDependencies:
       - bluebird
       - supports-color
-
-  rollup-plugin-peer-deps-external@2.2.4(rollup@4.53.2):
-    dependencies:
-      rollup: 4.53.2
 
   rollup-plugin-visualizer@6.0.5(rollup@4.53.2):
     dependencies:

@@ -1,6 +1,6 @@
 {
   "name": "react-activity-calendar",
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-alpha.4",
   "description": "React component to display activity data in calendar",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
@@ -27,13 +27,14 @@
     "format": "prettier --write .",
     "lint": "eslint .",
     "postbuild": "dts-bundle-generator src/index.tsx -o build/index.d.ts --no-check --no-banner --external-imports react date-fns @floating-ui/react",
+    "prebuild": "rm -rf build/*",
+    "prepare": "husky",
     "prepublishOnly": "pnpm check && pnpm build",
     "start": "rollup -c -w",
     "test": "pnpm test:unit && pnpm test:visual",
     "test:unit": "jest",
     "test:visual": "docker compose run -p 9001:9001 --rm playwright bash -c 'npm install --silent --no-package-lock && npx playwright test'",
-    "test:visual:update": "docker compose run --rm playwright bash -c 'npm install --silent --no-package-lock && npx playwright test --update-snapshots'",
-    "prepare": "husky"
+    "test:visual:update": "docker compose run --rm playwright bash -c 'npm install --silent --no-package-lock && npx playwright test --update-snapshots'"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.12",
@@ -76,7 +77,6 @@
     "rollup": "^4.44.1",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-filesize": "^10.0.0",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-visualizer": "^6.0.3",
     "sass-embedded": "^1.93.2",
     "storybook": "^9.0.14",
