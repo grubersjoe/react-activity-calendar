@@ -3,6 +3,8 @@
 import {
   forwardRef,
   Fragment,
+  lazy,
+  Suspense,
   useEffect,
   useState,
   type CSSProperties,
@@ -33,7 +35,9 @@ import type {
   Labels,
   ThemeInput,
 } from '../types'
-import { Tooltip, type TooltipConfig } from './Tooltip'
+import { type TooltipConfig } from './Tooltip'
+
+const Tooltip = lazy(() => import('./Tooltip').then(module => ({ default: module.Tooltip })))
 
 export type Props = {
   /**
@@ -286,17 +290,19 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
             return (
               <Fragment key={activity.date}>
                 {tooltips.activity ? (
-                  <Tooltip
-                    text={tooltips.activity.text(activity)}
-                    colorScheme={colorScheme}
-                    placement={tooltips.activity.placement ?? 'top'}
-                    hoverRestMs={tooltips.activity.hoverRestMs}
-                    offset={tooltips.activity.offset}
-                    transitionStyles={tooltips.activity.transitionStyles}
-                    withArrow={tooltips.activity.withArrow}
-                  >
-                    {renderedBlock}
-                  </Tooltip>
+                  <Suspense fallback={renderedBlock}>
+                    <Tooltip
+                      text={tooltips.activity.text(activity)}
+                      colorScheme={colorScheme}
+                      placement={tooltips.activity.placement ?? 'top'}
+                      hoverRestMs={tooltips.activity.hoverRestMs}
+                      offset={tooltips.activity.offset}
+                      transitionStyles={tooltips.activity.transitionStyles}
+                      withArrow={tooltips.activity.withArrow}
+                    >
+                      {renderedBlock}
+                    </Tooltip>
+                  </Suspense>
                 ) : (
                   renderedBlock
                 )}
@@ -363,17 +369,19 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                 return (
                   <Fragment key={level}>
                     {tooltips.colorLegend ? (
-                      <Tooltip
-                        text={tooltips.colorLegend.text(level)}
-                        colorScheme={colorScheme}
-                        placement={tooltips.colorLegend.placement ?? 'bottom'}
-                        hoverRestMs={tooltips.colorLegend.hoverRestMs}
-                        offset={tooltips.colorLegend.offset}
-                        transitionStyles={tooltips.colorLegend.transitionStyles}
-                        withArrow={tooltips.colorLegend.withArrow}
-                      >
-                        {renderedColorLegend}
-                      </Tooltip>
+                      <Suspense fallback={renderedColorLegend}>
+                        <Tooltip
+                          text={tooltips.colorLegend.text(level)}
+                          colorScheme={colorScheme}
+                          placement={tooltips.colorLegend.placement ?? 'bottom'}
+                          hoverRestMs={tooltips.colorLegend.hoverRestMs}
+                          offset={tooltips.colorLegend.offset}
+                          transitionStyles={tooltips.colorLegend.transitionStyles}
+                          withArrow={tooltips.colorLegend.withArrow}
+                        >
+                          {renderedColorLegend}
+                        </Tooltip>
+                      </Suspense>
                     ) : (
                       renderedColorLegend
                     )}
