@@ -9,7 +9,7 @@ A React component to display activity data in a calendar (heatmap).<br>
 ![Screenshot](screenshot.png)
 
 <a href="https://www.buymeacoffee.com/grubersjoe">
-  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 48px;" >
+  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 40px;" >
 </a>
 
 ## Installation
