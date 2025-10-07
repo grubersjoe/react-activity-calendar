@@ -9,6 +9,8 @@ export function useColorScheme() {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setColorScheme(mediaQuery.matches ? 'dark' : 'light')
 
     mediaQuery.addEventListener('change', onChange)
