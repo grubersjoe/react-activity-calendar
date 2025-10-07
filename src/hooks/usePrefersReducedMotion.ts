@@ -7,6 +7,8 @@ export function usePrefersReducedMotion() {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(query)
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPrefersReducedMotion(mediaQuery.matches)
 
     const onChange = (event: MediaQueryListEvent) => {
