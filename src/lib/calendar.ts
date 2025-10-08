@@ -92,6 +92,57 @@ function fillHoles(activities: Array<Activity>): Array<Activity> {
   })
 }
 
+/**
+ * Extends the activity data based on smart logic:
+ * - Same year data: Expand to full Jan-Dec of that year
+ * - Multi-year data: Only render the specific months/range provided
+ */
+export function extendToCurrentYear(activities: Array<Activity>): Array<Activity> {
+  if (activities.length === 0) {
+    return generateEmptyData()
+  }
+
+  const calendar = new Map<string, Activity>(activities.map(a => [a.date, a]))
+  const firstActivity = activities[0] as Activity
+  const lastActivity = activities[activities.length - 1] as Activity
+
+  const firstActivityDate = parseISO(firstActivity.date)
+  const lastActivityDate = parseISO(lastActivity.date)
+
+  const firstYear = firstActivityDate.getFullYear()
+  const lastYear = lastActivityDate.getFullYear()
+
+  // Check if all data is within the same year
+  const isSameYear = firstYear === lastYear
+
+  let startDate = firstActivityDate
+  let endDate = lastActivityDate
+
+  if (isSameYear) {
+    // Same year data: Expand to full Jan-Dec of that year
+    startDate = new Date(firstYear, 0, 1) // January 1st of the data year
+    endDate = new Date(firstYear, 11, 31) // December 31st of the data year
+  }
+  // Multi-year data: Keep original range (no extension)
+
+  return eachDayOfInterval({
+    start: startDate,
+    end: endDate,
+  }).map(day => {
+    const date = formatISO(day, { representation: 'date' })
+
+    if (calendar.has(date)) {
+      return calendar.get(date) as Activity
+    }
+
+    return {
+      date,
+      count: 0,
+      level: 0,
+    }
+  })
+}
+
 export function getClassName(name: string) {
   return `${NAMESPACE}__${name}`
 }
@@ -141,4 +192,75 @@ export function generateTestData(args: {
 
 export function range(n: number) {
   return [...Array(n).keys()]
+}
+
+/**
+ * Groups activities by weeks with proper month boundaries for split-by-month display.
+ * Each month gets proper padding at the start and end to maintain correct day-of-week positioning.
+ */
+export function groupByWeeksForSplitByMonth(
+  activities: Array<Activity>,
+  weekStart: DayIndex = 0, // 0 = Sunday
+): Array<Week> {
+  const normalizedActivities = fillHoles(activities)
+
+  // Group activities by month first
+  const monthGroups = new Map<string, Array<Activity>>()
+
+  normalizedActivities.forEach(activity => {
+    const date = parseISO(activity.date)
+    const monthKey = `${date.getFullYear()}-${date.getMonth()}`
+
+    if (!monthGroups.has(monthKey)) {
+      monthGroups.set(monthKey, [])
+    }
+    monthGroups.get(monthKey)!.push(activity)
+  })
+
+  const allWeeks: Array<Week> = []
+
+  // Process each month separately
+  for (const [, monthActivities] of monthGroups) {
+    const firstActivity = monthActivities[0]
+    const lastActivity = monthActivities[monthActivities.length - 1]
+
+    if (!firstActivity || !lastActivity) {
+      continue
+    }
+
+    const firstDate = parseISO(firstActivity.date)
+    const lastDate = parseISO(lastActivity.date)
+
+    // Calculate padding needed at the start of the month
+    const firstDayOfWeek = getDay(firstDate)
+    const startPadding = (firstDayOfWeek - weekStart + 7) % 7
+
+    // Calculate padding needed at the end of the month to complete the last week
+    const lastDayOfWeek = getDay(lastDate)
+    const endPadding = (6 - ((lastDayOfWeek - weekStart + 7) % 7)) % 7
+
+    // Create padded month activities
+    const paddedMonthActivities = [
+      ...(Array(startPadding).fill(undefined) as Array<Activity>),
+      ...monthActivities,
+      ...(Array(endPadding).fill(undefined) as Array<Activity>),
+    ]
+
+    // Group this month's activities into weeks
+    const monthWeeks: Array<Week> = []
+    for (let i = 0; i < paddedMonthActivities.length; i += 7) {
+      monthWeeks.push(paddedMonthActivities.slice(i, i + 7))
+    }
+
+    allWeeks.push(...monthWeeks)
+
+    // Add a gap week only if this month ends on the last day of the week
+    // This creates natural spacing only when months are separated by week boundaries
+    const lastDayOfWeekForWeekStart = (weekStart + 6) % 7
+    if (lastDayOfWeek === lastDayOfWeekForWeekStart) {
+      allWeeks.push(Array(7).fill(undefined) as Week)
+    }
+  }
+
+  return allWeeks
 }

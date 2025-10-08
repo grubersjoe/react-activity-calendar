@@ -15,9 +15,11 @@ import { useColorScheme } from '../hooks/useColorScheme'
 import { loadingAnimationName, useLoadingAnimation } from '../hooks/useLoadingAnimation'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 import {
+  extendToCurrentYear,
   generateEmptyData,
   getClassName,
   groupByWeeks,
+  groupByWeeksForSplitByMonth,
   range,
   validateActivities,
 } from '../lib/calendar'
@@ -33,7 +35,6 @@ import type {
   ReactEvent,
   SVGRectEventHandler,
   ThemeInput,
-  Week,
 } from '../types'
 import { styles } from './styles'
 
@@ -205,6 +206,12 @@ export type Props = {
    * This adds extra space between different activity levels/groups.
    */
   activityGroupSpacing?: number
+  /**
+   * When enabled, automatically extends same-year data to show the full year (Jan-Dec).
+   * Multi-year data preserves its original range regardless of this setting.
+   * When disabled, preserves the original date range of the provided data.
+   */
+  showFullYear?: boolean
 }
 
 export const ActivityCalendar = forwardRef<HTMLElement, Props>(
@@ -236,6 +243,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       weekLabelSpacing = LABEL_MARGIN,
       monthLabelProps,
       weekLabelProps,
+      showFullYear = false,
     }: Props, // Required for react-docgen
     ref,
   ) => {
@@ -260,9 +268,14 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
     validateActivities(activities, maxLevel)
 
-    const firstActivity = activities[0] as Activity
+    // Conditionally extend activities to full year based on showFullYear prop
+    const processedActivities = showFullYear ? extendToCurrentYear(activities) : activities
+
+    const firstActivity = processedActivities[0] as Activity
     const year = getYear(parseISO(firstActivity.date))
-    const weeks = groupByWeeks(activities, weekStart)
+    const weeks = splitByMonth
+      ? groupByWeeksForSplitByMonth(processedActivities, weekStart)
+      : groupByWeeks(processedActivities, weekStart)
 
     const labels = Object.assign({}, DEFAULT_LABELS, labelsProp)
     const labelHeight = hideMonthLabels ? 0 : fontSize + monthLabelSpacing
@@ -276,48 +289,9 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
         ? maxWeekdayLabelWidth(labels.weekdays, weekdayLabels, fontSize) + weekLabelSpacing
         : undefined
 
-    function groupWeeksByMonth(weeks: Array<Week>) {
-      const monthGroups: Array<{
-        month: number
-        year: number
-        weeks: Array<Week>
-        startWeekIndex: number
-      }> = []
-
-      weeks.forEach((week, weekIndex) => {
-        const firstActivity = week.find(activity => activity !== undefined)
-        if (!firstActivity) return
-
-        const date = parseISO(firstActivity.date)
-        const month = getMonth(date)
-        const year = getYear(date)
-
-        const lastGroup = monthGroups[monthGroups.length - 1]
-
-        if (!lastGroup || lastGroup.month !== month || lastGroup.year !== year) {
-          monthGroups.push({
-            month,
-            year,
-            weeks: [week],
-            startWeekIndex: weekIndex,
-          })
-        } else {
-          lastGroup.weeks.push(week)
-        }
-      })
-
-      return monthGroups
-    }
-
     function getDimensions() {
-      let width = weeks.length * (blockSize + blockMargin) - blockMargin
-
-      if (splitByMonth) {
-        const monthGroups = groupWeeksByMonth(weeks)
-        const numberOfMonthGaps = monthGroups.length - 1
-        const spacing = blockSize + blockMargin
-        width += numberOfMonthGaps * spacing
-      }
+      // For split-by-month, the weeks array already includes proper spacing
+      const width = weeks.length * (blockSize + blockMargin) - blockMargin
 
       // Calculate height, adding extra space for bottom labels if needed
       let height = labelHeight + (blockSize + blockMargin) * 7 - blockMargin
@@ -344,70 +318,19 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     }
 
     function renderCalendar() {
-      if (!splitByMonth) {
-        // Current implementation for non-split mode
-        return weeks
-          .map((week, weekIndex) =>
-            week.map((activity, dayIndex) => {
-              if (!activity) {
-                return null
-              }
-
-              const loadingAnimation =
-                loading && useAnimation
-                  ? {
-                      animation: `${loadingAnimationName} 1.75s ease-in-out infinite`,
-                      animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
-                    }
-                  : undefined
-
-              const block = (
-                <rect
-                  {...getEventHandlers(activity)}
-                  x={0}
-                  y={labelHeight + (blockSize + blockMargin) * dayIndex}
-                  width={blockSize}
-                  height={blockSize}
-                  rx={blockRadius}
-                  ry={blockRadius}
-                  fill={colorScale[activity.level]}
-                  data-date={activity.date}
-                  data-level={activity.level}
-                  style={{ ...styles.rect(colorScheme), ...loadingAnimation }}
-                />
-              )
-
-              return (
-                <Fragment key={activity.date}>
-                  {renderBlock ? renderBlock(block, activity) : block}
-                </Fragment>
-              )
-            }),
-          )
-          .map((week, x) => (
-            <g key={x} transform={`translate(${(blockSize + blockMargin) * x}, 0)`}>
-              {week}
-            </g>
-          ))
-      }
-
-      // New month-split implementation
-      const monthGroups = groupWeeksByMonth(weeks)
-      let cumulativeOffset = 0
-
-      return monthGroups.map((monthGroup, monthIndex) => {
-        const monthWeeks = monthGroup.weeks.map((week, weekIndexInMonth) =>
+      // Render all weeks - the groupByWeeksForSplitByMonth function already handles month boundaries
+      return weeks
+        .map((week, weekIndex) =>
           week.map((activity, dayIndex) => {
             if (!activity) {
               return null
             }
 
-            const globalWeekIndex = monthGroup.startWeekIndex + weekIndexInMonth
             const loadingAnimation =
               loading && useAnimation
                 ? {
                     animation: `${loadingAnimationName} 1.75s ease-in-out infinite`,
-                    animationDelay: `${globalWeekIndex * 20 + dayIndex * 20}ms`,
+                    animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
                   }
                 : undefined
 
@@ -434,28 +357,11 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
             )
           }),
         )
-
-        const monthElement = (
-          <g key={`month-${monthIndex}`} transform={`translate(${cumulativeOffset}, 0)`}>
-            {monthWeeks.map((week, weekIndexInMonth) => (
-              <g
-                key={weekIndexInMonth}
-                transform={`translate(${(blockSize + blockMargin) * weekIndexInMonth}, 0)`}
-              >
-                {week}
-              </g>
-            ))}
+        .map((week, weekIndex) => (
+          <g key={weekIndex} transform={`translate(${(blockSize + blockMargin) * weekIndex}, 0)`}>
+            {week}
           </g>
-        )
-
-        // Update cumulative offset for next month
-        cumulativeOffset += monthGroup.weeks.length * (blockSize + blockMargin)
-        if (monthIndex < monthGroups.length - 1) {
-          cumulativeOffset += blockSize + blockMargin
-        }
-
-        return monthElement
-      })
+        ))
     }
 
     function renderFooter() {
@@ -579,42 +485,79 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
         )
       }
 
-      // Split-by-month mode with configurable label position
-      const monthGroups = groupWeeksByMonth(weeks)
-      let cumulativeOffset = 0
+      // Split-by-month mode: detect month boundaries and place labels
+      const monthLabels: Array<ReactElement> = []
+      let currentMonth = -1
+      let currentYear = -1
+      let monthStartWeekIndex = 0
 
-      return (
-        <g className={getClassName('legend-month')}>
-          {monthGroups.map((monthGroup, monthIndex) => {
-            const firstActivity = monthGroup.weeks[0]?.find(activity => activity !== undefined)
-            if (!firstActivity) return null
+      weeks.forEach((week, weekIndex) => {
+        const firstActivity = week.find(activity => activity !== undefined)
+        if (!firstActivity) return
 
-            const month = labels.months[getMonth(parseISO(firstActivity.date))]
-            if (!month) return null
+        const date = parseISO(firstActivity.date)
+        const month = getMonth(date)
+        const year = getYear(date)
 
-            const monthLabel = (
-              <text
-                x={cumulativeOffset}
-                y={yPosition}
-                dominantBaseline={dominantBaseline}
-                fill="currentColor"
-                key={monthIndex}
-                {...monthLabelProps}
-              >
-                {month}
-              </text>
-            )
+        // Check if we're starting a new month
+        if (month !== currentMonth || year !== currentYear) {
+          // Add label for the previous month (if any)
+          if (currentMonth !== -1) {
+            const monthName = labels.months[currentMonth]
+            if (monthName) {
+              const monthWeekCount = weekIndex - monthStartWeekIndex
+              const monthCenterX =
+                monthStartWeekIndex * (blockSize + blockMargin) +
+                (monthWeekCount * (blockSize + blockMargin)) / 2 -
+                (blockSize + blockMargin) / 2
 
-            // Update cumulative offset for next month
-            cumulativeOffset += monthGroup.weeks.length * (blockSize + blockMargin)
-            if (monthIndex < monthGroups.length - 1) {
-              cumulativeOffset += blockSize + blockMargin
+              monthLabels.push(
+                <text
+                  x={monthCenterX}
+                  y={yPosition}
+                  dominantBaseline={dominantBaseline}
+                  fill="currentColor"
+                  key={`${currentYear}-${currentMonth}`}
+                  {...monthLabelProps}
+                >
+                  {monthName}
+                </text>,
+              )
             }
+          }
 
-            return monthLabel
-          })}
-        </g>
-      )
+          currentMonth = month
+          currentYear = year
+          monthStartWeekIndex = weekIndex
+        }
+      })
+
+      // Add label for the last month
+      if (currentMonth !== -1) {
+        const monthName = labels.months[currentMonth]
+        if (monthName) {
+          const monthWeekCount = weeks.length - monthStartWeekIndex
+          const monthCenterX =
+            monthStartWeekIndex * (blockSize + blockMargin) +
+            (monthWeekCount * (blockSize + blockMargin)) / 2 -
+            (blockSize + blockMargin) / 2
+
+          monthLabels.push(
+            <text
+              x={monthCenterX}
+              y={yPosition}
+              dominantBaseline={dominantBaseline}
+              fill="currentColor"
+              key={`${currentYear}-${currentMonth}`}
+              {...monthLabelProps}
+            >
+              {monthName}
+            </text>,
+          )
+        }
+      }
+
+      return <g className={getClassName('legend-month')}>{monthLabels}</g>
     }
 
     const { width, height } = getDimensions()

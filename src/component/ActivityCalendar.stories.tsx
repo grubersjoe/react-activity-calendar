@@ -200,7 +200,7 @@ export const SplitByMonth: Story = {
         />
 
         <h2>Split by Month with Custom Styling</h2>
-        <p>Split by month with custom text styling and spacing:</p>
+        <p>Split by month with correct day-of-week positioning, custom text styling and spacing:</p>
         <ActivityCalendar
           {...args}
           data={data}
