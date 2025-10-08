@@ -9,7 +9,7 @@ import {
   type ForwardedRef,
   type ReactElement,
 } from 'react'
-import { getYear, parseISO } from 'date-fns'
+import { getMonth, getYear, parseISO } from 'date-fns'
 import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants'
 import { useColorScheme } from '../hooks/useColorScheme'
 import { loadingAnimationName, useLoadingAnimation } from '../hooks/useLoadingAnimation'
@@ -33,6 +33,7 @@ import type {
   ReactEvent,
   SVGRectEventHandler,
   ThemeInput,
+  Week,
 } from '../types'
 import { styles } from './styles'
 
@@ -169,6 +170,41 @@ export type Props = {
    * Index of day to be used as start of week. 0 represents Sunday.
    */
   weekStart?: DayIndex
+  /**
+   * Toggle to split calendar by months with spacing between them.
+   * When enabled, automatically adds one block space between months.
+   */
+  splitByMonth?: boolean
+  /**
+   * Position of month labels relative to the activity blocks.
+   * 'top' places labels above the activity blocks, 'bottom' places them below.
+   */
+  monthLabelPosition?: 'top' | 'bottom'
+  /**
+   * Spacing in pixels between month labels and activity groups.
+   * Controls the gap between month labels and the calendar blocks.
+   */
+  monthLabelSpacing?: number
+  /**
+   * Spacing in pixels between week labels and activity groups.
+   * Controls the gap between weekday labels and the calendar blocks.
+   */
+  weekLabelSpacing?: number
+  /**
+   * Text styling properties for month labels.
+   * Supports fontSize, fontFamily, fontWeight, color, etc.
+   */
+  monthLabelProps?: React.SVGProps<SVGTextElement>
+  /**
+   * Text styling properties for week labels.
+   * Supports fontSize, fontFamily, fontWeight, color, etc.
+   */
+  weekLabelProps?: React.SVGProps<SVGTextElement>
+  /**
+   * Additional spacing between activity groups in pixels.
+   * This adds extra space between different activity levels/groups.
+   */
+  activityGroupSpacing?: number
 }
 
 export const ActivityCalendar = forwardRef<HTMLElement, Props>(
@@ -194,6 +230,12 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       theme: themeProp = undefined,
       totalCount: totalCountProp = undefined,
       weekStart = 0, // Sunday
+      splitByMonth = false,
+      monthLabelPosition = 'top',
+      monthLabelSpacing = LABEL_MARGIN,
+      weekLabelSpacing = LABEL_MARGIN,
+      monthLabelProps,
+      weekLabelProps,
     }: Props, // Required for react-docgen
     ref,
   ) => {
@@ -223,7 +265,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     const weeks = groupByWeeks(activities, weekStart)
 
     const labels = Object.assign({}, DEFAULT_LABELS, labelsProp)
-    const labelHeight = hideMonthLabels ? 0 : fontSize + LABEL_MARGIN
+    const labelHeight = hideMonthLabels ? 0 : fontSize + monthLabelSpacing
 
     const weekdayLabels = initWeekdayLabels(showWeekdayLabels, weekStart)
 
@@ -231,13 +273,61 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     // because server and client HTML would not match.
     const weekdayLabelOffset =
       isClient && weekdayLabels.shouldShow
-        ? maxWeekdayLabelWidth(labels.weekdays, weekdayLabels, fontSize) + LABEL_MARGIN
+        ? maxWeekdayLabelWidth(labels.weekdays, weekdayLabels, fontSize) + weekLabelSpacing
         : undefined
 
+    function groupWeeksByMonth(weeks: Array<Week>) {
+      const monthGroups: Array<{
+        month: number
+        year: number
+        weeks: Array<Week>
+        startWeekIndex: number
+      }> = []
+
+      weeks.forEach((week, weekIndex) => {
+        const firstActivity = week.find(activity => activity !== undefined)
+        if (!firstActivity) return
+
+        const date = parseISO(firstActivity.date)
+        const month = getMonth(date)
+        const year = getYear(date)
+
+        const lastGroup = monthGroups[monthGroups.length - 1]
+
+        if (!lastGroup || lastGroup.month !== month || lastGroup.year !== year) {
+          monthGroups.push({
+            month,
+            year,
+            weeks: [week],
+            startWeekIndex: weekIndex,
+          })
+        } else {
+          lastGroup.weeks.push(week)
+        }
+      })
+
+      return monthGroups
+    }
+
     function getDimensions() {
+      let width = weeks.length * (blockSize + blockMargin) - blockMargin
+
+      if (splitByMonth) {
+        const monthGroups = groupWeeksByMonth(weeks)
+        const numberOfMonthGaps = monthGroups.length - 1
+        const spacing = blockSize + blockMargin
+        width += numberOfMonthGaps * spacing
+      }
+
+      // Calculate height, adding extra space for bottom labels if needed
+      let height = labelHeight + (blockSize + blockMargin) * 7 - blockMargin
+      if (monthLabelPosition === 'bottom' && !hideMonthLabels) {
+        height += fontSize + monthLabelSpacing
+      }
+
       return {
-        width: weeks.length * (blockSize + blockMargin) - blockMargin,
-        height: labelHeight + (blockSize + blockMargin) * 7 - blockMargin,
+        width,
+        height,
       }
     }
 
@@ -254,18 +344,70 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     }
 
     function renderCalendar() {
-      return weeks
-        .map((week, weekIndex) =>
+      if (!splitByMonth) {
+        // Current implementation for non-split mode
+        return weeks
+          .map((week, weekIndex) =>
+            week.map((activity, dayIndex) => {
+              if (!activity) {
+                return null
+              }
+
+              const loadingAnimation =
+                loading && useAnimation
+                  ? {
+                      animation: `${loadingAnimationName} 1.75s ease-in-out infinite`,
+                      animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
+                    }
+                  : undefined
+
+              const block = (
+                <rect
+                  {...getEventHandlers(activity)}
+                  x={0}
+                  y={labelHeight + (blockSize + blockMargin) * dayIndex}
+                  width={blockSize}
+                  height={blockSize}
+                  rx={blockRadius}
+                  ry={blockRadius}
+                  fill={colorScale[activity.level]}
+                  data-date={activity.date}
+                  data-level={activity.level}
+                  style={{ ...styles.rect(colorScheme), ...loadingAnimation }}
+                />
+              )
+
+              return (
+                <Fragment key={activity.date}>
+                  {renderBlock ? renderBlock(block, activity) : block}
+                </Fragment>
+              )
+            }),
+          )
+          .map((week, x) => (
+            <g key={x} transform={`translate(${(blockSize + blockMargin) * x}, 0)`}>
+              {week}
+            </g>
+          ))
+      }
+
+      // New month-split implementation
+      const monthGroups = groupWeeksByMonth(weeks)
+      let cumulativeOffset = 0
+
+      return monthGroups.map((monthGroup, monthIndex) => {
+        const monthWeeks = monthGroup.weeks.map((week, weekIndexInMonth) =>
           week.map((activity, dayIndex) => {
             if (!activity) {
               return null
             }
 
+            const globalWeekIndex = monthGroup.startWeekIndex + weekIndexInMonth
             const loadingAnimation =
               loading && useAnimation
                 ? {
                     animation: `${loadingAnimationName} 1.75s ease-in-out infinite`,
-                    animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
+                    animationDelay: `${globalWeekIndex * 20 + dayIndex * 20}ms`,
                   }
                 : undefined
 
@@ -292,11 +434,28 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
             )
           }),
         )
-        .map((week, x) => (
-          <g key={x} transform={`translate(${(blockSize + blockMargin) * x}, 0)`}>
-            {week}
+
+        const monthElement = (
+          <g key={`month-${monthIndex}`} transform={`translate(${cumulativeOffset}, 0)`}>
+            {monthWeeks.map((week, weekIndexInMonth) => (
+              <g
+                key={weekIndexInMonth}
+                transform={`translate(${(blockSize + blockMargin) * weekIndexInMonth}, 0)`}
+              >
+                {week}
+              </g>
+            ))}
           </g>
-        ))
+        )
+
+        // Update cumulative offset for next month
+        cumulativeOffset += monthGroup.weeks.length * (blockSize + blockMargin)
+        if (monthIndex < monthGroups.length - 1) {
+          cumulativeOffset += blockSize + blockMargin
+        }
+
+        return monthElement
+      })
     }
 
     function renderFooter() {
@@ -373,12 +532,13 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
             return (
               <text
-                x={-LABEL_MARGIN}
+                x={-weekLabelSpacing}
                 y={labelHeight + (blockSize + blockMargin) * index + blockSize / 2}
                 dominantBaseline="central"
                 textAnchor="end"
                 fill="currentColor"
                 key={index}
+                {...weekLabelProps}
               >
                 {labels.weekdays[dayIndex]}
               </text>
@@ -393,19 +553,66 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
         return null
       }
 
+      // Calculate y position based on monthLabelPosition
+      const calendarHeight = (blockSize + blockMargin) * 7 - blockMargin
+      const yPosition =
+        monthLabelPosition === 'bottom' ? labelHeight + calendarHeight + monthLabelSpacing : 0
+      const dominantBaseline = monthLabelPosition === 'bottom' ? 'hanging' : 'hanging'
+
+      if (!splitByMonth) {
+        // Normal mode with configurable label position
+        return (
+          <g className={getClassName('legend-month')}>
+            {getMonthLabels(weeks, labels.months).map(({ label, weekIndex }) => (
+              <text
+                x={(blockSize + blockMargin) * weekIndex}
+                y={yPosition}
+                dominantBaseline={dominantBaseline}
+                fill="currentColor"
+                key={weekIndex}
+                {...monthLabelProps}
+              >
+                {label}
+              </text>
+            ))}
+          </g>
+        )
+      }
+
+      // Split-by-month mode with configurable label position
+      const monthGroups = groupWeeksByMonth(weeks)
+      let cumulativeOffset = 0
+
       return (
         <g className={getClassName('legend-month')}>
-          {getMonthLabels(weeks, labels.months).map(({ label, weekIndex }) => (
-            <text
-              x={(blockSize + blockMargin) * weekIndex}
-              y={0}
-              dominantBaseline="hanging"
-              fill="currentColor"
-              key={weekIndex}
-            >
-              {label}
-            </text>
-          ))}
+          {monthGroups.map((monthGroup, monthIndex) => {
+            const firstActivity = monthGroup.weeks[0]?.find(activity => activity !== undefined)
+            if (!firstActivity) return null
+
+            const month = labels.months[getMonth(parseISO(firstActivity.date))]
+            if (!month) return null
+
+            const monthLabel = (
+              <text
+                x={cumulativeOffset}
+                y={yPosition}
+                dominantBaseline={dominantBaseline}
+                fill="currentColor"
+                key={monthIndex}
+                {...monthLabelProps}
+              >
+                {month}
+              </text>
+            )
+
+            // Update cumulative offset for next month
+            cumulativeOffset += monthGroup.weeks.length * (blockSize + blockMargin)
+            if (monthIndex < monthGroups.length - 1) {
+              cumulativeOffset += blockSize + blockMargin
+            }
+
+            return monthLabel
+          })}
         </g>
       )
     }
