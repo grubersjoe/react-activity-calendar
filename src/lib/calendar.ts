@@ -214,7 +214,10 @@ export function groupByWeeksForSplitByMonth(
     if (!monthGroups.has(monthKey)) {
       monthGroups.set(monthKey, [])
     }
-    monthGroups.get(monthKey)!.push(activity)
+
+    if (monthGroups.get(monthKey)) {
+      monthGroups.get(monthKey)?.push(activity)
+    }
   })
 
   const allWeeks: Array<Week> = []
