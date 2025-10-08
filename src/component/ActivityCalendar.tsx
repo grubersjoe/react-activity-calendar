@@ -9,15 +9,17 @@ import {
   type ForwardedRef,
   type ReactElement,
 } from 'react'
-import { getYear, parseISO } from 'date-fns'
+import { getMonth, getYear, parseISO } from 'date-fns'
 import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants'
 import { useColorScheme } from '../hooks/useColorScheme'
 import { loadingAnimationName, useLoadingAnimation } from '../hooks/useLoadingAnimation'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 import {
+  extendToCurrentYear,
   generateEmptyData,
   getClassName,
   groupByWeeks,
+  groupByWeeksForSplitByMonth,
   range,
   validateActivities,
 } from '../lib/calendar'
@@ -169,6 +171,47 @@ export type Props = {
    * Index of day to be used as start of week. 0 represents Sunday.
    */
   weekStart?: DayIndex
+  /**
+   * Toggle to split calendar by months with spacing between them.
+   * When enabled, automatically adds one block space between months.
+   */
+  splitByMonth?: boolean
+  /**
+   * Position of month labels relative to the activity blocks.
+   * 'top' places labels above the activity blocks, 'bottom' places them below.
+   */
+  monthLabelPosition?: 'top' | 'bottom'
+  /**
+   * Spacing in pixels between month labels and activity groups.
+   * Controls the gap between month labels and the calendar blocks.
+   */
+  monthLabelSpacing?: number
+  /**
+   * Spacing in pixels between week labels and activity groups.
+   * Controls the gap between weekday labels and the calendar blocks.
+   */
+  weekLabelSpacing?: number
+  /**
+   * Text styling properties for month labels.
+   * Supports fontSize, fontFamily, fontWeight, color, etc.
+   */
+  monthLabelProps?: React.SVGProps<SVGTextElement>
+  /**
+   * Text styling properties for week labels.
+   * Supports fontSize, fontFamily, fontWeight, color, etc.
+   */
+  weekLabelProps?: React.SVGProps<SVGTextElement>
+  /**
+   * Additional spacing between activity groups in pixels.
+   * This adds extra space between different activity levels/groups.
+   */
+  activityGroupSpacing?: number
+  /**
+   * When enabled, automatically extends same-year data to show the full year (Jan-Dec).
+   * Multi-year data preserves its original range regardless of this setting.
+   * When disabled, preserves the original date range of the provided data.
+   */
+  showFullYear?: boolean
 }
 
 export const ActivityCalendar = forwardRef<HTMLElement, Props>(
@@ -194,6 +237,13 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       theme: themeProp = undefined,
       totalCount: totalCountProp = undefined,
       weekStart = 0, // Sunday
+      splitByMonth = false,
+      monthLabelPosition = 'top',
+      monthLabelSpacing = LABEL_MARGIN,
+      weekLabelSpacing = LABEL_MARGIN,
+      monthLabelProps,
+      weekLabelProps,
+      showFullYear = false,
     }: Props, // Required for react-docgen
     ref,
   ) => {
@@ -218,12 +268,17 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
     validateActivities(activities, maxLevel)
 
-    const firstActivity = activities[0] as Activity
+    // Conditionally extend activities to full year based on showFullYear prop
+    const processedActivities = showFullYear ? extendToCurrentYear(activities) : activities
+
+    const firstActivity = processedActivities[0] as Activity
     const year = getYear(parseISO(firstActivity.date))
-    const weeks = groupByWeeks(activities, weekStart)
+    const weeks = splitByMonth
+      ? groupByWeeksForSplitByMonth(processedActivities, weekStart)
+      : groupByWeeks(processedActivities, weekStart)
 
     const labels = Object.assign({}, DEFAULT_LABELS, labelsProp)
-    const labelHeight = hideMonthLabels ? 0 : fontSize + LABEL_MARGIN
+    const labelHeight = hideMonthLabels ? 0 : fontSize + monthLabelSpacing
 
     const weekdayLabels = initWeekdayLabels(showWeekdayLabels, weekStart)
 
@@ -231,13 +286,22 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     // because server and client HTML would not match.
     const weekdayLabelOffset =
       isClient && weekdayLabels.shouldShow
-        ? maxWeekdayLabelWidth(labels.weekdays, weekdayLabels, fontSize) + LABEL_MARGIN
+        ? maxWeekdayLabelWidth(labels.weekdays, weekdayLabels, fontSize) + weekLabelSpacing
         : undefined
 
     function getDimensions() {
+      // For split-by-month, the weeks array already includes proper spacing
+      const width = weeks.length * (blockSize + blockMargin) - blockMargin
+
+      // Calculate height, adding extra space for bottom labels if needed
+      let height = labelHeight + (blockSize + blockMargin) * 7 - blockMargin
+      if (monthLabelPosition === 'bottom' && !hideMonthLabels) {
+        height += fontSize + monthLabelSpacing
+      }
+
       return {
-        width: weeks.length * (blockSize + blockMargin) - blockMargin,
-        height: labelHeight + (blockSize + blockMargin) * 7 - blockMargin,
+        width,
+        height,
       }
     }
 
@@ -254,6 +318,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     }
 
     function renderCalendar() {
+      // Render all weeks - the groupByWeeksForSplitByMonth function already handles month boundaries
       return weeks
         .map((week, weekIndex) =>
           week.map((activity, dayIndex) => {
@@ -292,8 +357,8 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
             )
           }),
         )
-        .map((week, x) => (
-          <g key={x} transform={`translate(${(blockSize + blockMargin) * x}, 0)`}>
+        .map((week, weekIndex) => (
+          <g key={weekIndex} transform={`translate(${(blockSize + blockMargin) * weekIndex}, 0)`}>
             {week}
           </g>
         ))
@@ -373,12 +438,13 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
             return (
               <text
-                x={-LABEL_MARGIN}
+                x={-weekLabelSpacing}
                 y={labelHeight + (blockSize + blockMargin) * index + blockSize / 2}
                 dominantBaseline="central"
                 textAnchor="end"
                 fill="currentColor"
                 key={index}
+                {...weekLabelProps}
               >
                 {labels.weekdays[dayIndex]}
               </text>
@@ -393,21 +459,105 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
         return null
       }
 
-      return (
-        <g className={getClassName('legend-month')}>
-          {getMonthLabels(weeks, labels.months).map(({ label, weekIndex }) => (
+      // Calculate y position based on monthLabelPosition
+      const calendarHeight = (blockSize + blockMargin) * 7 - blockMargin
+      const yPosition =
+        monthLabelPosition === 'bottom' ? labelHeight + calendarHeight + monthLabelSpacing : 0
+      const dominantBaseline = monthLabelPosition === 'bottom' ? 'hanging' : 'hanging'
+
+      if (!splitByMonth) {
+        // Normal mode with configurable label position
+        return (
+          <g className={getClassName('legend-month')}>
+            {getMonthLabels(weeks, labels.months).map(({ label, weekIndex }) => (
+              <text
+                x={(blockSize + blockMargin) * weekIndex}
+                y={yPosition}
+                dominantBaseline={dominantBaseline}
+                fill="currentColor"
+                key={weekIndex}
+                {...monthLabelProps}
+              >
+                {label}
+              </text>
+            ))}
+          </g>
+        )
+      }
+
+      // Split-by-month mode: detect month boundaries and place labels
+      const monthLabels: Array<ReactElement> = []
+      let currentMonth = -1
+      let currentYear = -1
+      let monthStartWeekIndex = 0
+
+      weeks.forEach((week, weekIndex) => {
+        const firstActivity = week.find(activity => activity !== undefined)
+        if (!firstActivity) return
+
+        const date = parseISO(firstActivity.date)
+        const month = getMonth(date)
+        const year = getYear(date)
+
+        // Check if we're starting a new month
+        if (month !== currentMonth || year !== currentYear) {
+          // Add label for the previous month (if any)
+          if (currentMonth !== -1) {
+            const monthName = labels.months[currentMonth]
+            if (monthName) {
+              const monthWeekCount = weekIndex - monthStartWeekIndex
+              const monthCenterX =
+                monthStartWeekIndex * (blockSize + blockMargin) +
+                (monthWeekCount * (blockSize + blockMargin)) / 2 -
+                (blockSize + blockMargin) / 2
+
+              monthLabels.push(
+                <text
+                  x={monthCenterX}
+                  y={yPosition}
+                  dominantBaseline={dominantBaseline}
+                  fill="currentColor"
+                  key={`${currentYear}-${currentMonth}`}
+                  {...monthLabelProps}
+                >
+                  {monthName}
+                </text>,
+              )
+            }
+          }
+
+          currentMonth = month
+          currentYear = year
+          monthStartWeekIndex = weekIndex
+        }
+      })
+
+      // Add label for the last month
+      if (currentMonth !== -1) {
+        const monthName = labels.months[currentMonth]
+        if (monthName) {
+          const monthWeekCount = weeks.length - monthStartWeekIndex
+          const monthCenterX =
+            monthStartWeekIndex * (blockSize + blockMargin) +
+            (monthWeekCount * (blockSize + blockMargin)) / 2 -
+            (blockSize + blockMargin) / 2
+
+          monthLabels.push(
             <text
-              x={(blockSize + blockMargin) * weekIndex}
-              y={0}
-              dominantBaseline="hanging"
+              x={monthCenterX}
+              y={yPosition}
+              dominantBaseline={dominantBaseline}
               fill="currentColor"
-              key={weekIndex}
+              key={`${currentYear}-${currentMonth}`}
+              {...monthLabelProps}
             >
-              {label}
-            </text>
-          ))}
-        </g>
-      )
+              {monthName}
+            </text>,
+          )
+        }
+      }
+
+      return <g className={getClassName('legend-month')}>{monthLabels}</g>
     }
 
     const { width, height } = getDimensions()
