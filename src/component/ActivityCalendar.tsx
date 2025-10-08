@@ -127,6 +127,12 @@ export type Props = {
    */
   renderColorLegend?: (block: BlockElement, level: number) => ReactElement
   /**
+   * Render prop for the total count. For example, useful to perform some
+   * transformation on the count before displaying to the user. Use `React.cloneElement`
+   * to pass additional props to the element if necessary.
+   */
+  renderTotalCount?: (totalCount: number) => ReactElement;
+  /**
    * Toggle to show weekday labels left to the calendar.
    * Alternatively, pass a list of ISO 8601 weekday names to show.
    * For example `['mon', 'wed', 'fri']`.
@@ -189,6 +195,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       loading = false,
       renderBlock = undefined,
       renderColorLegend = undefined,
+      renderTotalCount = undefined,
       showWeekdayLabels = false,
       style: styleProp = {},
       theme: themeProp = undefined,
@@ -319,11 +326,13 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
           {!loading && !hideTotalCount && (
             <div className={getClassName('count')}>
-              {labels.totalCount
-                ? labels.totalCount
-                    .replace('{{count}}', String(totalCount))
-                    .replace('{{year}}', String(year))
-                : `${totalCount} activities in ${year}`}
+              {renderTotalCount
+                ? renderTotalCount(totalCount)
+                : labels.totalCount
+                  ? labels.totalCount
+                      .replace('{{count}}', String(totalCount))
+                      .replace('{{year}}', String(year))
+                  : `${totalCount} activities in ${year}`}
             </div>
           )}
 
