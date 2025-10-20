@@ -29,7 +29,7 @@ export function getMonthLabels(
 
       const prevLabel = labels[labels.length - 1]
 
-      if (weekIndex === 0 || !prevLabel || prevLabel.label !== month) {
+      if (weekIndex === 0 || prevLabel?.label !== month) {
         return [...labels, { weekIndex, label: month }]
       }
 
