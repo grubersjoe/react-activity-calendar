@@ -1,6 +1,6 @@
 services:
   playwright:
-    build: ./tests
+    image: mcr.microsoft.com/playwright:v1.56.1-noble
     platform: linux/amd64
     working_dir: /app
     volumes:
