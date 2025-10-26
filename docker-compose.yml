@@ -1,0 +1,13 @@
+services:
+  playwright:
+    build: ./tests
+    platform: linux/amd64
+    working_dir: /app
+    volumes:
+      - .:/app
+      - playwright-node-modules:/app/node_modules
+    stdin_open: true
+    tty: true
+
+volumes:
+  playwright-node-modules:

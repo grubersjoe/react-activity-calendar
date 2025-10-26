@@ -1,5 +1,5 @@
 {
-  "include": ["src/**/*", ".storybook/**/*", "./*"],
+  "include": ["src/**/*", "tests/**/*", ".storybook/**/*", "./*"],
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,

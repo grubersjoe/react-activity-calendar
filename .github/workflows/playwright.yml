@@ -1,0 +1,41 @@
+name: Playwright tests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: # manually
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: lts/*
+
+      - uses: pnpm/action-setup@v4.2.0
+        name: Install pnpm
+        with:
+          version: latest
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install -r --ignore-scripts
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: .playwright-report
+          path: .playwright-report/
+          include-hidden-files: true
+          retention-days: 30

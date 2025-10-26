@@ -1,5 +1,4 @@
 name: GitHub actions updater
-
 on:
   workflow_dispatch:
   schedule:
