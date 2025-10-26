@@ -49,7 +49,7 @@ export function groupByWeeks(
     getDay(firstDate) === weekStart ? firstDate : subWeeks(nextDay(firstDate, weekStart), 1)
 
   // To correctly group activities by week, it is necessary to left-pad the list
-  // because the first date might not be set start weekday.
+  // because the first date might not be the set start weekday.
   const paddedActivities = [
     ...(Array(differenceInCalendarDays(firstDate, firstCalendarDate)).fill(
       undefined,
@@ -96,6 +96,10 @@ export function getClassName(name: string) {
   return `${NAMESPACE}__${name}`
 }
 
+export function range(n: number) {
+  return [...Array(n).keys()]
+}
+
 export function generateEmptyData(): Array<Activity> {
   const year = new Date().getFullYear()
   const days = eachDayOfInterval({
@@ -125,20 +129,43 @@ export function generateTestData(args: {
     },
   )
 
-  return days.map(date => {
-    // The random activity count is shifted by up to 80% towards zero.
-    const c = Math.round(Math.random() * maxCount - Math.random() * (0.8 * maxCount))
-    const count = Math.max(0, c)
-    const level = Math.ceil((count / maxCount) * maxLevel)
+  const noise = whiteNoise(days.length, maxLevel, v => 0.9 * Math.pow(v, 2))
+
+  return days.map((date, i) => {
+    const level = noise[i] as number
 
     return {
       date: formatISO(date, { representation: 'date' }),
-      count,
+      count: Math.round(level * (maxCount / maxLevel)),
       level,
     }
   })
 }
 
-export function range(n: number) {
-  return [...Array(n).keys()]
+// Deterministically generates n white noise values from 0 to max (inclusive).
+function whiteNoise(
+  n: number,
+  max: number,
+  transformFn: (v: number) => number = v => v,
+): Array<number> {
+  const seed = 54321
+  const random = mulberry32(seed)
+
+  return Array.from({ length: n }, () => {
+    const v = transformFn(random())
+    return Math.floor(v * (max + 1))
+  })
+}
+
+// Mulberry32 pseudorandom number generator
+function mulberry32(seed: number) {
+  let state = seed >>> 0 // ensure unsigned 32-bit integer
+
+  return () => {
+    state += 0x6d2b79f5
+    let r = Math.imul(state ^ (state >>> 15), 1 | state)
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r)
+
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296
+  }
 }

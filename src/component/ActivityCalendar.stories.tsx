@@ -10,11 +10,11 @@ import {
 import { Tooltip as MuiTooltip } from '@mui/material'
 import LinkTo from '@storybook/addon-links/react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { useDarkMode } from '@vueless/storybook-dark-mode'
 import { Highlight, themes as prismThemes } from 'prism-react-renderer'
 import { Tooltip as ReactTooltip } from 'react-tooltip'
 import { themes } from 'storybook/theming'
 import 'react-tooltip/dist/react-tooltip.css'
-import { useDarkMode } from '@vueless/storybook-dark-mode'
 import Container from '../../.storybook/components/Container'
 import exampleCustomization from '../../examples/customization?raw'
 import exampleEventHandlersInterface from '../../examples/event-handlers-type?raw'
@@ -55,7 +55,7 @@ const meta: Meta<ForwardedRef<Props>> = {
       control: { type: 'range', min: 6, max: 32, step: 2 },
     },
     maxLevel: {
-      control: { type: 'range', min: 1, max: 9 },
+      control: { type: 'range', min: 1, max: 10 },
     },
     ref: {
       control: false,
