@@ -1,6 +1,8 @@
 node_modules/
 build/
 coverage/
+.playwright/
+.playwright-report/
 bundle.html
 
 .env.*

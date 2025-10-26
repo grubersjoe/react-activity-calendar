@@ -1,8 +1,7 @@
 name: Tests
-
 on:
-  - push
-  - pull_request
+  push:
+  pull_request:
 
 jobs:
   test:
@@ -38,7 +37,7 @@ jobs:
         run: pnpx prettier -c .
 
       - name: Run unit tests
-        run: pnpm test
+        run: pnpm test:unit
 
       - name: Run type checks (TypeScript)
         run: pnpm tsc
