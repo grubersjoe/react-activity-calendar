@@ -81,6 +81,25 @@ const meta: Meta<ForwardedRef<Props>> = {
         },
       },
     },
+    splitByMonth: {
+      control: 'boolean',
+    },
+    monthLabelPosition: {
+      control: { type: 'select' },
+      options: ['top', 'bottom'],
+    },
+    monthLabelSpacing: {
+      control: { type: 'range', min: 0, max: 20, step: 1 },
+    },
+    weekLabelSpacing: {
+      control: { type: 'range', min: 0, max: 20, step: 1 },
+    },
+    monthLabelProps: {
+      control: 'object',
+    },
+    weekLabelProps: {
+      control: 'object',
+    },
   },
   decorators: [
     (Story, { args }) => {
@@ -130,6 +149,108 @@ export const Default: Story = {
     docs: {
       source: {
         code: '<ActivityCalendar data={data} />',
+      },
+    },
+  },
+}
+
+export const SplitByMonth: Story = {
+  args: {
+    ...defaultProps,
+    splitByMonth: true,
+  },
+  render: args => {
+    const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
+    return (
+      <Container>
+        <h2>Configurable Label Spacing</h2>
+        <p>Use the controls to adjust month and week label spacing independently.</p>
+        <ActivityCalendar {...args} data={data} />
+
+        <h2>Custom Spacing Examples</h2>
+        <p>Month labels with extra spacing (16px):</p>
+        <ActivityCalendar {...args} data={data} monthLabelSpacing={16} />
+
+        <p style={{ marginTop: '20px' }}>Week labels with extra spacing (16px):</p>
+        <ActivityCalendar {...args} data={data} weekLabelSpacing={16} showWeekdayLabels={true} />
+
+        <p style={{ marginTop: '20px' }}>Both labels with custom spacing:</p>
+        <ActivityCalendar
+          {...args}
+          data={data}
+          monthLabelSpacing={12}
+          weekLabelSpacing={12}
+          showWeekdayLabels={true}
+        />
+
+        <h2>Custom Text Styling</h2>
+        <p>Month labels with custom font styling:</p>
+        <ActivityCalendar
+          {...args}
+          data={data}
+          monthLabelProps={{ fontSize: 16, fontWeight: 'bold', fill: '#2196f3' }}
+        />
+
+        <p style={{ marginTop: '20px' }}>Week labels with custom font styling:</p>
+        <ActivityCalendar
+          {...args}
+          data={data}
+          showWeekdayLabels={true}
+          weekLabelProps={{ fontSize: 10, fontFamily: 'monospace', fill: '#ff5722' }}
+        />
+
+        <h2>Split by Month with Custom Styling</h2>
+        <p>Split by month with correct day-of-week positioning, custom text styling and spacing:</p>
+        <ActivityCalendar
+          {...args}
+          data={data}
+          splitByMonth={true}
+          monthLabelPosition="bottom"
+          monthLabelSpacing={16}
+          monthLabelProps={{ fontSize: 14, fontWeight: 'bold', fill: '#4caf50' }}
+          weekLabelProps={{ fontSize: 12, fontStyle: 'italic', fill: '#9c27b0' }}
+          showWeekdayLabels={true}
+        />
+      </Container>
+    )
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `// Default styling
+<ActivityCalendar data={data} />
+
+// Custom month label styling
+<ActivityCalendar
+  data={data}
+  monthLabelProps={{ fontSize: 16, fontWeight: 'bold', fill: '#2196f3' }}
+/>
+
+// Custom week label styling
+<ActivityCalendar
+  data={data}
+  showWeekdayLabels={true}
+  weekLabelProps={{ fontSize: 10, fontFamily: 'monospace', fill: '#ff5722' }}
+/>
+
+// Custom spacing and styling
+<ActivityCalendar
+  data={data}
+  monthLabelSpacing={16}
+  weekLabelSpacing={12}
+  monthLabelProps={{ fontSize: 14, fontWeight: 'bold' }}
+  weekLabelProps={{ fontSize: 12, fontStyle: 'italic' }}
+  showWeekdayLabels={true}
+/>
+
+// Split by month with custom styling
+<ActivityCalendar
+  data={data}
+  splitByMonth={true}
+  monthLabelPosition="bottom"
+  monthLabelSpacing={16}
+  monthLabelProps={{ fontSize: 14, fontWeight: 'bold', fill: '#4caf50' }}
+/>`,
       },
     },
   },
