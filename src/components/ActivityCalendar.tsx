@@ -41,14 +41,14 @@ const Tooltip = lazy(() => import('./Tooltip').then(module => ({ default: module
 
 export type Props = {
   /**
-   * List of calendar entries. Every `Activity` object requires an ISO 8601
+   * List of calendar entries. Each `Activity` object requires an ISO 8601
    * `date` string in the format `yyyy-MM-dd`, a `count` property with the
-   * amount of tracked data and a `level` property in the range `0-maxLevel`
-   * to specify activity intensity. The `maxLevel` prop is 4 by default.
+   * amount of tracked data, and a `level` property in the range `0-maxLevel`
+   * to specify activity intensity. The `maxLevel` prop defaults to 4.
    *
-   * For missing dates, no activity is assumed. This allows choosing the start
-   * and end date of the calendar arbitrarily by passing empty entries as the
-   * first and last item.
+   * Dates without corresponding entries are assumed to have no activity. This
+   * allows you to set arbitrary start and end dates for the calendar by passing
+   * empty entries as the first and last items.
    *
    * Example object:
    *
@@ -74,8 +74,7 @@ export type Props = {
    */
   blockSize?: number
   /**
-   * Use a specific color scheme instead of the system one. Supported values
-   * are `'light'` and `'dark'`.
+   * Use the `'light'` or `'dark'` color scheme instead of the system one.
    */
   colorScheme?: ColorScheme
   /**
@@ -83,11 +82,11 @@ export type Props = {
    */
   fontSize?: number
   /**
-   * Toggle to hide color legend below calendar.
+   * Toggle to hide the color legend below the calendar.
    */
   hideColorLegend?: boolean
   /**
-   * Toggle to hide month labels above the calendar.
+   * Toggle to hide the month labels above the calendar.
    */
   hideMonthLabels?: boolean
   /**
@@ -105,7 +104,8 @@ export type Props = {
    */
   maxLevel?: number
   /**
-   * Toggle for loading state. `data` property will be ignored if set.
+   * Toggle to display the calendar loading state. The `data` property is
+   * ignored if set.
    */
   loading?: boolean
   /**
@@ -119,14 +119,13 @@ export type Props = {
    */
   renderBlock?: (block: BlockElement, activity: Activity) => ReactElement
   /**
-   * Render prop for color legend blocks. For example, useful to wrap the
-   * element with a tooltip component. Use `React.cloneElement` to pass
+   * Render prop for color legend blocks. Use `React.cloneElement` to pass
    * additional props to the element if necessary.
    */
   renderColorLegend?: (block: BlockElement, level: number) => ReactElement
   /**
    * Toggle to show weekday labels left to the calendar.
-   * Alternatively, pass a list of ISO 8601 weekday names to show.
+   * Alternatively, provide an array of ISO 8601 weekday names to display.
    * Example: `['mon', 'wed', 'fri']`.
    */
   showWeekdayLabels?: boolean | Array<DayName>
@@ -135,14 +134,14 @@ export type Props = {
    */
   style?: CSSProperties
   /**
-   * Set the calendar colors for the light and dark system color scheme. Pass
-   * all colors per scheme explicitly (5 per default) or set exactly two colors
+   * Set the calendar colors for the light and dark color schemes. Provide
+   * all colors per scheme explicitly (5 by default) or specify exactly two colors
    * (the lowest and highest intensity) to calculate a single-hue scale. The
    * number of colors is controlled by the `maxLevel` property. Colors can be
    * specified in any valid CSS format.
    *
-   * The colors for at least one scheme must be set. If undefined, the default
-   * theme is used. By default, the calendar will select the current system color
+   * At least one scheme's colors must be set. If undefined, the default
+   * theme is used. By default, the calendar selects the current system color
    * scheme, but you can enforce a specific scheme with the `colorScheme` prop.
    *
    * Example:
@@ -160,7 +159,7 @@ export type Props = {
    */
   theme?: ThemeInput
   /**
-   * Tooltips to show when hovering the activity blocks or the color legend
+   * Tooltips to display when hovering over activity blocks or the color legend
    * below the calendar. See the story for details about tooltip configuration.
    */
   tooltips?: {
