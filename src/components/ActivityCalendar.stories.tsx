@@ -169,7 +169,7 @@ export const ActivityLevels: Story = {
             <b>maxLevel</b>
           </code>{' '}
           prop to control the number of activity levels. This value is zero indexed, where 0
-          represents no activity. <code>maxLevel</code> is 4 per default, so this results in 5
+          represents no activity. <code>maxLevel</code> is 4 by default, so this results in 5
           activity levels. Each activity level must be in the interval from 0 to{' '}
           <code>maxLevel</code>.
         </p>
@@ -267,14 +267,14 @@ export const ColorThemes: Story = {
           <code>
             <b>theme</b>
           </code>{' '}
-          prop to configure the calendar colors for the light and dark system{' '}
+          prop to configure the calendar colors for the light and dark{' '}
           <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme">color scheme</a>.
-          Pass all colors per scheme{' '}
+          Provide all colors per scheme{' '}
           <LinkTo kind="react-activity-calendar" name="explicit-themes">
             explicitly
           </LinkTo>{' '}
-          (5 per default) or set exactly two colors (the lowest and highest intensity) to calculate
-          a single-hue scale. For explicit themes the color count must match the number of activity
+          (5 by default) or set exactly two colors (the lowest and highest intensity) to calculate a
+          single-hue scale. For explicit themes the color count must match the number of activity
           levels, which is controlled by the{' '}
           <LinkTo kind="react-activity-calendar" name="activity-levels">
             <code>maxLevel</code>
@@ -282,9 +282,9 @@ export const ColorThemes: Story = {
           prop. Colors can be specified in any valid CSS format.
         </p>
         <p>
-          The colors for at least one scheme must be set. If undefined, the default theme is used.
-          By default, the calendar will select the current system color scheme, but you can enforce
-          a specific scheme with the{' '}
+          At least one scheme's colors must be set. If undefined, the default theme is used. By
+          default, the calendar selects the current system color scheme, but you can enforce a
+          specific scheme with the{' '}
           <a href="/?path=/docs/react-activity-calendar--docs">
             <code>colorScheme</code>
           </a>{' '}
@@ -448,7 +448,7 @@ export const Tooltips: Story = {
           </li>
           <li>
             <a href="https://floating-ui.com/docs/offset#options">offset</a> to the element in
-            pixels (4 per default)
+            pixels (4 by default)
           </li>
           <li>
             the cursor “<a href="https://floating-ui.com/docs/useHover#restms">rest time</a>” in
@@ -460,7 +460,7 @@ export const Tooltips: Story = {
             </a>{' '}
             to fine-tune CSS animations
           </li>
-          <li>whether to draw an arrow (false per default)</li>
+          <li>whether to draw an arrow (false by default)</li>
         </ul>
         <Source code={exampleTooltipsConfig} isDarkMode={useDarkMode()} />
         <ActivityCalendar

@@ -28,7 +28,7 @@ npm install react-activity-calendar
 - localization 🌍
 
 The component expects activity data in the following structure. Each activity level must be in the
-interval from 0 to `maxLevel`, which is 4 per default (see
+interval from 0 to `maxLevel`, which is 4 by default (see
 [documentation](https://grubersjoe.github.io/react-activity-calendar/?path=/story/react-activity-calendar--activity-levels)).
 It is up to you how to generate and classify your data.
 
