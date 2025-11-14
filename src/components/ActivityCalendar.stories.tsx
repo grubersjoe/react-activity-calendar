@@ -106,11 +106,11 @@ const defaultProps = {
   blockRadius: 2,
   blockSize: 12,
   fontSize: 14,
-  hideColorLegend: false,
-  hideMonthLabels: false,
-  hideTotalCount: false,
   loading: false,
   maxLevel: 4,
+  showColorLegend: true,
+  showMonthLabels: true,
+  showTotalCount: true,
   showWeekdayLabels: false,
   weekStart: 0, // Sunday
 } satisfies Omit<Props, 'data'>
@@ -496,9 +496,9 @@ export const Tooltips: Story = {
 export const WithoutLabels: Story = {
   args: {
     ...defaultProps,
-    hideMonthLabels: true,
-    hideColorLegend: true,
-    hideTotalCount: true,
+    showMonthLabels: false,
+    showColorLegend: false,
+    showTotalCount: false,
   },
   render: args => {
     const data = useMemo(() => generateTestData({ maxLevel: args.maxLevel }), [args.maxLevel])
@@ -507,7 +507,7 @@ export const WithoutLabels: Story = {
   parameters: {
     docs: {
       source: {
-        code: '<ActivityCalendar data={data} hideMonthLabels hideColorLegend hideTotalCount />',
+        code: '<ActivityCalendar data={data} showMonthLabels={false} showColorLegend={false} showTotalCount={false} />',
       },
     },
   },
