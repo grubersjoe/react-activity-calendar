@@ -82,25 +82,13 @@ export type Props = {
    */
   fontSize?: number
   /**
-   * Toggle to hide the color legend below the calendar.
-   */
-  hideColorLegend?: boolean
-  /**
-   * Toggle to hide the month labels above the calendar.
-   */
-  hideMonthLabels?: boolean
-  /**
-   * Toggle to hide the total count below the calendar.
-   */
-  hideTotalCount?: boolean
-  /**
    * Localization strings for all calendar labels.
    *
    * `totalCount` supports the placeholders `{{count}}` and `{{year}}`.
    */
   labels?: Labels
   /**
-   * Maximum activity level (zero-indexed). 4 per default, 0 means "no activity".
+   * Maximum activity level (zero-indexed). 4 by default, 0 means "no activity".
    */
   maxLevel?: number
   /**
@@ -123,6 +111,18 @@ export type Props = {
    * additional props to the element if necessary.
    */
   renderColorLegend?: (block: BlockElement, level: number) => ReactElement
+  /**
+   * Toggle to hide the color legend below the calendar.
+   */
+  showColorLegend?: boolean
+  /**
+   * Toggle to hide the month labels above the calendar.
+   */
+  showMonthLabels?: boolean
+  /**
+   * Toggle to hide the total count below the calendar.
+   */
+  showTotalCount?: boolean
   /**
    * Toggle to show weekday labels left to the calendar.
    * Alternatively, provide an array of ISO 8601 weekday names to display.
@@ -185,14 +185,14 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       blockSize = 12,
       colorScheme: colorSchemeProp = undefined,
       fontSize = 14,
-      hideColorLegend = false,
-      hideMonthLabels = false,
-      hideTotalCount = false,
       labels: labelsProp = undefined,
-      maxLevel = 4,
       loading = false,
+      maxLevel = 4,
       renderBlock = undefined,
       renderColorLegend = undefined,
+      showColorLegend = true,
+      showMonthLabels = true,
+      showTotalCount = true,
       showWeekdayLabels = false,
       style: styleProp = {},
       theme: themeProp = undefined,
@@ -227,7 +227,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     const weeks = groupByWeeks(activities, weekStart)
 
     const labels = Object.assign({}, DEFAULT_LABELS, labelsProp)
-    const labelHeight = hideMonthLabels ? 0 : fontSize + LABEL_MARGIN
+    const labelHeight = showMonthLabels ? fontSize + LABEL_MARGIN : 0
 
     const weekdayLabels = initWeekdayLabels(showWeekdayLabels, weekStart)
 
@@ -312,7 +312,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     }
 
     function renderFooter() {
-      if (hideTotalCount && hideColorLegend) {
+      if (!showTotalCount && !showColorLegend) {
         return null
       }
 
@@ -326,7 +326,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
           {/* Placeholder */}
           {loading && <div>&nbsp;</div>}
 
-          {!loading && !hideTotalCount && (
+          {!loading && showTotalCount && (
             <div className={getClassName('count')}>
               {labels.totalCount
                 ? labels.totalCount
@@ -336,7 +336,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
             </div>
           )}
 
-          {!loading && !hideColorLegend && (
+          {!loading && showColorLegend && (
             <div className={getClassName('legend-colors')} style={styles.footer.legend}>
               <span style={{ marginRight: '0.4em' }}>{labels.legend.less}</span>
               {range(maxLevel + 1).map(level => {
@@ -418,7 +418,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     }
 
     function renderMonthLabels() {
-      if (hideMonthLabels) {
+      if (!showMonthLabels) {
         return null
       }
 
