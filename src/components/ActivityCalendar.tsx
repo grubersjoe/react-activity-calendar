@@ -171,10 +171,6 @@ export type Props = {
     }
   }
   /**
-   * Overwrite the total activity count.
-   */
-  totalCount?: number
-  /**
    * Index of day to be used as start of week. 0 represents Sunday.
    */
   weekStart?: DayIndex
@@ -201,7 +197,6 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       style: styleProp = {},
       theme: themeProp = undefined,
       tooltips = {},
-      totalCount: totalCountProp = undefined,
       weekStart = 0, // Sunday
     }: Props, // Required for react-docgen
     ref,
@@ -321,10 +316,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
         return null
       }
 
-      const totalCount =
-        typeof totalCountProp === 'number'
-          ? totalCountProp
-          : activities.reduce((sum, activity) => sum + activity.count, 0)
+      const totalCount = activities.reduce((sum, activity) => sum + activity.count, 0)
 
       return (
         <footer
