@@ -51,7 +51,7 @@
     "@jest/types": "^30.0.1",
     "@playwright/test": "^1.56.1",
     "@rollup/plugin-babel": "^6.1.0",
-    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-replace": "^6.0.2",
     "@storybook/addon-docs": "^9.0.14",
