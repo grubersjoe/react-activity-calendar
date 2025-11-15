@@ -3,7 +3,7 @@ import { DocsContainer, type DocsContainerProps } from '@storybook/addon-docs/bl
 import type { Preview } from '@storybook/react-vite'
 import { DARK_MODE_EVENT_NAME } from '@vueless/storybook-dark-mode'
 import { themes, type ThemeVarsPartial } from 'storybook/theming'
-import './storybook.scss'
+import './storybook.css'
 
 const baseTheme = {
   base: 'light',
@@ -52,6 +52,9 @@ export const preview: Preview = {
       toc: true,
       codePanel: true,
       container: Container,
+      controls: {
+        sort: 'alpha',
+      },
       source: {
         language: 'tsx',
       },
