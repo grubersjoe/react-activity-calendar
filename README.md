@@ -6,7 +6,8 @@
 A React component to display activity data in a calendar (heatmap).<br>
 [Documentation (Storybook)](https://grubersjoe.github.io/react-activity-calendar)
 
-**Version 3** has been released 🎉<br>See the
+**Version 3** has been
+[released](https://github.com/grubersjoe/react-activity-calendar/releases/tag/v3.0) 🎉<br>See the
 [upgrade guide](https://grubersjoe.github.io/react-activity-calendar/?path=/docs/react-activity-calendar-upgrading-to-v3--docs).
 
 ![Screenshot](screenshot.png)
