@@ -1,0 +1,41 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+// noinspection ES6UnusedImports
+import LinkTo from '@storybook/addon-links/react'
+import { Source } from './Source.tsx'
+
+<Meta title="React Activity Calendar/Upgrading to v3" />
+
+# Upgrading to v3
+
+Version 3 of React Activity Calendar introduces several breaking changes and a introduces a new
+approach to tooltips. Follow the guide below to upgrade your project from v2 to v3.
+
+## Breaking changes
+
+- React Activity Calendar is now a
+  [pure ESM package](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
+- The default export has been **removed**. Use the named export instead:
+  <Source code="import { ActivityCalendar } from 'react-activity-calendar'" />
+- The `eventHandlers` prop has been **removed**. Use the `renderBlock` prop with
+  `React.cloneElement()` to <LinkTo kind="react-activity-calendar" name="event-handlers">attach
+  event handlers</LinkTo>.
+- The `totalCount` prop has been **removed**, overriding the total count is no longer supported.
+- The `hideColorLegend` prop has been **renamed** to `showColorLegend`.
+- The `hideMonthLabels` prop has been **renamed** to `showMonthLabels`.
+- The `hideTotalCount` prop has been **renamed** to `showTotalCount`.
+- The `<Skeleton />` component has been **removed**.<br /> Render the calendar in its loading state
+  instead:
+  <Source code="<ActivityCalendar loading />" />
+
+## Tooltips
+
+Tooltips no longer depend on external libraries and are now integrated directly into this package.
+Thanks to code-splitting, tooltips only affect your bundle size when you use them. They are
+implemented using the [Floating UI](https://floating-ui.com/) library as a “headless” component,
+meaning they come without predefined styles. This gives you full control over the appearance:
+
+- Import the default styles provided by this package, **or**
+- Add your own custom CSS.
+
+See the <LinkTo kind="react-activity-calendar" name="tooltips">tooltips</LinkTo> page for details
+and examples.

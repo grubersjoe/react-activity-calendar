@@ -3,15 +3,12 @@ import {
   useEffect,
   useMemo,
   useRef,
-  useState,
   type ForwardedRef,
   type ReactElement,
 } from 'react'
 import LinkTo from '@storybook/addon-links/react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useDarkMode } from '@vueless/storybook-dark-mode'
-import { Highlight, themes as prismThemes } from 'prism-react-renderer'
-import { themes } from 'storybook/theming'
 import Container from '../../.storybook/components/Container'
 import exampleCustomization from '../../examples/customization?raw'
 import exampleEventHandlers from '../../examples/event-handlers?raw'
@@ -23,6 +20,7 @@ import exampleTheme from '../../examples/themes?raw'
 import exampleTooltipsConfig from '../../examples/tooltips-config?raw'
 import exampleTooltips from '../../examples/tooltips?raw'
 import exampleTooltipsCSS from '../../src/styles/tooltips.css?raw'
+import { Source } from '../docs/Source'
 import { generateTestData } from '../lib/calendar'
 import type { Theme } from '../types'
 import { ActivityCalendar, type Props } from './ActivityCalendar'
@@ -162,7 +160,7 @@ export const ActivityLevels: Story = {
     return (
       <Container>
         <h1>Activity levels</h1>
-        <ActivityCalendar {...args} data={data} style={{ margin: '1rem 0' }} />
+        <ActivityCalendar {...args} data={data} style={{ margin: '1.5rem 0' }} />
         <p>
           Use the{' '}
           <code>
@@ -428,11 +426,19 @@ export const Tooltips: Story = {
         </p>
         <ActivityCalendar {...args} data={data} style={{ margin: '2rem 0' }} />
         <p>
-          Tooltips are implemented using the <a href="https://floating-ui.com/">Floating UI</a>{' '}
-          library as a “headless” component, meaning they come <b>without pre-defined styles</b>.
-          This gives you complete styling flexibility – you can either import the provided default
-          styles or write custom CSS yourself:
+          Tooltips no longer depend on external libraries and are now integrated directly into this
+          package. Thanks to code-splitting, tooltips only affect your bundle size when you use
+          them. Tooltips are implemented using the{' '}
+          <a href="https://floating-ui.com/">Floating UI</a> library as a “headless” component,
+          meaning they come <b>without predefined styles</b>. This gives you full control over the
+          appearance:
         </p>
+        <ul>
+          <li>
+            Import the default styles provided by this package, <b>or</b>
+          </li>
+          <li>Add your own custom CSS.</li>
+        </ul>
         <Source code="import 'react-activity-calendar/tooltips.css';" isDarkMode={useDarkMode()} />
         <Source
           code={`/* Adapt to your needs */\n${exampleTooltipsCSS}`}
@@ -675,75 +681,3 @@ const StackHeading = ({ children, code }: { children: string; code?: string }) =
     {code && <code style={{ fontSize: 13, fontWeight: 'normal' }}>{code}</code>}
   </div>
 )
-
-const Source = ({
-  code,
-  isDarkMode,
-  language = 'tsx',
-}: {
-  code: string
-  isDarkMode: boolean
-  language?: string
-}) => {
-  const [copied, setCopied] = useState(false)
-  const theme = isDarkMode ? themes.dark : themes.light
-
-  return (
-    <div>
-      <Highlight
-        code={code.trim()}
-        language={language}
-        theme={isDarkMode ? prismThemes.vsDark : prismThemes.vsLight}
-      >
-        {({ style, tokens, getLineProps, getTokenProps }) => (
-          <pre
-            style={Object.assign({}, style, {
-              position: 'relative',
-              margin: '1rem 0 1.5rem',
-              padding: '1em',
-              whiteSpace: 'pre-wrap',
-              backgroundColor: isDarkMode ? theme.appBg : 'hsl(210,50%,99%)', // slightly lighter than theme.appBg
-              border: `1px solid ${theme.appBorderColor}`,
-              borderRadius: theme.appBorderRadius,
-            })}
-          >
-            <button
-              type="button"
-              onClick={() => {
-                void navigator.clipboard.writeText(code).then(() => {
-                  setCopied(true)
-                  setTimeout(() => {
-                    setCopied(false)
-                  }, 1500)
-                })
-              }}
-              style={{
-                position: 'absolute',
-                bottom: -1,
-                right: -1,
-                padding: '4px 10px',
-                backgroundColor: theme.buttonBg,
-                border: `1px solid ${theme.appBorderColor}`,
-                borderTopLeftRadius: theme.appBorderRadius,
-                borderBottomRightRadius: theme.appBorderRadius,
-                color: theme.textColor,
-                fontWeight: 700,
-                fontSize: 12,
-                cursor: 'pointer',
-              }}
-            >
-              {copied ? 'Copied!' : 'Copy'}
-            </button>
-            {tokens.map((line, i) => (
-              <div key={i} {...getLineProps({ line })}>
-                {line.map((token, key) => (
-                  <span key={key} {...getTokenProps({ token })} />
-                ))}
-              </div>
-            ))}
-          </pre>
-        )}
-      </Highlight>
-    </div>
-  )
-}

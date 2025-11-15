@@ -101,9 +101,9 @@ export type Props = {
    */
   ref?: ForwardedRef<HTMLElement>
   /**
-   * Render prop for calendar blocks (activities). For example, useful to wrap
-   * the element with a link. Use `React.cloneElement` to pass additional props
-   * to the element if necessary.
+   * Render prop for calendar blocks (activities). For example, useful to
+   * attach event handlers or to wrap the element with a link. Use
+   * `React.cloneElement` to pass additional props to the element if necessary.
    */
   renderBlock?: (block: BlockElement, activity: Activity) => ReactElement
   /**

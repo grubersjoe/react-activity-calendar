@@ -1,4 +1,4 @@
-build/
-docs/
-examples/
+/build
+/docs
+/examples
 pnpm-lock.yaml
