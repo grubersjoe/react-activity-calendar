@@ -198,7 +198,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       theme: themeProp = undefined,
       tooltips = {},
       weekStart = 0, // Sunday
-    }: Props, // Required for react-docgen
+    },
     ref,
   ) => {
     const [isClient, setIsClient] = useState(false)
