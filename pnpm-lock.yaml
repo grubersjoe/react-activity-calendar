@@ -75,7 +75,7 @@ importers:
         version: 5.1.0(vite@7.2.2(@types/node@24.9.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.40.0))
       '@vueless/storybook-dark-mode':
         specifier: ^9.0.5
-        version: 9.0.9(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 9.0.10(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       dts-bundle-generator:
         specifier: ^9.5.1
         version: 9.5.1
@@ -2135,8 +2135,8 @@ packages:
   '@vitest/utils@3.2.4':
     resolution: {integrity: sha512-fB2V0JFrQSMsCo9HiSq3Ezpdv4iYaXRG1Sx8edX3MwxfyNn83mKiGzOcH+Fkxt4MHxr3y42fQi1oeAInqgX2QA==}
 
-  '@vueless/storybook-dark-mode@9.0.9':
-    resolution: {integrity: sha512-wXy4O/qgqxiPywKgyXDxYgIyP5r0lBRes+uJCCcEtcpNVISzUFieNEojFGz32oSOLLTk6EGGgYiwwy82OH4ylg==}
+  '@vueless/storybook-dark-mode@9.0.10':
+    resolution: {integrity: sha512-coAGV22wivHupfxnMHOLvAXdKp6mzk2I7f0tV0zHLW23qIKY2545g1A2LFfSbYx6JwDOvJr/+nFSRbcvxnbuaw==}
     engines: {node: '>=20'}
 
   abbrev@1.1.1:
@@ -6998,7 +6998,7 @@ snapshots:
       loupe: 3.2.1
       tinyrainbow: 2.0.0
 
-  '@vueless/storybook-dark-mode@9.0.9(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@vueless/storybook-dark-mode@9.0.10(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       '@storybook/global': 5.0.0
       '@storybook/icons': 1.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
