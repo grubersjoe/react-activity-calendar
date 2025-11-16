@@ -28,7 +28,6 @@ export default {
     banner: `'use client';`,
   },
   external: useExternal ? ['react', 'react/jsx-runtime', 'date-fns', '@floating-ui/react'] : [],
-  inlineDynamicImports: false,
   plugins: [
     replace({
       preventAssignment: true, // recommended to set this to true, will be default in the next major version
