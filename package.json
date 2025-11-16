@@ -1,6 +1,6 @@
 {
   "name": "react-activity-calendar",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "React component to display activity data in calendar",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
@@ -16,7 +16,10 @@
   "type": "module",
   "types": "build/index.d.ts",
   "files": [
-    "build"
+    "build",
+    "src",
+    "README.md",
+    "tsconfig.json"
   ],
   "scripts": {
     "build": "rollup -c",
