@@ -44,10 +44,7 @@ export default {
       extensions,
     }),
     copy({
-      targets: [
-        { src: 'src/*.d.ts', dest: 'build/' },
-        { src: 'src/styles/tooltips.css', dest: 'build/' },
-      ],
+      targets: [{ src: 'src/styles/tooltips.css', dest: 'build/' }],
     }),
     filesize(),
     visualizer({
