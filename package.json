@@ -25,7 +25,7 @@
     "build": "rollup -c",
     "build:storybook": "storybook build -o docs/ && touch docs/.nojekyll",
     "bundlesize": "pnpm install && EXTERNAL_DEPS=false pnpm build && open bundle.html",
-    "check": "pnpm install --frozen-lockfile && pnpx prettier -c . && pnpm exec tsc && pnpm lint && pnpm test:unit",
+    "check": "pnpm install --frozen-lockfile && pnpm exec prettier -c . && pnpm exec tsc && pnpm lint && pnpm test:unit",
     "dev": "storybook dev -p 9000",
     "format": "prettier --write .",
     "lint": "eslint .",
