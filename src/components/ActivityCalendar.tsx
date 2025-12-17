@@ -213,10 +213,16 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     const colorScheme = colorSchemeProp ?? systemColorScheme
     const colorScale = theme[colorScheme]
 
-    useLoadingAnimation(colorScale[0] as string, colorScheme)
+    const animationInjected = useLoadingAnimation(colorScale[0] as string, colorScheme)
     const useAnimation = !usePrefersReducedMotion()
 
     if (loading) {
+      // Only show the loading state once the CSS animation has been injected
+      // to avoid a flash of white with dark backgrounds.
+      if (!animationInjected) {
+        return null
+      }
+
       activities = generateEmptyData()
     }
 
@@ -231,7 +237,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
     const weekdayLabels = initWeekdayLabels(showWeekdayLabels, weekStart)
 
-    // Must be calculated on the client or SSR hydration errors will occur
+    // Must be calculated on the client, or SSR hydration errors will occur
     // because server and client HTML would not match.
     const weekdayLabelOffset =
       isClient && weekdayLabels.shouldShow
