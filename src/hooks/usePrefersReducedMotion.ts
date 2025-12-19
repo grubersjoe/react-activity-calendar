@@ -3,14 +3,10 @@ import { useEffect, useState } from 'react'
 const query = '(prefers-reduced-motion: reduce)'
 
 export function usePrefersReducedMotion() {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(true)
+  const mediaQuery = window.matchMedia(query)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(mediaQuery.matches)
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia(query)
-
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setPrefersReducedMotion(mediaQuery.matches)
-
     const onChange = (event: MediaQueryListEvent) => {
       setPrefersReducedMotion(event.matches)
     }
@@ -20,7 +16,7 @@ export function usePrefersReducedMotion() {
     return () => {
       mediaQuery.removeEventListener('change', onChange)
     }
-  }, [])
+  }, [mediaQuery])
 
   return prefersReducedMotion
 }
