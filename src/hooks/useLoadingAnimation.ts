@@ -5,7 +5,7 @@ import type { ColorScheme } from '../types'
 export const loadingAnimationName = `${NAMESPACE}--loading-animation`
 
 export function useLoadingAnimation(zeroColor: string, colorScheme: ColorScheme) {
-  const [injected, setInjected] = useState(false)
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     const colorLoading = `oklab(from ${zeroColor} l a b)`
@@ -28,16 +28,19 @@ export function useLoadingAnimation(zeroColor: string, colorScheme: ColorScheme)
         }
       }
     `
-    document.head.appendChild(style)
+    const handleLoad = () => {
+      setLoaded(true)
+    }
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setInjected(true)
+    document.head.appendChild(style)
+    style.addEventListener('load', handleLoad)
 
     return () => {
       document.head.removeChild(style)
-      setInjected(false)
+      style.removeEventListener('load', handleLoad)
+      setLoaded(false)
     }
   }, [zeroColor, colorScheme])
 
-  return injected
+  return loaded
 }

@@ -213,13 +213,13 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     const colorScheme = colorSchemeProp ?? systemColorScheme
     const colorScale = theme[colorScheme]
 
-    const animationInjected = useLoadingAnimation(colorScale[0] as string, colorScheme)
+    const animationLoaded = useLoadingAnimation(colorScale[0] as string, colorScheme)
     const useAnimation = !usePrefersReducedMotion()
 
     if (loading) {
       // Only show the loading state once the CSS animation has been injected
       // to avoid a flash of white with dark backgrounds.
-      if (!animationInjected) {
+      if (useAnimation && !animationLoaded) {
         return null
       }
 
