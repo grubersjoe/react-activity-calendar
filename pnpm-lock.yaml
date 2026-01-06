@@ -44,7 +44,7 @@ importers:
         specifier: ^30.0.1
         version: 30.2.0
       '@playwright/test':
-        specifier: ^1.56.1
+        specifier: ^1.57.0
         version: 1.57.0
       '@rollup/plugin-babel':
         specifier: ^6.1.0

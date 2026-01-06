@@ -53,7 +53,7 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
     "@jest/globals": "^30.0.3",
     "@jest/types": "^30.0.1",
-    "@playwright/test": "^1.56.1",
+    "@playwright/test": "^1.57.0",
     "@rollup/plugin-babel": "^6.1.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
