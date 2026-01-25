@@ -15,7 +15,7 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.57.0-noble
       options: --user 1001
     steps:
-      - uses: actions/checkout@v6.0.1
+      - uses: actions/checkout@v6.0.2
       - uses: actions/setup-node@v6.2.0
         with:
           node-version: lts/*
