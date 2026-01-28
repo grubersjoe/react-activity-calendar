@@ -1,4 +1,4 @@
-import{j as e,M as d}from"./iframe-B42hmk3g.js";import{useMDXComponents as i}from"./index-Db7CeO1l.js";import{S as o,r}from"./Source-pDmFsZUd.js";import"./preload-helper-PPVm8Dsz.js";function s(t){const n={a:"a",code:"code",h1:"h1",h2:"h2",li:"li",p:"p",strong:"strong",ul:"ul",...i(),...t.components};return e.jsxs(e.Fragment,{children:[e.jsx(d,{title:"React Activity Calendar/Upgrading to v3"}),`
+import{j as e,M as d}from"./iframe-Ci1dRKEi.js";import{useMDXComponents as i}from"./index-BaVMmwWb.js";import{S as o,r}from"./Source-CbZUrE9X.js";import"./preload-helper-PPVm8Dsz.js";function s(t){const n={a:"a",code:"code",h1:"h1",h2:"h2",li:"li",p:"p",strong:"strong",ul:"ul",...i(),...t.components};return e.jsxs(e.Fragment,{children:[e.jsx(d,{title:"React Activity Calendar/Upgrading to v3"}),`
 `,e.jsx(n.h1,{id:"upgrading-to-v3",children:"Upgrading to v3"}),`
 `,e.jsx(n.p,{children:`Version 3 of React Activity Calendar introduces several breaking changes and a introduces a new
 approach to tooltips. Follow the guide below to upgrade your project from v2 to v3.`}),`
