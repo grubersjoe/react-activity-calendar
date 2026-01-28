@@ -68,34 +68,31 @@ export function Tooltip({
   const role = useRole(context, { role: 'tooltip' })
 
   const { getReferenceProps, getFloatingProps } = useInteractions([hover, dismiss, role])
-
   const { isMounted, styles: transitionStyles } = useTransitionStyles(context, transitionStylesProp)
 
   return (
     <>
       {cloneElement(children, { ref: refs.setReference, ...getReferenceProps() })}
-      {
+      {isMounted && (
         <FloatingPortal>
-          {isMounted && (
-            <div
-              ref={refs.setFloating}
-              className={getClassName('tooltip')}
-              style={{ ...floatingStyles, ...transitionStyles }}
-              data-color-scheme={colorScheme}
-              {...getFloatingProps()}
-            >
-              {text}
-              {withArrow && (
-                <FloatingArrow
-                  ref={arrowRef}
-                  context={context}
-                  className={getClassName('tooltip-arrow')}
-                />
-              )}
-            </div>
-          )}
+          <div
+            ref={refs.setFloating}
+            className={getClassName('tooltip')}
+            style={{ ...floatingStyles, ...transitionStyles }}
+            data-color-scheme={colorScheme}
+            {...getFloatingProps()}
+          >
+            {text}
+            {withArrow && (
+              <FloatingArrow
+                ref={arrowRef}
+                context={context}
+                className={getClassName('tooltip-arrow')}
+              />
+            )}
+          </div>
         </FloatingPortal>
-      }
+      )}
     </>
   )
 }
