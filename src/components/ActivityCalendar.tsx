@@ -74,6 +74,10 @@ export type Props = {
    */
   blockSize?: number
   /**
+   * Class name to add to the component container.
+   */
+  className?: string
+  /**
    * Use the `'light'` or `'dark'` color scheme instead of the system one.
    */
   colorScheme?: ColorScheme
@@ -183,6 +187,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       blockMargin = 4,
       blockRadius = 2,
       blockSize = 12,
+      className,
       colorScheme: colorSchemeProp,
       fontSize = 14,
       labels: labelsProp,
@@ -450,7 +455,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     return (
       <article
         ref={ref}
-        className={NAMESPACE}
+        className={`${NAMESPACE} ${className ?? ''}`.trim()}
         style={{ ...styleProp, ...styles.container(fontSize) }}
       >
         <div className={getClassName('scroll-container')} style={styles.scrollContainer(fontSize)}>
