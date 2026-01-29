@@ -17,6 +17,7 @@ export const styles = {
       overflowX: 'auto',
       overflowY: 'hidden',
       paddingTop: Math.ceil(0.1 * fontSize), // SVG <text> overflows in Firefox at y=0
+      paddingLeft: 1, // Block outlines on the left are cut off otherwise
     }) satisfies CSSProperties,
   calendar: {
     display: 'block', // SVGs are inline-block by default

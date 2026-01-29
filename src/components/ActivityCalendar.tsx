@@ -251,8 +251,8 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
     function getDimensions() {
       return {
-        width: weeks.length * (blockSize + blockMargin) - blockMargin,
-        height: labelHeight + (blockSize + blockMargin) * 7 - blockMargin,
+        width: weeks.length * (blockSize + blockMargin) - blockMargin + 1, // Add 1px because block outlines are cut off otherwise
+        height: labelHeight + (blockSize + blockMargin) * 7 - blockMargin + 1, // Dito.
       }
     }
 
