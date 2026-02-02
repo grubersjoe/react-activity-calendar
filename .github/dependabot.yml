@@ -12,6 +12,8 @@ updates:
         update-types:
           - 'minor'
           - 'patch'
+    assignees:
+      - 'grubersjoe'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
@@ -20,3 +22,5 @@ updates:
       dependencies:
         - patterns:
             - '*'
+    assignees:
+      - 'grubersjoe'
