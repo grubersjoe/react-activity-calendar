@@ -1,8 +1,12 @@
 name: Tests
 on:
   push:
+    branches:
+      - main
   pull_request:
-
+    branches:
+      - main
+  workflow_dispatch: # manually
 jobs:
   test:
     runs-on: ubuntu-latest
