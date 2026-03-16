@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: lts/*
 
-      - uses: pnpm/action-setup@v4.2.0
+      - uses: pnpm/action-setup@v4.4.0
         name: Install pnpm
         with:
           version: latest
