@@ -19,7 +19,6 @@ export default {
     format: 'es',
     chunkFileNames: 'chunks/[name]-[hash].js',
     sourcemap: true,
-    exports: 'named',
     // Use 'auto' instead of 'default' to support more environments.
     // https://rollupjs.org/guide/en/#outputinterop
     interop: 'auto',
@@ -33,14 +32,14 @@ export default {
       preventAssignment: true, // recommended to set this to true, will be default in the next major version
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
+    resolve({
+      extensions,
+    }),
     ...(useExternal ? [] : [commonjs()]),
     babel({
       extensions,
       exclude: 'node_modules/**',
       babelHelpers: 'bundled',
-    }),
-    resolve({
-      extensions,
     }),
     copy({
       targets: [{ src: 'src/styles/tooltips.css', dest: 'build/' }],
