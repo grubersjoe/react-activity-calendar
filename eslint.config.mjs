@@ -41,6 +41,6 @@ export default defineConfig(
   },
   {
     // Note: there must be no other properties in this object
-    ignores: ['build/', 'coverage/', 'docs/', 'examples/', 'rollup.config.mjs'],
+    ignores: ['build', 'coverage', 'docs', 'src/docs/examples', 'rollup.config.mjs'],
   },
 )
