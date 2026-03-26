@@ -1,7 +1,7 @@
 {
   "extends": ["@tsconfig/bases/strictest", "@tsconfig/bases/vite-react"],
   "include": [".", ".storybook/**/*"],
-  "exclude": ["src/docs/examples"],
+  "exclude": ["examples"],
   "compilerOptions": {
     "allowJs": true,
     "exactOptionalPropertyTypes": false,
