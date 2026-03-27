@@ -1325,6 +1325,7 @@ import LinkTo from "@storybook/addon-links/react";</code></pre>
         <div class="panel panel-content">
           <div class="mdx-content">
             <pre><code>import { Meta } from &#39;@storybook/addon-docs/blocks&#39;
+import { useDarkMode } from &#39;@vueless/storybook-dark-mode&#39;
 // noinspection ES6UnusedImports
 import LinkTo from &#39;@storybook/addon-links/react&#39;
 import { Source } from &#39;./Source.tsx&#39;
@@ -1341,7 +1342,7 @@ approach to tooltips. Follow the guide below to upgrade your project from v2 to 
 - React Activity Calendar is now a
   [pure ESM package](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
 - The default export has been **removed**. Use the named export instead:
-  &lt;Source code=&quot;import { ActivityCalendar } from &#39;react-activity-calendar&#39;&quot; /&gt;
+  &lt;Source code=&quot;import { ActivityCalendar } from &#39;react-activity-calendar&#39;&quot; isDarkMode={useDarkMode()} /&gt;
 - The `eventHandlers` prop has been **removed**. Use the `renderBlock` prop with
   `React.cloneElement()` to &lt;LinkTo kind=&quot;react-activity-calendar&quot; name=&quot;event-handlers&quot;&gt;attach
   event handlers&lt;/LinkTo&gt;.
@@ -1351,7 +1352,7 @@ approach to tooltips. Follow the guide below to upgrade your project from v2 to 
 - The `hideTotalCount` prop has been **renamed** to `showTotalCount`.
 - The `&lt;Skeleton /&gt;` component has been **removed**.&lt;br /&gt; Render the calendar with empty data in
   its loading state instead:
-  &lt;Source code=&quot;&lt;ActivityCalendar data={[]} loading /&gt;&quot; /&gt;
+  &lt;Source code=&quot;&lt;ActivityCalendar data={[]} loading /&gt;&quot; isDarkMode={useDarkMode()} /&gt;
 
 ## Tooltips
 
