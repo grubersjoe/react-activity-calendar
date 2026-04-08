@@ -37,8 +37,8 @@
     "start": "rollup -c -w",
     "test": "pnpm test:unit && pnpm test:visual",
     "test:unit": "jest",
-    "test:visual": "docker compose run -p 9001:9001 --rm playwright bash -c 'npm install --silent --no-package-lock && npx playwright test'",
-    "test:visual:update": "docker compose run --rm playwright bash -c 'npm install --silent --no-package-lock && npx playwright test --update-snapshots'"
+    "test:visual": "docker compose run --build --rm -p 9001:9001 playwright bash -c 'pnpm i --frozen-lockfile --ignore-scripts && pnpm exec playwright test'",
+    "test:visual:update": "docker compose run --build --rm playwright bash -c 'pnpm i --frozen-lockfile --ignore-scripts && pnpm exec playwright test --update-snapshots'"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.19",

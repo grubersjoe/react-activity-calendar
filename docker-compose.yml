@@ -1,13 +1,22 @@
 services:
   playwright:
-    image: mcr.microsoft.com/playwright:v1.59.1-noble
+    build:
+      # https://pnpm.io/docker
+      dockerfile_inline: |
+        FROM mcr.microsoft.com/playwright:v1.59.1-noble
+        ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+        RUN corepack enable && corepack prepare pnpm@10 --activate
+        WORKDIR /app
+        RUN pnpm config set store-dir /pnpm/store
     platform: linux/arm64
     working_dir: /app
     volumes:
       - .:/app
       - playwright-node-modules:/app/node_modules
+      - playwright-pnpm:/pnpm
     stdin_open: true
     tty: true
 
 volumes:
+  playwright-pnpm:
   playwright-node-modules:
