@@ -349,7 +349,10 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
           {!loading && showColorLegend && (
             <div className={getClassName('legend-colors')} style={styles.footer.legend}>
-              <span style={{ marginRight: '0.4em' }}>{labels.legend.less}</span>
+              {labels.legend.less && (
+                <span style={{ marginRight: '0.4em' }}>{labels.legend.less}</span>
+              )}
+
               {range(maxLevel + 1).map(level => {
                 const colorLegend = (
                   <svg width={blockSize} height={blockSize} key={level}>
@@ -390,7 +393,10 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                   </Fragment>
                 )
               })}
-              <span style={{ marginLeft: '0.4em' }}>{labels.legend.more}</span>
+
+              {labels.legend.more && (
+                <span style={{ marginLeft: '0.4em' }}>{labels.legend.more}</span>
+              )}
             </div>
           )}
         </footer>
