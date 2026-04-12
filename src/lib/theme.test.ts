@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { Theme, ThemeInput } from '../types'
 import { createTheme } from './theme'
 
@@ -25,13 +25,12 @@ describe('createTheme', () => {
     dark: ['hsl(0, 0%, 22%)', '#4D455D', '#7DB9B6', '#F5E9CF', '#E96479'],
   }
 
-  const cssSpy = jest.fn<typeof global.CSS.supports>()
+  const cssSupportsSpy = vi.fn<typeof global.CSS.supports>()
 
   beforeEach(() => {
-    // @ts-expect-error only this method needs to be mocked
-    global.CSS = {
-      supports: cssSpy.mockReturnValue(true),
-    }
+    vi.stubGlobal('CSS', {
+      supports: cssSupportsSpy.mockReturnValue(true),
+    })
   })
 
   it('returns the default theme if no input is passed', () => {
@@ -93,7 +92,7 @@ describe('createTheme', () => {
   })
 
   it('throws if an invalid color is passed', () => {
-    cssSpy.mockReturnValue(false)
+    cssSupportsSpy.mockReturnValue(false)
     expect(() =>
       createTheme({
         dark: ['#333', '🙃'],
