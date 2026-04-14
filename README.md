@@ -31,8 +31,8 @@ npm install react-activity-calendar
 - event handlers ⁉️
 - localization 🌍
 
-The component expects activity data in the following structure. Each activity level must be in the
-interval from 0 to `maxLevel`, which is 4 by default (see
+The component expects activity data in the following shape, where each activity level must be in the
+given level bounds. By default, the level bounds are `[0, 4]` (see
 [documentation](https://grubersjoe.github.io/react-activity-calendar/?path=/story/react-activity-calendar--activity-levels)).
 It is up to you how to generate and classify your data.
 

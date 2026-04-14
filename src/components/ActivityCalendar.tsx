@@ -41,24 +41,22 @@ const Tooltip = lazy(() => import('./Tooltip').then(module => ({ default: module
 
 export type Props = {
   /**
-   * List of calendar entries. Each `Activity` object requires an ISO 8601
-   * `date` string in the format `yyyy-MM-dd`, a `count` property with the
-   * amount of tracked data, and a `level` property in the range `0-maxLevel`
-   * to specify activity intensity. The `maxLevel` prop defaults to 4.
+   * List of calendar entries. Each Activity object requires an ISO 8601 date
+   * string in the `yyyy-MM-dd` format, a `count` property indicating the amount
+   * of tracked data, and a `level` property in the range `[minLevel, maxLevel]`
+   * representing activity intensity. By default, `minLevel` is 0 and `maxLevel`
+   * is 4, resulting in five activity levels.
    *
    * Dates without corresponding entries are assumed to have no activity. This
    * allows you to set arbitrary start and end dates for the calendar by passing
    * empty entries as the first and last items.
    *
-   * Example object:
-   *
-   * ```
+   * @example
    * {
    *   date: "2021-02-20",
    *   count: 16,
    *   level: 3
    * }
-   * ```
    */
   data: Array<Activity>
   /**
@@ -87,14 +85,19 @@ export type Props = {
   fontSize?: number
   /**
    * Localization strings for all calendar labels.
-   *
    * `totalCount` supports the placeholders `{{count}}` and `{{year}}`.
    */
   labels?: Labels
   /**
-   * Maximum activity level (zero-indexed). 4 by default, 0 means "no activity".
+   * Maximum activity level, 4 by default.
+   * @see minLevel
    */
   maxLevel?: number
+  /**
+   * Minimum activity level, 0 by default.
+   * @see maxLevel
+   */
+  minLevel?: number
   /**
    * Toggle to display the calendar loading state. The `data` property is
    * ignored if set.
@@ -105,9 +108,9 @@ export type Props = {
    */
   ref?: ForwardedRef<HTMLElement>
   /**
-   * Render prop for calendar blocks (activities). For example, useful to
-   * attach event handlers or to wrap the element with a link. Use
-   * `React.cloneElement` to pass additional props to the element if necessary.
+   * Render prop for calendar blocks (activities). Useful to attach event
+   * handlers or to wrap the element with a link. Use `React.cloneElement` to
+   * pass additional props to the element if necessary.
    */
   renderBlock?: (block: BlockElement, activity: Activity) => ReactElement
   /**
@@ -130,7 +133,8 @@ export type Props = {
   /**
    * Toggle to show weekday labels left to the calendar.
    * Alternatively, provide an array of ISO 8601 weekday names to display.
-   * Example: `['mon', 'wed', 'fri']`.
+   *
+   * @example ['mon', 'wed', 'fri']
    */
   showWeekdayLabels?: boolean | Array<DayName>
   /**
@@ -139,14 +143,18 @@ export type Props = {
   style?: CSSProperties
   /**
    * Set the calendar colors for the light and dark color schemes. Provide
-   * all colors per scheme explicitly (5 by default) or specify exactly two colors
-   * (the lowest and highest intensity) to calculate a single-hue scale. The
-   * number of colors is controlled by the `maxLevel` property. Colors can be
-   * specified in any valid CSS format.
+   * the colors for all activity levels per scheme explicitly or specify two
+   * colors (the zero and maximum intensity) to calculate a scale automatically.
+   * The number of activity levels is controlled by the `minLevel` and
+   * `maxLevel` properties.
+   * If you have negative activity levels, you can also pass three colors,
+   * representing the negative, zero, and positive levels, to calculate a
+   * corresponding scale. For explicit themes the color count must match the
+   * number of activity levels. Colors can be specified in any valid CSS format.
    *
-   * At least one scheme's colors must be set. If undefined, the default
-   * theme is used. By default, the calendar selects the current system color
-   * scheme, but you can enforce a specific scheme with the `colorScheme` prop.
+   * For undefined color schemes the default theme is used. By default, the
+   * current system color scheme is applied, but you can enforce a specific
+   * scheme with the `colorScheme` prop.
    *
    * Example:
    *
@@ -160,11 +168,17 @@ export type Props = {
    * />
    * ```
    *
+   * @see colorScheme
+   * @see minLevel
+   * @see maxLevel
    */
   theme?: ThemeInput
   /**
    * Tooltips to display when hovering over activity blocks or the color legend
-   * below the calendar. See the story for details about tooltip configuration.
+   * below the calendar.
+   *
+   * @see [Documentation](https://grubersjoe.github.io/react-activity-calendar/?path=/story/react-activity-calendar--tooltips)
+   *
    */
   tooltips?: {
     activity?: TooltipConfig & {
@@ -175,7 +189,7 @@ export type Props = {
     }
   }
   /**
-   * Index of day to be used as start of week. 0 represents Sunday.
+   * Index of day to be used as the week start. 0 represents Sunday.
    */
   weekStart?: DayIndex
 }
@@ -192,6 +206,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       fontSize = 14,
       labels: labelsProp,
       loading = false,
+      minLevel = 0,
       maxLevel = 4,
       renderBlock,
       renderColorLegend,
@@ -211,9 +226,14 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       setIsClient(true)
     }, [])
 
-    maxLevel = Math.max(1, maxLevel)
+    if (minLevel >= maxLevel) {
+      throw new RangeError(
+        `Minimum activity level must be less than maximum level. Got ${minLevel} and ${maxLevel}.`,
+      )
+    }
 
-    const theme = createTheme(themeProp, maxLevel + 1)
+    const levels = { minLevel, maxLevel }
+    const theme = createTheme(themeProp, levels)
     const systemColorScheme = useColorScheme()
     const colorScheme = colorSchemeProp ?? systemColorScheme
     const colorScale = theme[colorScheme]
@@ -231,7 +251,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       activities = generateEmptyData()
     }
 
-    validateActivities(activities, maxLevel)
+    validateActivities(activities, levels)
 
     const firstActivity = activities[0] as Activity
     const year = getYear(parseISO(firstActivity.date))
@@ -280,7 +300,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                 height={blockSize}
                 rx={blockRadius}
                 ry={blockRadius}
-                fill={colorScale[activity.level]}
+                fill={colorForLevel(activity.level)}
                 data-date={activity.date}
                 data-level={activity.level}
                 style={{
@@ -353,13 +373,13 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
                 <span style={{ marginRight: '0.4em' }}>{labels.legend.less}</span>
               )}
 
-              {range(maxLevel + 1).map(level => {
+              {range(minLevel, maxLevel + 1).map(level => {
                 const colorLegend = (
                   <svg width={blockSize} height={blockSize} key={level}>
                     <rect
                       width={blockSize}
                       height={blockSize}
-                      fill={colorScale[level]}
+                      fill={colorForLevel(level)}
                       rx={blockRadius}
                       ry={blockRadius}
                       style={styles.rect(colorScheme)}
@@ -454,6 +474,10 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
           ))}
         </g>
       )
+    }
+
+    function colorForLevel(level: number) {
+      return colorScale[level - minLevel] // shift to zero-based index
     }
 
     const { width, height } = getDimensions()

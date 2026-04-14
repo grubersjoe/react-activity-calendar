@@ -1,6 +1,6 @@
 {
   "name": "react-activity-calendar",
-  "version": "3.1.2",
+  "version": "3.2.0",
   "description": "React component to display activity data in calendar",
   "author": "Jonathan Gruber <gruberjonathan@gmail.com>",
   "license": "MIT",
@@ -62,6 +62,7 @@
     "@tsconfig/bases": "^1.0.23",
     "@types/react": "^19.2.14",
     "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "^4.1.4",
     "@vueless/storybook-dark-mode": "^10.0.7",
     "dts-bundle-generator": "^9.5.1",
     "eslint": "^10.2.0",
@@ -90,10 +91,6 @@
     "react": "^18.0.0 || ^19.0.0"
   },
   "pnpm": {
-    "overrides": {
-      "react": "^19.0.0",
-      "react-dom": "^19.0.0"
-    },
     "onlyBuiltDependencies": [
       "@parcel/watcher",
       "esbuild",

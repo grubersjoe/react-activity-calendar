@@ -1,45 +1,58 @@
-import type { Color, ColorScale, Theme, ThemeInput } from '../types'
+import type { Color, Levels, Theme, ThemeInput } from '../types'
 import { range } from './calendar'
 
-export function createTheme(input?: ThemeInput, steps = 5): Theme {
-  const defaultTheme = createDefaultTheme(steps)
+export function createTheme(
+  input?: ThemeInput,
+  levels: Levels = { minLevel: 0, maxLevel: 4 },
+): Theme {
+  const defaultTheme = createDefaultTheme(levels)
 
   if (input) {
-    validateThemeInput(input, steps)
+    const numberOfLevels = levels.maxLevel - levels.minLevel + 1
+    validateThemeInput(input, numberOfLevels)
 
     input.light = input.light ?? defaultTheme.light
     input.dark = input.dark ?? defaultTheme.dark
 
     return {
-      light: isPair(input.light) ? calcColorScale(input.light, steps) : input.light,
-      dark: isPair(input.dark) ? calcColorScale(input.dark, steps) : input.dark,
+      light: isPair(input.light)
+        ? calcColorScale([input.light[1], input.light[0], input.light[1]], levels)
+        : isTriple(input.light)
+          ? calcColorScale(input.light, levels)
+          : input.light,
+      dark: isPair(input.dark)
+        ? calcColorScale([input.dark[1], input.dark[0], input.dark[1]], levels)
+        : isTriple(input.dark)
+          ? calcColorScale(input.dark, levels)
+          : input.dark,
     }
   }
 
   return defaultTheme
 }
 
-function createDefaultTheme(steps: number): Theme {
+function createDefaultTheme(levels: Levels): Theme {
   return {
-    light: calcColorScale(['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'], steps),
-    dark: calcColorScale(['hsl(0, 0%, 22%)', 'hsl(0, 0%, 92%)'], steps),
+    light: calcColorScale(['hsl(0, 0%, 26%)', 'hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'], levels),
+    dark: calcColorScale(['hsl(0, 0%, 92%)', 'hsl(0, 0%, 22%)', 'hsl(0, 0%, 92%)'], levels),
   }
 }
 
-function validateThemeInput(input: ThemeInput, steps: number) {
-  const maxLevelHint = 'The number of colors is controlled by the "maxLevel" property.'
+function validateThemeInput(input: ThemeInput, numberOfLevels: number) {
+  const levelsHint =
+    'The number of colors must match the number of activity levels controlled by the `minLevel` and `maxLevel` properties.'
 
   if (typeof input !== 'object' || (input.light === undefined && input.dark === undefined)) {
     throw new Error(
-      `The theme object must contain at least one of the fields "light" and "dark" with exactly 2 or ${steps} colors respectively. ${maxLevelHint}`,
+      `The theme object must contain at least one of the fields "light" and "dark" with exactly 2 or ${numberOfLevels} colors respectively. ${levelsHint}`,
     )
   }
 
   if (input.light) {
     const { length } = input.light
-    if (length !== 2 && length !== steps) {
+    if (length !== 2 && length !== 3 && length !== numberOfLevels) {
       throw new Error(
-        `theme.light must contain exactly 2 or ${steps} colors, ${length} passed. ${maxLevelHint}`,
+        `theme.light must contain exactly 2 or 3 or ${numberOfLevels} colors, ${length} passed. ${levelsHint}`,
       )
     }
 
@@ -52,9 +65,9 @@ function validateThemeInput(input: ThemeInput, steps: number) {
 
   if (input.dark) {
     const { length } = input.dark
-    if (length !== 2 && length !== steps) {
+    if (length !== 2 && length !== 3 && length !== numberOfLevels) {
       throw new Error(
-        `theme.dark must contain exactly 2 or ${steps} colors, ${length} passed. ${maxLevelHint}`,
+        `theme.dark must contain exactly 2 or 3 or ${numberOfLevels} colors, ${length} passed. ${levelsHint}`,
       )
     }
 
@@ -66,26 +79,38 @@ function validateThemeInput(input: ThemeInput, steps: number) {
   }
 }
 
-function calcColorScale([start, end]: [Color, Color], steps: number): ColorScale {
-  return range(steps).map(i => {
-    // In the loading animation the zero color is used.
-    // However, Safari 16 crashes if a CSS color-mix expression like below is
-    // combined with relative color syntax to calculate a hue variation for the
-    // animation. Since the start and end colors do not need to be mixed, they
-    // can be returned directly to work around this issue.
-    switch (i) {
-      case 0:
-        return start
-      case steps - 1:
-        return end
-      default: {
-        const pos = (i / (steps - 1)) * 100
-        return `color-mix(in oklab, ${end} ${parseFloat(pos.toFixed(2))}%, ${start})`
+function calcColorScale(
+  [colorNeg, colorZero, colorPos]: [Color, Color, Color],
+  { minLevel, maxLevel }: Levels,
+): Array<Color> {
+  return range(minLevel, maxLevel + 1).map(i => {
+    if (i < 0) {
+      if (i === minLevel) {
+        return colorNeg
       }
+
+      const pos = (1 - i / minLevel) * 100
+      return `color-mix(in oklab, ${colorZero} ${parseFloat(pos.toFixed(2))}%, ${colorNeg})`
     }
+
+    if (i === 0) {
+      return colorZero
+    }
+
+    // i > 0
+    if (i === maxLevel) {
+      return colorPos
+    }
+
+    const pos = (i / maxLevel) * 100
+    return `color-mix(in oklab, ${colorPos} ${parseFloat(pos.toFixed(2))}%, ${colorZero})`
   })
 }
 
 function isPair<T>(val: Array<T>): val is [T, T] {
   return val.length === 2
+}
+
+function isTriple<T>(val: Array<T>): val is [T, T, T] {
+  return val.length === 3
 }
