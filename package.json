@@ -62,7 +62,7 @@
     "@storybook/react-vite": "^10.4.0",
     "@tsconfig/bases": "^1.0.24",
     "@types/react": "^19.2.14",
-    "@typescript/native-preview": "7.0.0-dev.20260602.1",
+    "@typescript/native-preview": "7.0.0-dev.20260608.1",
     "@vitejs/plugin-react": "^6.0.2",
     "@vitest/coverage-v8": "^4.1.6",
     "@vueless/storybook-dark-mode": "^10.0.7",
