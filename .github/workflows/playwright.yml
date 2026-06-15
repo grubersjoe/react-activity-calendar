@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: lts/*
 
-      - uses: pnpm/action-setup@v6.0.8
+      - uses: pnpm/action-setup@v6.0.9
         name: Install pnpm
         with:
           version: 11
