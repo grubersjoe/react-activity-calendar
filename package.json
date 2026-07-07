@@ -46,10 +46,10 @@
     "date-fns": "^4.2.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
-    "@babel/preset-env": "^7.29.2",
-    "@babel/preset-react": "^7.28.5",
-    "@babel/preset-typescript": "^7.28.5",
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@babel/preset-react": "^8.0.1",
+    "@babel/preset-typescript": "^8.0.1",
     "@eslint/js": "^10.0.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@playwright/test": "^1.61.0",
@@ -62,7 +62,7 @@
     "@storybook/react-vite": "^10.4.0",
     "@tsconfig/bases": "^1.0.24",
     "@types/react": "^19.2.14",
-    "@typescript/native-preview": "7.0.0-dev.20260703.1",
+    "@typescript/native-preview": "7.0.0-dev.20260704.1",
     "@vitejs/plugin-react": "^6.0.2",
     "@vitest/coverage-v8": "^4.1.6",
     "@vueless/storybook-dark-mode": "^10.0.7",
