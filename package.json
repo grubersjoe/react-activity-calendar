@@ -38,8 +38,8 @@
     "start": "rollup -c -w",
     "test": "pnpm test:unit && pnpm test:visual",
     "test:unit": "vitest run",
-    "test:visual": "docker compose run --build --rm --quiet -p 9001:9001 playwright bash -c 'pnpm i --ignore-scripts && pnpm exec playwright test'",
-    "test:visual:update": "docker compose run --build --rm --quiet playwright bash -c 'pnpm i --ignore-scripts && pnpm exec playwright test --update-snapshots'"
+    "test:visual": "docker compose run --build --rm -p 9001:9001 playwright bash -c 'pnpm i --ignore-scripts && pnpm exec playwright test'",
+    "test:visual:update": "docker compose run --build --rm playwright bash -c 'pnpm i --ignore-scripts && pnpm exec playwright test --update-snapshots'"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.19",
@@ -52,7 +52,7 @@
     "@babel/preset-typescript": "^8.0.1",
     "@eslint/js": "^10.0.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
-    "@playwright/test": "^1.61.0",
+    "@playwright/test": "^1.61.1",
     "@rollup/plugin-babel": "^7.0.0",
     "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-node-resolve": "^16.0.3",

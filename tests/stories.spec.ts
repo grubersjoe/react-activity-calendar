@@ -39,9 +39,9 @@ test('color-themes', async ({ page }) => {
   await expect(page).toHaveScreenshot('color-themes.png', options)
 })
 
-test('explicit-themes', async ({ page }) => {
-  await loadStory(page, 'explicit-themes')
-  await expect(page).toHaveScreenshot('explicit-themes.png', options)
+test('explicit-theme', async ({ page }) => {
+  await loadStory(page, 'explicit-theme')
+  await expect(page).toHaveScreenshot('explicit-theme.png', options)
 })
 
 test('customization', async ({ page }) => {
