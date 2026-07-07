@@ -1,21 +1,23 @@
-import { useState } from 'react'
 import { Highlight, themes as prismThemes } from 'prism-react-renderer'
+import { type CSSProperties, useState } from 'react'
 import { themes } from 'storybook/theming'
 
 export const Source = ({
   code,
   isDarkMode,
   language = 'tsx',
+  style
 }: {
   code: string
   isDarkMode: boolean
   language?: string
+  style?: CSSProperties
 }) => {
   const [copied, setCopied] = useState(false)
   const theme = isDarkMode ? themes.dark : themes.light
 
   return (
-    <div>
+    <div style={style}>
       <Highlight
         code={code.trim()}
         language={language}

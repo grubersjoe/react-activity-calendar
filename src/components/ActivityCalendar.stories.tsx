@@ -20,6 +20,7 @@ import exampleThemeExplicit from '../../examples/themes-explicit?raw'
 import exampleTheme from '../../examples/themes?raw'
 import exampleTooltipsConfig from '../../examples/tooltips-config?raw'
 import exampleTooltips from '../../examples/tooltips?raw'
+import exampleWeekdaysAll from '../../examples/weekdays-all?raw'
 import exampleTooltipsCSS from '../../src/styles/tooltips.css?raw'
 import { Source } from '../docs/Source'
 import { generateTestData } from '../lib/calendar'
@@ -180,6 +181,16 @@ export const ActivityLevels: Story = {
     return (
       <Container>
         <h1>Activity levels</h1>
+        <p>
+          Use the <code>minLevel</code> and <code>maxLevel</code> props to control the range of
+          activity levels. By default, the range is <code>[0, 4]</code>, resulting in 5 activity
+          levels (0 through 4, inclusive). All activity data must fall within these bounds. The
+          following example uses the range{' '}
+          <code>
+            [{args.minLevel}, {args.maxLevel}]
+          </code>
+          :
+        </p>
         <ActivityCalendar
           {...args}
           data={data}
@@ -189,14 +200,9 @@ export const ActivityLevels: Story = {
           style={{ margin: '1.5rem 0' }}
         />
         <p>
-          Use the <code>minLevel</code> and <code>maxLevel</code> props to control the range of
-          activity levels. By default, the range is <code>[0, 4]</code>, resulting in 5 activity
-          levels (0 through 4, inclusive). All activity data must be within these bounds.
-        </p>
-        <p>
-          Activity levels support any range, including negative ones like <code>[-6, 3]</code>. To
-          calculate a scale automatically pass exactly three colors representing the negative, zero
-          and positive color (see{' '}
+          Activity levels support any range, including negative ones like <code>[-6, 3]</code>{' '}
+          below. To calculate a scale automatically pass exactly three colors representing the
+          negative, zero and positive color (see{' '}
           <LinkTo kind="react-activity-calendar" name="color-themes">
             color themes
           </LinkTo>
@@ -349,7 +355,7 @@ export const ColorThemes: Story = {
   },
 }
 
-export const ExplicitThemes: Story = {
+export const ExplicitTheme: Story = {
   args: {
     ...defaultProps,
     theme: explicitTheme,
@@ -377,7 +383,8 @@ export const ExplicitThemes: Story = {
           </LinkTo>{' '}
           page for details how to use the <code>theme</code> prop.
         </p>
-        <ActivityCalendar {...args} data={data} style={{ marginTop: '2rem' }} />
+        <ActivityCalendar {...args} data={data} style={{ marginBlock: '2rem' }} />
+        <Source code={exampleThemeExplicit} isDarkMode={useDarkMode()} />
       </Container>
     )
   },
@@ -590,28 +597,46 @@ export const WeekdayLabels: Story = {
       [args.minLevel, args.maxLevel],
     )
     return (
-      <Stack>
-        <div>
-          <StackHeading code="true">Show every second weekday (default)</StackHeading>
-          <ActivityCalendar {...args} data={data} />
-        </div>
+      <>
+        <h1>Weekday labels</h1>
+        <h2 style={{ fontSize: 'inherit', fontWeight: 600 }}>
+          Show label for every second weekday (default)
+        </h2>
+        <ActivityCalendar {...args} data={data} style={{ marginBlock: '1rem' }} />
+        <Source
+          code={`<ActivityCalendar data={data} showWeekdayLabels />`}
+          isDarkMode={useDarkMode()}
+          style={{ marginBottom: '2rem' }}
+        />
 
-        <div>
-          <StackHeading code="['mon', 'fri']">Show specific days</StackHeading>
-          <ActivityCalendar {...args} data={data} showWeekdayLabels={['mon', 'fri']} />
-        </div>
+        <h2 style={{ fontSize: 'inherit', fontWeight: 600 }}>
+          Show labels for Monday and Friday only
+        </h2>
+        <ActivityCalendar
+          {...args}
+          data={data}
+          showWeekdayLabels={['mon', 'fri']}
+          style={{ marginBlock: '1rem' }}
+        />
+        <Source
+          code={`<ActivityCalendar data={data} showWeekdayLabels={['mon', 'fri']} />`}
+          isDarkMode={useDarkMode()}
+          style={{ marginBottom: '2rem' }}
+        />
 
-        <div>
-          <StackHeading code="['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']">
-            Show every day
-          </StackHeading>
-          <ActivityCalendar
-            {...args}
-            data={data}
-            showWeekdayLabels={['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']}
-          />
-        </div>
-      </Stack>
+        <h2 style={{ fontSize: 'inherit', fontWeight: 600 }}>Show labels for all weekdays</h2>
+        <ActivityCalendar
+          {...args}
+          data={data}
+          showWeekdayLabels={['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']}
+          style={{ marginBlock: '1rem' }}
+        />
+        <Source
+          code={exampleWeekdaysAll}
+          isDarkMode={useDarkMode()}
+          style={{ marginBottom: '2rem' }}
+        />
+      </>
     )
   },
   parameters: {
@@ -736,23 +761,6 @@ export const ContainerRef: Story = {
   },
 }
 
-const Stack = ({ children }: { children: Array<ReactElement> }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>{children}</div>
-)
-
-const StackHeading = ({ children, code }: { children: string; code?: string }) => (
-  <div
-    role="heading"
-    style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: 12,
-      marginBottom: 16,
-      fontSize: 16,
-      fontWeight: 'bolder',
-    }}
-  >
-    {children}
-    {code && <code style={{ fontSize: 13, fontWeight: 'normal' }}>{code}</code>}
-  </div>
+const Stack = ({ children, gap = '3rem' }: { children: Array<ReactElement>; gap?: string }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
 )
