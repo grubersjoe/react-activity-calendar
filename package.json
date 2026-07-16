@@ -25,8 +25,7 @@
     "postbuild": "dts-bundle-generator src/index.tsx -o build/index.d.ts --no-check --no-banner --external-imports react date-fns",
     "prepublishOnly": "pnpm check && pnpm build",
     "start": "rollup -c -w",
-    "test": "jest",
-    "prepare": "husky"
+    "test": "jest"
   },
   "dependencies": {
     "date-fns": "^4.1.0"
