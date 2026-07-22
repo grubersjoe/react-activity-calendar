@@ -2,7 +2,7 @@
   data={data}
   tooltips={{
     activity: {
-      text: activity => `${activity.level} activities on ${activity.date}`
+      text: ({level, date}) => `${level} activities on ${new Date(date).toLocaleDateString('en-US')}`
     },
     colorLegend: {
       text: level => `Activity level ${level + 1}`

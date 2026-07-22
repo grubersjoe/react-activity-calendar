@@ -467,7 +467,8 @@ export const Tooltips: Story = {
     ...defaultProps,
     tooltips: {
       activity: {
-        text: ({ count, date }) => `${count} activities on ${date}`,
+        text: ({ count, date }) =>
+          `${count} activities on ${new Date(date).toLocaleDateString('en-US')}`,
       },
       colorLegend: {
         text: level => `Activity level ${level}`,
@@ -538,7 +539,8 @@ export const Tooltips: Story = {
           data={data}
           tooltips={{
             activity: {
-              text: activity => `${activity.level} activities on ${activity.date}`,
+              text: ({ level, date }) =>
+                `${level} activities on ${new Date(date).toLocaleDateString('en-US')}`,
               placement: 'right',
               offset: 8,
               transitionStyles: {

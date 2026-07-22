@@ -2,7 +2,8 @@
   data={data}
   tooltips={{
     activity: {
-      text: activity => `${activity.level} activities on ${activity.date}`,
+      text: ({level, date}) =>
+        `${level} activities on ${new Date(date).toLocaleDateString('en-US')}`,
       placement: 'right',
       offset: 6,
       hoverRestMs: 300,
