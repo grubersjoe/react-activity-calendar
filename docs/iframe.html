@@ -45,7 +45,7 @@
       window.LOGLEVEL = 'info';
       window.FRAMEWORK_OPTIONS = {};
       window.CHANNEL_OPTIONS = {};
-      window.FEATURES = {"argTypeTargetsV7":true,"legacyDecoratorFileOrder":false,"disallowImplicitActionsInRenderV8":true,"viewport":true,"highlight":true,"controls":true,"interactions":false,"actions":false,"backgrounds":true,"outline":true,"measure":true,"sidebarOnboardingChecklist":true,"componentsManifest":false};
+      window.FEATURES = {"actions":false,"argTypeTargetsV7":true,"babelRemoveBugfixes":true,"backgrounds":true,"changeDetection":true,"componentsManifest":false,"controls":true,"disallowImplicitActionsInRenderV8":true,"highlight":true,"interactions":false,"legacyDecoratorFileOrder":false,"measure":true,"outline":true,"menuOnboardingChecklist":true,"sidebarOnboardingChecklist":true,"viewport":true};
       window.STORIES = [{"titlePrefix":"","directory":"./src","files":"**/*.stories.@(ts|tsx)","importPathMatcher":"^\\.[\\\\/](?:src(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)\\/|\\/|$)(?!\\.)(?=.)[^/]*?\\.stories\\.(ts|tsx))$"},{"titlePrefix":"","directory":"./src","files":"**/*.mdx","importPathMatcher":"^\\.[\\\\/](?:src(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)\\/|\\/|$)(?!\\.)(?=.)[^/]*?\\.mdx)$"}];
       window.DOCS_OPTIONS = {"defaultName":"Docs"};
       window.TAGS_OPTIONS = {};
@@ -171,11 +171,11 @@
     border-radius: 10px;
     background: rgb(247, 247, 247);
     color: rgb(46, 52, 56);
+  }
 
-    & * {
-      background: rgb(247, 247, 247);
-      color: rgb(46, 52, 56);
-    }
+  .sb-nopreview_main * {
+    background: rgb(247, 247, 247);
+    color: rgb(46, 52, 56);
   }
 
   .sb-nopreview_heading {
@@ -206,84 +206,89 @@
     border: 1px solid #ff0000;
     box-shadow: 0 0 64px rgba(0, 0, 0, 0.1);
     gap: 24px;
+  }
 
-    & ol {
-      padding-left: 18px;
-      margin: 0;
-    }
+  .sb-errordisplay_main ol {
+    padding-left: 18px;
+    margin: 0;
+  }
 
-    /* Redefine colors to ensure readability regardless of user-provided * selectors. */
-    * {
-      background: white;
-      color: black;
-    }
+  /* Redefine colors to ensure readability regardless of user-provided * selectors. */
+  .sb-errordisplay_main * {
+    background: white;
+    color: black;
+  }
 
-    & h1 {
-      font-family: Nunito Sans;
-      font-size: 22px;
-      font-weight: 400;
-      line-height: 30px;
-      font-weight: normal;
-      margin: 0;
+  /* Exclude error code block from the universal reset to preserve ANSI colors and dark theme */
+  .sb-errordisplay_main .sb-errordisplay_code,
+  .sb-errordisplay_main .sb-errordisplay_code * {
+    background: #242424;
+    color: #c6c6c6;
+  }
 
-      &::before {
-        content: '';
-        display: inline-block;
-        width: 12px;
-        height: 12px;
-        background: #ff4400;
-        border-radius: 50%;
-        margin-right: 8px;
-      }
-    }
+  .sb-errordisplay_main h1 {
+    font-family: inherit;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 30px;
+    margin: 0;
+  }
 
-    & p,
-    & ol {
-      font-family: Nunito Sans;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 19px;
-      margin: 0;
-    }
+  .sb-errordisplay_main h1::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: #ff4400;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
 
-    & li + li {
-      margin: 0;
-      padding: 0;
-      padding-top: 12px;
-    }
+  .sb-errordisplay_main p,
+  .sb-errordisplay_main ol {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 19px;
+    margin: 0;
+  }
 
-    & a {
-      color: currentColor;
-    }
+  .sb-errordisplay_main li + li {
+    margin: 0;
+    padding: 0;
+    padding-top: 12px;
+  }
 
-    & .sb-errordisplay_code {
-      padding: 10px;
-      flex: 1;
-      background: #242424;
-      color: #c6c6c6;
-      box-sizing: border-box;
+  .sb-errordisplay_main a {
+    color: currentColor;
+  }
 
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 19px;
-      border-radius: 4px;
+  .sb-errordisplay_main .sb-errordisplay_code {
+    padding: 10px;
+    flex: 1;
+    background: #242424;
+    color: #c6c6c6;
+    box-sizing: border-box;
 
-      font-family:
-        'Operator Mono', 'Fira Code Retina', 'Fira Code', 'FiraCode-Retina', 'Andale Mono',
-        'Lucida Console', Consolas, Monaco, monospace;
-      margin: 0;
-      overflow: auto;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 19px;
+    border-radius: 4px;
 
-      & code {
-        background-color: inherit;
-        color: inherit;
-      }
-    }
+    font-family:
+      'Operator Mono', 'Fira Code Retina', 'Fira Code', 'FiraCode-Retina', 'Andale Mono',
+      'Lucida Console', Consolas, Monaco, monospace;
+    margin: 0;
+    overflow: auto;
+  }
 
-    & .sb-errordisplay pre {
-      white-space: pre-wrap;
-      white-space: revert;
-    }
+  .sb-errordisplay_main .sb-errordisplay_code code {
+    background-color: inherit;
+    color: inherit;
+  }
+
+  .sb-errordisplay_main .sb-errordisplay_code {
+    white-space: pre-wrap;
   }
 
   @-webkit-keyframes sb-rotate360 {
@@ -547,22 +552,22 @@
   }
 </script>
 
-    <script type="module" crossorigin src="./assets/iframe-CgKZHKcR.js"></script>
-    <link rel="modulepreload" crossorigin href="./assets/chunk-BneVvdWh.js">
-    <link rel="modulepreload" crossorigin href="./assets/preload-helper-CV6hqhE5.js">
-    <link rel="modulepreload" crossorigin href="./assets/chunk-CYSK6WYR-C7GGD6Sc.js">
-    <link rel="modulepreload" crossorigin href="./assets/react-D1sJ83FZ.js">
-    <link rel="modulepreload" crossorigin href="./assets/react-DUEmErTH.js">
-    <link rel="modulepreload" crossorigin href="./assets/react-dom-CX6U_vZl.js">
-    <link rel="modulepreload" crossorigin href="./assets/jsx-runtime-Cw9gq7QB.js">
-    <link rel="modulepreload" crossorigin href="./assets/chunk-242VQQM5-DhDXsZYD.js">
-    <link rel="modulepreload" crossorigin href="./assets/chunk-3LY4VQVK-DCNlYdu3.js">
-    <link rel="modulepreload" crossorigin href="./assets/csf-Co-ueV5P.js">
-    <link rel="modulepreload" crossorigin href="./assets/theming-b7XIry0e.js">
-    <link rel="modulepreload" crossorigin href="./assets/chunk-RD3KTAHR-BsxoL_G8.js">
-    <link rel="modulepreload" crossorigin href="./assets/components-DyFJpMfg.js">
-    <link rel="modulepreload" crossorigin href="./assets/blocks-B7uraDXf.js">
-    <link rel="modulepreload" crossorigin href="./assets/dist-Kc0obCSN.js">
+    <script type="module" crossorigin src="./assets/iframe-kXpwseO2.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-DaJ6WEGw.js">
+    <link rel="modulepreload" crossorigin href="./assets/preload-helper-si3HNj2m.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-DvlgmmzG.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-DRQKCCAG-D-NCJ15P.js">
+    <link rel="modulepreload" crossorigin href="./assets/csf-KRTQ4i_m.js">
+    <link rel="modulepreload" crossorigin href="./assets/theming-tqqQV3LB.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-dom-ua_76iqd.js">
+    <link rel="modulepreload" crossorigin href="./assets/jsx-runtime-cM__dR4X.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-W22LQPXL-gjnlyhvu.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-242VQQM5-Bvks-qQ6.js">
+    <link rel="modulepreload" crossorigin href="./assets/components-BubuMeGP.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-QQBDHPVZ-CLNKAVn-.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-XnqUzw--.js">
+    <link rel="modulepreload" crossorigin href="./assets/blocks-Cme2jDWp.js">
+    <link rel="modulepreload" crossorigin href="./assets/chunk-UAWMPV5J-C23r05oX.js">
     <link rel="stylesheet" crossorigin href="./assets/iframe-Bo6zjVKx.css">
   </head>
 

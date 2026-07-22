@@ -9,11 +9,20 @@ var __require = /* @__PURE__ */ ((x2) => typeof require < "u" ? require : typeof
   if (typeof require < "u") return require.apply(this, arguments);
   throw Error('Dynamic require of "' + x2 + '" is not supported');
 });
-var __esm = (fn, res) => function() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+var __esm = (fn, res, err) => function() {
+  if (err) throw err[0];
+  try {
+    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+  } catch (e2) {
+    throw err = [e2], e2;
+  }
 };
 var __commonJS = (cb, mod) => function() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  try {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  } catch (e2) {
+    throw mod = 0, e2;
+  }
 };
 var __export = (target, all) => {
   for (var name in all)
@@ -100,7 +109,7 @@ var require_factoryWithThrowingShims = __commonJS({
     }
     emptyFunctionWithReset.resetWarningCache = emptyFunction;
     module.exports = function() {
-      function shim(props, propName, componentName, location2, propFullName, secret) {
+      function shim(props, propName, componentName2, location2, propFullName, secret) {
         if (secret !== ReactPropTypesSecret) {
           var err = new Error(
             "Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types"
@@ -152,7 +161,7 @@ var require_prop_types = __commonJS({
 var require_react_fast_compare = __commonJS({
   "../../node_modules/react-fast-compare/index.js"(exports, module) {
     var hasElementType = typeof Element < "u", hasMap = typeof Map == "function", hasSet = typeof Set == "function", hasArrayBuffer = typeof ArrayBuffer == "function" && !!ArrayBuffer.isView;
-    function equal4(a2, b2) {
+    function equal3(a2, b2) {
       if (a2 === b2) return !0;
       if (a2 && b2 && typeof a2 == "object" && typeof b2 == "object") {
         if (a2.constructor !== b2.constructor) return !1;
@@ -160,7 +169,7 @@ var require_react_fast_compare = __commonJS({
         if (Array.isArray(a2)) {
           if (length = a2.length, length != b2.length) return !1;
           for (i2 = length; i2-- !== 0; )
-            if (!equal4(a2[i2], b2[i2])) return !1;
+            if (!equal3(a2[i2], b2[i2])) return !1;
           return !0;
         }
         var it;
@@ -169,7 +178,7 @@ var require_react_fast_compare = __commonJS({
           for (it = a2.entries(); !(i2 = it.next()).done; )
             if (!b2.has(i2.value[0])) return !1;
           for (it = a2.entries(); !(i2 = it.next()).done; )
-            if (!equal4(i2.value[1], b2.get(i2.value[0]))) return !1;
+            if (!equal3(i2.value[1], b2.get(i2.value[0]))) return !1;
           return !0;
         }
         if (hasSet && a2 instanceof Set && b2 instanceof Set) {
@@ -192,7 +201,7 @@ var require_react_fast_compare = __commonJS({
           if (!Object.prototype.hasOwnProperty.call(b2, keys[i2])) return !1;
         if (hasElementType && a2 instanceof Element) return !1;
         for (i2 = length; i2-- !== 0; )
-          if (!((keys[i2] === "_owner" || keys[i2] === "__v" || keys[i2] === "__o") && a2.$$typeof) && !equal4(a2[keys[i2]], b2[keys[i2]]))
+          if (!((keys[i2] === "_owner" || keys[i2] === "__v" || keys[i2] === "__o") && a2.$$typeof) && !equal3(a2[keys[i2]], b2[keys[i2]]))
             return !1;
         return !0;
       }
@@ -200,7 +209,7 @@ var require_react_fast_compare = __commonJS({
     }
     module.exports = function(a2, b2) {
       try {
-        return equal4(a2, b2);
+        return equal3(a2, b2);
       } catch (error) {
         if ((error.message || "").match(/stack|recursion/i))
           return console.warn("react-fast-compare cannot handle circular refs"), !1;
@@ -442,79 +451,14 @@ var require_memoizerific = __commonJS({
   }
 });
 
-// ../../node_modules/toggle-selection/index.js
-var require_toggle_selection = __commonJS({
-  "../../node_modules/toggle-selection/index.js"(exports, module) {
-    module.exports = function() {
-      var selection = document.getSelection();
-      if (!selection.rangeCount)
-        return function() {
-        };
-      for (var active = document.activeElement, ranges = [], i2 = 0; i2 < selection.rangeCount; i2++)
-        ranges.push(selection.getRangeAt(i2));
-      switch (active.tagName.toUpperCase()) {
-        // .toUpperCase handles XHTML
-        case "INPUT":
-        case "TEXTAREA":
-          active.blur();
-          break;
-        default:
-          active = null;
-          break;
-      }
-      return selection.removeAllRanges(), function() {
-        selection.type === "Caret" && selection.removeAllRanges(), selection.rangeCount || ranges.forEach(function(range) {
-          selection.addRange(range);
-        }), active && active.focus();
-      };
+// ../../node_modules/picocolors/picocolors.browser.js
+var require_picocolors_browser = __commonJS({
+  "../../node_modules/picocolors/picocolors.browser.js"(exports, module) {
+    var x2 = String, create4 = function() {
+      return { isColorSupported: !1, reset: x2, bold: x2, dim: x2, italic: x2, underline: x2, inverse: x2, hidden: x2, strikethrough: x2, black: x2, red: x2, green: x2, yellow: x2, blue: x2, magenta: x2, cyan: x2, white: x2, gray: x2, bgBlack: x2, bgRed: x2, bgGreen: x2, bgYellow: x2, bgBlue: x2, bgMagenta: x2, bgCyan: x2, bgWhite: x2, blackBright: x2, redBright: x2, greenBright: x2, yellowBright: x2, blueBright: x2, magentaBright: x2, cyanBright: x2, whiteBright: x2, bgBlackBright: x2, bgRedBright: x2, bgGreenBright: x2, bgYellowBright: x2, bgBlueBright: x2, bgMagentaBright: x2, bgCyanBright: x2, bgWhiteBright: x2 };
     };
-  }
-});
-
-// ../../node_modules/copy-to-clipboard/index.js
-var require_copy_to_clipboard = __commonJS({
-  "../../node_modules/copy-to-clipboard/index.js"(exports, module) {
-    "use strict";
-    var deselectCurrent = require_toggle_selection(), clipboardToIE11Formatting = {
-      "text/plain": "Text",
-      "text/html": "Url",
-      default: "Text"
-    }, defaultMessage = "Copy to clipboard: #{key}, Enter";
-    function format(message) {
-      var copyKey = (/mac os x/i.test(navigator.userAgent) ? "\u2318" : "Ctrl") + "+C";
-      return message.replace(/#{\s*key\s*}/g, copyKey);
-    }
-    function copy3(text, options2) {
-      var debug, message, reselectPrevious, range, selection, mark, success = !1;
-      options2 || (options2 = {}), debug = options2.debug || !1;
-      try {
-        reselectPrevious = deselectCurrent(), range = document.createRange(), selection = document.getSelection(), mark = document.createElement("span"), mark.textContent = text, mark.ariaHidden = "true", mark.style.all = "unset", mark.style.position = "fixed", mark.style.top = 0, mark.style.clip = "rect(0, 0, 0, 0)", mark.style.whiteSpace = "pre", mark.style.webkitUserSelect = "text", mark.style.MozUserSelect = "text", mark.style.msUserSelect = "text", mark.style.userSelect = "text", mark.addEventListener("copy", function(e2) {
-          if (e2.stopPropagation(), options2.format)
-            if (e2.preventDefault(), typeof e2.clipboardData > "u") {
-              debug && console.warn("unable to use e.clipboardData"), debug && console.warn("trying IE specific stuff"), window.clipboardData.clearData();
-              var format2 = clipboardToIE11Formatting[options2.format] || clipboardToIE11Formatting.default;
-              window.clipboardData.setData(format2, text);
-            } else
-              e2.clipboardData.clearData(), e2.clipboardData.setData(options2.format, text);
-          options2.onCopy && (e2.preventDefault(), options2.onCopy(e2.clipboardData));
-        }), document.body.appendChild(mark), range.selectNodeContents(mark), selection.addRange(range);
-        var successful = document.execCommand("copy");
-        if (!successful)
-          throw new Error("copy command was unsuccessful");
-        success = !0;
-      } catch (err) {
-        debug && console.error("unable to copy using execCommand: ", err), debug && console.warn("trying IE specific stuff");
-        try {
-          window.clipboardData.setData(options2.format || "text", text), options2.onCopy && options2.onCopy(window.clipboardData), success = !0;
-        } catch (err2) {
-          debug && console.error("unable to copy using clipboardData: ", err2), debug && console.error("falling back to prompt"), message = format("message" in options2 ? options2.message : defaultMessage), window.prompt(message, text);
-        }
-      } finally {
-        selection && (typeof selection.removeRange == "function" ? selection.removeRange(range) : selection.removeAllRanges()), mark && document.body.removeChild(mark), reselectPrevious();
-      }
-      return success;
-    }
-    module.exports = copy3;
+    module.exports = create4();
+    module.exports.createColors = create4;
   }
 });
 
@@ -606,7 +550,7 @@ var require_cjs = __commonJS({
       var stringValue = Object.prototype.toString.call(value);
       return stringValue === "[object RegExp]" || stringValue === "[object Date]" || isReactElement(value);
     }
-    var canUseSymbol = typeof Symbol == "function" && Symbol.for, REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for("react.element") : 60103;
+    var canUseSymbol = typeof Symbol == "function" && Symbol.for, REACT_ELEMENT_TYPE = canUseSymbol ? /* @__PURE__ */ Symbol.for("react.element") : 60103;
     function isReactElement(value) {
       return value.$$typeof === REACT_ELEMENT_TYPE;
     }
@@ -674,8 +618,8 @@ var require_cjs = __commonJS({
 var require_react_is_production_min = __commonJS({
   "../../node_modules/downshift/node_modules/react-is/cjs/react-is.production.min.js"(exports) {
     "use strict";
-    var b2 = Symbol.for("react.element"), c2 = Symbol.for("react.portal"), d2 = Symbol.for("react.fragment"), e2 = Symbol.for("react.strict_mode"), f2 = Symbol.for("react.profiler"), g2 = Symbol.for("react.provider"), h2 = Symbol.for("react.context"), k2 = Symbol.for("react.server_context"), l3 = Symbol.for("react.forward_ref"), m2 = Symbol.for("react.suspense"), n3 = Symbol.for("react.suspense_list"), p2 = Symbol.for("react.memo"), q2 = Symbol.for("react.lazy"), t2 = Symbol.for("react.offscreen"), u2;
-    u2 = Symbol.for("react.module.reference");
+    var b2 = /* @__PURE__ */ Symbol.for("react.element"), c2 = /* @__PURE__ */ Symbol.for("react.portal"), d2 = /* @__PURE__ */ Symbol.for("react.fragment"), e2 = /* @__PURE__ */ Symbol.for("react.strict_mode"), f2 = /* @__PURE__ */ Symbol.for("react.profiler"), g2 = /* @__PURE__ */ Symbol.for("react.provider"), h2 = /* @__PURE__ */ Symbol.for("react.context"), k2 = /* @__PURE__ */ Symbol.for("react.server_context"), l3 = /* @__PURE__ */ Symbol.for("react.forward_ref"), m2 = /* @__PURE__ */ Symbol.for("react.suspense"), n3 = /* @__PURE__ */ Symbol.for("react.suspense_list"), p2 = /* @__PURE__ */ Symbol.for("react.memo"), q2 = /* @__PURE__ */ Symbol.for("react.lazy"), t2 = /* @__PURE__ */ Symbol.for("react.offscreen"), u2;
+    u2 = /* @__PURE__ */ Symbol.for("react.module.reference");
     function v2(a2) {
       if (typeof a2 == "object" && a2 !== null) {
         var r4 = a2.$$typeof;
@@ -1314,10 +1258,10 @@ var require_store2 = __commonJS({
 init_react();
 
 // global-externals:storybook/internal/channels
-var channels_default = __STORYBOOK_CHANNELS__, { Channel, HEARTBEAT_INTERVAL, HEARTBEAT_MAX_LATENCY, PostMessageTransport, WebsocketTransport, createBrowserChannel } = __STORYBOOK_CHANNELS__;
+var channels_default = __STORYBOOK_CHANNELS__, { Channel, HEARTBEAT_INTERVAL, HEARTBEAT_MAX_LATENCY, PostMessageTransport, WebsocketTransport, clearChannel, createBrowserChannel, ensureChannel, getChannel, installNoopChannel, requireChannel, setChannel } = __STORYBOOK_CHANNELS__;
 
 // global-externals:storybook/internal/core-events
-var core_events_default = __STORYBOOK_CORE_EVENTS__, { ARGTYPES_INFO_REQUEST, ARGTYPES_INFO_RESPONSE, CHANNEL_CREATED, CHANNEL_WS_DISCONNECT, CONFIG_ERROR, CREATE_NEW_STORYFILE_REQUEST, CREATE_NEW_STORYFILE_RESPONSE, CURRENT_STORY_WAS_SET, DOCS_PREPARED, DOCS_RENDERED, FILE_COMPONENT_SEARCH_REQUEST, FILE_COMPONENT_SEARCH_RESPONSE, FORCE_REMOUNT, FORCE_RE_RENDER, GHOST_STORIES_REQUEST, GHOST_STORIES_RESPONSE, GLOBALS_UPDATED, MANAGER_INERT_ATTRIBUTE_CHANGED, NAVIGATE_URL, OPEN_IN_EDITOR_REQUEST, OPEN_IN_EDITOR_RESPONSE, PLAY_FUNCTION_THREW_EXCEPTION, PRELOAD_ENTRIES, PREVIEW_BUILDER_PROGRESS, PREVIEW_INITIALIZED, PREVIEW_KEYDOWN, REGISTER_SUBSCRIPTION, REQUEST_WHATS_NEW_DATA, RESET_STORY_ARGS, RESULT_WHATS_NEW_DATA, SAVE_STORY_REQUEST, SAVE_STORY_RESPONSE, SELECT_STORY, SET_CONFIG, SET_CURRENT_STORY, SET_FILTER, SET_GLOBALS, SET_INDEX, SET_STORIES, SET_WHATS_NEW_CACHE, SHARED_STATE_CHANGED, SHARED_STATE_SET, SHARE_ISOLATE_MODE, SHARE_POPOVER_OPENED, SHARE_STORY_LINK, STORIES_COLLAPSE_ALL, STORIES_EXPAND_ALL, STORY_ARGS_UPDATED, STORY_CHANGED, STORY_ERRORED, STORY_FINISHED, STORY_HOT_UPDATED, STORY_INDEX_INVALIDATED, STORY_MISSING, STORY_PREPARED, STORY_RENDERED, STORY_RENDER_PHASE_CHANGED, STORY_SPECIFIED, STORY_THREW_EXCEPTION, STORY_UNCHANGED, TELEMETRY_ERROR, TOGGLE_WHATS_NEW_NOTIFICATIONS, UNHANDLED_ERRORS_WHILE_PLAYING, UPDATE_GLOBALS, UPDATE_QUERY_PARAMS, UPDATE_STORY_ARGS } = __STORYBOOK_CORE_EVENTS__;
+var core_events_default = __STORYBOOK_CORE_EVENTS__, { AI_PROMPT_NUDGE, AI_SETUP_ANALYTICS_REQUEST, AI_SETUP_ANALYTICS_RESPONSE, ARGTYPES_INFO_REQUEST, ARGTYPES_INFO_RESPONSE, CHANNEL_CREATED, CHANNEL_WS_DISCONNECT, CONFIG_ERROR, CREATE_NEW_STORYFILE_REQUEST, CREATE_NEW_STORYFILE_RESPONSE, CURRENT_STORY_WAS_SET, DOCS_PREPARED, DOCS_RENDERED, FILE_COMPONENT_SEARCH_REQUEST, FILE_COMPONENT_SEARCH_RESPONSE, FORCE_REMOUNT, FORCE_RE_RENDER, GHOST_STORIES_REQUEST, GHOST_STORIES_RESPONSE, GLOBALS_UPDATED, MANAGER_INERT_ATTRIBUTE_CHANGED, NAVIGATE_URL, OPEN_IN_EDITOR_REQUEST, OPEN_IN_EDITOR_RESPONSE, PLAY_FUNCTION_THREW_EXCEPTION, PRELOAD_ENTRIES, PREVIEW_BUILDER_PROGRESS, PREVIEW_INITIALIZED, PREVIEW_KEYDOWN, REGISTER_SUBSCRIPTION, REQUEST_WHATS_NEW_DATA, RESET_STORY_ARGS, RESULT_WHATS_NEW_DATA, SAVE_STORY_REQUEST, SAVE_STORY_RESPONSE, SELECT_STORY, SET_CONFIG, SET_CURRENT_STORY, SET_FILTER, SET_GLOBALS, SET_INDEX, SET_STORIES, SET_WHATS_NEW_CACHE, SHARED_STATE_CHANGED, SHARED_STATE_SET, SHARE_ISOLATE_MODE, SIDEBAR_FILTER_CHANGED, STORIES_COLLAPSE_ALL, STORIES_EXPAND_ALL, STORY_ARGS_UPDATED, STORY_CHANGED, STORY_ERRORED, STORY_FINISHED, STORY_HOT_UPDATED, STORY_INDEX_INVALIDATED, STORY_MISSING, STORY_PREPARED, STORY_RENDERED, STORY_RENDER_PHASE_CHANGED, STORY_SPECIFIED, STORY_THREW_EXCEPTION, STORY_UNCHANGED, TELEMETRY_ERROR, TOGGLE_WHATS_NEW_NOTIFICATIONS, UNHANDLED_ERRORS_WHILE_PLAYING, UPDATE_GLOBALS, UPDATE_QUERY_PARAMS, UPDATE_STORY_ARGS } = __STORYBOOK_CORE_EVENTS__;
 
 // ../../node_modules/@storybook/global/dist/index.mjs
 var scope = (() => {
@@ -1378,6 +1322,7 @@ __export(icons_exports, {
   ChangedIcon: () => ChangedIcon,
   ChatIcon: () => ChatIcon,
   CheckIcon: () => CheckIcon,
+  ChecklistIcon: () => ChecklistIcon,
   ChevronDownIcon: () => ChevronDownIcon,
   ChevronLeftIcon: () => ChevronLeftIcon,
   ChevronRightIcon: () => ChevronRightIcon,
@@ -1437,6 +1382,7 @@ __export(icons_exports, {
   FailedIcon: () => FailedIcon,
   FastForwardIcon: () => FastForwardIcon,
   FigmaIcon: () => FigmaIcon,
+  FilesIcon: () => FilesIcon,
   FilterIcon: () => FilterIcon,
   FlagIcon: () => FlagIcon,
   FolderIcon: () => FolderIcon,
@@ -1502,6 +1448,7 @@ __export(icons_exports, {
   PlusIcon: () => PlusIcon,
   PointerDefaultIcon: () => PointerDefaultIcon,
   PointerHandIcon: () => PointerHandIcon,
+  PopOutIcon: () => PopOutIcon,
   PowerIcon: () => PowerIcon,
   PrintIcon: () => PrintIcon,
   ProceedIcon: () => ProceedIcon,
@@ -1535,6 +1482,7 @@ __export(icons_exports, {
   StarIcon: () => StarIcon,
   StatusFailIcon: () => StatusFailIcon,
   StatusIcon: () => StatusIcon,
+  StatusNewIcon: () => StatusNewIcon,
   StatusPassIcon: () => StatusPassIcon,
   StatusWarnIcon: () => StatusWarnIcon,
   StickerIcon: () => StickerIcon,
@@ -1582,19 +1530,19 @@ __export(icons_exports, {
   default: () => icons_default,
   iconList: () => iconList
 });
-var icons_default = __STORYBOOK_ICONS__, { AccessibilityAltIcon, AccessibilityIcon, AccessibilityIgnoredIcon, AddIcon, AdminIcon, AlertAltIcon, AlertIcon, AlignLeftIcon, AlignRightIcon, AppleIcon, ArrowBottomLeftIcon, ArrowBottomRightIcon, ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowSolidDownIcon, ArrowSolidLeftIcon, ArrowSolidRightIcon, ArrowSolidUpIcon, ArrowTopLeftIcon, ArrowTopRightIcon, ArrowUpIcon, AzureDevOpsIcon, BackIcon, BasketIcon, BatchAcceptIcon, BatchDenyIcon, BeakerIcon, BellIcon, BitbucketIcon, BoldIcon, BookIcon, BookmarkHollowIcon, BookmarkIcon, BottomBarIcon, BottomBarToggleIcon, BoxIcon, BranchIcon, BrowserIcon, BugIcon, ButtonIcon, CPUIcon, CalendarIcon, CameraIcon, CameraStabilizeIcon, CategoryIcon, CertificateIcon, ChangedIcon, ChatIcon, CheckIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronSmallDownIcon, ChevronSmallLeftIcon, ChevronSmallRightIcon, ChevronSmallUpIcon, ChevronUpIcon, ChromaticIcon, ChromeIcon, CircleHollowIcon, CircleIcon, ClearIcon, CloseAltIcon, CloseIcon, CloudHollowIcon, CloudIcon, CogIcon, CollapseIcon, CommandIcon, CommentAddIcon, CommentIcon, CommentsIcon, CommitIcon, CompassIcon, ComponentDrivenIcon, ComponentIcon, ContrastIcon, ContrastIgnoredIcon, ControlsIcon, CopyIcon, CreditIcon, CrossIcon, DashboardIcon, DatabaseIcon, DeleteIcon, DiamondIcon, DirectionIcon, DiscordIcon, DocChartIcon, DocListIcon, DocumentIcon, DownloadIcon, DragIcon, EditIcon, EditorIcon, EllipsisIcon, EmailIcon, ExpandAltIcon, ExpandIcon, EyeCloseIcon, EyeIcon, FaceHappyIcon, FaceNeutralIcon, FaceSadIcon, FacebookIcon, FailedIcon, FastForwardIcon, FigmaIcon, FilterIcon, FlagIcon, FolderIcon, FormIcon, GDriveIcon, GiftIcon, GithubIcon, GitlabIcon, GlobeIcon, GoogleIcon, GraphBarIcon, GraphLineIcon, GraphqlIcon, GridAltIcon, GridIcon, GrowIcon, HeartHollowIcon, HeartIcon, HomeIcon, HourglassIcon, InfoIcon, ItalicIcon, JumpToIcon, KeyIcon, LightningIcon, LightningOffIcon, LinkBrokenIcon, LinkIcon, LinkedinIcon, LinuxIcon, ListOrderedIcon, ListUnorderedIcon, LocationIcon, LockIcon, MarkdownIcon, MarkupIcon, MediumIcon, MemoryIcon, MenuIcon, MergeIcon, MirrorIcon, MobileIcon, MoonIcon, NutIcon, OutboxIcon, OutlineIcon, PaintBrushAltIcon, PaintBrushIcon, PaperClipIcon, ParagraphIcon, PassedIcon, PhoneIcon, PhotoDragIcon, PhotoIcon, PhotoStabilizeIcon, PinAltIcon, PinIcon, PlayAllHollowIcon, PlayBackIcon, PlayHollowIcon, PlayIcon, PlayNextIcon, PlusIcon, PointerDefaultIcon, PointerHandIcon, PowerIcon, PrintIcon, ProceedIcon, ProfileIcon, PullRequestIcon, QuestionIcon, RSSIcon, RedirectIcon, ReduxIcon, RefreshIcon, ReplyIcon, RepoIcon, RequestChangeIcon, RewindIcon, RulerIcon, SaveIcon, SearchIcon, ShareAltIcon, ShareIcon, ShieldIcon, SideBySideIcon, SidebarAltIcon, SidebarAltToggleIcon, SidebarIcon, SidebarToggleIcon, SortDownIcon, SortUpIcon, SpeakerIcon, StackedIcon, StarHollowIcon, StarIcon, StatusFailIcon, StatusIcon, StatusPassIcon, StatusWarnIcon, StickerIcon, StopAltHollowIcon, StopAltIcon, StopIcon, StorybookIcon, StructureIcon, SubtractIcon, SunIcon, SupportIcon, SweepIcon, SwitchAltIcon, SyncIcon, TabletIcon, ThumbsUpIcon, TimeIcon, TimerIcon, TransferIcon, TrashIcon, TwitterIcon, TypeIcon, UbuntuIcon, UndoIcon, UnfoldIcon, UnlockIcon, UnpinIcon, UploadIcon, UserAddIcon, UserAltIcon, UserIcon, UsersIcon, VSCodeIcon, VerifiedIcon, VideoIcon, WandIcon, WatchIcon, WindowsIcon, WrenchIcon, XIcon, YoutubeIcon, ZoomIcon, ZoomOutIcon, ZoomResetIcon, iconList } = __STORYBOOK_ICONS__;
+var icons_default = __STORYBOOK_ICONS__, { AccessibilityAltIcon, AccessibilityIcon, AccessibilityIgnoredIcon, AddIcon, AdminIcon, AlertAltIcon, AlertIcon, AlignLeftIcon, AlignRightIcon, AppleIcon, ArrowBottomLeftIcon, ArrowBottomRightIcon, ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowSolidDownIcon, ArrowSolidLeftIcon, ArrowSolidRightIcon, ArrowSolidUpIcon, ArrowTopLeftIcon, ArrowTopRightIcon, ArrowUpIcon, AzureDevOpsIcon, BackIcon, BasketIcon, BatchAcceptIcon, BatchDenyIcon, BeakerIcon, BellIcon, BitbucketIcon, BoldIcon, BookIcon, BookmarkHollowIcon, BookmarkIcon, BottomBarIcon, BottomBarToggleIcon, BoxIcon, BranchIcon, BrowserIcon, BugIcon, ButtonIcon, CPUIcon, CalendarIcon, CameraIcon, CameraStabilizeIcon, CategoryIcon, CertificateIcon, ChangedIcon, ChatIcon, CheckIcon, ChecklistIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronSmallDownIcon, ChevronSmallLeftIcon, ChevronSmallRightIcon, ChevronSmallUpIcon, ChevronUpIcon, ChromaticIcon, ChromeIcon, CircleHollowIcon, CircleIcon, ClearIcon, CloseAltIcon, CloseIcon, CloudHollowIcon, CloudIcon, CogIcon, CollapseIcon, CommandIcon, CommentAddIcon, CommentIcon, CommentsIcon, CommitIcon, CompassIcon, ComponentDrivenIcon, ComponentIcon, ContrastIcon, ContrastIgnoredIcon, ControlsIcon, CopyIcon, CreditIcon, CrossIcon, DashboardIcon, DatabaseIcon, DeleteIcon, DiamondIcon, DirectionIcon, DiscordIcon, DocChartIcon, DocListIcon, DocumentIcon, DownloadIcon, DragIcon, EditIcon, EditorIcon, EllipsisIcon, EmailIcon, ExpandAltIcon, ExpandIcon, EyeCloseIcon, EyeIcon, FaceHappyIcon, FaceNeutralIcon, FaceSadIcon, FacebookIcon, FailedIcon, FastForwardIcon, FigmaIcon, FilesIcon, FilterIcon, FlagIcon, FolderIcon, FormIcon, GDriveIcon, GiftIcon, GithubIcon, GitlabIcon, GlobeIcon, GoogleIcon, GraphBarIcon, GraphLineIcon, GraphqlIcon, GridAltIcon, GridIcon, GrowIcon, HeartHollowIcon, HeartIcon, HomeIcon, HourglassIcon, InfoIcon, ItalicIcon, JumpToIcon, KeyIcon, LightningIcon, LightningOffIcon, LinkBrokenIcon, LinkIcon, LinkedinIcon, LinuxIcon, ListOrderedIcon, ListUnorderedIcon, LocationIcon, LockIcon, MarkdownIcon, MarkupIcon, MediumIcon, MemoryIcon, MenuIcon, MergeIcon, MirrorIcon, MobileIcon, MoonIcon, NutIcon, OutboxIcon, OutlineIcon, PaintBrushAltIcon, PaintBrushIcon, PaperClipIcon, ParagraphIcon, PassedIcon, PhoneIcon, PhotoDragIcon, PhotoIcon, PhotoStabilizeIcon, PinAltIcon, PinIcon, PlayAllHollowIcon, PlayBackIcon, PlayHollowIcon, PlayIcon, PlayNextIcon, PlusIcon, PointerDefaultIcon, PointerHandIcon, PopOutIcon, PowerIcon, PrintIcon, ProceedIcon, ProfileIcon, PullRequestIcon, QuestionIcon, RSSIcon, RedirectIcon, ReduxIcon, RefreshIcon, ReplyIcon, RepoIcon, RequestChangeIcon, RewindIcon, RulerIcon, SaveIcon, SearchIcon, ShareAltIcon, ShareIcon, ShieldIcon, SideBySideIcon, SidebarAltIcon, SidebarAltToggleIcon, SidebarIcon, SidebarToggleIcon, SortDownIcon, SortUpIcon, SpeakerIcon, StackedIcon, StarHollowIcon, StarIcon, StatusFailIcon, StatusIcon, StatusNewIcon, StatusPassIcon, StatusWarnIcon, StickerIcon, StopAltHollowIcon, StopAltIcon, StopIcon, StorybookIcon, StructureIcon, SubtractIcon, SunIcon, SupportIcon, SweepIcon, SwitchAltIcon, SyncIcon, TabletIcon, ThumbsUpIcon, TimeIcon, TimerIcon, TransferIcon, TrashIcon, TwitterIcon, TypeIcon, UbuntuIcon, UndoIcon, UnfoldIcon, UnlockIcon, UnpinIcon, UploadIcon, UserAddIcon, UserAltIcon, UserIcon, UsersIcon, VSCodeIcon, VerifiedIcon, VideoIcon, WandIcon, WatchIcon, WindowsIcon, WrenchIcon, XIcon, YoutubeIcon, ZoomIcon, ZoomOutIcon, ZoomResetIcon, iconList } = __STORYBOOK_ICONS__;
 
 // global-externals:storybook/manager-api
-var manager_api_default = __STORYBOOK_API__, { ActiveTabs, Consumer, ManagerContext, Provider, RequestResponseError, Tag, addons, combineParameters, controlOrMetaKey, controlOrMetaSymbol, eventMatchesShortcut, eventToShortcut, experimental_MockUniversalStore, experimental_UniversalStore, experimental_getStatusStore, experimental_getTestProviderStore, experimental_requestResponse, experimental_useStatusStore, experimental_useTestProviderStore, experimental_useUniversalStore, internal_checklistStore, internal_fullStatusStore, internal_fullTestProviderStore, internal_universalChecklistStore, internal_universalStatusStore, internal_universalTestProviderStore, isMacLike, isShortcutTaken, keyToSymbol, merge, mockChannel, optionOrAltSymbol, shortcutMatchesShortcut, shortcutToAriaKeyshortcuts, shortcutToHumanString, types, useAddonState, useArgTypes, useArgs, useChannel, useGlobalTypes, useGlobals, useParameter, useSharedState, useStoryPrepared, useStorybookApi, useStorybookState } = __STORYBOOK_API__;
+var manager_api_default = __STORYBOOK_API__, { ActiveTabs, Consumer, ManagerContext, Provider, RequestResponseError, Tag, addons, combineParameters, controlOrMetaKey, controlOrMetaSymbol, eventMatchesShortcut, eventToShortcut, experimental_MockUniversalStore, experimental_UniversalStore, experimental_getStatusStore, experimental_getTestProviderStore, experimental_requestResponse, experimental_useStatusStore, experimental_useTestProviderStore, experimental_useUniversalStore, getService, internal_checklistStore, internal_fullStatusStore, internal_fullTestProviderStore, internal_universalChecklistStore, internal_universalStatusStore, internal_universalTestProviderStore, isMacLike, isShortcutTaken, keyToSymbol, merge, mockChannel, optionOrAltSymbol, registerService, shortcutMatchesShortcut, shortcutToAriaKeyshortcuts, shortcutToHumanString, types, useAddonState, useArgTypes, useArgs, useChannel, useGlobalTypes, useGlobals, useParameter, useServiceCommand, useServiceQuery, useSharedState, useStoryPrepared, useStorybookApi, useStorybookState } = __STORYBOOK_API__;
 
 // global-externals:storybook/theming
-var theming_default = __STORYBOOK_THEMING__, { CacheProvider, ClassNames, Global, ThemeProvider, background, color, convert, create, createCache, createGlobal, createReset, css, darken, ensure, getPreferredColorScheme, ignoreSsrWarning, isPropValid, jsx, keyframes, lighten, srOnlyStyles, styled, themes, tokens, typography, useTheme, withTheme } = __STORYBOOK_THEMING__;
+var theming_default = __STORYBOOK_THEMING__, { CacheProvider, ClassNames, Global, ThemeProvider, background, color, convert, create, createCache, createGlobal, createReset, css, darken, ensure, getPreferredColorScheme, ignoreSsrWarning, isPropValid, jsx, keyframes, lighten, srOnlyStyles, srOnlyUnsetStyles, styled, themes, tokens, typography, useTheme, withTheme } = __STORYBOOK_THEMING__;
 
 // src/toolbar/components/ToolbarManager.tsx
 init_react();
 
 // global-externals:storybook/internal/components
-var components_default = __STORYBOOK_COMPONENTS__, { A, AbstractToolbar, ActionBar, ActionList, AddonPanel, Badge, Bar, Blockquote, Button, Card, ClipboardCode, Code, Collapsible, DL, Div, DocumentWrapper, EmptyTabContent, ErrorFormatter, FlexBar, Form, H1, H2, H3, H4, H5, H6, HR, IconButton, Img, LI, Link, ListItem, Loader, Modal, ModalDecorator, OL, P, Placeholder, Popover, PopoverProvider, Pre, ProgressSpinner, ResetWrapper, ScrollArea, Select, Separator, Spaced, Span, StatelessTab, StatelessTabList, StatelessTabPanel, StatelessTabsView, StorybookIcon: StorybookIcon2, StorybookLogo, SyntaxHighlighter, TT, TabBar, TabButton, TabList, TabPanel, TabWrapper, Table, Tabs, TabsState, TabsView, ToggleButton, Toolbar, Tooltip, TooltipLinkList, TooltipMessage, TooltipNote, TooltipProvider, UL, WithTooltip, WithTooltipPure, Zoom, codeCommon, components, convertToReactAriaPlacement, createCopyToClipboardFunction, getStoryHref, interleaveSeparators, nameSpaceClassNames, resetComponents, useTabsState, withReset } = __STORYBOOK_COMPONENTS__;
+var components_default = __STORYBOOK_COMPONENTS__, { A, AbstractToolbar, ActionBar, ActionList, AddonPanel, Badge, Bar, Blockquote, Button, Card, ClipboardCode, Code, Collapsible, DL, Div, DocumentWrapper, EmptyTabContent, ErrorFormatter, FlexBar, Form, H1, H2, H3, H4, H5, H6, HR, IconButton, Img, LI, Link, ListItem, Loader, Modal, ModalDecorator, OL, P, Placeholder, Popover, PopoverProvider, Pre, ProgressSpinner, ResetWrapper, ScrollArea, Select, Separator, Spaced, Span, StatelessTab, StatelessTabList, StatelessTabPanel, StatelessTabsView, StorybookIcon: StorybookIcon2, StorybookLogo, SyntaxHighlighter, TT, TabBar, TabButton, TabList, TabPanel, TabWrapper, Table, Tabs, TabsState, TabsView, ToggleButton, Toolbar, Tooltip, TooltipLinkList, TooltipMessage, TooltipNote, TooltipProvider, UL, WithTooltip, WithTooltipPure, Zoom, codeCommon, components, convertToReactAriaPlacement, createCopyToClipboardFunction, getStoryHref, interleaveSeparators, nameSpaceClassNames, resetComponents, useCopyButton, useTabsState, withReset } = __STORYBOOK_COMPONENTS__;
 
 // src/toolbar/utils/normalize-toolbar-arg-type.ts
 var defaultItemValues = {
@@ -1994,7 +1942,7 @@ init_react();
 var client_default = __REACT_DOM_CLIENT__, { createRoot, hydrateRoot } = __REACT_DOM_CLIENT__;
 
 // global-externals:storybook/internal/manager-errors
-var manager_errors_default = __STORYBOOK_CORE_EVENTS_MANAGER_ERRORS__, { Category, ProviderDoesNotExtendBaseProviderError, StatusTypeIdMismatchError, UncaughtManagerError } = __STORYBOOK_CORE_EVENTS_MANAGER_ERRORS__;
+var manager_errors_default = __STORYBOOK_CORE_EVENTS_MANAGER_ERRORS__, { Category, OpenServiceStaticSnapshotInvalidError, OpenServiceStaticSnapshotLoadError, ProviderDoesNotExtendBaseProviderError, StatusTypeIdMismatchError, UncaughtManagerError, UniversalStoreFollowerTimeoutError } = __STORYBOOK_CORE_EVENTS_MANAGER_ERRORS__;
 
 // global-externals:storybook/internal/router
 var router_default = __STORYBOOK_ROUTER__, { BaseLocationProvider, DEEPLY_EQUAL, Link: Link2, Location, LocationProvider, Match, MemoryRouter, Route, buildArgsParam, deepDiff, getMatch, parsePath, queryFromLocation, stringifyQuery, useNavigate } = __STORYBOOK_ROUTER__;
@@ -2346,6 +2294,9 @@ W.propTypes = { base: import_prop_types.default.object, bodyAttributes: import_p
 
 // src/manager/App.tsx
 init_react();
+
+// src/shared/review/features.ts
+var isReviewFeatureEnabled = (features) => features?.experimentalReview !== !1 && !!features?.changeDetection;
 
 // src/manager/components/error-boundary/ManagerErrorBoundary.tsx
 init_react();
@@ -3067,6 +3018,28 @@ Component Stack:${errorInfo.componentStack}`)
 // src/manager/components/layout/Layout.tsx
 init_react();
 
+// ../../node_modules/es-toolkit/dist/string/words.mjs
+var CASE_SPLIT_PATTERN = new RegExp("\\p{Lu}?\\p{Ll}+|[0-9]+|\\p{Lu}+(?!\\p{Ll})|\\p{Emoji_Presentation}|\\p{Extended_Pictographic}|\\p{L}+", "gu");
+
+// global-externals:storybook/theming/create
+var create_default = __STORYBOOK_THEMING_CREATE__, { create: create2, themes: themes2 } = __STORYBOOK_THEMING_CREATE__;
+
+// src/shared/review/routes.ts
+var REVIEW_COLLECTION_QUERY_PARAM = "collection", isReviewSummaryPath = (path) => path === "/review/" || path === "/review", isReviewCollectionStoryRoute = (path, customQueryParams) => !!path && path.startsWith("/story/") && customQueryParams?.[REVIEW_COLLECTION_QUERY_PARAM] !== void 0;
+
+// src/manager-api/modules/layout.ts
+var { document: document2 } = scope;
+var isPagesViewMode = (viewMode) => viewMode !== void 0 && viewMode !== "story" && viewMode !== "docs" && viewMode !== "review";
+var focusableUIElements = {
+  addonPanel: "storybook-panel-region",
+  storySearchField: "storybook-explorer-searchfield",
+  storyListMenu: "storybook-explorer-menu",
+  storyPanelRoot: "storybook-panel-root",
+  showAddonPanel: "storybook-show-addon-panel",
+  sidebarRegion: "storybook-sidebar-region",
+  showSidebar: "storybook-show-sidebar"
+};
+
 // src/manager/constants.ts
 var MEDIA_DESKTOP_BREAKPOINT = "@media (min-width: 600px)";
 
@@ -3618,15 +3591,15 @@ function $7215afc6de606d6b$var$restoreScrollPosition(scrollableElements) {
 }
 
 // ../../node_modules/@react-aria/utils/dist/platform.mjs
-function $c87311424ea30a05$var$testUserAgent(re) {
+function $c87311424ea30a05$var$testUserAgent(re2) {
   var _window_navigator_userAgentData;
   if (typeof window > "u" || window.navigator == null) return !1;
   let brands = (_window_navigator_userAgentData = window.navigator.userAgentData) === null || _window_navigator_userAgentData === void 0 ? void 0 : _window_navigator_userAgentData.brands;
-  return Array.isArray(brands) && brands.some((brand) => re.test(brand.brand)) || re.test(window.navigator.userAgent);
+  return Array.isArray(brands) && brands.some((brand) => re2.test(brand.brand)) || re2.test(window.navigator.userAgent);
 }
-function $c87311424ea30a05$var$testPlatform(re) {
+function $c87311424ea30a05$var$testPlatform(re2) {
   var _window_navigator_userAgentData;
-  return typeof window < "u" && window.navigator != null ? re.test(((_window_navigator_userAgentData = window.navigator.userAgentData) === null || _window_navigator_userAgentData === void 0 ? void 0 : _window_navigator_userAgentData.platform) || window.navigator.platform) : !1;
+  return typeof window < "u" && window.navigator != null ? re2.test(((_window_navigator_userAgentData = window.navigator.userAgentData) === null || _window_navigator_userAgentData === void 0 ? void 0 : _window_navigator_userAgentData.platform) || window.navigator.platform) : !1;
 }
 function $c87311424ea30a05$var$cached(fn) {
   let res = null;
@@ -4032,7 +4005,7 @@ function $9446cca9a3875146$export$7d15b64cf5a3a4c4(value, min = -1 / 0, max = 1 
 
 // ../../node_modules/@react-aria/landmark/dist/useLandmark.mjs
 init_react();
-var import_shim = __toESM(require_shim(), 1), $a86207c5d7f7e1fb$var$LANDMARK_API_VERSION = 1, $a86207c5d7f7e1fb$var$landmarkSymbol = Symbol.for("react-aria-landmark-manager");
+var import_shim = __toESM(require_shim(), 1), $a86207c5d7f7e1fb$var$LANDMARK_API_VERSION = 1, $a86207c5d7f7e1fb$var$landmarkSymbol = /* @__PURE__ */ Symbol.for("react-aria-landmark-manager");
 function $a86207c5d7f7e1fb$var$subscribe(fn) {
   return document.addEventListener("react-aria-landmark-manager-change", fn), () => document.removeEventListener("react-aria-landmark-manager-change", fn);
 }
@@ -4645,37 +4618,27 @@ var useFullStoryName = () => {
   let { index, refs } = useStorybookState(), api = useStorybookApi(), currentStory = api.getCurrentStoryData();
   if (!currentStory)
     return "";
-  let combinedIndex = combineIndexes(index, refs || {}), fullStoryName = currentStory.renderLabel?.(currentStory, api) || currentStory.name, node = combinedIndex[currentStory.id];
-  for (; node && "parent" in node && node.parent && combinedIndex[node.parent] && fullStoryName.length < 24; )
-    node = combinedIndex[node.parent], fullStoryName = `${node.renderLabel?.(node, api) || node.name}/${fullStoryName}`;
+  let combinedIndex = combineIndexes(index, refs || {}), storyLabel = currentStory.renderLabel?.(currentStory, api), fullStoryName = typeof storyLabel == "string" ? storyLabel : currentStory.name, node = combinedIndex[currentStory.id];
+  for (; node && "parent" in node && node.parent && combinedIndex[node.parent] && fullStoryName.length < 24; ) {
+    node = combinedIndex[node.parent];
+    let parentLabel = node.renderLabel?.(node, api);
+    fullStoryName = `${typeof parentLabel == "string" ? parentLabel : node.name}/${fullStoryName}`;
+  }
   return fullStoryName;
-}, MobileNavigation = ({
-  menu,
-  panel,
-  showPanel,
-  ...props
+}, MobileBottomBarContent = ({
+  fullStoryName,
+  isMobileMenuOpen,
+  setMobileMenuOpen,
+  isMobilePanelOpen,
+  setMobilePanelOpen,
+  showMenu,
+  showPanel
 }) => {
-  let { isMobileMenuOpen, isMobilePanelOpen, setMobileMenuOpen, setMobilePanelOpen } = useLayout(), fullStoryName = useFullStoryName(), headingId = $bdb11010cef70236$export$f680877a34711e37(), sectionRef = useRef(null), { landmarkProps } = useLandmark(
+  let headingId = $bdb11010cef70236$export$f680877a34711e37(), sectionRef = useRef(null), { landmarkProps } = useLandmark(
     { "aria-labelledby": headingId, role: "banner" },
     sectionRef
   );
-  return react_default.createElement(Container4, { ...props }, react_default.createElement(
-    MobileMenuDrawer,
-    {
-      id: "storybook-mobile-menu",
-      isOpen: isMobileMenuOpen,
-      onOpenChange: setMobileMenuOpen
-    },
-    menu
-  ), react_default.createElement(
-    MobileAddonsDrawer,
-    {
-      id: "storybook-mobile-addon-panel",
-      isOpen: isMobilePanelOpen,
-      onOpenChange: setMobilePanelOpen
-    },
-    panel
-  ), !isMobilePanelOpen && react_default.createElement(MobileBottomBar, { className: "sb-bar", ...landmarkProps, ref: sectionRef }, react_default.createElement("h2", { id: headingId, className: "sb-sr-only" }, "Navigation controls"), react_default.createElement(
+  return react_default.createElement(MobileBottomBar, { className: "sb-bar", ...landmarkProps, ref: sectionRef }, react_default.createElement("h2", { id: headingId, className: "sb-sr-only" }, "Navigation controls"), showMenu && react_default.createElement(
     BottomBarButton,
     {
       padding: "small",
@@ -4698,7 +4661,45 @@ var useFullStoryName = () => {
       "aria-controls": "storybook-mobile-addon-panel"
     },
     react_default.createElement(BottomBarToggleIcon, null)
-  )));
+  ));
+}, MobileNavigation = ({
+  menu,
+  panel,
+  showMenu = !0,
+  showPanel,
+  ...props
+}) => {
+  let { isMobileMenuOpen, isMobilePanelOpen, setMobileMenuOpen, setMobilePanelOpen } = useLayout(), fullStoryName = useFullStoryName();
+  return useLayoutEffect(() => {
+    showMenu || setMobileMenuOpen(!1);
+  }, [showMenu, setMobileMenuOpen]), react_default.createElement(Container4, { ...props }, showMenu && react_default.createElement(
+    MobileMenuDrawer,
+    {
+      id: "storybook-mobile-menu",
+      isOpen: isMobileMenuOpen,
+      onOpenChange: setMobileMenuOpen
+    },
+    menu
+  ), react_default.createElement(
+    MobileAddonsDrawer,
+    {
+      id: "storybook-mobile-addon-panel",
+      isOpen: isMobilePanelOpen,
+      onOpenChange: setMobilePanelOpen
+    },
+    panel
+  ), !isMobilePanelOpen && (showMenu || showPanel) && react_default.createElement(
+    MobileBottomBarContent,
+    {
+      fullStoryName,
+      isMobileMenuOpen,
+      setMobileMenuOpen,
+      isMobilePanelOpen,
+      setMobilePanelOpen,
+      showMenu,
+      showPanel
+    }
+  ));
 }, Container4 = styled.section(({ theme }) => ({
   bottom: 0,
   left: 0,
@@ -4993,7 +4994,7 @@ var $f6c31cce2adf654f$var$_shouldStopPropagation = /* @__PURE__ */ new WeakMap()
     let currentTarget = (_state_target = state?.target) !== null && _state_target !== void 0 ? _state_target : originalEvent.currentTarget, rect = currentTarget?.getBoundingClientRect(), x2, y2 = 0, clientX, clientY = null;
     originalEvent.clientX != null && originalEvent.clientY != null && (clientX = originalEvent.clientX, clientY = originalEvent.clientY), rect && (clientX != null && clientY != null ? (x2 = clientX - rect.left, y2 = clientY - rect.top) : (x2 = rect.width / 2, y2 = rect.height / 2)), this.type = type, this.pointerType = pointerType, this.target = originalEvent.currentTarget, this.shiftKey = originalEvent.shiftKey, this.metaKey = originalEvent.metaKey, this.ctrlKey = originalEvent.ctrlKey, this.altKey = originalEvent.altKey, this.x = x2, this.y = y2;
   }
-}, $f6c31cce2adf654f$var$LINK_CLICKED = Symbol("linkClicked"), $f6c31cce2adf654f$var$STYLE_ID = "react-aria-pressable-style", $f6c31cce2adf654f$var$PRESSABLE_ATTRIBUTE = "data-react-aria-pressable";
+}, $f6c31cce2adf654f$var$LINK_CLICKED = /* @__PURE__ */ Symbol("linkClicked"), $f6c31cce2adf654f$var$STYLE_ID = "react-aria-pressable-style", $f6c31cce2adf654f$var$PRESSABLE_ATTRIBUTE = "data-react-aria-pressable";
 function $f6c31cce2adf654f$export$45712eceda6fad21(props) {
   let { onPress, onPressChange, onPressStart, onPressEnd, onPressUp, onClick, isDisabled, isPressed: isPressedProp, preventFocusOnPress, shouldCancelOnPointerExit, allowTextSelectionOnPress, ref: domRef, ...domProps } = $f6c31cce2adf654f$var$usePressResponderContext(props), [isPressed, setPressed] = useState(!1), ref = useRef({
     isPressed: !1,
@@ -5541,7 +5542,7 @@ init_react();
 
 // ../../node_modules/react-aria-components/dist/utils.mjs
 init_react();
-var $64fa3d84918910a7$export$c62b8e45d58ddad9 = Symbol("default");
+var $64fa3d84918910a7$export$c62b8e45d58ddad9 = /* @__PURE__ */ Symbol("default");
 function $64fa3d84918910a7$export$2881499e37b75b9a({ values, children }) {
   for (let [Context2, value] of values)
     children = react_default.createElement(Context2.Provider, {
@@ -5993,7 +5994,7 @@ function $148a7a147e38ea7f$export$702d680b21cbd764(localeString) {
 
 // ../../node_modules/@react-aria/i18n/dist/useDefaultLocale.mjs
 init_react();
-var $1e5a04cdaf7d1af8$var$localeSymbol = Symbol.for("react-aria.i18n.locale");
+var $1e5a04cdaf7d1af8$var$localeSymbol = /* @__PURE__ */ Symbol.for("react-aria.i18n.locale");
 function $1e5a04cdaf7d1af8$export$f09106e7c6677ec5() {
   let locale = typeof window < "u" && window[$1e5a04cdaf7d1af8$var$localeSymbol] || typeof navigator < "u" && (navigator.language || navigator.userLanguage) || "en-US";
   try {
@@ -6079,11 +6080,11 @@ function memoize(fn, options2) {
     serializer
   });
 }
-function isPrimitive(value) {
+function isPrimitive2(value) {
   return value == null || typeof value == "number" || typeof value == "boolean";
 }
 function monadic(fn, cache, serializer, arg) {
-  var cacheKey = isPrimitive(arg) ? arg : serializer(arg), computedValue = cache.get(cacheKey);
+  var cacheKey = isPrimitive2(arg) ? arg : serializer(arg), computedValue = cache.get(cacheKey);
   return typeof computedValue > "u" && (computedValue = fn.call(this, arg), cache.set(cacheKey, computedValue)), computedValue;
 }
 function variadic(fn, cache, serializer) {
@@ -8886,9 +8887,6 @@ var IntlMessageFormat = (
 // ../../node_modules/@react-aria/i18n/dist/useMessageFormatter.mjs
 init_react();
 
-// ../../node_modules/@internationalized/string/dist/LocalizedStringDictionary.mjs
-var $5b160d28a433310d$var$localeSymbol = Symbol.for("react-aria.i18n.locale"), $5b160d28a433310d$var$stringsSymbol = Symbol.for("react-aria.i18n.strings");
-
 // ../../node_modules/@react-aria/i18n/dist/useLocalizedStringFormatter.mjs
 init_react();
 
@@ -9905,11 +9903,12 @@ function useDragging({
 }) {
   let panelResizerRef = useRef(null), sidebarResizerRef = useRef(null), sidebarMaxWidth = computeSidebarMaxWidth(panelPosition, rightPanelWidth, showPanel), panelMaxSize = computePanelMaxSize(panelPosition, navSize);
   return useEffect(() => {
-    let panelResizer = panelResizerRef.current, sidebarResizer = sidebarResizerRef.current, previewIframe = document.querySelector("#storybook-preview-iframe"), draggedElement = null, onDragStart = (e2) => {
-      e2.preventDefault(), setState((state) => ({
+    let panelResizer = panelResizerRef.current, sidebarResizer = sidebarResizerRef.current, draggedElement = null, onDragStart = (e2) => {
+      e2.preventDefault(), e2.currentTarget === panelResizer ? draggedElement = panelResizer : e2.currentTarget === sidebarResizer && (draggedElement = sidebarResizer), setState((state) => ({
         ...state,
-        isDragging: !0
-      })), e2.currentTarget === panelResizer ? draggedElement = panelResizer : e2.currentTarget === sidebarResizer && (draggedElement = sidebarResizer), window.addEventListener("mousemove", onDrag), window.addEventListener("mouseup", onDragEnd), previewIframe && (previewIframe.style.pointerEvents = "none");
+        isDragging: !0,
+        dragCursor: draggedElement === panelResizer && state.panelPosition === "bottom" ? "row-resize" : "col-resize"
+      })), window.addEventListener("mousemove", onDrag), window.addEventListener("mouseup", onDragEnd);
     }, onDragEnd = () => {
       setState((state) => {
         if (draggedElement === sidebarResizer && state.navSize < 240 && state.navSize > 0)
@@ -9936,7 +9935,7 @@ function useDragging({
           ...state,
           isDragging: !1
         };
-      }), window.removeEventListener("mousemove", onDrag), window.removeEventListener("mouseup", onDragEnd), previewIframe?.removeAttribute("style"), draggedElement = null;
+      }), window.removeEventListener("mousemove", onDrag), window.removeEventListener("mouseup", onDragEnd), draggedElement = null;
     }, onDrag = (e2) => {
       if (e2.buttons === 0) {
         onDragEnd();
@@ -10021,7 +10020,7 @@ function useDragging({
       );
     };
     return panelResizer?.addEventListener("mousedown", onDragStart), sidebarResizer?.addEventListener("mousedown", onDragStart), panelResizer?.addEventListener("keydown", onPanelKeyDown), sidebarResizer?.addEventListener("keydown", onSidebarKeyDown), () => {
-      panelResizer?.removeEventListener("mousedown", onDragStart), sidebarResizer?.removeEventListener("mousedown", onDragStart), panelResizer?.removeEventListener("keydown", onPanelKeyDown), sidebarResizer?.removeEventListener("keydown", onSidebarKeyDown), previewIframe?.removeAttribute("style");
+      panelResizer?.removeEventListener("mousedown", onDragStart), sidebarResizer?.removeEventListener("mousedown", onDragStart), panelResizer?.removeEventListener("keydown", onPanelKeyDown), sidebarResizer?.removeEventListener("keydown", onSidebarKeyDown);
     };
   }, [
     // we need to rerun this effect when the panel is shown/hidden or when changing between mobile/desktop to re-attach the event listeners
@@ -10086,7 +10085,8 @@ var layoutStateIsEqual = (state, other) => state.navSize === other.navSize && st
 }) => {
   let prevManagerLayoutStateRef = react_default.useRef(managerLayoutState), [internalDraggingSizeState, setInternalDraggingSizeState] = useState({
     ...managerLayoutState,
-    isDragging: !1
+    isDragging: !1,
+    dragCursor: "col-resize"
   });
   useEffect(() => {
     internalDraggingSizeState.isDragging || // don't interrupt user's drag
@@ -10105,7 +10105,7 @@ var layoutStateIsEqual = (state, other) => state.navSize === other.navSize && st
       ...nextState
     }, setManagerLayoutState(nextState);
   }, [internalDraggingSizeState, setManagerLayoutState]);
-  let isPagesShown = managerLayoutState.viewMode !== void 0 && managerLayoutState.viewMode !== "story" && managerLayoutState.viewMode !== "docs", isPanelShown = managerLayoutState.viewMode === "story" && !hasTab, { navSize, rightPanelWidth, bottomPanelHeight } = internalDraggingSizeState.isDragging ? internalDraggingSizeState : managerLayoutState, customisedNavSize = api.getNavSizeWithCustomisations?.(navSize) ?? navSize, customisedShowPanel = api.getShowPanelWithCustomisations?.(isPanelShown) ?? isPanelShown, { panelResizerRef, sidebarResizerRef, sidebarMaxWidth, panelMaxSize } = useDragging({
+  let isPagesShown = isPagesViewMode(managerLayoutState.viewMode), isPanelShown = managerLayoutState.viewMode === "story" && !hasTab, { navSize, rightPanelWidth, bottomPanelHeight } = internalDraggingSizeState.isDragging ? internalDraggingSizeState : managerLayoutState, customisedNavSize = api.getNavSizeWithCustomisations?.(navSize) ?? navSize, customisedShowPanel = api.getShowPanelWithCustomisations?.(isPanelShown) ?? isPanelShown, { panelResizerRef, sidebarResizerRef, sidebarMaxWidth, panelMaxSize } = useDragging({
     setState: setInternalDraggingSizeState,
     isDesktop,
     navSize: customisedNavSize,
@@ -10124,12 +10124,15 @@ var layoutStateIsEqual = (state, other) => state.navSize === other.navSize && st
     panelMaxSize,
     showPages: isPagesShown,
     showPanel: customisedShowPanel,
-    isDragging: internalDraggingSizeState.isDragging
+    isDragging: internalDraggingSizeState.isDragging,
+    dragCursor: internalDraggingSizeState.dragCursor
   };
 }, OrderedMobileNavigation = styled(MobileNavigation)({
   order: 1
 }), Layout = ({ managerLayoutState, setManagerLayoutState, hasTab, ...slots }) => {
-  let { isDesktop, isMobile: isMobile2 } = useLayout(), api = useStorybookApi(), {
+  let { isDesktop, isMobile: isMobile2 } = useLayout(), api = useStorybookApi();
+  useStorybookState();
+  let showSidebar = api.getNavAvailability() === "shown", {
     navSize,
     rightPanelWidth,
     bottomPanelHeight,
@@ -10139,20 +10142,23 @@ var layoutStateIsEqual = (state, other) => state.navSize === other.navSize && st
     sidebarMaxWidth,
     panelMaxSize,
     showPages,
-    showPanel
+    showPanel,
+    isDragging,
+    dragCursor
   } = useLayoutSyncingState({ api, managerLayoutState, setManagerLayoutState, isDesktop, hasTab });
   return useLandmarkIndicator(), react_default.createElement(
     LayoutContainer,
     {
       panelPosition: managerLayoutState.panelPosition,
       showPanel,
+      showSidebar,
       style: {
         "--nav-width": `${navSize}px`,
         "--right-panel-width": `${rightPanelWidth}px`,
         "--bottom-panel-height": `${bottomPanelHeight}px`
       }
     },
-    react_default.createElement(react_default.Fragment, null, isDesktop && react_default.createElement(
+    react_default.createElement(react_default.Fragment, null, isDesktop && showSidebar && react_default.createElement(
       SidebarContainer,
       {
         navSize,
@@ -10160,11 +10166,12 @@ var layoutStateIsEqual = (state, other) => state.navSize === other.navSize && st
         sidebarResizerRef
       },
       slots.slotSidebar
-    ), isMobile2 && react_default.createElement(
+    ), isMobile2 && !showPages && react_default.createElement(
       OrderedMobileNavigation,
       {
         menu: slots.slotSidebar,
         panel: slots.slotPanel,
+        showMenu: showSidebar,
         showPanel
       }
     ), react_default.createElement(
@@ -10174,7 +10181,7 @@ var layoutStateIsEqual = (state, other) => state.navSize === other.navSize && st
         slotMain: slots.slotMain,
         slotPages: slots.slotPages
       }
-    ), isDesktop && showPanel && react_default.createElement(
+    ), slots.slotOverlay && react_default.createElement(ContentOverlayCell, null, slots.slotOverlay), isDesktop && showPanel && react_default.createElement(
       PanelContainer,
       {
         bottomPanelHeight,
@@ -10184,9 +10191,25 @@ var layoutStateIsEqual = (state, other) => state.navSize === other.navSize && st
         position: panelPosition
       },
       slots.slotPanel
-    ), isMobile2 && react_default.createElement(Notifications, null))
+    ), isMobile2 && !showPages && react_default.createElement(Notifications, null)),
+    isDragging && react_default.createElement(DragShield, { style: { cursor: dragCursor } })
   );
-}, LayoutContainer = styled.div(({ panelPosition, showPanel }) => ({
+}, ContentOverlayCell = styled.div({
+  position: "absolute",
+  inset: 0,
+  pointerEvents: "none",
+  zIndex: 2,
+  [MEDIA_DESKTOP_BREAKPOINT]: {
+    position: "relative",
+    inset: "auto",
+    gridArea: "content"
+  }
+}), DragShield = styled.div({
+  position: "fixed",
+  inset: 0,
+  zIndex: 10
+}), LayoutContainer = styled.div(({ panelPosition, showPanel, showSidebar }) => ({
+  position: "relative",
   width: "100%",
   height: ["100vh", "100dvh"],
   overflow: "hidden",
@@ -10196,24 +10219,1455 @@ var layoutStateIsEqual = (state, other) => state.navSize === other.navSize && st
   [MEDIA_DESKTOP_BREAKPOINT]: {
     display: "grid",
     gap: 0,
-    // This uses CSS variables to prevent Emotion from generating a new CSS className for every possible value
-    gridTemplateColumns: `minmax(0, var(--nav-width)) minmax(${100}px, 1fr) minmax(0, var(--right-panel-width))`,
+    gridTemplateColumns: showSidebar ? `minmax(0, var(--nav-width)) minmax(${100}px, 1fr) minmax(0, var(--right-panel-width))` : `minmax(${100}px, 1fr) minmax(0, var(--right-panel-width))`,
     gridTemplateRows: "1fr minmax(0, var(--bottom-panel-height))",
-    gridTemplateAreas: showPanel ? panelPosition === "right" ? `"sidebar content panel"
-                  "sidebar content panel"` : `"sidebar content content"
-                "sidebar panel   panel"` : `"sidebar content content"
-                  "sidebar content content"`
+    gridTemplateAreas: !showSidebar && !showPanel ? `"content content"
+                "content content"` : !showSidebar && showPanel ? panelPosition === "right" ? `"content panel"
+                  "content panel"` : `"content content"
+                "panel   panel"` : showPanel ? panelPosition === "right" ? `"sidebar content panel"
+                "sidebar content panel"` : `"sidebar content content"
+              "sidebar panel   panel"` : `"sidebar content content"
+                "sidebar content content"`
   }
 }));
+
+// src/manager/components/review/components/ReviewPersistentLayer.tsx
+init_react();
+
+// src/manager/components/review/screens/ReviewSummaryHost.tsx
+init_react();
+
+// src/shared/review/events.ts
+var REVIEW_NAMESPACE = "storybook/review", REVIEW_EVENTS = {
+  // `@storybook/addon-mcp` display-review tool → core-server: the raw agent payload.
+  PUSH_REVIEW: `${REVIEW_NAMESPACE}/push-review`,
+  // core-server → tabs: display the (createdAt-stamped) review.
+  DISPLAY_REVIEW: `${REVIEW_NAMESPACE}/display-review`,
+  // tab → core-server: replay the cached review on mount.
+  REQUEST_REVIEW: `${REVIEW_NAMESPACE}/request-review`,
+  // core-server → tabs: a watched source file changed after the review was cached.
+  REVIEW_STALE: `${REVIEW_NAMESPACE}/review-stale`,
+  // tab → core-server: dismiss the cached review.
+  DISMISS_REVIEW: `${REVIEW_NAMESPACE}/dismiss-review`,
+  // core-server → tabs: the review was dismissed.
+  REVIEW_DISMISSED: `${REVIEW_NAMESPACE}/review-dismissed`,
+  // tab → core-server: a review page (summary or detail) was viewed; forwarded to telemetry.
+  PAGEVIEW: `${REVIEW_NAMESPACE}/pageview`
+};
+
+// src/manager/components/review/constants.ts
+var PAGE_ID = `${REVIEW_NAMESPACE}/page`, REVIEW_CHANGES_URL = "/review/", PRE_REVIEW_RETURN_KEY = `${REVIEW_NAMESPACE}/pre-review-return`, AUTO_ENTERED_SESSION_KEY = `${REVIEW_NAMESPACE}/auto-entered`, VISITED_REVIEW_CREATED_AT_KEY = `${REVIEW_NAMESPACE}/visited-created-at`, NOTIFIED_REVIEW_CREATED_AT_KEY = `${REVIEW_NAMESPACE}/notified-created-at`, REVIEW_AVAILABLE_NOTIFICATION_ID = `${REVIEW_NAMESPACE}/review-available`, reviewAvailableNotificationId = (createdAt) => `${REVIEW_AVAILABLE_NOTIFICATION_ID}/${createdAt}`;
+
+// global-externals:storybook/internal/types
+var types_default = __STORYBOOK_TYPES__, { Addon_TypesEnum, CHANGE_DETECTION_STATUS_TYPE_ID, CoreWebpackCompiler, Feature, NON_AGGREGATED_STATUS_TYPE_IDS, REVIEW_EVENTS: REVIEW_EVENTS2, REVIEW_NAMESPACE: REVIEW_NAMESPACE2, REVIEW_STATUS_TYPE_ID, SupportedBuilder, SupportedFramework, SupportedLanguage, SupportedRenderer } = __STORYBOOK_TYPES__;
+
+// src/manager/components/review/review-status.ts
+var REVIEWING_STATUS_VALUE = "status-value:reviewing", collectReviewStoryIds = (review) => {
+  let storyIds = /* @__PURE__ */ new Set();
+  for (let collection of review.collections)
+    for (let storyId of collection.storyIds)
+      storyIds.add(storyId);
+  return storyIds;
+}, createReviewStatus = (storyId) => ({
+  storyId,
+  typeId: REVIEW_STATUS_TYPE_ID,
+  value: REVIEWING_STATUS_VALUE,
+  title: "",
+  description: "",
+  sidebarContextMenu: !1
+}), applyReviewStatuses = (statusStore, storyIds) => {
+  statusStore.unset(), storyIds.size > 0 && statusStore.set([...storyIds].map(createReviewStatus));
+}, clearReviewStatuses = (statusStore) => {
+  statusStore.unset();
+};
+
+// src/manager/components/review/review-store.ts
+init_react();
+
+// src/manager/components/review/session-store.ts
+var sessionStore = {
+  read(key) {
+    try {
+      return sessionStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  },
+  write(key, value) {
+    try {
+      sessionStorage.setItem(key, value);
+    } catch {
+    }
+  },
+  remove(key) {
+    try {
+      sessionStorage.removeItem(key);
+    } catch {
+    }
+  }
+};
+
+// src/manager/components/review/review-store.ts
+var REVIEW_MODE_SESSION_KEY = `${REVIEW_NAMESPACE}/review-mode`, emptyCore = {
+  state: null,
+  pendingReview: null,
+  isStale: !1,
+  isInReviewMode: !1,
+  isExiting: !1
+}, emptyDerived = {
+  storyInfo: {},
+  flattenedEntries: [],
+  newlyAddedStoryIds: /* @__PURE__ */ new Set(),
+  activeEntry: null,
+  activeIndex: -1,
+  isSummaryVisible: !1,
+  banner: null
+}, core = {
+  ...emptyCore,
+  isInReviewMode: sessionStore.read(REVIEW_MODE_SESSION_KEY) === "1"
+}, derived = emptyDerived, buildSnapshot = () => ({
+  ...derived,
+  state: core.state,
+  pendingReview: core.pendingReview,
+  isStale: core.isStale,
+  isInReviewMode: core.isInReviewMode,
+  isExiting: core.isExiting
+}), snapshot = buildSnapshot(), listeners = /* @__PURE__ */ new Set(), notify = () => {
+  snapshot = buildSnapshot(), listeners.forEach((listener) => listener());
+}, commit = (patch) => {
+  core = { ...core, ...patch }, notify();
+}, reviewStore = {
+  getState: () => snapshot,
+  subscribe: (listener) => (listeners.add(listener), () => listeners.delete(listener)),
+  /** Show a review, replacing any displayed or deferred one. */
+  displayReview: (next) => {
+    commit({ state: next, pendingReview: null, isStale: !!next.stale });
+  },
+  /** Hold an updated payload until the user accepts it. */
+  deferReview: (next) => {
+    commit({ pendingReview: next });
+  },
+  setStale: (isStale) => {
+    commit({ isStale });
+  },
+  /** Drop all review state (dismissal), including the persisted review-mode flag. */
+  clearReview: () => {
+    sessionStore.remove(REVIEW_MODE_SESSION_KEY), commit({ state: null, pendingReview: null, isStale: !1, isInReviewMode: !1 });
+  },
+  /** Toggle review mode, persisted so it survives reloads. */
+  setReviewMode: (active) => {
+    active ? sessionStore.write(REVIEW_MODE_SESSION_KEY, "1") : sessionStore.remove(REVIEW_MODE_SESSION_KEY), commit({ isInReviewMode: active });
+  },
+  setExiting: (isExiting) => {
+    commit({ isExiting });
+  },
+  /** Push values derived by ReviewProvider from index/status/route inputs. */
+  setDerived: (next) => {
+    derived = next, notify();
+  },
+  reset: () => {
+    core = { ...emptyCore }, derived = emptyDerived, notify();
+  }
+}, useReview = () => useSyncExternalStore(reviewStore.subscribe, reviewStore.getState, reviewStore.getState);
+
+// src/manager/components/review/review-mode.ts
+var FILTERS_SNAPSHOT_SESSION_KEY = `${REVIEW_NAMESPACE}/filters-snapshot`, stripReviewingStatusFilter = (filters) => ({
+  ...filters,
+  includedStatusFilters: filters.includedStatusFilters.filter(
+    (value) => value !== REVIEWING_STATUS_VALUE
+  ),
+  excludedStatusFilters: filters.excludedStatusFilters.filter(
+    (value) => value !== REVIEWING_STATUS_VALUE
+  )
+}), isReviewModeActive = () => reviewStore.getState().isInReviewMode, readJson = (key) => {
+  let raw = sessionStore.read(key);
+  if (raw === null)
+    return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}, enterReviewMode = async (api, filters) => {
+  if (!isReviewModeActive()) {
+    sessionStore.write(
+      FILTERS_SNAPSHOT_SESSION_KEY,
+      JSON.stringify(stripReviewingStatusFilter(filters))
+    ), reviewStore.setReviewMode(!0);
+    try {
+      await api.setAllTagFilters([], []), await api.setAllStatusFilters([REVIEWING_STATUS_VALUE], []);
+    } catch (error) {
+      throw reviewStore.setReviewMode(!1), sessionStore.remove(FILTERS_SNAPSHOT_SESSION_KEY), error;
+    }
+  }
+}, exitReviewMode = async (api) => {
+  let filters = readJson(FILTERS_SNAPSHOT_SESSION_KEY);
+  if (filters) {
+    let restored = stripReviewingStatusFilter(filters);
+    await api.setAllTagFilters(restored.includedTagFilters, restored.excludedTagFilters), await api.setAllStatusFilters(restored.includedStatusFilters, restored.excludedStatusFilters);
+  } else
+    await api.removeStatusFilters([REVIEWING_STATUS_VALUE]);
+  sessionStore.remove(FILTERS_SNAPSHOT_SESSION_KEY), reviewStore.setReviewMode(!1);
+};
+
+// src/manager/components/review/review-navigation.ts
+var prettifyComponentId = (componentId) => componentId.split(/[-/]/).filter(Boolean).map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" "), buildReviewChangesSummaryHref = () => `?path=${REVIEW_CHANGES_URL}`, STORYBOOK_ROOT_HREF = "/", buildSummaryBackHref = (returnSearch) => returnSearch || STORYBOOK_ROOT_HREF, REVIEW_SUMMARY_BACK_ATTR = "data-review-summary-back", buildReviewStoryTarget = (entry) => `/story/${entry.storyId}&${REVIEW_COLLECTION_QUERY_PARAM}=${entry.collectionIndex}`, buildReviewStoryHref = (entry) => `?path=${buildReviewStoryTarget(entry)}`, parseReviewStoryHref = (href) => {
+  if (!href.startsWith("?path=/story/"))
+    return null;
+  let query = href.startsWith("?") ? href.slice(1) : href, params = new URLSearchParams(query), path = params.get("path");
+  if (!path?.startsWith("/story/"))
+    return null;
+  let storyId = path.slice(7), collectionIndex = parseCollectionIndex(
+    params.get(REVIEW_COLLECTION_QUERY_PARAM) ?? void 0
+  );
+  return !storyId || collectionIndex === void 0 ? null : { storyId, collectionIndex };
+}, buildFlattenedNavEntries = (state) => {
+  let entries = [];
+  return state.collections.forEach((collection, collectionIndex) => {
+    for (let storyId of collection.storyIds)
+      entries.push({ storyId, collectionIndex });
+  }), entries;
+}, isReviewReturnSearch = (search) => {
+  let normalized = search.startsWith("?") ? search.slice(1) : search, params = new URLSearchParams(normalized), path = params.get("path") ?? "";
+  return isReviewSummaryPath(path) || path.startsWith(REVIEW_CHANGES_URL) ? !0 : path.startsWith("/story/") && params.has(REVIEW_COLLECTION_QUERY_PARAM);
+}, parseStoryIdFromPath = (path) => path.startsWith("/story/") && path.slice(7) || null, parseCollectionIndex = (value) => {
+  if (value === void 0 || !/^\d+$/.test(value))
+    return;
+  let parsed = Number(value);
+  return Number.isInteger(parsed) ? parsed : void 0;
+}, resolveActiveNavEntry = (entries, storyId, collectionIndex) => {
+  if (entries.length === 0)
+    return null;
+  if (collectionIndex !== void 0) {
+    let exact = entries.find(
+      (entry) => entry.storyId === storyId && entry.collectionIndex === collectionIndex
+    );
+    if (exact)
+      return exact;
+  }
+  return entries.find((entry) => entry.storyId === storyId) ?? null;
+}, resolveNavIndex = (entries, active) => entries.findIndex(
+  (entry) => entry.storyId === active.storyId && entry.collectionIndex === active.collectionIndex
+);
+
+// src/manager/components/review/review-notification.ts
+var isUnseen = (createdAt) => createdAt !== void 0 && sessionStore.read(VISITED_REVIEW_CREATED_AT_KEY) !== String(createdAt), readVisitedCreatedAt = () => {
+  let raw = sessionStore.read(VISITED_REVIEW_CREATED_AT_KEY);
+  if (raw === null)
+    return;
+  let visited = Number(raw);
+  return Number.isFinite(visited) ? visited : void 0;
+}, isSupersededByVisit = (createdAt) => {
+  let visited = readVisitedCreatedAt();
+  return createdAt !== void 0 && visited !== void 0 && visited > createdAt;
+}, readNotifiedCreatedAt = () => {
+  let raw = sessionStore.read(NOTIFIED_REVIEW_CREATED_AT_KEY);
+  if (raw === null)
+    return;
+  let notified = Number(raw);
+  return Number.isFinite(notified) ? notified : void 0;
+}, isOnReviewRoute = (path, collectionIndex) => isReviewSummaryPath(path) || path.startsWith("/story/") && collectionIndex !== void 0, shouldSkipArrivalNotification = (path, collectionIndex, review, displayed, deferred) => isOnReviewRoute(path, collectionIndex) ? deferred?.createdAt !== void 0 && deferred.createdAt === review.createdAt ? !0 : displayed?.createdAt !== void 0 && displayed.createdAt === review.createdAt : !1, pickReviewToNotify = (displayed, deferred) => deferred?.createdAt !== void 0 && isUnseen(deferred.createdAt) ? deferred : displayed?.createdAt !== void 0 && isUnseen(displayed.createdAt) && !isSupersededByVisit(displayed.createdAt) ? displayed : null, shouldAutoAcceptOnRoute = (path, collectionIndex, candidate, displayed, deferred) => {
+  let createdAt = candidate.createdAt;
+  return !(createdAt === void 0 || !isUnseen(createdAt) || displayed?.createdAt !== createdAt || !isOnReviewRoute(path, collectionIndex) || deferred?.createdAt !== void 0 && deferred.createdAt !== displayed.createdAt);
+}, clearReviewNotifications = (api, ...createdAts) => {
+  for (let createdAt of new Set(
+    createdAts.filter((value) => value != null)
+  ))
+    api.clearNotification(reviewAvailableNotificationId(createdAt));
+  api.clearNotification(REVIEW_AVAILABLE_NOTIFICATION_ID);
+}, acceptReviewNotification = (api, createdAt) => {
+  createdAt !== void 0 && (clearReviewNotifications(api, createdAt), sessionStore.write(VISITED_REVIEW_CREATED_AT_KEY, String(createdAt)), sessionStore.write(NOTIFIED_REVIEW_CREATED_AT_KEY, String(createdAt)));
+}, clearReviewNotificationsOnDismiss = (api, displayed, deferred) => {
+  clearReviewNotifications(api, displayed?.createdAt, deferred?.createdAt, readNotifiedCreatedAt()), sessionStore.remove(VISITED_REVIEW_CREATED_AT_KEY), sessionStore.remove(NOTIFIED_REVIEW_CREATED_AT_KEY);
+}, claimNotificationSlot = (api, createdAt, ...extraCreatedAts) => !isUnseen(createdAt) || readNotifiedCreatedAt() === createdAt ? !1 : (clearReviewNotifications(api, readNotifiedCreatedAt(), ...extraCreatedAts), sessionStore.write(NOTIFIED_REVIEW_CREATED_AT_KEY, String(createdAt)), !0), readCollectionIndex = (queryParams) => parseCollectionIndex(queryParams?.[REVIEW_COLLECTION_QUERY_PARAM]);
+
+// src/manager/components/review/review-actions.ts
+var navigateToReviewEntry = (api, navigate, entry, filters) => {
+  enterReviewMode(api, filters), api.setQueryParams({ [REVIEW_COLLECTION_QUERY_PARAM]: String(entry.collectionIndex) }), navigate(buildReviewStoryTarget(entry));
+}, navigateToReviewSummary = (api, navigate, filters) => {
+  enterReviewMode(api, filters), api.setQueryParams({ [REVIEW_COLLECTION_QUERY_PARAM]: null }), navigate(REVIEW_CHANGES_URL);
+}, navigateOutOfReview = async (api, navigate, returnSearch, { recordVisit = !0 } = {}) => {
+  let visitCreatedAt = recordVisit ? reviewStore.getState().state?.createdAt : void 0;
+  api.setQueryParams({ [REVIEW_COLLECTION_QUERY_PARAM]: null }), reviewStore.setExiting(!0);
+  try {
+    if (await exitReviewMode(api), visitCreatedAt !== void 0 && acceptReviewNotification(api, visitCreatedAt), returnSearch && !isReviewReturnSearch(returnSearch)) {
+      navigate(returnSearch.startsWith("?") ? returnSearch : `?${returnSearch}`, { plain: !0 });
+      return;
+    }
+    api.selectFirstStory();
+  } finally {
+    reviewStore.setExiting(!1);
+  }
+}, dismissReview = (api) => {
+  api.emit(REVIEW_EVENTS.DISMISS_REVIEW, sessionStore.read(PRE_REVIEW_RETURN_KEY));
+}, acceptPendingReview = (api, navigate, filters) => {
+  let accepted = reviewStore.getState().pendingReview;
+  accepted && (acceptReviewNotification(api, accepted.createdAt), sessionStore.remove(AUTO_ENTERED_SESSION_KEY), reviewStore.displayReview(accepted), enterReviewMode(api, filters), navigate(buildReviewChangesSummaryHref(), { plain: !0 }));
+};
+
+// src/manager/components/review/screens/SummaryScreen.tsx
+init_react();
+
+// src/manager/components/review/components/AttentionBanner.tsx
+init_react();
+
+// src/manager/components/review/components/CopyButton.tsx
+init_react();
+function CopyButton({
+  children,
+  childrenOnCopy,
+  content,
+  onCopy,
+  ariaLabel,
+  ariaLabelOnCopy,
+  duration,
+  ...buttonProps
+}) {
+  let { children: buttonChildren, buttonProps: copyButtonProps } = useCopyButton({
+    children,
+    childrenOnCopy,
+    content,
+    onCopy,
+    ariaLabel,
+    ariaLabelOnCopy,
+    duration
+  });
+  return react_default.createElement(Button, { ...buttonProps, ...copyButtonProps }, buttonChildren);
+}
+
+// src/manager/components/review/components/AttentionBanner.tsx
+var STALE_REFRESH_PROMPT = "Generate a fresh review including my latest changes using the display-review tool.", Region = styled.div({
+  flexShrink: 0
+}), Bar2 = styled.div(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: 8,
+  flexShrink: 0,
+  padding: "4px 16px",
+  background: theme.background.hoverable,
+  color: theme.color.defaultText,
+  borderBottom: `1px solid ${theme.appBorderColor}`,
+  fontSize: theme.typography.size.s2,
+  minHeight: 40
+})), PopoverContent = styled.div({
+  padding: 15,
+  width: 280,
+  boxSizing: "border-box"
+}), Title = styled.div(({ theme }) => ({
+  fontWeight: theme.typography.weight.bold
+})), Message = styled.div(({ theme }) => ({
+  color: theme.color.defaultText,
+  lineHeight: "18px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-start",
+  gap: 8
+})), Prompt = styled.p(({ theme }) => ({
+  margin: 0,
+  fontFamily: theme.typography.fonts.mono,
+  fontSize: theme.typography.size.s1 - 1,
+  padding: "6px 10px",
+  background: theme.background.app,
+  boxShadow: `inset 0 0 0 1px ${theme.appBorderColor}`,
+  borderRadius: theme.appBorderRadius
+})), AttentionBanner = (props) => {
+  let { kind } = props, regionRef = useRef(null), { landmarkProps } = useLandmark(
+    { role: "region", "aria-label": "Review status" },
+    regionRef
+  );
+  if (kind === "pending-update") {
+    let { onAccept } = props;
+    return react_default.createElement(Region, { ref: regionRef, ...landmarkProps }, react_default.createElement(Bar2, { role: "status", "aria-live": "polite" }, react_default.createElement("span", null, "A new review is available."), react_default.createElement(Button, { variant: "solid", padding: "small", onClick: onAccept }, "Update")));
+  }
+  return react_default.createElement(Region, { ref: regionRef, ...landmarkProps }, react_default.createElement(Bar2, { role: "status", "aria-live": "polite" }, react_default.createElement("span", null, "Code changes detected. This review may be stale.", " ", react_default.createElement(
+    PopoverProvider,
+    {
+      ariaLabel: "Prompt to refresh stale review",
+      placement: "bottom",
+      padding: 0,
+      popover: react_default.createElement(PopoverContent, null, react_default.createElement(Message, null, react_default.createElement(Title, null, "Prompt for your agent to refresh this review:"), react_default.createElement(Prompt, null, STALE_REFRESH_PROMPT), react_default.createElement(
+        CopyButton,
+        {
+          appearance: "agentic",
+          padding: "small",
+          ariaLabel: "Copy prompt to refresh this review",
+          ariaLabelOnCopy: "Prompt copied to clipboard",
+          content: STALE_REFRESH_PROMPT,
+          childrenOnCopy: react_default.createElement(react_default.Fragment, null, react_default.createElement(CheckIcon, null), " Copy prompt")
+        },
+        react_default.createElement(CopyIcon, null),
+        "Copy prompt"
+      )))
+    },
+    react_default.createElement(Link, null, react_default.createElement("strong", null, "Ask your agent to refresh it."))
+  ))));
+};
+
+// src/manager/components/review/components/CollectionGrid.tsx
+init_react();
+
+// src/viewport/constants.ts
+var ADDON_ID = "storybook/viewport", PARAM_KEY = "viewport", PANEL_ID = `${ADDON_ID}/panel`, TOOL_ID = `${ADDON_ID}/tool`, RESPONSIVE_VIEWPORT_VALUE = "100pct-100pct";
+
+// src/shared/constants/iframe-resize.ts
+var IFRAME_RESIZE_CONTEXT = "iframe.resize", IFRAME_RESIZE_REQUEST_CONTEXT = "iframe.resize.request", isPositiveFinite = (value) => typeof value == "number" && Number.isFinite(value) && value > 0, parseViewport = (value) => {
+  if (!value || typeof value != "object")
+    return;
+  let viewport = value;
+  if (typeof viewport.name != "string" || typeof viewport.value != "string")
+    return;
+  let parsed = {
+    name: viewport.name,
+    value: viewport.value
+  };
+  if (viewport.width !== void 0) {
+    if (!isPositiveFinite(viewport.width))
+      return;
+    parsed.width = viewport.width;
+  }
+  if (viewport.height !== void 0) {
+    if (!isPositiveFinite(viewport.height))
+      return;
+    parsed.height = viewport.height;
+  }
+  return parsed;
+}, parseIframeResizeMessage = (data) => {
+  try {
+    let parsed = typeof data == "string" ? JSON.parse(data) : data;
+    if (parsed?.context !== IFRAME_RESIZE_CONTEXT || !isPositiveFinite(parsed.width) || !isPositiveFinite(parsed.height))
+      return null;
+    let viewport = parseViewport(parsed.viewport);
+    return parsed.viewport !== void 0 && viewport === void 0 ? null : {
+      width: parsed.width,
+      height: parsed.height,
+      ...viewport ? { viewport } : {}
+    };
+  } catch {
+    return null;
+  }
+}, hasFixedViewportDimensions = (viewport) => !!viewport && viewport.value !== RESPONSIVE_VIEWPORT_VALUE && typeof viewport.width == "number" && viewport.width > 0 && typeof viewport.height == "number" && viewport.height > 0, iframeResizeViewportsEqual = (left, right) => left === right ? !0 : !left || !right ? !left && !right : left.name === right.name && left.value === right.value && left.width === right.width && left.height === right.height, iframeResizeDimensionsEqual = (left, right) => !left || left.width !== right.width || left.height !== right.height ? !1 : iframeResizeViewportsEqual(left.viewport, right.viewport);
+
+// src/manager/components/review/review-types.ts
+var fallbackStoryInfo = (storyId) => {
+  let separator = storyId.indexOf("--");
+  return separator === -1 ? { title: storyId, name: "Story" } : {
+    title: storyId.slice(0, separator),
+    name: storyId.slice(separator + 2) || "Story"
+  };
+};
+
+// src/manager/components/review/components/usePreviewThumbnail.ts
+init_react();
+
+// src/manager/components/review/components/previewScheduler.ts
+var activePreviewLoads = 0, previewQueue = [];
+function startTask(task) {
+  task.state = "started", activePreviewLoads += 1, task.deadline = setTimeout(() => releaseTask(task), 1500), task.start();
+}
+function startQueuedPreviews() {
+  for (; activePreviewLoads < 3 && previewQueue.length > 0; )
+    startTask(previewQueue.shift());
+}
+function releaseTask(task) {
+  task.state !== "released" && (task.state === "started" ? (clearTimeout(task.deadline), activePreviewLoads -= 1) : previewQueue.splice(previewQueue.indexOf(task), 1), task.state = "released", startQueuedPreviews());
+}
+function enqueuePreview(start) {
+  let task = { start, state: "queued" };
+  return previewQueue.push(task), startQueuedPreviews(), {
+    forceStart: () => {
+      task.state === "queued" && (previewQueue.splice(previewQueue.indexOf(task), 1), startTask(task));
+    },
+    release: () => releaseTask(task)
+  };
+}
+
+// src/manager/components/review/components/previewThumbnailState.ts
+var initialThumbnailState = {
+  phase: "idle",
+  src: void 0,
+  dimensions: null,
+  bootId: 0
+}, isThumbnailLoading = ({ phase }) => phase === "queued" || phase === "booting" || phase === "measured", thumbnailReducer = (state, event) => {
+  switch (event.type) {
+    case "enqueued":
+      return { ...state, phase: "queued", dimensions: null };
+    case "started":
+      return state.phase !== "queued" ? state : { ...state, phase: "booting", src: event.src, bootId: state.bootId + 1 };
+    case "resized": {
+      if (state.phase === "booting" || state.phase === "measured") {
+        let unchanged = iframeResizeDimensionsEqual(state.dimensions, event.dimensions);
+        return state.phase === "measured" && unchanged ? state : {
+          ...state,
+          phase: "measured",
+          dimensions: unchanged ? state.dimensions : event.dimensions
+        };
+      }
+      return state.phase === "settled" ? iframeResizeDimensionsEqual(state.dimensions, event.dimensions) ? state : { ...state, dimensions: event.dimensions } : state;
+    }
+    case "settled":
+      return state.phase === "booting" || state.phase === "measured" ? { ...state, phase: "settled" } : state;
+    case "evicted":
+      return state.phase === "idle" ? state : { ...initialThumbnailState, bootId: state.bootId };
+  }
+};
+
+// src/manager/components/review/components/usePreviewThumbnail.ts
+var PREVIEW_SCALE_SETTLE_FALLBACK_MS = 1500 * 3, PREVIEW_MOUNT_ROOT_MARGIN = "50% 0px", PREVIEW_EVICT_ROOT_MARGIN = "150% 0px", getScrollRoot = (element) => {
+  let radixViewport = element.closest("[data-radix-scroll-area-viewport]");
+  if (radixViewport)
+    return radixViewport;
+  let current = element.parentElement;
+  for (; current; ) {
+    let { overflowY } = window.getComputedStyle(current);
+    if (overflowY === "auto" || overflowY === "scroll")
+      return current;
+    current = current.parentElement;
+  }
+  return null;
+}, usePreviewThumbnail = ({
+  storyId,
+  getPreviewHref,
+  summaryHidden = !1
+}) => {
+  let cellRef = useRef(null), iframeRef = useRef(null), [isInView, setIsInView] = useState(!1), [state, dispatch] = useReducer(thumbnailReducer, initialThumbnailState), handleRef = useRef(null), settleRafRef = useRef({ raf1: 0, raf2: 0 }), { src, bootId } = state;
+  useEffect(() => {
+    let host = cellRef.current;
+    if (!host || summaryHidden)
+      return;
+    let scrollRoot = getScrollRoot(host), root2 = scrollRoot && scrollRoot.clientHeight > 0 ? scrollRoot : null, mountObserver = new IntersectionObserver(
+      ([entry]) => {
+        entry.isIntersecting && setIsInView(!0);
+      },
+      { root: root2, rootMargin: PREVIEW_MOUNT_ROOT_MARGIN }
+    ), evictObserver = new IntersectionObserver(
+      ([entry]) => {
+        entry.isIntersecting || setIsInView(!1);
+      },
+      { root: root2, rootMargin: PREVIEW_EVICT_ROOT_MARGIN }
+    );
+    return mountObserver.observe(host), evictObserver.observe(host), () => {
+      mountObserver.disconnect(), evictObserver.disconnect();
+    };
+  }, [summaryHidden]), useEffect(() => {
+    isInView || dispatch({ type: "evicted" });
+  }, [isInView]), useEffect(() => {
+    if (!isInView)
+      return;
+    let previewHref = getPreviewHref(storyId);
+    dispatch({ type: "enqueued" });
+    let handle = enqueuePreview(() => {
+      dispatch({ type: "started", src: previewHref });
+    });
+    return handleRef.current = handle, () => {
+      handle.release(), handleRef.current = null;
+    };
+  }, [isInView, storyId, getPreviewHref]), useEffect(() => {
+    if (!src)
+      return;
+    let timer = setTimeout(() => dispatch({ type: "settled" }), PREVIEW_SCALE_SETTLE_FALLBACK_MS);
+    return () => clearTimeout(timer);
+  }, [bootId, src]);
+  let handleResize = useCallback((dimensions) => {
+    dispatch({ type: "resized", dimensions }), cancelAnimationFrame(settleRafRef.current.raf1), cancelAnimationFrame(settleRafRef.current.raf2), settleRafRef.current.raf1 = requestAnimationFrame(() => {
+      settleRafRef.current.raf2 = requestAnimationFrame(() => {
+        dispatch({ type: "settled" });
+      });
+    });
+  }, []);
+  useEffect(() => {
+    let rafs = settleRafRef.current;
+    return () => {
+      cancelAnimationFrame(rafs.raf1), cancelAnimationFrame(rafs.raf2);
+    };
+  }, []), useLayoutEffect(() => {
+    if (!src)
+      return;
+    let iframe = iframeRef.current;
+    if (!iframe)
+      return;
+    let onMessage = (event) => {
+      if (event.source === null || event.source !== iframe.contentWindow)
+        return;
+      let dimensions = parseIframeResizeMessage(event.data);
+      dimensions && handleResize(dimensions);
+    };
+    window.addEventListener("message", onMessage);
+    let requestRemeasure = () => {
+      try {
+        iframe.contentWindow?.postMessage(
+          JSON.stringify({ context: IFRAME_RESIZE_REQUEST_CONTEXT }),
+          "*"
+        );
+      } catch {
+      }
+    };
+    return requestRemeasure(), iframe.addEventListener("load", requestRemeasure), () => {
+      window.removeEventListener("message", onMessage), iframe.removeEventListener("load", requestRemeasure);
+    };
+  }, [src, handleResize]);
+  let finishCurrent = useCallback(() => {
+    handleRef.current?.release();
+  }, []), forceStartCurrent = useCallback(() => {
+    handleRef.current?.forceStart();
+  }, []);
+  return {
+    cellRef,
+    iframeRef,
+    src,
+    isPreviewLoading: isThumbnailLoading(state),
+    rememberedDimensions: state.dimensions,
+    forceStartCurrent,
+    finishCurrent
+  };
+};
+
+// src/manager/components/review/components/CollectionGrid.tsx
+var band = (cols) => {
+  let cap = cols * 2;
+  return {
+    gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+    [`&:not([data-show-all]):has(> [data-cell]:nth-child(${cap + 1})) > [data-cell]:nth-child(n + ${cap})`]: {
+      display: "none"
+    },
+    [`&:not([data-show-all]):has(> [data-cell]:nth-child(${cap + 1})) > [data-review-all]`]: {
+      display: "flex"
+    }
+  };
+}, GridContainer = styled.div({
+  containerType: "inline-size",
+  containerName: "review-grid"
+}), Grid = styled.div({
+  display: "grid",
+  alignItems: "stretch",
+  gap: 12,
+  padding: 12,
+  gridTemplateColumns: "minmax(0, 1fr)",
+  "@container review-grid (max-width: 629.98px)": band(1),
+  "@container review-grid (min-width: 630px) and (max-width: 844.98px)": band(2),
+  "@container review-grid (min-width: 845px) and (max-width: 1259.98px)": band(3),
+  "@container review-grid (min-width: 1260px)": band(4)
+}), Cell = styled.div({
+  display: "flex",
+  flexDirection: "column",
+  minWidth: 0,
+  overflow: "hidden"
+}), FrameShell = styled.div({
+  width: "100%",
+  minWidth: 0,
+  maxWidth: "100%",
+  aspectRatio: "3 / 2",
+  position: "relative"
+}), DEFAULT_CONTENT_WIDTH = 300, THUMBNAIL_BOOTSTRAP_SCALE = 0.5, getPreviewFrameLayout = (dimensions) => dimensions ? hasFixedViewportDimensions(dimensions.viewport) ? {
+  style: {
+    "--vp-w": dimensions.viewport.width,
+    "--vp-h": dimensions.viewport.height
+  },
+  viewportFill: !0
+} : { style: { "--content-w": dimensions.width }, viewportFill: !1 } : {
+  style: { "--scale": THUMBNAIL_BOOTSTRAP_SCALE },
+  viewportFill: !1
+}, Frame = styled.a(({ theme }) => ({
+  position: "absolute",
+  inset: 0,
+  display: "block",
+  boxSizing: "border-box",
+  containerType: "inline-size",
+  containerName: "preview-frame",
+  "--content-w": DEFAULT_CONTENT_WIDTH,
+  "--fit-w": "calc(100cqw / (var(--content-w) * 1px))",
+  "--fit": "min(1, var(--fit-w))",
+  "--scale": "max(0.5, min(1, round(down, var(--fit), 0.25)))",
+  "--vp-scale": "calc(100cqw / (var(--vp-w) * 1px))",
+  borderRadius: 6,
+  overflow: "hidden",
+  background: theme.background.app,
+  border: `1px solid ${theme.appBorderColor}`,
+  transition: "border-color 120ms ease",
+  textDecoration: "none",
+  outline: "none",
+  "& [data-preview-scale]": {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    transformOrigin: "top left"
+  },
+  "&[data-viewport-fill] [data-preview-scale]": {
+    width: "calc(var(--vp-w) * 1px)",
+    height: "calc(var(--vp-h) * 1px)",
+    transform: "scale(var(--vp-scale))"
+  },
+  "&:not([data-viewport-fill]) [data-preview-scale]": {
+    width: "calc(100% / var(--scale))",
+    height: "calc(100% / var(--scale))",
+    transform: "scale(var(--scale))"
+  },
+  "&[href]:hover": {
+    borderColor: theme.color.secondary
+  },
+  "&:focus-visible": {
+    outline: `${theme.barSelectedColor} solid 2px`,
+    outlineOffset: -2
+  }
+})), Preview = styled.iframe(({ theme }) => ({
+  display: "block",
+  width: "100%",
+  height: "100%",
+  background: theme.background.preview,
+  border: 0,
+  pointerEvents: "none"
+})), PreviewLoading = styled.div(({ theme }) => ({
+  position: "absolute",
+  inset: 0,
+  zIndex: 1,
+  display: "grid",
+  placeItems: "center",
+  background: theme.background.app,
+  pointerEvents: "none"
+})), ActionBar2 = styled.div({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: 8,
+  minHeight: 36,
+  marginTop: "auto"
+}), Label = styled.div({
+  display: "flex",
+  alignItems: "center",
+  gap: 4,
+  flex: 1,
+  minWidth: 0,
+  marginLeft: 10,
+  overflow: "hidden"
+}), LabelComponent = styled.span({
+  fontWeight: 700,
+  whiteSpace: "nowrap",
+  flexShrink: 0,
+  maxWidth: "60%",
+  overflow: "hidden",
+  textOverflow: "ellipsis"
+}), LabelSeparator = styled.span(({ theme }) => ({
+  color: theme.textMutedColor,
+  flexShrink: 0
+})), LabelStory = styled.span({
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  marginRight: 4
+}), NewBadge = styled(Badge)({
+  flexShrink: 0
+}), ReviewAllCell = styled(Cell)({
+  display: "none"
+}), ReviewAllShell = styled.div({
+  width: "100%",
+  minWidth: 0,
+  maxWidth: "100%",
+  aspectRatio: "3 / 2",
+  minHeight: 50
+}), ReviewAllFrame = styled.div(({ theme }) => ({
+  display: "grid",
+  placeItems: "center",
+  width: "100%",
+  height: "100%",
+  boxSizing: "border-box",
+  borderRadius: 6,
+  background: theme.background.app,
+  border: `1px dashed ${theme.appBorderColor}`
+})), deriveStoryInfo = (info) => ({
+  component: info.title.split("/").pop() ?? info.title,
+  name: info.name
+}), StoryPreviewCell = ({ storyId, href, info, getPreviewHref, summaryHidden = !1 }) => {
+  let {
+    cellRef,
+    iframeRef,
+    src,
+    isPreviewLoading,
+    rememberedDimensions,
+    forceStartCurrent,
+    finishCurrent
+  } = usePreviewThumbnail({ storyId, getPreviewHref, summaryHidden }), { component, name } = deriveStoryInfo(info), readableTitle = `${component} \u2013 ${name}`, { style: frameStyle, viewportFill } = getPreviewFrameLayout(rememberedDimensions), preview = src ? react_default.createElement("div", { "data-preview-scale": !0 }, react_default.createElement(
+    Preview,
+    {
+      ref: iframeRef,
+      title: readableTitle,
+      src,
+      "data-content-width": rememberedDimensions?.width,
+      "data-content-height": rememberedDimensions?.height,
+      tabIndex: -1,
+      scrolling: "no",
+      onLoad: finishCurrent,
+      onError: finishCurrent
+    }
+  )) : null;
+  return react_default.createElement(Cell, { ref: cellRef, role: "listitem", "data-cell": !0, "data-testid": "review-collection-grid-cell" }, react_default.createElement(FrameShell, null, react_default.createElement(
+    Frame,
+    {
+      as: href ? "a" : "div",
+      ...href ? { href } : {},
+      "data-testid": "review-collection-grid-frame",
+      "data-viewport-fill": viewportFill || void 0,
+      style: frameStyle,
+      "aria-label": href ? `Review story ${readableTitle}` : void 0,
+      onMouseEnter: forceStartCurrent,
+      onFocus: forceStartCurrent
+    },
+    isPreviewLoading ? react_default.createElement(PreviewLoading, { "data-testid": "review-preview-loading" }, react_default.createElement(Loader, null)) : null,
+    preview
+  )), react_default.createElement(ActionBar2, null, react_default.createElement(Label, null, react_default.createElement(LabelComponent, null, component), react_default.createElement(LabelSeparator, null, "/"), react_default.createElement(LabelStory, null, name), info.changeStatus === "new" || info.isNewlyAdded ? react_default.createElement(NewBadge, { status: "positive", compact: !0 }, "New") : null)));
+}, CollectionGrid = ({
+  storyIds,
+  getStoryHref: getStoryHref2,
+  getStoryPreviewHref,
+  showAll = !1,
+  onShowAll,
+  storyInfo,
+  summaryHidden = !1
+}) => react_default.createElement(GridContainer, null, react_default.createElement(Grid, { role: "list", "data-show-all": showAll || void 0, "data-testid": "review-collection-grid" }, storyIds.map((storyId, storyIndex) => {
+  let info = storyInfo[storyId] ?? fallbackStoryInfo(storyId);
+  return react_default.createElement(
+    StoryPreviewCell,
+    {
+      key: storyId,
+      storyId,
+      href: getStoryHref2?.(storyId, storyIndex),
+      info,
+      getPreviewHref: getStoryPreviewHref,
+      summaryHidden
+    }
+  );
+}), react_default.createElement(ReviewAllCell, { role: "presentation", "data-review-all": !0 }, react_default.createElement(ReviewAllShell, null, react_default.createElement(ReviewAllFrame, null, react_default.createElement(Button, { size: "medium", onClick: () => onShowAll?.() }, "Review all ", storyIds.length))), react_default.createElement(ActionBar2, { "aria-hidden": "true" }))));
+
+// src/manager/components/review/components/Markdown.tsx
+init_react();
+var createInlinePattern = () => /(\*\*([\s\S]+?)\*\*|\*([\s\S]+?)\*|_([\s\S]+?)_|`([\s\S]+?)`)/g, parseInline = (text) => {
+  let nodes = [], pattern = createInlinePattern(), lastIndex = 0, key = 0, match;
+  for (; (match = pattern.exec(text)) !== null; ) {
+    match.index > lastIndex && nodes.push(text.slice(lastIndex, match.index));
+    let [token, , bold, italicStar, italicUnderscore, code] = match;
+    bold !== void 0 ? nodes.push(react_default.createElement("strong", { key: key++ }, parseInline(bold))) : italicStar !== void 0 ? nodes.push(react_default.createElement("em", { key: key++ }, parseInline(italicStar))) : italicUnderscore !== void 0 ? nodes.push(react_default.createElement("em", { key: key++ }, parseInline(italicUnderscore))) : code !== void 0 && nodes.push(react_default.createElement("code", { key: key++ }, code)), lastIndex = match.index + token.length;
+  }
+  return lastIndex < text.length && nodes.push(text.slice(lastIndex)), nodes;
+}, Markdown = ({ children }) => {
+  let paragraphs = children.split(/\n{2,}/).filter((paragraph) => paragraph.trim() !== "");
+  return react_default.createElement(react_default.Fragment, null, paragraphs.map((paragraph, index) => react_default.createElement("p", { key: index }, parseInline(paragraph))));
+};
+
+// src/manager/components/review/components/ReviewHeader.tsx
+init_react();
+var Root = styled.header(({ theme, $variant }) => ({
+  containerType: "inline-size",
+  containerName: "review-header",
+  display: "flex",
+  flexDirection: "column",
+  flexShrink: 0,
+  width: "100%",
+  background: $variant === "toolbar" ? theme.barBg : theme.background.content,
+  color: theme.color.defaultText,
+  ...$variant === "page" ? { borderBottom: `1px solid ${theme.appBorderColor}` } : {}
+})), TopRow = styled.div(({ $variant }) => ({
+  display: "flex",
+  flexWrap: "wrap",
+  flexDirection: "row",
+  alignItems: "center",
+  gap: 8,
+  padding: $variant === "toolbar" ? "16px 16px 8px 16px" : "16px",
+  minHeight: 40
+})), Main = styled.div({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  gap: 8,
+  flex: "1 1 auto",
+  minWidth: 0
+}), Leading = styled.div({
+  display: "flex",
+  alignItems: "center",
+  alignSelf: "flex-start",
+  flexShrink: 0
+}), TextBlock = styled.div({
+  display: "flex",
+  flexDirection: "column",
+  flexGrow: 1,
+  minWidth: 0
+}), Title2 = styled.h1(({ theme }) => ({
+  margin: "2px 0",
+  minWidth: 0,
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  fontSize: theme.typography.size.m1,
+  fontWeight: theme.typography.weight.bold,
+  lineHeight: "24px"
+})), Subtitle = styled.div(({ theme }) => ({
+  display: "flex",
+  flexWrap: "wrap",
+  alignItems: "center",
+  gap: 8,
+  color: theme.textMutedColor,
+  fontSize: theme.typography.size.s2,
+  lineHeight: "20px"
+})), Actions = styled.div({
+  display: "flex",
+  flexWrap: "wrap",
+  alignItems: "center",
+  justifyContent: "flex-end",
+  gap: 6,
+  flex: "0 1 auto",
+  marginLeft: "auto"
+}), SecondRow = styled.div({
+  display: "flex",
+  alignItems: "center",
+  gap: 8,
+  padding: "0 16px 2px 16px",
+  minHeight: 39
+}), ReviewHeader = ({
+  leading,
+  title: title2,
+  subtitle,
+  actions,
+  secondRow,
+  variant = "page"
+}) => {
+  let titleId = $bdb11010cef70236$export$f680877a34711e37(), regionRef = useRef(null), { landmarkProps } = useLandmark({ "aria-labelledby": titleId, role: "banner" }, regionRef);
+  return react_default.createElement(Root, { $variant: variant, ref: regionRef, ...landmarkProps }, react_default.createElement(TopRow, { $variant: variant }, react_default.createElement(Main, null, leading ? react_default.createElement(Leading, null, leading) : null, react_default.createElement(TextBlock, null, react_default.createElement(Title2, { id: titleId }, title2), subtitle ? react_default.createElement(Subtitle, null, subtitle) : null)), actions ? react_default.createElement(Actions, null, actions) : null), secondRow ? react_default.createElement(SecondRow, null, secondRow) : null);
+};
+
+// src/manager/components/review/screens/SummaryScreen.tsx
+var MarkdownWrapper = styled(DocumentWrapper)(({ theme }) => ({
+  color: theme.color.defaultText,
+  p: {
+    margin: 0
+  },
+  "p + p": {
+    marginTop: 10
+  },
+  code: {
+    color: "inherit",
+    verticalAlign: "text-bottom",
+    fontSize: "0.85em",
+    margin: 0,
+    padding: "0 4px",
+    background: "transparent",
+    border: "none",
+    boxShadow: `inset 0 0 0 1px ${theme.appBorderColor}`,
+    borderRadius: theme.appBorderRadius
+  }
+})), Page = styled.div(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  height: "100dvh",
+  minHeight: 0,
+  overflow: "hidden",
+  background: theme.background.app,
+  color: theme.color.defaultText,
+  fontFamily: theme.typography.fonts.base,
+  fontSize: theme.typography.size.s2
+})), Empty = styled.div(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: 16,
+  alignItems: "center",
+  justifyContent: "center",
+  height: "100dvh",
+  color: theme.color.defaultText,
+  "& > div": {
+    display: "flex",
+    alignItems: "center",
+    gap: 8
+  }
+})), ListScroll = styled.div({
+  flex: 1,
+  minHeight: 0
+}), Main2 = styled.main({
+  display: "flex",
+  flexDirection: "column",
+  gap: 12,
+  padding: 12,
+  // Cards must keep their intrinsic height so the list scrolls; without this
+  // the default flex-shrink collapses them to fit the viewport and Card's
+  // overflow:hidden clips the content at the bottom.
+  "& > *": {
+    flexShrink: 0
+  }
+}), SummaryCard = styled(Card)({
+  display: "flex",
+  alignItems: "flex-start",
+  padding: "9px 12px",
+  gap: 10,
+  svg: {
+    flexShrink: 0,
+    marginTop: 4
+  }
+}), SummaryLandmark = ({ children }) => {
+  let asideRef = useRef(null), { landmarkProps } = useLandmark(
+    { role: "complementary", "aria-label": "Summary" },
+    asideRef
+  );
+  return react_default.createElement("aside", { ref: asideRef, ...landmarkProps }, children);
+}, SummaryContent = styled(MarkdownWrapper)({
+  flex: 1,
+  minWidth: 0,
+  // Keep the "Summary:" heading and the first description paragraph on the same
+  // line, matching the previous inline "**Summary:** …" rendering.
+  "& > p:first-of-type": {
+    display: "inline"
+  }
+}), SummaryHeading = styled.h2(({ theme }) => ({
+  // Double the ampersand to outrank the DocumentWrapper's `.wrapper h2` rule
+  // (specificity 0,1,1), which would otherwise enlarge this and add a bottom
+  // border, so the label stays identical to the inline bold it replaces.
+  "&&": {
+    display: "inline",
+    margin: 0,
+    padding: 0,
+    fontSize: "inherit",
+    fontWeight: theme.typography.weight.bold,
+    lineHeight: "inherit",
+    color: "inherit",
+    border: "none"
+  }
+})), CardHead = styled.div({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: 8,
+  padding: "6px 10px 6px 12px",
+  minHeight: 40,
+  cursor: "pointer"
+}), CardTitle = styled.h2(({ theme }) => ({
+  minWidth: 0,
+  margin: 0,
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  fontSize: "inherit",
+  fontWeight: theme.typography.weight.bold,
+  lineHeight: "20px",
+  color: theme.color.defaultText
+})), CardControls = styled.div({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-end",
+  gap: 6,
+  flexShrink: 0
+}), CardCount = styled.span(({ theme }) => ({
+  minWidth: 28,
+  fontFamily: theme.typography.fonts.mono,
+  fontSize: theme.typography.size.s2 - 1,
+  lineHeight: "20px",
+  textAlign: "center",
+  color: theme.textMutedColor
+})), ToggleChevronIcon = styled(ChevronSmallDownIcon)({
+  transition: "transform 160ms ease"
+}), CardRationale = styled(MarkdownWrapper)(({ theme }) => ({
+  color: theme.textMutedColor,
+  margin: "0 12px"
+})), Footer = styled.div(({ theme }) => ({
+  color: theme.textMutedColor,
+  padding: "10px 10px 30px",
+  fontSize: theme.typography.size.s2,
+  textAlign: "center",
+  textWrap: "balance"
+})), CollectionLandmark = ({
+  titleId,
+  children
+}) => {
+  let regionRef = useRef(null), { landmarkProps } = useLandmark({ role: "region", "aria-labelledby": titleId }, regionRef);
+  return react_default.createElement("section", { ref: regionRef, ...landmarkProps }, children);
+}, FooterLandmark = ({ children }) => {
+  let regionRef = useRef(null), { landmarkProps } = useLandmark(
+    { role: "region", "aria-label": "About this review" },
+    regionRef
+  );
+  return react_default.createElement(Footer, { as: "footer", ref: regionRef, ...landmarkProps }, children);
+}, pluralize = (count, singular, plural = `${singular}s`) => `${count} ${count === 1 ? singular : plural}`, formatCreatedAgo = (createdAt, nowMs) => {
+  let elapsedMs = Math.max(0, nowMs - createdAt);
+  if (elapsedMs < 6e4)
+    return "just now";
+  let elapsedMinutes = Math.floor(elapsedMs / 6e4);
+  return elapsedMinutes < 60 ? `${elapsedMinutes}m ago` : `${Math.floor(elapsedMinutes / 60)}h ago`;
+}, SummaryScreen = ({
+  state,
+  storyInfo = {},
+  getStoryPreviewHref,
+  banner = null,
+  summaryHidden = !1,
+  onDismiss,
+  returnSearch = null
+}) => {
+  let [expandedCollections, setExpandedCollections] = useState(() => /* @__PURE__ */ new Set()), [showAllCollections, setShowAllCollections] = useState(() => /* @__PURE__ */ new Set()), [showNewOnly, setShowNewOnly] = useState(!1), [nowMs, setNowMs] = useState(() => Date.now());
+  useEffect(() => {
+    let intervalId = window.setInterval(() => {
+      setNowMs(Date.now());
+    }, 1e4);
+    return () => window.clearInterval(intervalId);
+  }, []), useLayoutEffect(() => {
+    if (!state) {
+      setExpandedCollections(/* @__PURE__ */ new Set()), setShowAllCollections(/* @__PURE__ */ new Set());
+      return;
+    }
+    setExpandedCollections(new Set(state.collections.map((_2, index) => index))), setShowAllCollections(/* @__PURE__ */ new Set());
+  }, [state?.createdAt]);
+  let newStoryCount = useMemo(
+    () => new Set(
+      (state?.collections ?? []).flatMap((c2) => c2.storyIds).filter((id) => storyInfo[id]?.isNewlyAdded)
+    ).size,
+    [state, storyInfo]
+  ), visibleCollections = useMemo(
+    () => (state?.collections ?? []).map((collection, index) => {
+      let storyIds = showNewOnly ? collection.storyIds.filter((id) => storyInfo[id]?.isNewlyAdded) : collection.storyIds;
+      return { collection, index, storyIds };
+    }).filter((entry) => entry.storyIds.length > 0),
+    [state?.collections, showNewOnly, storyInfo]
+  );
+  if (!state)
+    return react_default.createElement(Empty, null, react_default.createElement("span", null, "Waiting for the agent to display a review\u2026"), react_default.createElement("div", null, react_default.createElement(
+      CopyButton,
+      {
+        appearance: "agentic",
+        padding: "small",
+        ariaLabel: "Copy prompt to refresh this review",
+        ariaLabelOnCopy: "Prompt copied to clipboard",
+        content: "Generate a Storybook review including my latest changes using the display-review tool.",
+        childrenOnCopy: react_default.createElement(react_default.Fragment, null, react_default.createElement(CheckIcon, null), " Copy prompt")
+      },
+      react_default.createElement(CopyIcon, null),
+      "Copy prompt"
+    ), react_default.createElement(Button, { padding: "small", onClick: onDismiss, ariaLabel: "Close review screen" }, react_default.createElement(CloseIcon, null), "Close")));
+  let storyCount = new Set(state.collections.flatMap((collection) => collection.storyIds)).size, createdAgo = state.createdAt ? formatCreatedAgo(state.createdAt, nowMs) : null, toggleCollection = (index) => {
+    setExpandedCollections((previous) => {
+      let next = new Set(previous);
+      return next.has(index) ? next.delete(index) : next.add(index), next;
+    });
+  }, markCollectionShowAll = (index) => {
+    setShowAllCollections(
+      (previous) => previous.has(index) ? previous : new Set(previous).add(index)
+    );
+  };
+  return react_default.createElement(Page, null, banner && react_default.createElement(AttentionBanner, { ...banner }), react_default.createElement(
+    ReviewHeader,
+    {
+      leading: react_default.createElement(Button, { variant: "ghost", size: "small", padding: "small", ariaLabel: "Exit review", asChild: !0 }, react_default.createElement("a", { href: buildSummaryBackHref(returnSearch), [REVIEW_SUMMARY_BACK_ATTR]: "" }, react_default.createElement(ChevronSmallLeftIcon, null), react_default.createElement(StorybookIcon, null))),
+      title: state.title,
+      subtitle: react_default.createElement(react_default.Fragment, null, react_default.createElement("span", null, "Showing ", pluralize(storyCount, "story", "stories"), " for quick review"), createdAgo ? react_default.createElement(react_default.Fragment, null, react_default.createElement("span", null, "\u2022"), react_default.createElement("span", null, createdAgo)) : null),
+      actions: newStoryCount > 0 ? react_default.createElement(
+        ToggleButton,
+        {
+          variant: "ghost",
+          size: "small",
+          padding: "small",
+          ariaLabel: !1,
+          tooltip: "Toggle filtering of new stories",
+          pressed: showNewOnly,
+          onClick: () => setShowNewOnly((v2) => !v2)
+        },
+        newStoryCount,
+        " new"
+      ) : null
+    }
+  ), react_default.createElement(ListScroll, null, react_default.createElement(ScrollArea, { vertical: !0 }, react_default.createElement(Main2, null, react_default.createElement(SummaryLandmark, null, react_default.createElement(SummaryCard, { color: "agentic" }, react_default.createElement(WandIcon, null), react_default.createElement(SummaryContent, null, react_default.createElement(SummaryHeading, null, "Summary:"), " ", react_default.createElement(Markdown, null, state.description)))), visibleCollections.length === 0 ? react_default.createElement(Footer, null, showNewOnly ? "No new stories found." : "No collections found.") : visibleCollections.map(({ collection, index, storyIds }) => {
+    let isExpanded = expandedCollections.has(index), titleId = `review-collection-title-${index}`;
+    return react_default.createElement(CollectionLandmark, { key: `${collection.title}-${index}`, titleId }, react_default.createElement(Card, null, react_default.createElement(
+      Collapsible,
+      {
+        collapsed: !isExpanded,
+        summary: react_default.createElement(CardHead, { onClick: () => toggleCollection(index) }, react_default.createElement(CardTitle, { id: titleId }, collection.title), react_default.createElement(CardControls, null, react_default.createElement(
+          CardCount,
+          {
+            "aria-label": pluralize(storyIds.length, "story", "stories")
+          },
+          storyIds.length
+        ), react_default.createElement(
+          IconButton,
+          {
+            variant: "ghost",
+            size: "small",
+            padding: "small",
+            ariaLabel: isExpanded ? `Collapse collection ${collection.title}` : `Expand collection ${collection.title}`,
+            "aria-expanded": isExpanded,
+            onClick: (event) => {
+              event.stopPropagation(), toggleCollection(index);
+            }
+          },
+          react_default.createElement(
+            ToggleChevronIcon,
+            {
+              style: { transform: `rotate(${isExpanded ? -180 : 0}deg)` }
+            }
+          )
+        )))
+      },
+      collection.rationale ? react_default.createElement(CardRationale, null, react_default.createElement(Markdown, null, collection.rationale)) : null,
+      react_default.createElement(
+        CollectionGrid,
+        {
+          storyIds,
+          showAll: showAllCollections.has(index),
+          onShowAll: () => markCollectionShowAll(index),
+          storyInfo,
+          getStoryHref: (storyId) => buildReviewStoryHref({ collectionIndex: index, storyId }),
+          getStoryPreviewHref,
+          summaryHidden
+        }
+      )
+    )));
+  }), react_default.createElement(FooterLandmark, null, "This review shows the ", pluralize(storyCount, "story", "stories"), " most relevant for you to spot-check right now. Because this is AI-curated, results may be inaccurate or incomplete.")))));
+};
+
+// src/manager/components/review/screens/ReviewSummaryHost.tsx
+var SummaryHost = styled.div(({ $visible }) => ({
+  position: "absolute",
+  inset: 0,
+  display: "flex",
+  flexDirection: "column",
+  overflow: "hidden",
+  visibility: $visible ? "visible" : "hidden",
+  pointerEvents: $visible ? "auto" : "none"
+})), ReviewSummaryHost = () => {
+  let api = useStorybookApi(), { state, storyInfo, banner, isInReviewMode, isSummaryVisible } = useReview(), getStoryPreviewHref = useCallback(
+    (storyId) => api.getStoryHrefs(storyId, { embed: !0, freeze: !0 }).previewHref,
+    [api]
+  ), onDismiss = useCallback(() => dismissReview(api), [api]);
+  return !isSummaryVisible && !isInReviewMode ? null : react_default.createElement(
+    SummaryHost,
+    {
+      ref: (node) => {
+        node && (node.inert = !isSummaryVisible);
+      },
+      $visible: isSummaryVisible,
+      "aria-hidden": isSummaryVisible ? void 0 : !0,
+      "data-review-summary": isSummaryVisible ? "visible" : "hidden"
+    },
+    react_default.createElement(
+      SummaryScreen,
+      {
+        state,
+        storyInfo,
+        getStoryPreviewHref,
+        banner,
+        summaryHidden: !isSummaryVisible,
+        onDismiss,
+        returnSearch: sessionStore.read(PRE_REVIEW_RETURN_KEY)
+      }
+    )
+  );
+};
+
+// src/manager/components/review/useReviewNavigationInterceptor.ts
+init_react();
+
+// src/manager/components/review/useReviewFiltersRef.ts
+init_react();
+var useReviewFiltersRef = () => {
+  let { includedStatusFilters, excludedStatusFilters, includedTagFilters, excludedTagFilters } = useStorybookState(), filtersRef = useRef({
+    includedStatusFilters: [],
+    excludedStatusFilters: [],
+    includedTagFilters: [],
+    excludedTagFilters: []
+  });
+  return filtersRef.current = {
+    includedStatusFilters: includedStatusFilters ?? [],
+    excludedStatusFilters: excludedStatusFilters ?? [],
+    includedTagFilters: includedTagFilters ?? [],
+    excludedTagFilters: excludedTagFilters ?? []
+  }, filtersRef;
+};
+
+// src/manager/components/review/useReviewNavigationInterceptor.ts
+var isReviewStoryHref = (href) => href.startsWith("?path=/story/") && href.includes(`${REVIEW_COLLECTION_QUERY_PARAM}=`), isReviewSummaryHref = (href) => href === buildReviewChangesSummaryHref(), useReviewNavigationInterceptor = () => {
+  let navigate = useNavigate(), api = useStorybookApi(), filtersRef = useReviewFiltersRef();
+  useEffect(() => {
+    let onClick = (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+        return;
+      let { target } = event, anchor = target instanceof Element ? target.closest("a") : null, href = anchor?.getAttribute("href");
+      if (!href)
+        return;
+      if (anchor?.hasAttribute(REVIEW_SUMMARY_BACK_ATTR)) {
+        event.preventDefault(), navigateOutOfReview(api, navigate, sessionStore.read(PRE_REVIEW_RETURN_KEY));
+        return;
+      }
+      if (!isReviewStoryHref(href) && !isReviewSummaryHref(href))
+        return;
+      if (event.preventDefault(), isReviewSummaryHref(href)) {
+        navigateToReviewSummary(api, navigate, filtersRef.current);
+        return;
+      }
+      let entry = parseReviewStoryHref(href);
+      entry && navigateToReviewEntry(api, navigate, entry, filtersRef.current);
+    };
+    return document.addEventListener("click", onClick), () => document.removeEventListener("click", onClick);
+  }, [api, navigate, filtersRef]);
+};
+
+// src/manager/components/review/components/ReviewNotification.tsx
+init_react();
+var ReviewNotification = () => {
+  let api = useStorybookApi(), navigate = useNavigate(), { path, customQueryParams } = useStorybookState(), { state: displayed, pendingReview: deferred } = useReview(), filtersRef = useReviewFiltersRef(), collectionIndex = readCollectionIndex(customQueryParams), openReview = useCallback(() => {
+    navigateToReviewSummary(api, navigate, filtersRef.current);
+  }, [api, navigate, filtersRef]), handleNotificationClick = useCallback(
+    (createdAt) => {
+      let { pendingReview, banner } = reviewStore.getState();
+      if (pendingReview?.createdAt === createdAt && banner?.kind === "pending-update") {
+        banner.onAccept();
+        return;
+      }
+      acceptReviewNotification(api, createdAt), openReview();
+    },
+    [api, openReview]
+  );
+  return useLayoutEffect(() => {
+    let review = pickReviewToNotify(displayed, deferred);
+    if (!review)
+      return;
+    if (shouldAutoAcceptOnRoute(path, collectionIndex, review, displayed, deferred)) {
+      acceptReviewNotification(api, review.createdAt);
+      return;
+    }
+    if (shouldSkipArrivalNotification(path, collectionIndex, review, displayed, deferred))
+      return;
+    let createdAt = review.createdAt;
+    createdAt === void 0 || !claimNotificationSlot(api, createdAt, displayed?.createdAt, deferred?.createdAt) || api.addNotification({
+      id: reviewAvailableNotificationId(createdAt),
+      content: {
+        headline: "New review available",
+        subHeadline: review.title ?? "Open the curated review to spot-check your changes"
+      },
+      icon: react_default.createElement(WandIcon, null),
+      onClick: ({ onDismiss }) => {
+        handleNotificationClick(createdAt), onDismiss();
+      }
+    });
+  }, [api, collectionIndex, handleNotificationClick, displayed, deferred, path]), null;
+};
+
+// src/manager/components/review/components/ReviewProvider.tsx
+init_react();
+
+// src/manager/components/review/review-story-info.ts
+var getStoryChangeStatus = (allStatuses, storyId) => {
+  let changeValue = Object.values(allStatuses[storyId] ?? {}).find(
+    (status) => status.typeId === CHANGE_DETECTION_STATUS_TYPE_ID
+  )?.value;
+  if (changeValue === "status-value:new")
+    return "new";
+  if (changeValue === "status-value:modified")
+    return "modified";
+}, buildNewlyAddedStoryIds = (state, allStatuses) => {
+  let ids = /* @__PURE__ */ new Set(), isChangeDetectedNew = (storyId) => Object.values(allStatuses[storyId] ?? {}).some((status) => status.value === "status-value:new");
+  for (let collection of state.collections)
+    for (let storyId of collection.storyIds)
+      isChangeDetectedNew(storyId) && ids.add(storyId);
+  return ids;
+}, resolveStoryTitleAndName = (storyId, internalIndex, index, api) => {
+  let fromInternal = internalIndex?.entries[storyId];
+  if (fromInternal?.type === "story" && fromInternal.title)
+    return { title: fromInternal.title, name: fromInternal.name };
+  let direct = index?.[storyId], entry = direct?.type === "story" ? direct : index ? api.findLeafEntry(index, storyId) : void 0;
+  return entry?.type === "story" && entry.title ? { title: entry.title, name: entry.name } : fallbackStoryInfo(storyId);
+}, buildStoryInfo = (state, index, internalIndex, api, allStatuses, newlyAddedStoryIds) => {
+  let info = {};
+  for (let collection of state.collections)
+    for (let storyId of collection.storyIds)
+      storyId in info || (info[storyId] = {
+        ...resolveStoryTitleAndName(storyId, internalIndex, index, api),
+        isNewlyAdded: newlyAddedStoryIds.has(storyId) || void 0,
+        changeStatus: getStoryChangeStatus(allStatuses, storyId)
+      });
+  return info;
+};
+
+// src/manager/components/review/components/ReviewProvider.tsx
+var reviewStatusStore = experimental_getStatusStore(REVIEW_STATUS_TYPE_ID), isDeferredReviewUpdate = (current, next) => current !== null && current.createdAt !== void 0 && next.createdAt !== void 0 && current.createdAt !== next.createdAt, isSameReviewPayload = (current, next) => current?.createdAt !== void 0 && current.createdAt === next.createdAt, ReviewProvider = ({ children }) => {
+  let api = useStorybookApi(), navigate = useNavigate(), { index, internal_index, path, viewMode, customQueryParams, location: location2 } = useStorybookState(), { state, pendingReview, isStale, isInReviewMode } = useReview(), lastPageviewKeyRef = useRef(null), collectionParam = customQueryParams?.[REVIEW_COLLECTION_QUERY_PARAM], filtersRef = useReviewFiltersRef(), syncActiveReviewStatuses = useCallback((review) => {
+    applyReviewStatuses(reviewStatusStore, collectReviewStoryIds(review));
+  }, []), emit = useChannel({
+    [REVIEW_EVENTS.DISPLAY_REVIEW]: (next) => {
+      let current = reviewStore.getState().state;
+      if (isDeferredReviewUpdate(current, next)) {
+        reviewStore.deferReview(next);
+        return;
+      }
+      if (isSameReviewPayload(current, next)) {
+        reviewStore.setStale(!!next.stale), syncActiveReviewStatuses(next);
+        return;
+      }
+      sessionStore.remove(AUTO_ENTERED_SESSION_KEY), reviewStore.displayReview(next);
+    },
+    [REVIEW_EVENTS.REVIEW_STALE]: () => {
+      reviewStore.setStale(!0);
+    },
+    [REVIEW_EVENTS.REVIEW_DISMISSED]: (returnSearch) => {
+      clearReviewStatuses(reviewStatusStore), sessionStore.remove(AUTO_ENTERED_SESSION_KEY);
+      let { state: displayed, pendingReview: deferred } = reviewStore.getState();
+      clearReviewNotificationsOnDismiss(api, displayed, deferred), reviewStore.clearReview(), navigateOutOfReview(api, navigate, returnSearch, { recordVisit: !1 });
+    }
+  });
+  useEffect(() => {
+    emit(REVIEW_EVENTS.REQUEST_REVIEW);
+  }, [emit]), useEffect(() => {
+    state && syncActiveReviewStatuses(state);
+  }, [state, syncActiveReviewStatuses]);
+  let flattenedEntries = useMemo(() => state ? buildFlattenedNavEntries(state) : [], [state]), allStatuses = experimental_useStatusStore(), newlyAddedStoryIds = useMemo(
+    () => state ? buildNewlyAddedStoryIds(state, allStatuses) : /* @__PURE__ */ new Set(),
+    [allStatuses, state]
+  ), storyInfo = useMemo(
+    () => state ? buildStoryInfo(state, index, internal_index, api, allStatuses, newlyAddedStoryIds) : {},
+    [allStatuses, api, index, internal_index, newlyAddedStoryIds, state]
+  ), collectionIndex = parseCollectionIndex(collectionParam), storyIdFromPath = parseStoryIdFromPath(path), activeEntry = state && storyIdFromPath ? resolveActiveNavEntry(flattenedEntries, storyIdFromPath, collectionIndex) : null, activeIndex = activeEntry ? resolveNavIndex(flattenedEntries, activeEntry) : -1, isSummaryVisible = isReviewSummaryPath(path), onAcceptPendingUpdate = useCallback(() => {
+    acceptPendingReview(api, navigate, filtersRef.current);
+  }, [api, navigate, filtersRef]), banner = useMemo(
+    () => pendingReview !== null ? { kind: "pending-update", onAccept: onAcceptPendingUpdate } : isStale ? { kind: "stale" } : null,
+    [pendingReview, isStale, onAcceptPendingUpdate]
+  );
+  useEffect(() => {
+    if (!state) {
+      lastPageviewKeyRef.current = null;
+      return;
+    }
+    let page = null, key = null;
+    isSummaryVisible ? (page = "summary", key = "summary") : isInReviewMode && activeEntry && (page = "detail", key = `detail:${activeEntry.storyId}`), !(!page || key === lastPageviewKeyRef.current) && (lastPageviewKeyRef.current = key, emit(REVIEW_EVENTS.PAGEVIEW, { page, reviewCreatedAt: state.createdAt }));
+  }, [state, isSummaryVisible, isInReviewMode, activeEntry, emit]), useEffect(() => {
+    !state || !isSummaryVisible || isReviewModeActive() || reviewStore.getState().isExiting || sessionStore.read(AUTO_ENTERED_SESSION_KEY) !== "1" && (sessionStore.write(AUTO_ENTERED_SESSION_KEY, "1"), enterReviewMode(api, filtersRef.current));
+  }, [state, isSummaryVisible, api, filtersRef]), useEffect(() => {
+    if (isInReviewMode || viewMode !== "story" && viewMode !== "docs")
+      return;
+    let search = location2?.search;
+    search && !isReviewReturnSearch(search) && sessionStore.write(PRE_REVIEW_RETURN_KEY, search);
+  }, [isInReviewMode, viewMode, location2?.search]);
+  let derived2 = useMemo(
+    () => ({
+      storyInfo,
+      flattenedEntries,
+      newlyAddedStoryIds,
+      activeEntry,
+      activeIndex,
+      isSummaryVisible,
+      banner
+    }),
+    [
+      storyInfo,
+      flattenedEntries,
+      newlyAddedStoryIds,
+      activeEntry,
+      activeIndex,
+      isSummaryVisible,
+      banner
+    ]
+  );
+  return useLayoutEffect(() => {
+    reviewStore.setDerived(derived2);
+  }, [derived2]), children;
+};
+
+// src/manager/components/review/components/ReviewPersistentLayer.tsx
+var ReviewNavigationLayer = () => (useReviewNavigationInterceptor(), react_default.createElement(react_default.Fragment, null, react_default.createElement(ReviewNotification, null), react_default.createElement(ReviewSummaryHost, null))), ReviewPersistentLayer = () => react_default.createElement(ReviewProvider, null, react_default.createElement(ReviewNavigationLayer, null));
 
 // src/manager/container/Panel.tsx
 init_react();
 
-// global-externals:storybook/internal/types
-var types_default = __STORYBOOK_TYPES__, { Addon_TypesEnum, CoreWebpackCompiler, Feature, SupportedBuilder, SupportedFramework, SupportedLanguage, SupportedRenderer } = __STORYBOOK_TYPES__;
-
 // src/core-events/index.ts
-var events = /* @__PURE__ */ ((events2) => (events2.CHANNEL_WS_DISCONNECT = "channelWSDisconnect", events2.CHANNEL_CREATED = "channelCreated", events2.CONFIG_ERROR = "configError", events2.STORY_INDEX_INVALIDATED = "storyIndexInvalidated", events2.STORY_SPECIFIED = "storySpecified", events2.SET_CONFIG = "setConfig", events2.SET_STORIES = "setStories", events2.SET_INDEX = "setIndex", events2.SET_CURRENT_STORY = "setCurrentStory", events2.CURRENT_STORY_WAS_SET = "currentStoryWasSet", events2.FORCE_RE_RENDER = "forceReRender", events2.FORCE_REMOUNT = "forceRemount", events2.PRELOAD_ENTRIES = "preloadStories", events2.STORY_PREPARED = "storyPrepared", events2.DOCS_PREPARED = "docsPrepared", events2.STORY_CHANGED = "storyChanged", events2.STORY_UNCHANGED = "storyUnchanged", events2.STORY_RENDERED = "storyRendered", events2.STORY_FINISHED = "storyFinished", events2.STORY_MISSING = "storyMissing", events2.STORY_ERRORED = "storyErrored", events2.STORY_THREW_EXCEPTION = "storyThrewException", events2.STORY_RENDER_PHASE_CHANGED = "storyRenderPhaseChanged", events2.STORY_HOT_UPDATED = "storyHotUpdated", events2.PLAY_FUNCTION_THREW_EXCEPTION = "playFunctionThrewException", events2.UNHANDLED_ERRORS_WHILE_PLAYING = "unhandledErrorsWhilePlaying", events2.UPDATE_STORY_ARGS = "updateStoryArgs", events2.STORY_ARGS_UPDATED = "storyArgsUpdated", events2.RESET_STORY_ARGS = "resetStoryArgs", events2.SET_FILTER = "setFilter", events2.SET_GLOBALS = "setGlobals", events2.UPDATE_GLOBALS = "updateGlobals", events2.GLOBALS_UPDATED = "globalsUpdated", events2.REGISTER_SUBSCRIPTION = "registerSubscription", events2.PREVIEW_INITIALIZED = "previewInitialized", events2.PREVIEW_KEYDOWN = "previewKeydown", events2.PREVIEW_BUILDER_PROGRESS = "preview_builder_progress", events2.SELECT_STORY = "selectStory", events2.STORIES_COLLAPSE_ALL = "storiesCollapseAll", events2.STORIES_EXPAND_ALL = "storiesExpandAll", events2.DOCS_RENDERED = "docsRendered", events2.SHARED_STATE_CHANGED = "sharedStateChanged", events2.SHARED_STATE_SET = "sharedStateSet", events2.NAVIGATE_URL = "navigateUrl", events2.UPDATE_QUERY_PARAMS = "updateQueryParams", events2.REQUEST_WHATS_NEW_DATA = "requestWhatsNewData", events2.RESULT_WHATS_NEW_DATA = "resultWhatsNewData", events2.SET_WHATS_NEW_CACHE = "setWhatsNewCache", events2.TOGGLE_WHATS_NEW_NOTIFICATIONS = "toggleWhatsNewNotifications", events2.TELEMETRY_ERROR = "telemetryError", events2.FILE_COMPONENT_SEARCH_REQUEST = "fileComponentSearchRequest", events2.FILE_COMPONENT_SEARCH_RESPONSE = "fileComponentSearchResponse", events2.SAVE_STORY_REQUEST = "saveStoryRequest", events2.SAVE_STORY_RESPONSE = "saveStoryResponse", events2.ARGTYPES_INFO_REQUEST = "argtypesInfoRequest", events2.ARGTYPES_INFO_RESPONSE = "argtypesInfoResponse", events2.CREATE_NEW_STORYFILE_REQUEST = "createNewStoryfileRequest", events2.CREATE_NEW_STORYFILE_RESPONSE = "createNewStoryfileResponse", events2.GHOST_STORIES_REQUEST = "ghostStoriesRequest", events2.GHOST_STORIES_RESPONSE = "ghostStoriesResponse", events2.OPEN_IN_EDITOR_REQUEST = "openInEditorRequest", events2.OPEN_IN_EDITOR_RESPONSE = "openInEditorResponse", events2.MANAGER_INERT_ATTRIBUTE_CHANGED = "managerInertAttributeChanged", events2.SHARE_STORY_LINK = "shareStoryLink", events2.SHARE_ISOLATE_MODE = "shareIsolateMode", events2.SHARE_POPOVER_OPENED = "sharePopoverOpened", events2))(events || {});
+var events = /* @__PURE__ */ ((events2) => (events2.CHANNEL_WS_DISCONNECT = "channelWSDisconnect", events2.CHANNEL_CREATED = "channelCreated", events2.CONFIG_ERROR = "configError", events2.STORY_INDEX_INVALIDATED = "storyIndexInvalidated", events2.STORY_SPECIFIED = "storySpecified", events2.SET_CONFIG = "setConfig", events2.SET_STORIES = "setStories", events2.SET_INDEX = "setIndex", events2.SET_CURRENT_STORY = "setCurrentStory", events2.CURRENT_STORY_WAS_SET = "currentStoryWasSet", events2.FORCE_RE_RENDER = "forceReRender", events2.FORCE_REMOUNT = "forceRemount", events2.PRELOAD_ENTRIES = "preloadStories", events2.STORY_PREPARED = "storyPrepared", events2.DOCS_PREPARED = "docsPrepared", events2.STORY_CHANGED = "storyChanged", events2.STORY_UNCHANGED = "storyUnchanged", events2.STORY_RENDERED = "storyRendered", events2.STORY_FINISHED = "storyFinished", events2.STORY_MISSING = "storyMissing", events2.STORY_ERRORED = "storyErrored", events2.STORY_THREW_EXCEPTION = "storyThrewException", events2.STORY_RENDER_PHASE_CHANGED = "storyRenderPhaseChanged", events2.STORY_HOT_UPDATED = "storyHotUpdated", events2.PLAY_FUNCTION_THREW_EXCEPTION = "playFunctionThrewException", events2.UNHANDLED_ERRORS_WHILE_PLAYING = "unhandledErrorsWhilePlaying", events2.UPDATE_STORY_ARGS = "updateStoryArgs", events2.STORY_ARGS_UPDATED = "storyArgsUpdated", events2.RESET_STORY_ARGS = "resetStoryArgs", events2.SET_FILTER = "setFilter", events2.SET_GLOBALS = "setGlobals", events2.UPDATE_GLOBALS = "updateGlobals", events2.GLOBALS_UPDATED = "globalsUpdated", events2.REGISTER_SUBSCRIPTION = "registerSubscription", events2.PREVIEW_INITIALIZED = "previewInitialized", events2.PREVIEW_KEYDOWN = "previewKeydown", events2.PREVIEW_BUILDER_PROGRESS = "preview_builder_progress", events2.SELECT_STORY = "selectStory", events2.STORIES_COLLAPSE_ALL = "storiesCollapseAll", events2.STORIES_EXPAND_ALL = "storiesExpandAll", events2.DOCS_RENDERED = "docsRendered", events2.SHARED_STATE_CHANGED = "sharedStateChanged", events2.SHARED_STATE_SET = "sharedStateSet", events2.NAVIGATE_URL = "navigateUrl", events2.UPDATE_QUERY_PARAMS = "updateQueryParams", events2.REQUEST_WHATS_NEW_DATA = "requestWhatsNewData", events2.RESULT_WHATS_NEW_DATA = "resultWhatsNewData", events2.SET_WHATS_NEW_CACHE = "setWhatsNewCache", events2.TOGGLE_WHATS_NEW_NOTIFICATIONS = "toggleWhatsNewNotifications", events2.TELEMETRY_ERROR = "telemetryError", events2.FILE_COMPONENT_SEARCH_REQUEST = "fileComponentSearchRequest", events2.FILE_COMPONENT_SEARCH_RESPONSE = "fileComponentSearchResponse", events2.SAVE_STORY_REQUEST = "saveStoryRequest", events2.SAVE_STORY_RESPONSE = "saveStoryResponse", events2.ARGTYPES_INFO_REQUEST = "argtypesInfoRequest", events2.ARGTYPES_INFO_RESPONSE = "argtypesInfoResponse", events2.CREATE_NEW_STORYFILE_REQUEST = "createNewStoryfileRequest", events2.CREATE_NEW_STORYFILE_RESPONSE = "createNewStoryfileResponse", events2.GHOST_STORIES_REQUEST = "ghostStoriesRequest", events2.GHOST_STORIES_RESPONSE = "ghostStoriesResponse", events2.AI_SETUP_ANALYTICS_RESPONSE = "aiSetupAnalyticsResponse", events2.AI_SETUP_ANALYTICS_REQUEST = "aiSetupAnalyticsRequest", events2.OPEN_IN_EDITOR_REQUEST = "openInEditorRequest", events2.OPEN_IN_EDITOR_RESPONSE = "openInEditorResponse", events2.MANAGER_INERT_ATTRIBUTE_CHANGED = "managerInertAttributeChanged", events2.SHARE_ISOLATE_MODE = "shareIsolateMode", events2.AI_PROMPT_NUDGE = "aiPromptNudge", events2.SIDEBAR_FILTER_CHANGED = "sidebarFilterChanged", events2))(events || {});
 var {
   CHANNEL_WS_DISCONNECT: CHANNEL_WS_DISCONNECT2,
   CHANNEL_CREATED: CHANNEL_CREATED2,
@@ -10275,31 +11729,15 @@ var {
   ARGTYPES_INFO_RESPONSE: ARGTYPES_INFO_RESPONSE2,
   GHOST_STORIES_REQUEST: GHOST_STORIES_REQUEST2,
   GHOST_STORIES_RESPONSE: GHOST_STORIES_RESPONSE2,
+  AI_SETUP_ANALYTICS_RESPONSE: AI_SETUP_ANALYTICS_RESPONSE2,
+  AI_SETUP_ANALYTICS_REQUEST: AI_SETUP_ANALYTICS_REQUEST2,
   OPEN_IN_EDITOR_REQUEST: OPEN_IN_EDITOR_REQUEST2,
   OPEN_IN_EDITOR_RESPONSE: OPEN_IN_EDITOR_RESPONSE2,
   MANAGER_INERT_ATTRIBUTE_CHANGED: MANAGER_INERT_ATTRIBUTE_CHANGED2,
-  SHARE_STORY_LINK: SHARE_STORY_LINK2,
   SHARE_ISOLATE_MODE: SHARE_ISOLATE_MODE2,
-  SHARE_POPOVER_OPENED: SHARE_POPOVER_OPENED2
+  AI_PROMPT_NUDGE: AI_PROMPT_NUDGE2,
+  SIDEBAR_FILTER_CHANGED: SIDEBAR_FILTER_CHANGED2
 } = events;
-
-// ../../node_modules/es-toolkit/dist/string/words.mjs
-var CASE_SPLIT_PATTERN = new RegExp("\\p{Lu}?\\p{Ll}+|[0-9]+|\\p{Lu}+(?!\\p{Ll})|\\p{Emoji_Presentation}|\\p{Extended_Pictographic}|\\p{L}+", "gu");
-
-// global-externals:storybook/theming/create
-var create_default = __STORYBOOK_THEMING_CREATE__, { create: create3, themes: themes2 } = __STORYBOOK_THEMING_CREATE__;
-
-// src/manager-api/modules/layout.ts
-var { document: document2 } = scope;
-var focusableUIElements = {
-  addonPanel: "storybook-panel-region",
-  storySearchField: "storybook-explorer-searchfield",
-  storyListMenu: "storybook-explorer-menu",
-  storyPanelRoot: "storybook-panel-root",
-  showAddonPanel: "storybook-show-addon-panel",
-  sidebarRegion: "storybook-sidebar-region",
-  showSidebar: "storybook-show-sidebar"
-};
 
 // src/manager/components/panel/Panel.tsx
 init_react();
@@ -10384,7 +11822,7 @@ var PreRenderAddons = ({ panels }) => Object.entries(panels).map(([k2, v2]) => r
   return react_default.createElement(Aside, { ref: asideRef, id: focusableUIElements.addonPanel, ...landmarkProps }, react_default.createElement("h2", { id: "storybook-panel-heading", className: "sb-sr-only" }, "Addon panel"), react_default.createElement(
     StatelessTabsView,
     {
-      id: "storybook-panel-root",
+      id: focusableUIElements.storyPanelRoot,
       showToolsWhenEmpty: !0,
       emptyState,
       selected: selectedPanel ?? void 0,
@@ -10453,6 +11891,154 @@ var import_memoizerific2 = __toESM(require_memoizerific(), 1);
 // src/manager/components/preview/Preview.tsx
 init_react();
 
+// src/manager/components/review/components/ReviewToolbarHeader.tsx
+init_react();
+
+// src/manager/components/review/components/ReviewCollectionPicker.tsx
+init_react();
+var derivePickerLabel = (storyId, info) => {
+  if (info)
+    return { component: info.title.split("/").pop() ?? info.title, story: info.name };
+  let [componentId, ...rest2] = storyId.split("--");
+  return {
+    component: prettifyComponentId(componentId),
+    story: prettifyComponentId(rest2.join("--")) || "Story"
+  };
+}, ReviewCollectionPicker = ({
+  entries,
+  activeEntry,
+  storyInfo,
+  children
+}) => {
+  let api = useStorybookApi(), navigate = useNavigate(), filtersRef = useReviewFiltersRef(), options2 = entries.map((entry, index) => {
+    let { component, story } = derivePickerLabel(entry.storyId, storyInfo[entry.storyId]);
+    return { value: index, title: component, description: story };
+  }), activeValue = resolveNavIndex(entries, activeEntry), [nextStory, setNextStory] = react_default.useState(void 0);
+  return useEffect(() => {
+    nextStory && navigateToReviewEntry(api, navigate, nextStory, filtersRef.current);
+  }, [nextStory, api, navigate, filtersRef]), react_default.createElement(
+    Select,
+    {
+      ariaLabel: "Select story",
+      size: "small",
+      padding: "small",
+      options: options2,
+      defaultOptions: activeValue >= 0 ? activeValue : void 0,
+      showSelectedOptionTitle: !1,
+      onSelect: (value) => {
+        let entry = typeof value == "number" ? entries[value] : void 0;
+        setNextStory(entry);
+      }
+    },
+    children
+  );
+};
+
+// src/manager/components/review/components/ReviewToolbarHeader.tsx
+var Root2 = styled.div(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  flexShrink: 0,
+  width: "100%",
+  background: theme.background.content,
+  zIndex: 4
+})), HeaderWrap = styled.div({
+  position: "relative",
+  flexShrink: 0
+}), ProgressBar = styled.div(({ theme }) => ({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  zIndex: 1,
+  width: "100%",
+  height: 3,
+  overflow: "hidden",
+  background: theme.background.app
+})), ProgressFill = styled.div(({ theme }) => ({
+  position: "absolute",
+  insetBlock: 0,
+  left: 0,
+  background: theme.color.secondary,
+  transition: "width 200ms ease"
+})), SubtitleStrong = styled.span(({ theme }) => ({
+  fontWeight: 700,
+  color: theme.color.defaultText
+})), SubtitleSeparator = styled.span(({ theme }) => ({
+  color: theme.color.defaultText
+})), SubtitleText = styled.span(({ theme }) => ({
+  color: theme.color.defaultText
+})), Counter = styled.span(({ theme }) => ({
+  fontVariantNumeric: "tabular-nums",
+  fontFamily: theme.typography.fonts.mono,
+  fontWeight: theme.typography.weight.regular
+})), NavButton = ({
+  entry,
+  ariaLabel,
+  icon
+}) => entry ? react_default.createElement(Button, { variant: "ghost", size: "small", padding: "small", ariaLabel, asChild: !0 }, react_default.createElement("a", { href: buildReviewStoryHref(entry) }, icon)) : react_default.createElement(Button, { variant: "ghost", size: "small", padding: "small", ariaLabel, disabled: !0 }, icon), componentName = (componentTitle) => componentTitle.split("/").map((part) => part.trim()).filter(Boolean).pop() ?? componentTitle, ReviewToolbarHeader = () => {
+  let {
+    state,
+    banner,
+    storyInfo,
+    flattenedEntries,
+    newlyAddedStoryIds,
+    activeEntry,
+    activeIndex
+  } = useReview();
+  if (!state || !activeEntry || activeIndex < 0)
+    return null;
+  let collectionTitle = state.collections[activeEntry.collectionIndex]?.title ?? "Review", totalStories = flattenedEntries.length, hasPrevious = activeIndex > 0, hasNext = activeIndex < totalStories - 1, previousEntry = hasPrevious ? flattenedEntries[activeIndex - 1] : null, nextEntry = hasNext ? flattenedEntries[activeIndex + 1] : null, progress = totalStories > 1 ? activeIndex / (totalStories - 1) : 0, currentStoryInfo = storyInfo[activeEntry.storyId], isNewlyAdded = newlyAddedStoryIds.has(activeEntry.storyId), metadataSubtitle = currentStoryInfo?.title && currentStoryInfo.name ? react_default.createElement(react_default.Fragment, null, react_default.createElement(SubtitleStrong, null, componentName(currentStoryInfo.title)), react_default.createElement(SubtitleSeparator, null, "/"), react_default.createElement(SubtitleText, null, currentStoryInfo.name)) : null, subtitle = metadataSubtitle || isNewlyAdded ? react_default.createElement(react_default.Fragment, null, metadataSubtitle, isNewlyAdded ? react_default.createElement(Badge, { status: "positive" }, "New") : null) : void 0;
+  return react_default.createElement(Root2, { "data-testid": "review-toolbar-header" }, banner && react_default.createElement(AttentionBanner, { ...banner }), react_default.createElement(HeaderWrap, null, react_default.createElement(
+    ProgressBar,
+    {
+      role: "progressbar",
+      "aria-label": "Review progress",
+      "aria-valuenow": activeIndex + 1,
+      "aria-valuemin": 1,
+      "aria-valuemax": totalStories,
+      "data-testid": "review-progress"
+    },
+    react_default.createElement(
+      ProgressFill,
+      {
+        "data-testid": "review-progress-fill",
+        style: { width: `${progress * 100}%` }
+      }
+    )
+  ), react_default.createElement(
+    ReviewHeader,
+    {
+      variant: "toolbar",
+      leading: react_default.createElement(Button, { variant: "ghost", size: "small", padding: "small", ariaLabel: "Back to review", asChild: !0 }, react_default.createElement("a", { href: buildReviewChangesSummaryHref() }, react_default.createElement(ChevronSmallLeftIcon, null), react_default.createElement(WandIcon, null))),
+      title: collectionTitle,
+      subtitle,
+      actions: react_default.createElement(react_default.Fragment, null, react_default.createElement(
+        ReviewCollectionPicker,
+        {
+          entries: flattenedEntries,
+          activeEntry,
+          storyInfo
+        },
+        react_default.createElement(Counter, null, activeIndex + 1, "/", totalStories)
+      ), react_default.createElement(
+        NavButton,
+        {
+          entry: previousEntry,
+          ariaLabel: "Previous story",
+          icon: react_default.createElement(ChevronSmallLeftIcon, null)
+        }
+      ), react_default.createElement(
+        NavButton,
+        {
+          entry: nextEntry,
+          ariaLabel: "Next story",
+          icon: react_default.createElement(ChevronSmallRightIcon, null)
+        }
+      ))
+    }
+  )));
+};
+
 // src/manager/components/preview/FramesRenderer.tsx
 init_react();
 
@@ -10461,9 +12047,6 @@ init_react();
 
 // src/viewport/useViewport.ts
 init_react();
-
-// src/viewport/constants.ts
-var ADDON_ID = "storybook/viewport", PARAM_KEY = "viewport", PANEL_ID = `${ADDON_ID}/panel`, TOOL_ID = `${ADDON_ID}/tool`;
 
 // src/viewport/defaults.ts
 var MINIMAL_VIEWPORTS = {
@@ -10501,18 +12084,23 @@ var MINIMAL_VIEWPORTS = {
   }
 };
 
-// src/viewport/useViewport.ts
-var URL_VALUE_PATTERN = /^([0-9]{1,4})([a-z]{0,4})-([0-9]{1,4})([a-z]{0,4})$/, VIEWPORT_MIN_WIDTH = 40, VIEWPORT_MIN_HEIGHT = 40, cycle = (viewports, current, direction = 1) => {
-  let keys = Object.keys(viewports), nextIndex = (current ? keys.indexOf(current) : -1) + direction;
-  return nextIndex < 0 ? keys[keys.length - 1] : nextIndex >= keys.length ? keys[0] : keys[nextIndex];
-}, normalizeGlobal = (value, defaultIsRotated) => typeof value == "string" ? { value, isRotated: defaultIsRotated } : { value: value?.value, isRotated: value?.isRotated ?? defaultIsRotated }, parseGlobals = (globals, storyGlobals, userGlobals, options2, lastSelectedOption, disable, viewMode) => {
+// src/viewport/resolveViewport.ts
+var VIEWPORT_MIN_WIDTH = 40, VIEWPORT_MIN_HEIGHT = 40, URL_VALUE_PATTERN = /^([0-9]{1,4})([a-z]{0,4})-([0-9]{1,4})([a-z]{0,4})$/, normalizeGlobal = (value, defaultIsRotated) => typeof value == "string" ? { value, isRotated: defaultIsRotated } : { value: value?.value, isRotated: value?.isRotated ?? defaultIsRotated }, resolveViewport = ({
+  globals,
+  storyGlobals,
+  userGlobals,
+  options: options2,
+  lastSelectedOption,
+  disable = !1,
+  viewMode
+}) => {
   if (viewMode !== "story")
     return {
       name: "Responsive",
       type: "desktop",
       width: "100%",
       height: "100%",
-      value: "100pct-100pct",
+      value: RESPONSIVE_VIEWPORT_VALUE,
       option: void 0,
       isCustom: !1,
       isDefault: !0,
@@ -10555,24 +12143,39 @@ var URL_VALUE_PATTERN = /^([0-9]{1,4})([a-z]{0,4})-([0-9]{1,4})([a-z]{0,4})$/, V
     type: "desktop",
     width: "100%",
     height: "100%",
-    value: "100pct-100pct",
+    value: RESPONSIVE_VIEWPORT_VALUE,
     option: void 0,
     isCustom: !1,
     isDefault: !0,
     isLocked,
     isRotated: !1
   };
-}, useViewport = () => {
-  let api = useStorybookApi(), { viewMode } = api.getUrlState(), lastSelectedOption = useRef(), parameter = useParameter(PARAM_KEY), [globals, updateGlobals, storyGlobals, userGlobals] = useGlobals(), { options: options2 = MINIMAL_VIEWPORTS, disable = !1 } = parameter || {}, { name, type, width, height, value, option, isCustom, isDefault, isLocked, isRotated } = parseGlobals(
+};
+
+// src/viewport/useViewport.ts
+var cycle = (viewports, current, direction = 1) => {
+  let keys = Object.keys(viewports), nextIndex = (current ? keys.indexOf(current) : -1) + direction;
+  return nextIndex < 0 ? keys[keys.length - 1] : nextIndex >= keys.length ? keys[0] : keys[nextIndex];
+}, normalizeGlobal2 = (value, defaultIsRotated) => typeof value == "string" ? { value, isRotated: defaultIsRotated } : { value: value?.value, isRotated: value?.isRotated ?? defaultIsRotated }, useViewport = () => {
+  let api = useStorybookApi(), { viewMode } = api.getUrlState(), lastSelectedOption = useRef(), parameter = useParameter(PARAM_KEY), [globals, updateGlobals, storyGlobals, userGlobals] = useGlobals();
+  useEffect(() => {
+    if (parameter && "defaultViewport" in parameter) {
+      let value2 = parameter.defaultViewport;
+      deprecate(
+        `The \`viewport.defaultViewport\` parameter was removed in Storybook 10. Use \`globals: { viewport: ${JSON.stringify(value2)} }\` instead, or run \`npx storybook automigrate\` to update your code automatically.`
+      );
+    }
+  }, [parameter]);
+  let { options: options2 = MINIMAL_VIEWPORTS, disable = !1 } = parameter || {}, { name, type, width, height, value, option, isCustom, isDefault, isLocked, isRotated } = resolveViewport({
     globals,
     storyGlobals,
     userGlobals,
-    options2,
-    lastSelectedOption.current,
+    options: options2,
+    lastSelectedOption: lastSelectedOption.current,
     disable,
     viewMode
-  ), update2 = useCallback(
-    (input) => updateGlobals({ [PARAM_KEY]: normalizeGlobal(input, !1) }),
+  }), update2 = useCallback(
+    (input) => updateGlobals({ [PARAM_KEY]: normalizeGlobal2(input, !1) }),
     [updateGlobals]
   ), resize = useCallback(
     (width2, height2) => {
@@ -11109,7 +12712,7 @@ var getActive = (refId, refs) => refId && refs[refId] ? `storybook-ref-${refId}`
   }
 })), whenSidebarIsVisible = ({ api, state }) => ({
   isFullscreen: api.getIsFullscreen(),
-  isNavShown: api.getIsNavShown(),
+  isNavShown: api.getNavAvailability() === "shown",
   selectedStoryId: state.storyId
 }), styles = {
   '#root [data-is-storybook="false"]': {
@@ -11130,7 +12733,7 @@ var getActive = (refId, refs) => refId && refs[refId] ? `storybook-ref-${refId}`
   let version3 = refs[refId]?.version, active = getActive(refId, refs), { current: frames } = useRef({}), refsToLoad = Object.values(refs).filter((ref) => ref.type === "auto-inject" || ref.id === refId, {});
   return frames["storybook-preview-iframe"] || (frames["storybook-preview-iframe"] = api.getStoryHrefs(storyId, {
     queryParams: { ...queryParams, ...version3 && { version: version3 } },
-    refId,
+    refId: void 0,
     viewMode
   }).previewHref), refsToLoad.forEach((ref) => {
     let id = `storybook-ref-${ref.id}`;
@@ -11149,7 +12752,8 @@ var fullScreenMapper = ({ api, state }) => ({
   isFullscreen: api.getIsFullscreen(),
   shortcut: api.getShortcutKeys().fullScreen,
   hasPanel: Object.keys(api.getElements(Addon_TypesEnum.PANEL)).length > 0,
-  singleStory: state.singleStory
+  singleStory: state.singleStory,
+  isNavUnavailable: api.getNavAvailability() === "unavailable"
 }), fullScreenTool = {
   title: "fullscreen",
   id: "fullscreen",
@@ -11158,7 +12762,7 @@ var fullScreenMapper = ({ api, state }) => ({
   match: (p2) => ["story", "docs"].includes(p2.viewMode),
   render: () => {
     let { isMobile: isMobile2 } = useLayout();
-    return isMobile2 ? null : react_default.createElement(Consumer, { filter: fullScreenMapper }, ({ toggle, isFullscreen, shortcut, hasPanel, singleStory }) => (!singleStory || singleStory && hasPanel) && react_default.createElement(
+    return isMobile2 ? null : react_default.createElement(Consumer, { filter: fullScreenMapper }, ({ toggle, isFullscreen, shortcut, hasPanel, singleStory, isNavUnavailable }) => !isNavUnavailable && (!singleStory || singleStory && hasPanel) && react_default.createElement(
       Button,
       {
         key: "full",
@@ -11260,13 +12864,13 @@ var PreviewContainer = styled.div({
   width: "100%",
   height: "100%",
   overflow: "hidden"
-}), FrameWrap = styled.main({
+}), FrameWrap = styled.main(({ theme }) => ({
   overflow: "auto",
   width: "100%",
   zIndex: 3,
-  background: "transparent",
+  background: theme.background.app,
   flex: 1
-}), CanvasWrap = styled.div(
+})), CanvasWrap = styled.div(
   {
     alignContent: "center",
     alignItems: "center",
@@ -11276,8 +12880,8 @@ var PreviewContainer = styled.div({
     gridTemplateColumns: "100%",
     gridTemplateRows: "100%",
     position: "relative",
-    minWidth: "100%",
-    minHeight: "100%"
+    width: "100%",
+    height: "100%"
   },
   ({ show }) => ({ display: show ? "grid" : "none" })
 ), UnstyledLink = styled(Link2)({
@@ -11353,7 +12957,7 @@ var Wrapper2 = styled.span(({ theme }) => ({
   "& + &": {
     marginLeft: 6
   }
-})), Shortcut = ({ keys }) => react_default.createElement(Wrapper2, null, keys.map((key) => react_default.createElement(Key, { key }, shortcutToHumanString([key]))));
+})), Shortcut = ({ keys }) => react_default.createElement(Wrapper2, null, (keys ?? []).map((key) => react_default.createElement(Key, { key }, shortcutToHumanString([key]))));
 
 // src/manager/components/preview/tools/zoom.tsx
 var ZOOM_LEVELS = [0.25, 0.5, 0.75, 0.9, 1, 1.1, 1.25, 1.5, 2, 3, 4, 8], INITIAL_ZOOM_LEVEL = 1, ZoomButton = styled(ToggleButton)({
@@ -11522,7 +13126,7 @@ var canvasMapper = ({ state, api }) => ({
   route: ({ storyId, refId }) => refId ? `/story/${refId}_${storyId}` : `/story/${storyId}`,
   match: ({ viewMode }) => !!(viewMode && viewMode.match(/^(story|docs)$/)),
   render: () => null
-}), Preview = react_default.memo(function(props) {
+}), Preview2 = react_default.memo(function(props) {
   let {
     api,
     id: previewId,
@@ -11537,7 +13141,9 @@ var canvasMapper = ({ state, api }) => ({
     toolsExtra,
     tabs,
     wrappers,
-    tabId
+    tabId,
+    path,
+    queryParams
   } = props, tabState = useTabsState({
     selected: tabId ?? "canvas",
     onSelectionChange: (key) => {
@@ -11551,7 +13157,7 @@ var canvasMapper = ({ state, api }) => ({
     }))
   });
   tabs.length > 1 && deprecate("Addon tabs are deprecated and will be removed in Storybook 11.");
-  let tabContent = tabs.find((tab) => tab.id === tabId)?.render, shouldScale = viewMode === "story", { showToolbar } = options2, customisedShowToolbar = api.getShowToolbarWithCustomisations(showToolbar), previousStoryId = useRef(storyId);
+  let tabContent = tabs.find((tab) => tab.id === tabId)?.render, shouldScale = viewMode === "story", { showToolbar } = options2, customisedShowToolbar = api.getShowToolbarWithCustomisations(showToolbar), isReviewCollectionStory = isReviewFeatureEnabled(scope.FEATURES) && isReviewCollectionStoryRoute(path, queryParams), previousStoryId = useRef(storyId);
   useEffect(() => {
     if (entry && viewMode) {
       if (storyId === previousStoryId.current)
@@ -11570,7 +13176,7 @@ var canvasMapper = ({ state, api }) => ({
     { "aria-labelledby": "main-preview-heading", role: "main" },
     mainRef
   );
-  return react_default.createElement(Fragment, null, previewId === "main" && react_default.createElement(W, { key: "description" }, react_default.createElement("title", null, description)), react_default.createElement(ZoomProvider, { shouldScale }, react_default.createElement(PreviewContainer, null, react_default.createElement(
+  return react_default.createElement(Fragment, null, previewId === "main" && react_default.createElement(W, { key: "description" }, react_default.createElement("title", null, description)), react_default.createElement(ZoomProvider, { shouldScale }, react_default.createElement(PreviewContainer, null, customisedShowToolbar && isReviewCollectionStory ? react_default.createElement(ReviewToolbarHeader, null) : null, react_default.createElement(
     ToolbarComp,
     {
       key: "tools",
@@ -11651,48 +13257,44 @@ var SHOW_ADDON_PANEL_BUTTON_ID = "storybook-show-addon-panel", menuMapper = ({ a
   isVisible: api.getIsPanelShown(),
   singleStory: state.singleStory,
   panelPosition: state.layout.panelPosition,
-  showPanel: async (animateLandmark) => {
-    api.togglePanel(!0), await api.focusOnUIElement(focusableUIElements.addonPanel, {
-      forceFocus: !0,
+  showPanel: async (forceFocus) => {
+    api.togglePanel(!0), api.focusOnUIElement(focusableUIElements.addonPanel, {
+      forceFocus,
       poll: !0
-    }) && animateLandmark?.(document.getElementById(focusableUIElements.addonPanel));
+    });
   }
 }), addonsTool = {
   title: "addons",
   id: "addons",
   type: types.TOOL,
   match: ({ viewMode, tabId }) => viewMode === "story" && !tabId,
-  render: () => {
-    let animateLandmark = useRegionFocusAnimation();
-    return react_default.createElement(Consumer, { filter: menuMapper }, ({ isVisible, showPanel, singleStory, panelPosition }) => !singleStory && !isVisible && react_default.createElement(react_default.Fragment, null, react_default.createElement(
-      Button,
-      {
-        padding: "small",
-        variant: "ghost",
-        ariaLabel: "Show addon panel",
-        id: SHOW_ADDON_PANEL_BUTTON_ID,
-        key: "addons",
-        onClick: () => showPanel(),
-        onKeyDown: (e2) => {
-          (e2.key === "Enter" || e2.key === " ") && (e2.preventDefault(), showPanel(animateLandmark));
-        }
-      },
-      panelPosition === "bottom" ? react_default.createElement(BottomBarIcon, null) : react_default.createElement(SidebarAltIcon, null)
-    )));
-  }
+  render: () => react_default.createElement(Consumer, { filter: menuMapper }, ({ isVisible, showPanel, singleStory, panelPosition }) => !singleStory && !isVisible && react_default.createElement(react_default.Fragment, null, react_default.createElement(
+    Button,
+    {
+      padding: "small",
+      variant: "ghost",
+      ariaLabel: "Show addon panel",
+      id: SHOW_ADDON_PANEL_BUTTON_ID,
+      key: "addons",
+      onClick: () => showPanel(!1),
+      onKeyDown: (e2) => {
+        (e2.key === "Enter" || e2.key === " ") && (e2.preventDefault(), showPanel(!0));
+      }
+    },
+    panelPosition === "bottom" ? react_default.createElement(BottomBarIcon, null) : react_default.createElement(SidebarAltIcon, null)
+  )))
 };
 
 // src/manager/components/preview/tools/menu.tsx
 init_react();
 var menuMapper2 = ({ api, state }) => ({
-  isVisible: api.getIsNavShown(),
+  navAvailability: api.getNavAvailability(),
   singleStory: state.singleStory,
-  viewMode: state.viewMode,
-  showSidebar: async (animateLandmark) => {
-    api.toggleNav(!0), await api.focusOnUIElement(focusableUIElements.sidebarRegion, {
-      forceFocus: !0,
+  showSidebar: async (forceFocus) => {
+    api.toggleNav(!0), api.focusOnUIElement(focusableUIElements.sidebarRegion, {
+      forceFocus,
       poll: !0
-    }) && animateLandmark?.(document.getElementById(focusableUIElements.sidebarRegion));
+    });
   }
 }), menuTool = {
   title: "menu",
@@ -11700,24 +13302,21 @@ var menuMapper2 = ({ api, state }) => ({
   type: types.TOOL,
   // @ts-expect-error (non strict)
   match: ({ viewMode }) => ["story", "docs"].includes(viewMode),
-  render: () => {
-    let animateLandmark = useRegionFocusAnimation();
-    return react_default.createElement(Consumer, { filter: menuMapper2 }, ({ isVisible, showSidebar, singleStory }) => !singleStory && !isVisible && react_default.createElement(react_default.Fragment, null, react_default.createElement(
-      Button,
-      {
-        padding: "small",
-        variant: "ghost",
-        ariaLabel: "Show sidebar",
-        id: focusableUIElements.showSidebar,
-        key: "menu",
-        onClick: () => showSidebar(),
-        onKeyDown: (e2) => {
-          (e2.key === "Enter" || e2.key === " ") && (e2.preventDefault(), showSidebar(animateLandmark));
-        }
-      },
-      react_default.createElement(MenuIcon, null)
-    ), react_default.createElement(Separator, null)));
-  }
+  render: () => react_default.createElement(Consumer, { filter: menuMapper2 }, ({ navAvailability, showSidebar, singleStory }) => !singleStory && navAvailability === "hidden" && react_default.createElement(react_default.Fragment, null, react_default.createElement(
+    Button,
+    {
+      padding: "small",
+      variant: "ghost",
+      ariaLabel: "Show sidebar",
+      id: focusableUIElements.showSidebar,
+      key: "menu",
+      onClick: () => showSidebar(!1),
+      onKeyDown: (e2) => {
+        (e2.key === "Enter" || e2.key === " ") && (e2.preventDefault(), showSidebar(!0));
+      }
+    },
+    react_default.createElement(MenuIcon, null)
+  ), react_default.createElement(Separator, null)))
 };
 
 // src/manager/components/preview/tools/open-in-editor.tsx
@@ -11797,7 +13396,6 @@ var StyledAnimatedButton = styled(Button)(({ theme, animating, disabled }) => ({
 
 // src/manager/components/preview/tools/share.tsx
 init_react();
-var import_copy_to_clipboard = __toESM(require_copy_to_clipboard(), 1);
 
 // ../../node_modules/qrcode.react/lib/esm/index.js
 init_react();
@@ -12165,8 +13763,8 @@ var qrcodegen;
     finderPenaltyCountPatterns(runHistory) {
       let n3 = runHistory[1];
       assert(n3 <= this.size * 3);
-      let core = n3 > 0 && runHistory[2] == n3 && runHistory[3] == n3 * 3 && runHistory[4] == n3 && runHistory[5] == n3;
-      return (core && runHistory[0] >= n3 * 4 && runHistory[6] >= n3 ? 1 : 0) + (core && runHistory[6] >= n3 * 4 && runHistory[0] >= n3 ? 1 : 0);
+      let core2 = n3 > 0 && runHistory[2] == n3 && runHistory[3] == n3 * 3 && runHistory[4] == n3 && runHistory[5] == n3;
+      return (core2 && runHistory[0] >= n3 * 4 && runHistory[6] >= n3 ? 1 : 0) + (core2 && runHistory[6] >= n3 * 4 && runHistory[0] >= n3 ? 1 : 0);
     }
     // Must be called at the end of a line (row or column) of modules. A helper function for getPenaltyScore().
     finderPenaltyTerminateAndCount(currentRunColor, currentRunLength, runHistory) {
@@ -12627,91 +14225,80 @@ QRCodeSVG.displayName = "QRCodeSVG";
 var mapper3 = ({ api, state }) => {
   let { storyId, refId } = state;
   return { api, refId, storyId };
-}, QRContainer = styled.div(() => ({
+}, QRContainer = styled.div(
+  () => ({
+    display: "flex",
+    flexDirection: "column",
+    padding: 8,
+    width: 300,
+    maxWidth: 300,
+    gap: 8
+  })
+), QRRow = styled.div(() => ({
   display: "flex",
-  alignItems: "center",
-  padding: 8,
-  maxWidth: 200
+  alignItems: "center"
+})), ShareLinkInput = styled.input(({ theme }) => ({
+  width: "100%",
+  border: `1px solid ${theme.appBorderColor}`,
+  borderRadius: 4,
+  padding: "6px 8px",
+  fontSize: theme.typography.size.s1,
+  color: theme.color.defaultText,
+  backgroundColor: theme.background.app,
+  outline: "none",
+  textOverflow: "ellipsis",
+  overflow: "hidden",
+  whiteSpace: "nowrap",
+  "&:focus": {
+    borderColor: theme.color.secondary
+  }
 })), QRImageContainer = styled.div(() => ({
   width: 64,
   height: 64,
   marginRight: 12,
   backgroundColor: "white",
   padding: 2
-})), QRImage = ({ value }) => {
-  let theme = useTheme();
-  return react_default.createElement(QRImageContainer, null, react_default.createElement(QRCodeSVG, { value, marginSize: 0, size: 60, fgColor: theme.color.darkest }));
-}, QRContent = styled.div(() => ({})), QRTitle = styled.div(({ theme }) => ({
+}));
+var QRContent = styled.div(() => ({})), QRTitle = styled.div(({ theme }) => ({
   fontWeight: theme.typography.weight.bold,
   fontSize: theme.typography.size.s1,
   marginBottom: 4
 })), QRDescription = styled.div(({ theme }) => ({
   fontSize: theme.typography.size.s1,
   color: theme.textMutedColor
-})), ShareMenu = react_default.memo(function({
-  api,
-  storyId,
-  refId
-}) {
-  let shortcutKeys = api.getShortcutKeys(), enableShortcuts = !!shortcutKeys, [copied, setCopied] = useState(!1), copyStoryLink = shortcutKeys?.copyStoryLink, openInIsolation = shortcutKeys?.openInIsolation;
-  useEffect(() => {
-    api.emit(SHARE_POPOVER_OPENED);
-  }, [api]);
-  let links = useMemo(() => {
-    let copyTitle = copied ? "Copied!" : "Copy story link", originHrefs = api.getStoryHrefs(storyId, { base: "origin", refId }), networkHrefs = api.getStoryHrefs(storyId, { base: "network", refId });
-    return [
-      [
-        {
-          id: "copy-link",
-          title: copyTitle,
-          icon: react_default.createElement(LinkIcon, null),
-          right: enableShortcuts ? react_default.createElement(Shortcut, { keys: copyStoryLink }) : null,
-          onClick: () => {
-            api.emit(SHARE_STORY_LINK, originHrefs.managerHref), (0, import_copy_to_clipboard.default)(originHrefs.managerHref), setCopied(!0), setTimeout(() => setCopied(!1), 2e3);
-          }
-        },
-        {
-          id: "open-new-tab",
-          title: "Open in isolation mode",
-          icon: react_default.createElement(ShareAltIcon, null),
-          right: enableShortcuts ? react_default.createElement(Shortcut, { keys: openInIsolation }) : null,
-          onClick: () => {
-            api.emit(SHARE_ISOLATE_MODE, originHrefs.previewHref);
-          },
-          href: originHrefs.previewHref,
-          target: "_blank",
-          rel: "noopener noreferrer"
-        }
-      ],
-      [
-        {
-          id: "qr-section",
-          content: react_default.createElement(QRContainer, null, react_default.createElement(QRImage, { value: networkHrefs.managerHref }), react_default.createElement(QRContent, null, react_default.createElement(QRTitle, null, "Scan to open"), react_default.createElement(QRDescription, null, scope.CONFIG_TYPE === "DEVELOPMENT" ? "Device must be on the same network." : "View story on another device.")))
-        }
-      ]
-    ];
-  }, [api, storyId, refId, copied, enableShortcuts, copyStoryLink, openInIsolation]);
-  return react_default.createElement(TooltipLinkList, { links, style: { width: 240 } });
-}), shareTool = {
-  title: "share",
-  id: "share",
-  type: types.TOOL,
+})), isolationModeTool = {
+  title: "isolation mode",
+  id: "isolationMode",
+  type: types.TOOLEXTRA,
   match: ({ viewMode, tabId }) => viewMode === "story" && !tabId,
   render: () => react_default.createElement(Consumer, { filter: mapper3 }, ({ api, storyId, refId }) => storyId ? react_default.createElement(
-    PopoverProvider,
+    Button,
     {
-      ariaLabel: "Share this story",
-      hasChrome: !0,
-      placement: "bottom",
-      padding: 0,
-      popover: react_default.createElement(ShareMenu, { api, storyId, refId })
+      padding: "small",
+      variant: "ghost",
+      ariaLabel: "Open in isolation mode",
+      tooltip: "Open in isolation mode",
+      onClick: () => {
+        let originHrefs = api.getStoryHrefs(storyId, {
+          base: "origin",
+          refId,
+          inheritArgs: !0
+        });
+        window.open(originHrefs.previewHref, "_blank", "noopener,noreferrer"), api.emit(SHARE_ISOLATE_MODE, originHrefs.previewHref);
+      }
     },
-    react_default.createElement(Button, { padding: "small", variant: "ghost", ariaLabel: "Share", tooltip: "Share..." }, react_default.createElement(ShareIcon, null))
+    react_default.createElement(PopOutIcon, null)
   ) : null)
 };
 
 // src/manager/container/Preview.tsx
-var defaultTabs = [createCanvasTab()], defaultTools = [menuTool, remountTool], defaultToolsExtra = [zoomTool, addonsTool, fullScreenTool, shareTool, openInEditorTool], emptyTabsList = [], memoizedTabs = (0, import_memoizerific2.default)(1)(
+var defaultTabs = [createCanvasTab()], defaultTools = [menuTool, remountTool], defaultToolsExtra = [
+  isolationModeTool,
+  zoomTool,
+  addonsTool,
+  fullScreenTool,
+  openInEditorTool
+], emptyTabsList = [], memoizedTabs = (0, import_memoizerific2.default)(1)(
   (_2, tabElements, parameters, showTabs) => showTabs ? filterTabs([...defaultTabs, ...Object.values(tabElements)], parameters) : emptyTabsList
 ), memoizedTools = (0, import_memoizerific2.default)(1)(
   (_2, toolElements, filterProps) => filterToolsSide([...defaultTools, ...Object.values(toolElements)], ...filterProps)
@@ -12753,6 +14340,7 @@ var defaultTabs = [createCanvasTab()], defaultTools = [menuTool, remountTool], d
     refs,
     storyId,
     baseUrl: PREVIEW_URL || "iframe.html",
+    path,
     queryParams: customQueryParams,
     tools,
     toolsExtra,
@@ -12769,7 +14357,7 @@ var defaultTabs = [createCanvasTab()], defaultTools = [menuTool, remountTool], d
     tabId
   };
 }, PreviewConnected = react_default.memo(function(props) {
-  return react_default.createElement(Consumer, { filter: mapper4 }, (fromState) => react_default.createElement(Preview, { ...props, ...fromState }));
+  return react_default.createElement(Consumer, { filter: mapper4 }, (fromState) => react_default.createElement(Preview2, { ...props, ...fromState }));
 }), Preview_default = PreviewConnected;
 
 // src/manager/container/Sidebar.tsx
@@ -12986,7 +14574,7 @@ function partialImpl(func, placeholder, ...partialArgs) {
   };
   return func.prototype && (partialed.prototype = Object.create(func.prototype)), partialed;
 }
-var placeholderSymbol = Symbol("partial.placeholder");
+var placeholderSymbol = /* @__PURE__ */ Symbol("partial.placeholder");
 partial.placeholder = placeholderSymbol;
 
 // ../../node_modules/es-toolkit/dist/function/partialRight.mjs
@@ -13000,7 +14588,7 @@ function partialRightImpl(func, placeholder, ...partialArgs) {
   };
   return func.prototype && (partialedRight.prototype = Object.create(func.prototype)), partialedRight;
 }
-var placeholderSymbol2 = Symbol("partialRight.placeholder");
+var placeholderSymbol2 = /* @__PURE__ */ Symbol("partialRight.placeholder");
 partialRight.placeholder = placeholderSymbol2;
 
 // ../../node_modules/es-toolkit/dist/function/retry.mjs
@@ -13058,6 +14646,7 @@ var storeOptions = {
       componentTestStatuses: [],
       a11yStatuses: [],
       a11yReports: {},
+      reports: {},
       componentTestCount: {
         success: 0,
         error: 0
@@ -13079,8 +14668,33 @@ var storeOptions = {
 var STORE_CHANNEL_EVENT_NAME = `UNIVERSAL_STORE:${storeOptions.id}`;
 var TRIGGER_TEST_RUN_REQUEST = `${ADDON_ID5}/trigger-test-run-request`, TRIGGER_TEST_RUN_RESPONSE = `${ADDON_ID5}/trigger-test-run-response`;
 
+// src/server-errors.ts
+var import_picocolors = __toESM(require_picocolors_browser(), 1);
+
+// src/shared/status-store/index.ts
+var STATUS_VALUE_PREFIX = "status-value:";
+var statusValueShortName = (value) => value === "status-value:affected" ? "related" : value.slice(STATUS_VALUE_PREFIX.length), statusValueDescription = (value) => ({
+  "status-value:pending": "Stories with pending status",
+  "status-value:success": "Stories with passing tests",
+  "status-value:new": "Newly added stories",
+  "status-value:modified": "Stories closely linked to code changes",
+  "status-value:affected": "Stories likely to be affected by code changes",
+  "status-value:reviewing": "Stories included in the active review",
+  "status-value:warning": "Stories with warnings",
+  "status-value:error": "Stories with failing tests",
+  "status-value:unknown": "Stories with unknown status"
+})[value];
+function countStatusesByValue(allStatuses) {
+  let counts = {};
+  for (let statusByTypeId of Object.values(allStatuses))
+    for (let status of Object.values(statusByTypeId))
+      counts[status.value] = (counts[status.value] ?? 0) + 1;
+  return counts;
+}
+
 // src/cli/AddonVitestService.constants.ts
 var SUPPORTED_FRAMEWORKS = [
+  "angular-vite" /* ANGULAR_VITE */,
   "html-vite" /* HTML_VITE */,
   "nextjs-vite" /* NEXTJS_VITE */,
   "preact-vite" /* PREACT_VITE */,
@@ -13090,7 +14704,8 @@ var SUPPORTED_FRAMEWORKS = [
   "svelte-vite" /* SVELTE_VITE */,
   "sveltekit" /* SVELTEKIT */,
   "vue3-vite" /* VUE3_VITE */,
-  "web-components-vite" /* WEB_COMPONENTS_VITE */
+  "web-components-vite" /* WEB_COMPONENTS_VITE */,
+  "tanstack-react" /* TANSTACK_REACT */
 ];
 
 // src/docs-tools/shared.ts
@@ -13938,15 +15553,7 @@ function toValue(str, measurement, popperOffsets, referenceOffsets) {
     return str;
   if (unit.indexOf("%") === 0) {
     var element = void 0;
-    switch (unit) {
-      case "%p":
-        element = popperOffsets;
-        break;
-      case "%":
-      case "%r":
-      default:
-        element = referenceOffsets;
-    }
+    unit === "%p" ? element = popperOffsets : element = referenceOffsets;
     var rect = getClientRect(element);
     return rect[measurement] / 100 * value;
   } else if (unit === "vh" || unit === "vw") {
@@ -15232,14 +16839,14 @@ function _toPropertyKey(arg) {
   return typeof key == "symbol" ? key : String(key);
 }
 var DEFAULTS = { flip: { padding: 20 }, preventOverflow: { padding: 10 } }, VALIDATOR_ARG_ERROR_MESSAGE = "The typeValidator argument must be a function with the signature function(props, propName, componentName).", MESSAGE_ARG_ERROR_MESSAGE = "The error message is optional, but must be a string if provided.";
-function propIsRequired(condition, props, propName, componentName) {
-  return typeof condition == "boolean" ? condition : typeof condition == "function" ? condition(props, propName, componentName) : condition ? !!condition : !1;
+function propIsRequired(condition, props, propName, componentName2) {
+  return typeof condition == "boolean" ? condition : typeof condition == "function" ? condition(props, propName, componentName2) : condition ? !!condition : !1;
 }
 function propExists(props, propName) {
   return Object.hasOwnProperty.call(props, propName);
 }
-function missingPropError(props, propName, componentName, message) {
-  return message ? new Error(message) : new Error("Required ".concat(props[propName], " `").concat(propName, "` was not specified in `").concat(componentName, "`."));
+function missingPropError(props, propName, componentName2, message) {
+  return message ? new Error(message) : new Error("Required ".concat(props[propName], " `").concat(propName, "` was not specified in `").concat(componentName2, "`."));
 }
 function guardAgainstInvalidArgTypes(typeValidator, message) {
   if (typeof typeValidator != "function")
@@ -15248,10 +16855,10 @@ function guardAgainstInvalidArgTypes(typeValidator, message) {
     throw new TypeError(MESSAGE_ARG_ERROR_MESSAGE);
 }
 function isRequiredIf(typeValidator, condition, message) {
-  return guardAgainstInvalidArgTypes(typeValidator, message), function(props, propName, componentName) {
+  return guardAgainstInvalidArgTypes(typeValidator, message), function(props, propName, componentName2) {
     for (var _len = arguments.length, rest2 = new Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++)
       rest2[_key - 3] = arguments[_key];
-    return propIsRequired(condition, props, propName, componentName) ? propExists(props, propName) ? typeValidator.apply(void 0, [props, propName, componentName].concat(rest2)) : missingPropError(props, propName, componentName, message) : typeValidator.apply(void 0, [props, propName, componentName].concat(rest2));
+    return propIsRequired(condition, props, propName, componentName2) ? propExists(props, propName) ? typeValidator.apply(void 0, [props, propName, componentName2].concat(rest2)) : missingPropError(props, propName, componentName2, message) : typeValidator.apply(void 0, [props, propName, componentName2].concat(rest2));
   };
 }
 var STATUS2 = { INIT: "init", IDLE: "idle", OPENING: "opening", OPEN: "open", CLOSING: "closing", ERROR: "error" }, isReact16 = react_dom_default.createPortal !== void 0;
@@ -17230,15 +18837,21 @@ var LocationMonitor = {
   stop() {
     this._intervalId !== null && (clearInterval(this._intervalId), this._intervalId = null);
   },
-  subscribe(...listeners) {
-    return listeners.forEach((listener) => this._listeners.add(listener)), this.start(), () => {
-      listeners.forEach((listener) => this._listeners.delete(listener)), this._listeners.size === 0 && this.stop();
+  subscribe(...listeners2) {
+    return listeners2.forEach((listener) => this._listeners.add(listener)), this.start(), () => {
+      listeners2.forEach((listener) => this._listeners.delete(listener)), this._listeners.size === 0 && this.stop();
     };
   }
 }, useLocationHash = () => {
   let [hash, setHash] = useState(globalThis.window?.location.hash ?? "");
   return useEffect(() => LocationMonitor.subscribe((location2) => setHash(location2.hash)), []), hash.slice(1);
 };
+
+// src/shared/utils/ai-prompts.ts
+var DEFAULT_STORYBOOK_EXECUTOR = "npx storybook";
+function getAiSetupPrompt(executor = DEFAULT_STORYBOOK_EXECUTOR) {
+  return `Run \`${executor} ai setup\` and follow its instructions precisely.`;
+}
 
 // src/shared/checklist-store/checklistData.tsx
 var CodeWrapper = styled.div(({ theme }) => ({
@@ -17268,6 +18881,21 @@ var CodeWrapper = styled.div(({ theme }) => ({
       id: "basics",
       title: "Storybook basics",
       items: [
+        {
+          id: "aiSetup",
+          label: "Set up with AI",
+          icon: WandIcon,
+          available: ({ storeState }) => !!storeState.aiOptIn && storeState.items.aiSetup?.status !== "done",
+          criteria: "ai setup command has not been run yet",
+          showOnGuidePage: !1,
+          action: {
+            label: "Copy prompt",
+            copyContent: getAiSetupPrompt(),
+            onClick: ({ api }) => {
+              api.emit(AI_PROMPT_NUDGE, { id: "setup", origin: "onboarding-checklist-side" });
+            }
+          }
+        },
         {
           id: "guidedTour",
           label: "Take the guided tour",
@@ -17534,6 +19162,48 @@ export default {
             },
             "story organization documentation"
           ), " ", "to learn:"), react_default.createElement("ul", null, react_default.createElement("li", null, "The full hierarchy available"), react_default.createElement("li", null, "How to configure the sorting of your stories")))
+        }
+      ]
+    },
+    {
+      id: "share",
+      title: "Share",
+      items: [
+        {
+          id: "shareStorybook",
+          label: "Share your Storybook for feedback",
+          available: () => addons.experimental_getRegisteredAddons(Addon_TypesEnum.TOOLEXTRA).includes("chromaui/addon-visual-tests/share-tool"),
+          criteria: "User has shared their Storybook",
+          subscribe: ({ api, done }) => {
+            let SHARE_PROGRESS_KEY = "chromaui/addon-visual-tests/shareProgress";
+            return api.on("experimental_useSharedState_setValue", (key, value) => {
+              key === SHARE_PROGRESS_KEY && value?.status === "complete" && done();
+            });
+          },
+          action: {
+            label: "Share",
+            onClick: () => document.getElementById("chromatic-share-button")?.click()
+          },
+          content: () => react_default.createElement(react_default.Fragment, null, react_default.createElement("p", null, "Share your Storybook with your team in one click using Chromatic. Click the", " ", react_default.createElement("strong", null, "Share"), " button in the toolbar to publish and get a shareable link."), react_default.createElement("strong", null, "Take it further"), react_default.createElement("p", null, "Read the", " ", react_default.createElement(Link, { href: "https://www.chromatic.com/docs/sharing", target: "_blank", withArrow: !0 }, "sharing documentation")))
+        },
+        {
+          id: "publishStorybook",
+          label: "Publish your Storybook for feedback",
+          available: () => !addons.experimental_getRegisteredAddons(Addon_TypesEnum.TOOLEXTRA).includes("chromaui/addon-visual-tests/share-tool"),
+          criteria: "User has published their Storybook",
+          content: ({ api }) => react_default.createElement(react_default.Fragment, null, react_default.createElement("p", null, "Publishing your Storybook is easy and unlocks super clear review cycles and other collaborative workflows."), react_default.createElement("p", null, "Run ", react_default.createElement("code", null, "npx storybook build"), " in CI and deploy it using services like", " ", react_default.createElement(Link, { href: "https://chromatic.com", target: "_blank" }, "Chromatic"), ",", " ", react_default.createElement(Link, { href: "https://vercel.com", target: "_blank", rel: "noopener noreferrer" }, "Vercel"), ", or", " ", react_default.createElement(Link, { href: "https://www.netlify.com", target: "_blank", rel: "noopener noreferrer" }, "Netlify"), "."), react_default.createElement("strong", null, "Take it further"), react_default.createElement("p", null, "Read the", " ", react_default.createElement(
+            Link,
+            {
+              href: api.getDocsUrl({
+                subpath: "sharing/publish-storybook",
+                renderer: !0,
+                ref: "guide"
+              }),
+              target: "_blank",
+              withArrow: !0
+            },
+            "publishing documentation"
+          )))
         }
       ]
     },
@@ -17972,7 +19642,7 @@ export default meta;`), react_default.createElement("p", null, "That tag can als
             },
             "doc blocks"
           ), ") write a usage guide for your project."), react_default.createElement(CodeSnippet, { language: "jsx" }, `{ /* introduction.mdx */ }
-import { Meta, Title, Subtitle, Description } from '@storybook/addon-docs/blocks';
+import { Meta, Title, Subtitle } from '@storybook/addon-docs/blocks';
 
 <Meta title="Get started" />
  
@@ -17980,10 +19650,8 @@ import { Meta, Title, Subtitle, Description } from '@storybook/addon-docs/blocks
 
 <Subtitle>It's really awesome</Subtitle>
 
-<Description>
-  My Awesome Project is designed to work with Your Awesome Project seamlessly.
-  Follow this guide and you'll be ready in no time.
-</Description>
+My Awesome Project is designed to work with Your Awesome Project seamlessly.
+Follow this guide and you'll be ready in no time.
 
 ## Install
 
@@ -18001,32 +19669,6 @@ npm install @my/awesome-project
             },
             "MDX documentation"
           ), " ", "to learn:"), react_default.createElement("ul", null, react_default.createElement("li", null, "How to reference stories in your content"), react_default.createElement("li", null, "How to import and display markdown files, such as READMEs")))
-        },
-        {
-          id: "publishStorybook",
-          label: "Publish your Storybook to share",
-          criteria: "Have some form of `storybook build` in the project's CI config",
-          content: ({ api }) => react_default.createElement(react_default.Fragment, null, react_default.createElement("p", null, "Publishing your Storybook is easy and unlocks super clear review cycles and other collaborative workflows."), react_default.createElement("p", null, "Run ", react_default.createElement("code", null, "npx storybook build"), " in CI and deploy it using services like", " ", react_default.createElement(Link, { href: "https://chromatic.com", target: "_blank" }, "Chromatic"), ",", " ", react_default.createElement(Link, { href: "https://vercel.com", target: "_blank", rel: "noopener noreferrer" }, "Vercel"), ", or", " ", react_default.createElement(Link, { href: "https://www.netlify.com", target: "_blank", rel: "noopener noreferrer" }, "Netlify"), "."), react_default.createElement(
-            "img",
-            {
-              src: api.getDocsUrl({
-                asset: "sharing/prbadge-publish.png",
-                ref: "guide"
-              }),
-              alt: "PR check for publish action"
-            }
-          ), react_default.createElement("strong", null, "Take it further"), react_default.createElement("p", null, "Read the", " ", react_default.createElement(
-            Link,
-            {
-              href: api.getDocsUrl({
-                subpath: "sharing/publish-storybook",
-                renderer: !0,
-                ref: "guide"
-              }),
-              target: "_blank"
-            },
-            "publishing documentation"
-          ), " ", "to learn:"), react_default.createElement("ul", null, react_default.createElement("li", null, "How to configure the built Storybook (e.g. performance optimizations)"), react_default.createElement("li", null, "How to use your published Storybook to collaborate with colleagues")))
         }
       ]
     }
@@ -18062,7 +19704,7 @@ var subscriptions = /* @__PURE__ */ new Map(), useStoryIndex = () => {
       ({ items: items2, id: sectionId, title: sectionTitle }, sectionIndex) => items2.map(({ id, ...item }, itemIndex) => [id, { id, itemIndex, sectionId, sectionIndex, sectionTitle, ...item }])
     )
   ), []), allItems = useMemo(() => Object.values(itemsById).map((item) => {
-    let { status: status2, mutedAt } = items[item.id], isOpen = status2 === "open", isAccepted = status2 === "accepted", isDone = status2 === "done", isCompleted = isAccepted || isDone, isSkipped = !isCompleted && checkSkipped(item, itemsById, items), isMuted = !!mutedAt || !!widget.disable, isAvailable = isCompleted ? item.afterCompletion !== "unavailable" : checkAvailable(item, itemsById, { api, index, item }), isLockedBy = checkLockedBy(item, itemsById, items), isImmutable = isCompleted && item.afterCompletion === "immutable";
+    let { status: status2, mutedAt } = items[item.id], isOpen = status2 === "open", isAccepted = status2 === "accepted", isDone = status2 === "done", isCompleted = isAccepted || isDone, isSkipped = !isCompleted && checkSkipped(item, itemsById, items), isMuted = !!mutedAt || !!widget.disable, isAvailable = isCompleted ? item.afterCompletion !== "unavailable" : checkAvailable(item, itemsById, { api, index, item, storeState: checklistState }), isLockedBy = checkLockedBy(item, itemsById, items), isImmutable = isCompleted && item.afterCompletion === "immutable";
     return {
       ...item,
       isAvailable,
@@ -18076,7 +19718,7 @@ var subscriptions = /* @__PURE__ */ new Map(), useStoryIndex = () => {
       isSkipped,
       isMuted
     };
-  }), [itemsById, items, widget, api, index]), itemCollections = useMemo(() => {
+  }), [itemsById, items, widget, api, index, checklistState]), itemCollections = useMemo(() => {
     let availableItems = allItems.filter((item) => item.isAvailable), openItems = availableItems.filter((item) => item.isOpen), readyItems = openItems.filter((item) => item.isReady), nextItems = Object.values(
       readyItems.reduce((acc, item) => (acc[item.sectionId] ??= [], acc[item.sectionId].push({ ...item, itemIndex: acc[item.sectionId].length }), acc), {})
     ).flat().sort((a2, b2) => a2.itemIndex - b2.itemIndex).slice(0, 3).sort((a2, b2) => a2.sectionIndex - b2.sectionIndex), progress = availableItems.length ? Math.round((availableItems.length - openItems.length) / availableItems.length * 100) : 100;
@@ -18119,6 +19761,100 @@ var subscriptions = /* @__PURE__ */ new Map(), useStoryIndex = () => {
     ...checklistState
   };
 };
+
+// src/shared/useCopyButton.ts
+init_react();
+
+// ../../node_modules/@react-aria/live-announcer/dist/LiveAnnouncer.mjs
+var $319e236875307eab$var$liveAnnouncer = null;
+function $319e236875307eab$export$a9b970dcc4ae71a9(message, assertiveness = "assertive", timeout = 7e3) {
+  $319e236875307eab$var$liveAnnouncer ? $319e236875307eab$var$liveAnnouncer.announce(message, assertiveness, timeout) : ($319e236875307eab$var$liveAnnouncer = new $319e236875307eab$var$LiveAnnouncer(), (typeof IS_REACT_ACT_ENVIRONMENT == "boolean" ? IS_REACT_ACT_ENVIRONMENT : typeof jest < "u") ? $319e236875307eab$var$liveAnnouncer.announce(message, assertiveness, timeout) : setTimeout(() => {
+    $319e236875307eab$var$liveAnnouncer?.isAttached() && $319e236875307eab$var$liveAnnouncer?.announce(message, assertiveness, timeout);
+  }, 100));
+}
+function $319e236875307eab$export$d10ae4f68404609a(assertiveness) {
+  $319e236875307eab$var$liveAnnouncer && $319e236875307eab$var$liveAnnouncer.clear(assertiveness);
+}
+var $319e236875307eab$var$LiveAnnouncer = class {
+  isAttached() {
+    var _this_node;
+    return (_this_node = this.node) === null || _this_node === void 0 ? void 0 : _this_node.isConnected;
+  }
+  createLog(ariaLive) {
+    let node = document.createElement("div");
+    return node.setAttribute("role", "log"), node.setAttribute("aria-live", ariaLive), node.setAttribute("aria-relevant", "additions"), node;
+  }
+  destroy() {
+    this.node && (document.body.removeChild(this.node), this.node = null);
+  }
+  announce(message, assertiveness = "assertive", timeout = 7e3) {
+    var _this_assertiveLog, _this_politeLog;
+    if (!this.node) return;
+    let node = document.createElement("div");
+    typeof message == "object" ? (node.setAttribute("role", "img"), node.setAttribute("aria-labelledby", message["aria-labelledby"])) : node.textContent = message, assertiveness === "assertive" ? (_this_assertiveLog = this.assertiveLog) === null || _this_assertiveLog === void 0 || _this_assertiveLog.appendChild(node) : (_this_politeLog = this.politeLog) === null || _this_politeLog === void 0 || _this_politeLog.appendChild(node), message !== "" && setTimeout(() => {
+      node.remove();
+    }, timeout);
+  }
+  clear(assertiveness) {
+    this.node && ((!assertiveness || assertiveness === "assertive") && this.assertiveLog && (this.assertiveLog.innerHTML = ""), (!assertiveness || assertiveness === "polite") && this.politeLog && (this.politeLog.innerHTML = ""));
+  }
+  constructor() {
+    this.node = null, this.assertiveLog = null, this.politeLog = null, typeof document < "u" && (this.node = document.createElement("div"), this.node.dataset.liveAnnouncer = "true", Object.assign(this.node.style, {
+      border: 0,
+      clip: "rect(0 0 0 0)",
+      clipPath: "inset(50%)",
+      height: "1px",
+      margin: "-1px",
+      overflow: "hidden",
+      padding: 0,
+      position: "absolute",
+      width: "1px",
+      whiteSpace: "nowrap"
+    }), this.assertiveLog = this.createLog("assertive"), this.node.appendChild(this.assertiveLog), this.politeLog = this.createLog("polite"), this.node.appendChild(this.politeLog), document.body.prepend(this.node));
+  }
+};
+
+// src/shared/useCopyButton.ts
+function useCopyButton2({
+  children = "Copy",
+  childrenOnCopy = "Copied!",
+  content,
+  onCopy,
+  ariaLabel = !1,
+  ariaLabelOnCopy = !1,
+  duration = 3e3
+}) {
+  let [copied, setCopied] = useState(!1), timerRef = useRef(null);
+  useEffect(
+    () => () => {
+      timerRef.current && clearTimeout(timerRef.current);
+    },
+    []
+  );
+  let handleClick = useCallback(
+    (e2) => {
+      timerRef.current && clearTimeout(timerRef.current);
+      let announcement = typeof ariaLabelOnCopy == "string" ? ariaLabelOnCopy : "Copied to clipboard";
+      navigator.clipboard?.writeText(content).then(() => {
+        onCopy?.(e2), setCopied(!0), $319e236875307eab$export$a9b970dcc4ae71a9(announcement, "polite"), timerRef.current = setTimeout(() => {
+          setCopied(!1), $319e236875307eab$export$d10ae4f68404609a("polite"), timerRef.current = null;
+        }, duration);
+      });
+    },
+    [content, onCopy, ariaLabelOnCopy, duration]
+  );
+  return {
+    // @ts-expect-error - TypeScript is not realising T is constrained identically in both interfaces.
+    children: copied ? childrenOnCopy : children,
+    buttonProps: useMemo(
+      () => ({
+        onClick: handleClick,
+        ariaLabel: copied ? ariaLabelOnCopy : ariaLabel
+      }),
+      [handleClick, copied, ariaLabelOnCopy, ariaLabel]
+    )
+  };
+}
 
 // src/manager/components/sidebar/ChecklistWidget.tsx
 var fadeScaleIn = keyframes`
@@ -18221,6 +19957,19 @@ var fadeScaleIn = keyframes`
     react_default.createElement(ActionList.Icon, null, react_default.createElement(ListUnorderedIcon, null)),
     children
   );
+}, CopyButton2 = ({
+  label,
+  copyContent,
+  onClick,
+  ...props
+}) => {
+  let { children: copyChildren, buttonProps: copyButtonProps } = useCopyButton2({
+    children: label,
+    childrenOnCopy: react_default.createElement(react_default.Fragment, null, react_default.createElement(CheckIcon, null), " Copied!"),
+    onCopy: onClick,
+    content: copyContent
+  });
+  return react_default.createElement(ActionList.Button, { ...props, ...copyButtonProps }, copyChildren);
 }, ChecklistWidget = () => {
   let api = useStorybookApi(), { loaded, ready, allItems, nextItems, progress, accept, mute, items } = useChecklist(), [renderItems, setRenderItems] = useState(nextItems), [animated, setAnimated] = useState(!1);
   useEffect(() => {
@@ -18319,9 +20068,22 @@ var fadeScaleIn = keyframes`
           ariaLabel: `Open onboarding guide for ${item.label}`,
           onClick: () => api.navigate(`/settings/guide#${item.id}`)
         },
-        react_default.createElement(ActionList.Icon, null, item.isCompleted && animated ? react_default.createElement(Particles, { anchor: Checked, key: item.id }) : react_default.createElement(StatusFailIcon, null)),
+        react_default.createElement(ActionList.Icon, null, item.isCompleted && animated ? react_default.createElement(Particles, { anchor: Checked, key: item.id }) : item.icon ? react_default.createElement(item.icon, null) : react_default.createElement(CircleHollowIcon, null)),
         react_default.createElement(ActionList.Text, null, react_default.createElement(ItemLabel, { isCompleted: item.isCompleted, isSkipped: item.isSkipped }, item.label))
-      ), item.action && react_default.createElement(
+      ), item.action && (item.action.copyContent ? react_default.createElement(
+        CopyButton2,
+        {
+          "data-target-id": item.id,
+          label: item.action.label,
+          copyContent: item.action.copyContent,
+          onClick: (e2) => {
+            e2.stopPropagation(), item.action?.onClick({
+              api,
+              accept: () => accept(item.id)
+            });
+          }
+        }
+      ) : react_default.createElement(
         ActionList.Button,
         {
           "data-target-id": item.id,
@@ -18334,7 +20096,7 @@ var fadeScaleIn = keyframes`
           }
         },
         item.action.label
-      ))
+      )))
     ))
   ))) : null;
 };
@@ -19509,14 +21271,14 @@ var MODAL_HEIGHT = 418, ModalStyled = styled(Modal)(() => ({
   );
 };
 
-// src/manager/components/sidebar/FileSearchModal.utils.tsx
-async function trySelectNewStory(selectStory, storyId, attempt = 1) {
+// src/manager/utils/trySelectStory.ts
+async function trySelectStory(selectStory, storyId, attempt = 1) {
   if (attempt > 10)
     throw new Error("We could not select the new story. Please try again.");
   try {
-    await selectStory(storyId);
+    selectStory(storyId);
   } catch {
-    return await new Promise((resolve) => setTimeout(resolve, 500)), trySelectNewStory(selectStory, storyId, attempt + 1);
+    return await new Promise((resolve) => setTimeout(resolve, 500)), trySelectStory(selectStory, storyId, attempt + 1);
   }
 }
 
@@ -19549,14 +21311,14 @@ var isRendererReact = scope.STORYBOOK_RENDERER === "react", CreateNewStoryFileMo
     }), onOpenChange(!1);
   }, [api, onOpenChange]), handleFileSearch = useCallback(() => {
     setLoading(!0);
-    let channel = addons.getChannel(), set = (data) => {
-      data.id === fileSearchQueryDeferred && (data.success ? setSearchResults(data.payload.files) : setError({ error: data.error }), channel.off(FILE_COMPONENT_SEARCH_RESPONSE, set), setLoading(!1), emittedValue.current = null);
+    let channel2 = addons.getChannel(), set = (data) => {
+      data.id === fileSearchQueryDeferred && (data.success ? setSearchResults(data.payload.files) : setError({ error: data.error }), channel2.off(FILE_COMPONENT_SEARCH_RESPONSE, set), setLoading(!1), emittedValue.current = null);
     };
-    return channel.on(FILE_COMPONENT_SEARCH_RESPONSE, set), fileSearchQueryDeferred !== "" && emittedValue.current !== fileSearchQueryDeferred ? (emittedValue.current = fileSearchQueryDeferred, channel.emit(FILE_COMPONENT_SEARCH_REQUEST, {
+    return channel2.on(FILE_COMPONENT_SEARCH_RESPONSE, set), fileSearchQueryDeferred !== "" && emittedValue.current !== fileSearchQueryDeferred ? (emittedValue.current = fileSearchQueryDeferred, channel2.emit(FILE_COMPONENT_SEARCH_REQUEST, {
       id: fileSearchQueryDeferred,
       payload: {}
     })) : (setSearchResults(null), setLoading(!1)), () => {
-      channel.off(FILE_COMPONENT_SEARCH_RESPONSE, set);
+      channel2.off(FILE_COMPONENT_SEARCH_RESPONSE, set);
     };
   }, [fileSearchQueryDeferred]), handleCreateNewStory = useCallback(
     async ({
@@ -19567,7 +21329,7 @@ var isRendererReact = scope.STORYBOOK_RENDERER === "react", CreateNewStoryFileMo
       selectedItemId
     }) => {
       try {
-        let channel = addons.getChannel(), createNewStoryResult = await experimental_requestResponse(channel, CREATE_NEW_STORYFILE_REQUEST, CREATE_NEW_STORYFILE_RESPONSE, {
+        let channel2 = addons.getChannel(), createNewStoryResult = await experimental_requestResponse(channel2, CREATE_NEW_STORYFILE_REQUEST, CREATE_NEW_STORYFILE_RESPONSE, {
           componentExportName,
           componentFilePath,
           componentIsDefaultExport,
@@ -19575,17 +21337,13 @@ var isRendererReact = scope.STORYBOOK_RENDERER === "react", CreateNewStoryFileMo
         });
         setError(null);
         let storyId = createNewStoryResult.storyId;
-        await trySelectNewStory(api.selectStory, storyId), handleSuccessfullyCreatedStory(componentExportName), handleFileSearch();
+        await trySelectStory(api.selectStory, storyId), handleSuccessfullyCreatedStory(componentExportName), handleFileSearch();
       } catch (e2) {
-        switch (e2?.payload?.type) {
-          case "STORY_FILE_EXISTS":
-            let err = e2;
-            await trySelectNewStory(api.selectStory, err.payload.kind), handleStoryAlreadyExists();
-            break;
-          default:
-            setError({ selectedItemId, error: e2?.message });
-            break;
-        }
+        if (e2?.payload?.type === "STORY_FILE_EXISTS") {
+          let err = e2;
+          await trySelectStory(api.selectStory, err.payload.kind), handleStoryAlreadyExists();
+        } else
+          setError({ selectedItemId, error: e2?.message });
       }
     },
     [api?.selectStory, handleSuccessfullyCreatedStory, handleFileSearch, handleStoryAlreadyExists]
@@ -19645,6 +21403,38 @@ var HighlightStyles = ({ refId, itemId }) => react_default.createElement(
 // src/manager/components/sidebar/Refs.tsx
 init_react();
 
+// src/shared/constants/tags.ts
+var Tag2 = {
+  /** Indicates that autodocs should be generated for this component */
+  AUTODOCS: "autodocs",
+  /** MDX documentation attached to a component's stories file */
+  ATTACHED_MDX: "attached-mdx",
+  /** Standalone MDX documentation not attached to stories */
+  UNATTACHED_MDX: "unattached-mdx",
+  /** Story has a play function */
+  PLAY_FN: "play-fn",
+  /** Story has a test function */
+  TEST_FN: "test-fn",
+  /** Development environment tag */
+  DEV: "dev",
+  /** Test environment tag */
+  TEST: "test",
+  /** Manifest generation tag */
+  MANIFEST: "manifest"
+}, BUILT_IN_FILTERS = {
+  _docs: (entry, excluded) => excluded ? entry.type !== "docs" : entry.type === "docs",
+  _play: (entry, excluded) => excluded ? entry.type !== "story" || !entry.tags?.includes(Tag2.PLAY_FN) : entry.type === "story" && !!entry.tags?.includes(Tag2.PLAY_FN),
+  _test: (entry, excluded) => excluded ? entry.type !== "story" || entry.subtype !== "test" : entry.type === "story" && entry.subtype === "test"
+}, USER_TAG_FILTER = (tag) => (entry, excluded) => excluded ? !entry.tags?.includes(tag) : !!entry.tags?.includes(tag);
+
+// src/shared/utils/story-index-filters.ts
+var getActiveFilterCount = ({
+  includedTagFilters,
+  excludedTagFilters,
+  includedStatusFilters,
+  excludedStatusFilters
+}) => (includedTagFilters?.length ?? 0) + (excludedTagFilters?.length ?? 0) + (includedStatusFilters?.length ?? 0) + (excludedStatusFilters?.length ?? 0);
+
 // src/manager/utils/tree.ts
 var import_memoizerific3 = __toESM(require_memoizerific(), 1);
 var { document: document3, window: globalWindow } = scope, createId = (itemId, refId) => !refId || refId === DEFAULT_REF_ID ? itemId : `${refId}_${itemId}`, getLink = (item, refId) => `${document3.location.pathname}?path=/${item.type}/${createId(item.id, refId)}`;
@@ -19693,7 +21483,7 @@ var scrollIntoView = (element, center = !1) => {
     default:
       return "ready";
   }
-}, isAncestor = (element, maybeAncestor) => !element || !maybeAncestor ? !1 : element === maybeAncestor ? !0 : isAncestor(element.parentElement || void 0, maybeAncestor), removeNoiseFromName = (storyName) => storyName.replaceAll(/(\s|-|_)/gi, ""), isStoryHoistable = (storyName, componentName) => removeNoiseFromName(storyName) === removeNoiseFromName(componentName);
+}, isAncestor = (element, maybeAncestor) => !element || !maybeAncestor ? !1 : element === maybeAncestor ? !0 : isAncestor(element.parentElement || void 0, maybeAncestor), removeNoiseFromName = (storyName) => storyName.replaceAll(/(\s|-|_)/gi, ""), isStoryHoistable = (storyName, componentName2) => removeNoiseFromName(storyName) === removeNoiseFromName(componentName2);
 
 // src/manager/components/sidebar/RefBlocks.tsx
 init_react();
@@ -19742,6 +21532,10 @@ var NoResults2 = styled.div(({ theme }) => ({
   small: {
     color: theme.textMutedColor,
     fontSize: `${theme.typography.size.s1}px`
+  },
+  button: {
+    marginTop: 8,
+    alignSelf: "center"
   }
 }));
 
@@ -19805,23 +21599,42 @@ var { window: globalWindow2 } = scope, TextStyle = styled.div(({ theme }) => ({
   display: "flex"
 }), WideSpaced = styled(Spaced)({
   flex: 1
-}), EmptyBlock = ({ isMain, hasEntries }) => react_default.createElement(Contained, null, react_default.createElement(FlexSpaced, { col: 1 }, react_default.createElement(WideSpaced, null, hasEntries ? react_default.createElement(NoResults2, null, react_default.createElement("strong", null, "No stories found"), react_default.createElement("small", null, "Your selected filters did not match any stories.")) : isMain ? react_default.createElement(Text3, null, "Oh no! Your Storybook is empty. This can happen when:", react_default.createElement("ul", null, react_default.createElement("li", null, "Your", " ", react_default.createElement(
-  Link,
-  {
-    href: "https://storybook.js.org/docs/api/main-config/main-config-stories?ref=ui",
-    cancel: !1,
-    target: "_blank"
-  },
-  "stories glob configuration"
-), " ", "does not match any files.", " "), react_default.createElement("li", null, "You have", " ", react_default.createElement(
-  Link,
-  {
-    href: "https://storybook.js.org/docs/writing-stories?ref=ui",
-    cancel: !1,
-    target: "_blank"
-  },
-  "no stories defined"
-), " ", "in your story files.", " "))) : react_default.createElement(Text3, null, "This composed Storybook is empty. Perhaps no stories match your selected filters.")))), LoaderBlock = ({ isMain }) => react_default.createElement(Contained, null, react_default.createElement(Loader2, { size: isMain ? 17 : 5 }));
+}), EmptyBlock = ({
+  isMain,
+  hasEntries,
+  activeFilterCount
+}) => {
+  let api = useStorybookApi();
+  return react_default.createElement(Contained, null, react_default.createElement(FlexSpaced, { col: 1 }, react_default.createElement(WideSpaced, null, hasEntries ? react_default.createElement(NoResults2, null, react_default.createElement("strong", null, "No stories found"), activeFilterCount > 0 ? react_default.createElement("small", null, "Your selected filters did not match any stories.") : react_default.createElement("small", null, "Try adding some stories!"), activeFilterCount > 0 ? react_default.createElement(
+    Button,
+    {
+      ariaLabel: !1,
+      size: "small",
+      variant: "outline",
+      onClick: async () => {
+        await api.setAllTagFilters([], []), await api.resetStatusFilters();
+      }
+    },
+    react_default.createElement(SweepIcon, null),
+    "Clear filters"
+  ) : null) : isMain ? react_default.createElement(Text3, null, "Oh no! Your Storybook is empty. This can happen when:", react_default.createElement("ul", null, react_default.createElement("li", null, "Your", " ", react_default.createElement(
+    Link,
+    {
+      href: "https://storybook.js.org/docs/api/main-config/main-config-stories?ref=ui",
+      cancel: !1,
+      target: "_blank"
+    },
+    "stories glob configuration"
+  ), " ", "does not match any files.", " "), react_default.createElement("li", null, "You have", " ", react_default.createElement(
+    Link,
+    {
+      href: "https://storybook.js.org/docs/writing-stories?ref=ui",
+      cancel: !1,
+      target: "_blank"
+    },
+    "no stories defined"
+  ), " ", "in your story files.", " "))) : react_default.createElement(Text3, null, "This composed Storybook is empty. Perhaps no stories match your selected filters."))));
+}, LoaderBlock = ({ isMain }) => react_default.createElement(Contained, null, react_default.createElement(Loader2, { size: isMain ? 17 : 5 }));
 
 // src/manager/components/sidebar/RefIndicator.tsx
 init_react();
@@ -19877,7 +21690,7 @@ var { document: document4, window: globalWindow3 } = scope, IndicatorPlacement =
     marginRight: 10,
     flex: "unset"
   }
-})), Message = ({ href, blank = !0, children, onClick }) => react_default.createElement(StyledMessage, { href, target: blank ? "_blank" : void 0, onClick }, children), MessageWrapper = styled.div(
+})), Message2 = ({ href, blank = !0, children, onClick }) => react_default.createElement(StyledMessage, { href, target: blank ? "_blank" : void 0, onClick }, children), MessageWrapper = styled.div(
   ({ isMobile: isMobile2 }) => ({
     width: isMobile2 ? "calc(100vw - 20px)" : 280,
     boxSizing: "border-box",
@@ -19948,10 +21761,10 @@ var { document: document4, window: globalWindow3 } = scope, IndicatorPlacement =
   )
 ), ReadyMessage = ({ url, componentCount, leafCount }) => {
   let theme = useTheme();
-  return react_default.createElement(Message, { href: url.replace(/\/?$/, "/index.html") }, react_default.createElement(GlobeIcon, { color: theme.color.secondary }), react_default.createElement("div", null, react_default.createElement(MessageTitle, null, "View external Storybook"), react_default.createElement("div", null, "Explore ", componentCount, " components and ", leafCount, " stories in a new browser tab.")));
+  return react_default.createElement(Message2, { href: url.replace(/\/?$/, "/index.html") }, react_default.createElement(GlobeIcon, { color: theme.color.secondary }), react_default.createElement("div", null, react_default.createElement(MessageTitle, null, "View external Storybook"), react_default.createElement("div", null, "Explore ", componentCount, " components and ", leafCount, " stories in a new browser tab.")));
 }, SourceCodeMessage = ({ url }) => {
   let theme = useTheme();
-  return react_default.createElement(Message, { href: url }, react_default.createElement(MarkupIcon, { color: theme.color.secondary }), react_default.createElement("div", null, react_default.createElement(MessageTitle, null, "View source code")));
+  return react_default.createElement(Message2, { href: url }, react_default.createElement(MarkupIcon, { color: theme.color.secondary }), react_default.createElement("div", null, react_default.createElement(MessageTitle, null, "View source code")));
 }, LoginRequiredMessage = ({ loginUrl, id }) => {
   let theme = useTheme(), open = useCallback(
     (e2) => {
@@ -19966,19 +21779,19 @@ var { document: document4, window: globalWindow3 } = scope, IndicatorPlacement =
     },
     [id, loginUrl]
   );
-  return react_default.createElement(Message, { onClick: open, blank: !1 }, react_default.createElement(LockIcon, { color: theme.color.gold }), react_default.createElement("div", null, react_default.createElement(MessageTitle, null, "Log in required"), react_default.createElement("div", null, "You need to authenticate to view this Storybook's components.")));
+  return react_default.createElement(Message2, { onClick: open, blank: !1 }, react_default.createElement(LockIcon, { color: theme.color.gold }), react_default.createElement("div", null, react_default.createElement(MessageTitle, null, "Log in required"), react_default.createElement("div", null, "You need to authenticate to view this Storybook's components.")));
 }, ReadDocsMessage = () => {
   let theme = useTheme();
-  return react_default.createElement(Message, { href: "https://storybook.js.org/docs/sharing/storybook-composition?ref=ui" }, react_default.createElement(DocumentIcon, { color: theme.color.green }), react_default.createElement("div", null, react_default.createElement(MessageTitle, null, "Read Composition docs"), react_default.createElement("div", null, "Learn how to combine multiple Storybooks into one.")));
+  return react_default.createElement(Message2, { href: "https://storybook.js.org/docs/sharing/storybook-composition?ref=ui" }, react_default.createElement(DocumentIcon, { color: theme.color.green }), react_default.createElement("div", null, react_default.createElement(MessageTitle, null, "Read Composition docs"), react_default.createElement("div", null, "Learn how to combine multiple Storybooks into one.")));
 }, ErrorOccurredMessage = ({ url }) => {
   let theme = useTheme();
-  return react_default.createElement(Message, { href: url.replace(/\/?$/, "/index.html") }, react_default.createElement(AlertIcon, { color: theme.color.negative }), react_default.createElement("div", null, react_default.createElement(MessageTitle, null, "Something went wrong"), react_default.createElement("div", null, "This external Storybook didn't load. Debug it in a new tab now.")));
+  return react_default.createElement(Message2, { href: url.replace(/\/?$/, "/index.html") }, react_default.createElement(AlertIcon, { color: theme.color.negative }), react_default.createElement("div", null, react_default.createElement(MessageTitle, null, "Something went wrong"), react_default.createElement("div", null, "This external Storybook didn't load. Debug it in a new tab now.")));
 }, LoadingMessage = ({ url }) => {
   let theme = useTheme();
-  return react_default.createElement(Message, { href: url.replace(/\/?$/, "/index.html") }, react_default.createElement(TimeIcon, { color: theme.color.secondary }), react_default.createElement("div", null, react_default.createElement(MessageTitle, null, "Please wait"), react_default.createElement("div", null, "This Storybook is loading.")));
+  return react_default.createElement(Message2, { href: url.replace(/\/?$/, "/index.html") }, react_default.createElement(TimeIcon, { color: theme.color.secondary }), react_default.createElement("div", null, react_default.createElement(MessageTitle, null, "Please wait"), react_default.createElement("div", null, "This Storybook is loading.")));
 }, PerformanceDegradedMessage = () => {
   let theme = useTheme();
-  return react_default.createElement(Message, { href: "https://storybook.js.org/docs/sharing/storybook-composition?ref=ui" }, react_default.createElement(LightningIcon, { color: theme.color.gold }), react_default.createElement("div", null, react_default.createElement(MessageTitle, null, "Reduce lag"), react_default.createElement("div", null, "Learn how to speed up Composition performance.")));
+  return react_default.createElement(Message2, { href: "https://storybook.js.org/docs/sharing/storybook-composition?ref=ui" }, react_default.createElement(LightningIcon, { color: theme.color.gold }), react_default.createElement("div", null, react_default.createElement(MessageTitle, null, "Reduce lag"), react_default.createElement("div", null, "Learn how to speed up Composition performance.")));
 };
 
 // src/manager/components/sidebar/Tree.tsx
@@ -19997,7 +21810,7 @@ var Svg2 = styled.svg`
   display: inline-block;
   shape-rendering: inherit;
   vertical-align: middle;
-`, GROUP_ID = "icon--group", COMPONENT_ID = "icon--component", DOCUMENT_ID = "icon--document", STORY_ID = "icon--story", TEST_ID = "icon--test", SUCCESS_ID = "icon--success", ERROR_ID = "icon--error", WARNING_ID = "icon--warning", DOT_ID = "icon--dot", IconSymbols = () => react_default.createElement(Svg2, { "data-chromatic": "ignore" }, react_default.createElement("symbol", { id: GROUP_ID }, react_default.createElement(
+`, GROUP_ID = "icon--group", COMPONENT_ID = "icon--component", DOCUMENT_ID = "icon--document", STORY_ID = "icon--story", TEST_ID = "icon--test", SUCCESS_ID = "icon--success", ERROR_ID = "icon--error", WARNING_ID = "icon--warning", DOT_ID = "icon--dot", NEW_ID = "icon--new", MODIFIED_ID = "icon--modified", AFFECTED_ID = "icon--affected", REVIEWING_ID = "icon--reviewing", IconSymbols = () => react_default.createElement(Svg2, { "data-chromatic": "ignore" }, react_default.createElement("symbol", { id: GROUP_ID }, react_default.createElement(
   "path",
   {
     fillRule: "evenodd",
@@ -20067,7 +21880,13 @@ var Svg2 = styled.svg`
     d: "M7.206 3.044a.498.498 0 01.23.212l3.492 5.985a.494.494 0 01.006.507.497.497 0 01-.443.252H3.51a.499.499 0 01-.437-.76l3.492-5.984a.497.497 0 01.642-.212zM7 4.492L4.37 9h5.26L7 4.492z",
     fill: "currentColor"
   }
-)), react_default.createElement("symbol", { id: DOT_ID }, react_default.createElement("circle", { cx: "3", cy: "3", r: "3", fill: "currentColor" }))), UseSymbol = ({ type }) => type === "group" ? react_default.createElement("use", { xlinkHref: `#${GROUP_ID}` }) : type === "component" ? react_default.createElement("use", { xlinkHref: `#${COMPONENT_ID}` }) : type === "document" ? react_default.createElement("use", { xlinkHref: `#${DOCUMENT_ID}` }) : type === "story" ? react_default.createElement("use", { xlinkHref: `#${STORY_ID}` }) : type === "test" ? react_default.createElement("use", { xlinkHref: `#${TEST_ID}` }) : type === "success" ? react_default.createElement("use", { xlinkHref: `#${SUCCESS_ID}` }) : type === "error" ? react_default.createElement("use", { xlinkHref: `#${ERROR_ID}` }) : type === "warning" ? react_default.createElement("use", { xlinkHref: `#${WARNING_ID}` }) : type === "dot" ? react_default.createElement("use", { xlinkHref: `#${DOT_ID}` }) : null;
+)), react_default.createElement("symbol", { id: DOT_ID }, react_default.createElement("circle", { cx: "3", cy: "3", r: "3", fill: "currentColor" })), react_default.createElement("symbol", { id: NEW_ID }, react_default.createElement("rect", { x: "6", y: "3.5", width: "2", height: "7", rx: "1", fill: "currentColor" }), react_default.createElement("rect", { x: "3.5", y: "6", width: "7", height: "2", rx: "1", fill: "currentColor" })), react_default.createElement("symbol", { id: MODIFIED_ID }, react_default.createElement("circle", { cx: "7", cy: "7", r: "3", fill: "currentColor" })), react_default.createElement("symbol", { id: AFFECTED_ID }, react_default.createElement("circle", { cx: "7", cy: "7", r: "3", fill: "currentColor" })), react_default.createElement("symbol", { id: REVIEWING_ID }, react_default.createElement(
+  "path",
+  {
+    d: "M7.052 3.004c.01 0 .02 0 .03.002.004 0 .01.003.015.004a.493.493 0 01.051.013l.043.015a.497.497 0 01.089.049l.03.023c.015.012.029.023.042.036.012.012.023.026.035.04l.023.03c.01.015.019.03.027.047.008.014.016.028.022.043.006.014.01.028.015.043.005.017.01.034.013.051l.005.017.03.182A3.5 3.5 0 0010.4 6.476l.182.03c.005 0 .01.003.016.004a.494.494 0 01.051.013l.043.015a.503.503 0 01.089.049l.03.023c.015.012.029.023.042.036.012.012.023.026.035.04l.023.03c.01.015.019.03.027.047.008.014.016.028.022.043l.014.04.014.054.005.017c.002.01 0 .019.001.028.002.018.004.036.004.054 0 .018-.002.035-.004.053v.03l-.006.015a.479.479 0 01-.013.051l-.015.043a.507.507 0 01-.049.089l-.023.03-.035.042-.042.035-.03.023a.503.503 0 01-.046.027c-.014.008-.028.016-.043.022-.014.006-.028.01-.043.015a.491.491 0 01-.051.013l-.016.005-.182.03A3.5 3.5 0 007.522 10.4l-.03.182c0 .005-.004.01-.005.016a.491.491 0 01-.013.051l-.015.043a.503.503 0 01-.049.089l-.023.03-.035.042-.041.035-.03.023a.507.507 0 01-.047.027c-.014.008-.028.016-.043.022-.014.006-.028.01-.043.015a.479.479 0 01-.051.013l-.016.005c-.01.002-.02 0-.03.001-.017.002-.034.004-.052.004-.018 0-.036-.002-.054-.004h-.028c-.006-.002-.011-.005-.017-.006a.503.503 0 01-.051-.013l-.043-.015a.505.505 0 01-.089-.049l-.03-.023c-.015-.012-.029-.023-.041-.035-.013-.013-.024-.027-.036-.042l-.023-.03a.503.503 0 01-.027-.046c-.008-.014-.016-.028-.022-.043-.006-.014-.01-.028-.015-.043a.494.494 0 01-.013-.051l-.004-.016-.03-.182a3.5 3.5 0 00-2.877-2.877l-.182-.03c-.006 0-.011-.004-.017-.005a.493.493 0 01-.051-.013l-.043-.015a.492.492 0 01-.089-.049l-.03-.023c-.015-.012-.029-.023-.041-.035-.013-.013-.024-.027-.036-.041l-.023-.03a.497.497 0 01-.027-.047c-.008-.014-.016-.028-.022-.043-.006-.013-.01-.028-.015-.043a.493.493 0 01-.013-.051l-.004-.016c-.002-.01-.001-.02-.002-.03C3.002 7.035 3 7.018 3 7c0-.018.002-.036.004-.054 0-.009 0-.019.002-.028 0-.006.003-.011.004-.017l.015-.054.013-.04a.498.498 0 01.049-.089l.023-.03.026-.032.02-.02.03-.025.03-.023a.498.498 0 01.047-.027c.014-.008.028-.016.043-.022.014-.006.028-.01.043-.015A.493.493 0 013.4 6.51l.017-.004.182-.03a3.5 3.5 0 002.877-2.877l.03-.182c0-.006.003-.011.004-.017a.493.493 0 01.013-.051l.015-.043a.498.498 0 01.049-.089l.023-.03.026-.032.02-.02.03-.025.03-.023a.498.498 0 01.047-.027c.014-.008.028-.016.043-.022.014-.006.028-.01.043-.015A.493.493 0 016.9 3.01l.017-.004c.01-.002.019-.001.028-.002C6.963 3.002 6.981 3 7 3c.018 0 .035.002.053.004z",
+    fill: "currentColor"
+  }
+))), UseSymbol = ({ type }) => type === "group" ? react_default.createElement("use", { xlinkHref: `#${GROUP_ID}` }) : type === "component" ? react_default.createElement("use", { xlinkHref: `#${COMPONENT_ID}` }) : type === "document" ? react_default.createElement("use", { xlinkHref: `#${DOCUMENT_ID}` }) : type === "story" ? react_default.createElement("use", { xlinkHref: `#${STORY_ID}` }) : type === "test" ? react_default.createElement("use", { xlinkHref: `#${TEST_ID}` }) : type === "success" ? react_default.createElement("use", { xlinkHref: `#${SUCCESS_ID}` }) : type === "error" ? react_default.createElement("use", { xlinkHref: `#${ERROR_ID}` }) : type === "warning" ? react_default.createElement("use", { xlinkHref: `#${WARNING_ID}` }) : type === "dot" ? react_default.createElement("use", { xlinkHref: `#${DOT_ID}` }) : type === "new" ? react_default.createElement("use", { xlinkHref: `#${NEW_ID}` }) : type === "reviewing" ? react_default.createElement("use", { xlinkHref: `#${REVIEWING_ID}` }) : type === "modified" ? react_default.createElement("use", { xlinkHref: `#${MODIFIED_ID}` }) : type === "affected" ? react_default.createElement("use", { xlinkHref: `#${AFFECTED_ID}` }) : null;
 
 // src/manager/utils/status.tsx
 var SmallIcons = styled(CircleIcon)({
@@ -20083,35 +21902,122 @@ var SmallIcons = styled(CircleIcon)({
   "status-value:unknown",
   "status-value:pending",
   "status-value:success",
+  "status-value:affected",
+  "status-value:reviewing",
+  "status-value:modified",
+  "status-value:new",
   "status-value:warning",
   "status-value:error"
-], getStatus = (0, import_memoizerific4.default)(5)((theme, status) => ({
-  "status-value:unknown": [null, null],
-  "status-value:pending": [react_default.createElement(LoadingIcons, { key: "icon" }), "currentColor"],
-  "status-value:success": [
-    react_default.createElement("svg", { key: "icon", viewBox: "0 0 14 14", width: "14", height: "14" }, react_default.createElement(UseSymbol, { type: "success" })),
-    "currentColor"
-  ],
-  "status-value:warning": [
-    react_default.createElement("svg", { key: "icon", viewBox: "0 0 14 14", width: "14", height: "14" }, react_default.createElement(UseSymbol, { type: "warning" })),
-    theme.fgColor.warning
-  ],
-  "status-value:error": [
-    react_default.createElement("svg", { key: "icon", viewBox: "0 0 14 14", width: "14", height: "14" }, react_default.createElement(UseSymbol, { type: "error" })),
-    theme.fgColor.negative
-  ]
-})[status]), getMostCriticalStatusValue = (statusValues) => statusPriority.reduce(
+], getStatus = (0, import_memoizerific4.default)(10)((theme, status) => {
+  let defaultIconColor = theme.base === "light" ? curriedTransparentize$1(0.3, theme.color.defaultText) : curriedTransparentize$1(0.6, theme.color.defaultText);
+  return {
+    "status-value:unknown": {
+      icon: null,
+      iconColor: defaultIconColor,
+      textColor: null
+    },
+    "status-value:pending": {
+      icon: react_default.createElement(LoadingIcons, { key: "icon" }),
+      iconColor: defaultIconColor,
+      textColor: "currentColor"
+    },
+    "status-value:success": {
+      icon: react_default.createElement("svg", { key: "icon", viewBox: "0 0 14 14", width: "14", height: "14" }, react_default.createElement(UseSymbol, { type: "success" })),
+      iconColor: theme.color.positive,
+      textColor: "currentColor"
+    },
+    "status-value:new": {
+      icon: react_default.createElement("svg", { key: "icon", viewBox: "0 0 14 14", width: "14", height: "14" }, react_default.createElement(UseSymbol, { type: "new" })),
+      iconColor: theme.fgColor.accent,
+      textColor: null
+    },
+    "status-value:modified": {
+      icon: react_default.createElement("svg", { key: "icon", viewBox: "0 0 14 14", width: "14", height: "14" }, react_default.createElement(UseSymbol, { type: "modified" })),
+      iconColor: theme.fgColor.accent,
+      textColor: null
+    },
+    "status-value:affected": {
+      icon: react_default.createElement("svg", { key: "icon", viewBox: "0 0 14 14", width: "14", height: "14" }, react_default.createElement(UseSymbol, { type: "affected" })),
+      iconColor: theme.fgColor.accent,
+      textColor: null
+    },
+    "status-value:reviewing": {
+      icon: react_default.createElement("svg", { key: "icon", viewBox: "0 0 14 14", width: "14", height: "14" }, react_default.createElement(UseSymbol, { type: "reviewing" })),
+      iconColor: theme.fgColor.agentic,
+      textColor: null
+    },
+    "status-value:warning": {
+      icon: react_default.createElement("svg", { key: "icon", viewBox: "0 0 14 14", width: "14", height: "14" }, react_default.createElement(UseSymbol, { type: "warning" })),
+      iconColor: theme.color.warning,
+      textColor: theme.fgColor.warning
+    },
+    "status-value:error": {
+      icon: react_default.createElement("svg", { key: "icon", viewBox: "0 0 14 14", width: "14", height: "14" }, react_default.createElement(UseSymbol, { type: "error" })),
+      iconColor: theme.color.negative,
+      textColor: theme.fgColor.negative
+    }
+  }[status];
+}), shouldShowChangeStatus = (changeStatus, isModifiedFilterActive) => changeStatus !== "status-value:unknown" && changeStatus !== "status-value:affected" && (changeStatus !== "status-value:modified" || isModifiedFilterActive), isAggregatedTestStatus = (status) => !NON_AGGREGATED_STATUS_TYPE_IDS.includes(status.typeId);
+function getSidebarVisibleStatus({
+  theme,
+  item,
+  statuses,
+  groupDualStatus,
+  isModifiedFilterActive
+}) {
+  let statusByType = statuses ?? {};
+  if (item.type === "group" || item.type === "component" || item.type === "story" && item.children && item.children.length > 0) {
+    let { changeStatus: localChange, testStatus: localTest } = getChangeDetectionStatus(statusByType), groupDual = groupDualStatus?.[item.id] ?? {
+      change: "status-value:unknown",
+      test: "status-value:unknown"
+    }, branchChange = getMostCriticalStatusValue([localChange, groupDual.change]), branchTest = getMostCriticalStatusValue([localTest, groupDual.test]);
+    return shouldShowChangeStatus(branchChange, isModifiedFilterActive) ? { icon: getStatus(theme, branchChange).icon, status: branchChange } : { icon: getStatus(theme, branchTest).icon, status: branchTest };
+  }
+  if (item.type === "story" && !(item.children && item.children.length > 0) && item.subtype !== "test" || item.type === "docs") {
+    let { changeStatus, testStatus } = getChangeDetectionStatus(statusByType);
+    return shouldShowChangeStatus(changeStatus, isModifiedFilterActive) ? { icon: getStatus(theme, changeStatus).icon, status: changeStatus } : { icon: getStatus(theme, testStatus).icon, status: testStatus };
+  }
+  let leafStatuses = Object.values(statusByType).filter(
+    (status) => isAggregatedTestStatus(status) || status.value === "status-value:new"
+  ), leafStatus = getMostCriticalStatusValue(leafStatuses.map((s2) => s2.value));
+  return { icon: getStatus(theme, leafStatus).icon, status: leafStatus };
+}
+function getChangeDetectionStatus(statuses) {
+  let changeValues = Object.values(statuses).filter((status) => status.typeId === CHANGE_DETECTION_STATUS_TYPE_ID).map((status) => status.value), testValues = Object.values(statuses).filter(isAggregatedTestStatus).map((status) => status.value);
+  return {
+    changeStatus: getMostCriticalStatusValue(changeValues),
+    testStatus: getMostCriticalStatusValue(testValues)
+  };
+}
+var getMostCriticalStatusValue = (statusValues) => statusPriority.reduce(
   (acc, value) => statusValues.includes(value) ? value : acc,
   "status-value:unknown"
-);
+), statusesExcludingReview = (statuses) => statuses.filter((status) => status.typeId !== REVIEW_STATUS_TYPE_ID);
 function getGroupStatus(collapsedData, allStatuses) {
   return Object.values(collapsedData).reduce((acc, item) => {
     if (item.type === "group" || item.type === "component" || item.type === "story") {
       let leafs = getDescendantIds(collapsedData, item.id, !1).map((id) => collapsedData[id]).filter((i2) => i2.type === "story"), combinedStatus = getMostCriticalStatusValue(
-        // @ts-expect-error (non strict)
-        leafs.flatMap((story) => Object.values(allStatuses[story.id] || {})).map((s2) => s2.value)
+        statusesExcludingReview(
+          leafs.flatMap(
+            (story) => Object.values(allStatuses[story.id] || {})
+          )
+        ).map((s2) => s2.value)
       );
       combinedStatus && (acc[item.id] = combinedStatus);
+    }
+    return acc;
+  }, {});
+}
+function getGroupDualStatus(collapsedData, allStatuses) {
+  return Object.values(collapsedData).reduce((acc, item) => {
+    if (item.type === "group" || item.type === "component" || item.type === "story") {
+      let allDescendantStatuses = getDescendantIds(collapsedData, item.id, !1).map((id) => collapsedData[id]).filter((i2) => i2.type === "story").flatMap(
+        (story) => Object.values(allStatuses[story.id] || {})
+      ), changeValues = allDescendantStatuses.filter((s2) => s2.typeId === CHANGE_DETECTION_STATUS_TYPE_ID).map((s2) => s2.value), testValues = allDescendantStatuses.filter(isAggregatedTestStatus).map((s2) => s2.value);
+      acc[item.id] = {
+        change: getMostCriticalStatusValue(changeValues),
+        test: getMostCriticalStatusValue(testValues)
+      };
     }
     return acc;
   }, {});
@@ -20119,22 +22025,12 @@ function getGroupStatus(collapsedData, allStatuses) {
 
 // src/manager/components/sidebar/ContextMenu.tsx
 init_react();
-var import_copy_to_clipboard2 = __toESM(require_copy_to_clipboard(), 1);
 
 // src/manager/components/sidebar/StatusButton.tsx
 init_react();
-var withStatusColor = ({ theme, status }) => {
-  let defaultColor = theme.base === "light" ? curriedTransparentize$1(0.3, theme.color.defaultText) : curriedTransparentize$1(0.6, theme.color.defaultText);
-  return {
-    color: {
-      "status-value:pending": defaultColor,
-      "status-value:success": theme.color.positive,
-      "status-value:error": theme.color.negative,
-      "status-value:warning": theme.color.warning,
-      "status-value:unknown": defaultColor
-    }[status]
-  };
-}, StatusLabel = styled.div(withStatusColor, {
+var withStatusColor = ({ theme, status }) => ({
+  color: getStatus(theme, status).iconColor ?? void 0
+}), StatusLabel = styled.div(withStatusColor, {
   margin: 3
 }), StyledButton = styled(Button)(
   withStatusColor,
@@ -20174,10 +22070,6 @@ var withStatusColor = ({ theme, status }) => {
 ), StatusButton = forwardRef((props, ref) => react_default.createElement(StyledButton, { variant: "ghost", padding: "small", ...props, ref }));
 StatusButton.displayName = "StatusButton";
 
-// src/manager/components/sidebar/StatusContext.tsx
-init_react();
-var StatusContext = createContext({});
-
 // src/manager/components/sidebar/ContextMenu.tsx
 var empty = {
   onMouseEnter: () => {
@@ -20192,14 +22084,17 @@ var empty = {
   "&:focus-visible": {
     outlineOffset: -2
   }
-}), useContextMenu = (context, links, api) => {
-  let [hoverCount, setHoverCount] = useState(0), [isOpen, setIsOpen] = useState(!1), [copyText, setCopyText] = react_default.useState("Copy story name"), { allStatuses, groupStatus } = useContext(StatusContext), shortcutKeys = api.getShortcutKeys(), enableShortcuts = !!shortcutKeys, topLinks = useMemo(() => {
+}), useContextMenu = (context, links, api, visibleStatus) => {
+  let [hoverCount, setHoverCount] = useState(0), [isOpen, setIsOpen] = useState(!1), exportName = context && "exportName" in context ? context.exportName ?? "" : "", { children: copyText, buttonProps: copyButtonProps } = useCopyButton2({
+    children: "Copy story name",
+    content: exportName
+  }), openInEditorShortcut = api.getShortcutKeys()?.openInEditor, topLinks = useMemo(() => {
     let defaultLinks = [];
     return context && "importPath" in context && context.importPath && defaultLinks.push({
       id: "open-in-editor",
       title: "Open in editor",
       icon: react_default.createElement(EditorIcon, null),
-      right: enableShortcuts ? react_default.createElement(Shortcut, { keys: shortcutKeys.openInEditor }) : null,
+      right: openInEditorShortcut ? react_default.createElement(Shortcut, { keys: openInEditorShortcut }) : null,
       onClick: (e2) => {
         context.importPath && (e2.preventDefault(), api.openInEditor({ file: context.importPath }));
       }
@@ -20213,12 +22108,10 @@ var empty = {
       //     <Shortcut keys={shortcutKeys.copyStoryName} />
       //   ) : null,
       onClick: (e2) => {
-        e2.preventDefault(), (0, import_copy_to_clipboard2.default)(context.exportName), setCopyText("Copied!"), setTimeout(() => {
-          setCopyText("Copy story name");
-        }, 2e3);
+        e2.preventDefault(), copyButtonProps.onClick(e2);
       }
     }), defaultLinks;
-  }, [api, context, copyText, enableShortcuts, shortcutKeys]), handlers = useMemo(() => ({
+  }, [api, context, copyText, copyButtonProps, openInEditorShortcut]), handlers = useMemo(() => ({
     onMouseEnter: () => {
       setHoverCount((c2) => c2 + 1);
     },
@@ -20231,20 +22124,7 @@ var empty = {
   }), []), providerLinks = useMemo(() => {
     let registeredTestProviders = api.getElements(Addon_TypesEnum.experimental_TEST_PROVIDER);
     return hoverCount ? generateTestProviderLinks(registeredTestProviders, context) : [];
-  }, [api, context, hoverCount]), shouldRender = !context.refId && (providerLinks.length > 0 || links.length > 0 || topLinks.length > 0), isLeafNode = context.type === "story" || context.type === "docs", itemStatus = useMemo(() => {
-    let status = "status-value:unknown";
-    if (!context)
-      return status;
-    if (isLeafNode) {
-      let values = Object.values(allStatuses?.[context.id] || {}).map((s2) => s2.value);
-      status = getMostCriticalStatusValue(values);
-    }
-    if (!isLeafNode) {
-      let groupValue = groupStatus && groupStatus[context.id];
-      status = groupValue === "status-value:success" || groupValue === void 0 ? "status-value:unknown" : groupValue;
-    }
-    return status;
-  }, [allStatuses, groupStatus, context, isLeafNode]), MenuIcon2 = useMemo(() => context.type !== "story" && context.type !== "docs" ? itemStatus !== "status-value:success" && itemStatus !== "status-value:unknown" ? react_default.createElement("svg", { key: "icon", viewBox: "0 0 6 6", width: "6", height: "6" }, react_default.createElement(UseSymbol, { type: "dot" })) : react_default.createElement(EllipsisIcon, null) : itemStatus === "status-value:error" ? react_default.createElement("svg", { key: "icon", viewBox: "0 0 14 14", width: "14", height: "14" }, react_default.createElement(UseSymbol, { type: "error" })) : itemStatus === "status-value:warning" ? react_default.createElement("svg", { key: "icon", viewBox: "0 0 14 14", width: "14", height: "14" }, react_default.createElement(UseSymbol, { type: "warning" })) : itemStatus === "status-value:success" ? react_default.createElement("svg", { key: "icon", viewBox: "0 0 14 14", width: "14", height: "14" }, react_default.createElement(UseSymbol, { type: "success" })) : react_default.createElement(EllipsisIcon, null), [itemStatus, context.type]);
+  }, [api, context, hoverCount]), shouldRender = !context.refId && (providerLinks.length > 0 || links.length > 0 || topLinks.length > 0), buttonStatus = visibleStatus?.status ?? "status-value:unknown", menuIcon = visibleStatus?.icon ?? react_default.createElement(EllipsisIcon, null);
   return useMemo(() => globalThis.CONFIG_TYPE !== "DEVELOPMENT" ? empty : {
     onMouseEnter: handlers.onMouseEnter,
     node: shouldRender ? react_default.createElement(
@@ -20266,13 +22146,13 @@ var empty = {
           "data-testid": "context-menu",
           ariaLabel: "Open context menu",
           type: "button",
-          status: itemStatus,
+          status: buttonStatus,
           onClick: handlers.onOpen
         },
-        MenuIcon2
+        menuIcon
       )
     ) : null
-  }, [context, handlers, isOpen, shouldRender, links, topLinks, itemStatus, MenuIcon2]);
+  }, [context, handlers, isOpen, shouldRender, links, topLinks, buttonStatus, menuIcon]);
 }, LiveContextMenu = ({
   context,
   links,
@@ -20294,6 +22174,10 @@ function generateTestProviderLinks(registeredTestProviders, context) {
     } : null;
   }).filter(Boolean);
 }
+
+// src/manager/components/sidebar/StatusContext.tsx
+init_react();
+var StatusContext = createContext({});
 
 // src/manager/components/sidebar/TreeNode.tsx
 init_react();
@@ -20612,36 +22496,15 @@ var CollapseButton = styled(Button)(({ theme }) => ({
       width: "auto"
     }
   }
-})), SuccessStatusIcon = (props) => {
-  let theme = useTheme();
-  return react_default.createElement(StatusPassIcon, { ...props, color: theme.color.positive });
-}, ErrorStatusIcon = (props) => {
-  let theme = useTheme();
-  return react_default.createElement(StatusFailIcon, { ...props, color: theme.color.negative });
-}, WarnStatusIcon = (props) => {
-  let theme = useTheme();
-  return react_default.createElement(StatusWarnIcon, { ...props, color: theme.color.warning });
-}, PendingStatusIcon = (props) => {
-  let theme = useTheme();
-  return react_default.createElement(SyncIcon, { ...props, size: 12, color: theme.color.defaultText });
-}, StatusIconMap = {
-  "status-value:success": react_default.createElement(SuccessStatusIcon, null),
-  "status-value:error": react_default.createElement(ErrorStatusIcon, null),
-  "status-value:warning": react_default.createElement(WarnStatusIcon, null),
-  "status-value:pending": react_default.createElement(PendingStatusIcon, null),
-  "status-value:unknown": null
-};
-var statusOrder = [
-  "status-value:success",
-  "status-value:error",
-  "status-value:warning",
-  "status-value:pending",
-  "status-value:unknown"
-], Node2 = react_default.memo(function(props) {
+})), StatusSlots = styled.div({
+  display: "flex",
+  alignItems: "center"
+});
+var getStatusLabel = (status) => status.split(":")[1].replace(/^./, (char) => char.toUpperCase()), Node2 = react_default.memo(function(props) {
   let {
     item,
     statuses,
-    groupStatus,
+    groupDualStatus,
     refId,
     docsMode,
     isOrphan,
@@ -20652,25 +22515,32 @@ var statusOrder = [
     isExpanded,
     setExpanded,
     onSelectStoryId,
-    api
-  } = props, theme = useTheme(), { isDesktop, isMobile: isMobile2, setMobileMenuOpen } = useLayout();
-  if (!isDisplayed)
-    return null;
-  let statusLinks = useMemo(() => item.type === "story" || item.type === "docs" ? Object.entries(statuses).filter(([, status]) => status.sidebarContextMenu !== !1).sort((a2, b2) => statusOrder.indexOf(a2[1].value) - statusOrder.indexOf(b2[1].value)).map(([typeId, status]) => ({
+    api,
+    isModifiedFilterActive
+  } = props, theme = useTheme(), { isDesktop, isMobile: isMobile2, setMobileMenuOpen } = useLayout(), statusLinks = useMemo(() => item.type === "story" || item.type === "docs" ? Object.entries(statuses).filter(([, status]) => status.sidebarContextMenu !== !1).filter(([, status]) => status.typeId !== REVIEW_STATUS_TYPE_ID).sort((a2, b2) => statusPriority.indexOf(a2[1].value) - statusPriority.indexOf(b2[1].value)).map(([typeId, status]) => ({
     id: typeId,
     title: status.title,
     description: status.description,
     "aria-label": `Test status for ${status.title}: ${status.value}`,
-    icon: StatusIconMap[status.value],
+    icon: getStatus(theme, status.value).icon,
     onClick: () => {
       onSelectStoryId(item.id), internal_fullStatusStore.selectStatuses([status]);
     }
-  })) : [], [item.id, item.type, onSelectStoryId, statuses]), id = createId(item.id, refId), contextMenu = refId === "storybook_internal" ? useContextMenu(item, statusLinks, api) : { node: null, onMouseEnter: () => {
-  } };
+  })) : [], [item.id, item.type, onSelectStoryId, statuses, theme]), visibleStatus = useMemo(
+    () => getSidebarVisibleStatus({
+      theme,
+      item,
+      statuses,
+      groupDualStatus,
+      isModifiedFilterActive
+    }),
+    [theme, item, statuses, groupDualStatus, isModifiedFilterActive]
+  ), contextMenu = useContextMenu(item, statusLinks, api, visibleStatus);
+  refId !== "storybook_internal" && (contextMenu = { node: null, onMouseEnter: () => {
+  } });
+  let id = createId(item.id, refId);
   if (item.type === "story" && !("children" in item && item.children) && (!("subtype" in item) || item.subtype !== "test") || item.type === "docs") {
-    let LeafNode3 = item.type === "docs" ? DocumentNode : StoryLeafNode, statusValue = getMostCriticalStatusValue(
-      Object.values(statuses || {}).map((s2) => s2.value)
-    ), [icon, textColor] = getStatus(theme, statusValue);
+    let LeafNode3 = item.type === "docs" ? DocumentNode : StoryLeafNode, { changeStatus, testStatus } = getChangeDetectionStatus(statuses || {}), leafChangeIcon = shouldShowChangeStatus(changeStatus, isModifiedFilterActive) ? getStatus(theme, changeStatus).icon : null, { icon: testIcon } = getStatus(theme, testStatus), overallStoryStatus = getMostCriticalStatusValue([changeStatus, testStatus]), { textColor } = getStatus(theme, overallStoryStatus);
     return react_default.createElement(
       LeafNodeStyleWrapper,
       {
@@ -20700,16 +22570,46 @@ var statusOrder = [
       ),
       isSelected && react_default.createElement(SkipToContentLink, { asChild: !0, ariaLabel: !1 }, react_default.createElement("a", { href: "#storybook-preview-wrapper" }, "Skip to content")),
       contextMenu.node,
-      icon ? react_default.createElement(
+      leafChangeIcon && testIcon ? react_default.createElement(StatusSlots, null, react_default.createElement(
         StatusButton,
         {
-          ariaLabel: `Test status: ${statusValue.replace("status-value:", "")}`,
-          "data-testid": "tree-status-button",
+          ariaLabel: `Change status: ${getStatusLabel(changeStatus)}`,
+          "data-testid": "tree-change-status-button",
           type: "button",
-          status: statusValue,
+          status: changeStatus,
           selectedItem: isSelected
         },
-        icon
+        leafChangeIcon
+      ), react_default.createElement(
+        StatusButton,
+        {
+          ariaLabel: `Test status: ${getStatusLabel(testStatus)}`,
+          "data-testid": "tree-status-button",
+          type: "button",
+          status: testStatus,
+          selectedItem: isSelected
+        },
+        testIcon
+      )) : leafChangeIcon ? react_default.createElement(
+        StatusButton,
+        {
+          ariaLabel: `Change status: ${getStatusLabel(changeStatus)}`,
+          "data-testid": "tree-change-status-button",
+          type: "button",
+          status: changeStatus,
+          selectedItem: isSelected
+        },
+        leafChangeIcon
+      ) : testIcon ? react_default.createElement(
+        StatusButton,
+        {
+          ariaLabel: `Test status: ${getStatusLabel(testStatus)}`,
+          "data-testid": "tree-status-button",
+          type: "button",
+          status: testStatus,
+          selectedItem: isSelected
+        },
+        testIcon
       ) : null
     );
   }
@@ -20754,20 +22654,13 @@ var statusOrder = [
         isFullyExpanded ? react_default.createElement(CollapseIcon, null) : react_default.createElement(ExpandAltIcon, null)
       )
     );
-  let itemStatus = getMostCriticalStatusValue(Object.values(statuses || {}).map((s2) => s2.value)), [itemIcon, itemColor] = getStatus(theme, itemStatus), itemStatusButton = itemIcon ? react_default.createElement(
-    StatusButton,
-    {
-      ariaLabel: `Test status: ${itemStatus.replace("status-value:", "")}`,
-      "data-testid": "tree-status-button",
-      role: "status",
-      type: "button",
-      status: itemStatus,
-      selectedItem: isSelected
-    },
-    itemIcon
-  ) : null;
   if (item.type === "component" || item.type === "group" || item.type === "story" && "children" in item && item.children) {
-    let { children = [] } = item, BranchNode2 = { component: ComponentNode, group: GroupNode, story: StoryBranchNode }[item.type], status = getMostCriticalStatusValue([itemStatus, groupStatus?.[item.id]]), color2 = status ? getStatus(theme, status)[1] : null, showBranchStatus = status === "status-value:error" || status === "status-value:warning";
+    let { children = [] } = item, BranchNode2 = { component: ComponentNode, group: GroupNode, story: StoryBranchNode }[item.type], { changeStatus: localChange, testStatus: localTest } = getChangeDetectionStatus(
+      statuses || {}
+    ), groupDual = groupDualStatus?.[item.id] || {
+      change: "status-value:unknown",
+      test: "status-value:unknown"
+    }, branchChange = getMostCriticalStatusValue([localChange, groupDual.change]), branchTest = getMostCriticalStatusValue([localTest, groupDual.test]), branchChangeIcon = shouldShowChangeStatus(branchChange, isModifiedFilterActive) ? getStatus(theme, branchChange).icon : null, branchTestIcon = getStatus(theme, branchTest).icon, overallStatus = getMostCriticalStatusValue([branchChange, branchTest]), color2 = overallStatus ? getStatus(theme, overallStatus).textColor : null;
     return react_default.createElement(
       LeafNodeStyleWrapper,
       {
@@ -20805,20 +22698,65 @@ var statusOrder = [
       ),
       isSelected && react_default.createElement(SkipToContentLink, { asChild: !0, ariaLabel: !1 }, react_default.createElement("a", { href: "#storybook-preview-wrapper" }, "Skip to content")),
       contextMenu.node,
-      showBranchStatus ? react_default.createElement(
+      branchChangeIcon && branchTestIcon ? react_default.createElement(StatusSlots, null, react_default.createElement(
         StatusButton,
         {
-          ariaLabel: `Test status: ${status.replace("status-value:", "")}`,
-          "data-testid": "tree-status-button",
+          ariaLabel: `Change status: ${getStatusLabel(branchChange)}`,
+          "data-testid": "tree-change-status-button",
           type: "button",
-          status,
+          status: branchChange,
           selectedItem: isSelected
         },
-        react_default.createElement("svg", { key: "icon", viewBox: "0 0 6 6", width: "6", height: "6", type: "dot" }, react_default.createElement(UseSymbol, { type: "dot" }))
-      ) : itemStatusButton
+        branchChangeIcon
+      ), react_default.createElement(
+        StatusButton,
+        {
+          ariaLabel: `Test status: ${getStatusLabel(branchTest)}`,
+          "data-testid": "tree-status-button",
+          type: "button",
+          status: branchTest,
+          selectedItem: isSelected
+        },
+        branchTestIcon
+      )) : branchChangeIcon ? react_default.createElement(
+        StatusButton,
+        {
+          ariaLabel: `Change status: ${getStatusLabel(branchChange)}`,
+          "data-testid": "tree-change-status-button",
+          type: "button",
+          status: branchChange,
+          selectedItem: isSelected
+        },
+        branchChangeIcon
+      ) : branchTestIcon ? react_default.createElement(
+        StatusButton,
+        {
+          ariaLabel: `Test status: ${getStatusLabel(branchTest)}`,
+          "data-testid": "tree-status-button",
+          type: "button",
+          status: branchTest,
+          selectedItem: isSelected
+        },
+        branchTestIcon
+      ) : null
     );
   }
-  let isTest = item.type === "story" && item.subtype === "test", LeafNode2 = isTest ? TestNode : { docs: DocumentNode, story: StoryLeafNode }[item.type], nodeType = isTest ? "test" : { docs: "document", story: "story" }[item.type];
+  let isTest = item.type === "story" && item.subtype === "test", LeafNode2 = isTest ? TestNode : { docs: DocumentNode, story: StoryLeafNode }[item.type], nodeType = isTest ? "test" : { docs: "document", story: "story" }[item.type], leafStatuses = Object.fromEntries(
+    Object.entries(statuses || {}).filter(
+      ([, status]) => status.typeId !== CHANGE_DETECTION_STATUS_TYPE_ID || status.value === "status-value:new"
+    )
+  ), leafStatus = getMostCriticalStatusValue(Object.values(leafStatuses).map((s2) => s2.value)), { icon: leafIcon, textColor: leafColor } = getStatus(theme, leafStatus), leafStatusButton = leafIcon ? react_default.createElement(
+    StatusButton,
+    {
+      ariaLabel: `Status: ${getStatusLabel(leafStatus)}`,
+      "data-testid": "tree-status-button",
+      role: "status",
+      type: "button",
+      status: leafStatus,
+      selectedItem: isSelected
+    },
+    leafIcon
+  ) : null;
   return react_default.createElement(
     LeafNodeStyleWrapper,
     {
@@ -20835,7 +22773,7 @@ var statusOrder = [
     react_default.createElement(
       LeafNode2,
       {
-        style: itemColor && !isSelected ? { color: itemColor } : {},
+        style: leafColor && !isSelected ? { color: leafColor } : {},
         href: getLink(item, refId),
         id,
         depth: isOrphan ? item.depth : item.depth - 1,
@@ -20847,9 +22785,9 @@ var statusOrder = [
     ),
     isSelected && react_default.createElement(SkipToContentLink, { ariaLabel: !1, asChild: !0 }, react_default.createElement("a", { href: "#storybook-preview-wrapper" }, "Skip to content")),
     contextMenu.node,
-    itemStatusButton
+    leafStatusButton
   );
-}), Root = react_default.memo(function({
+}), Root3 = react_default.memo(function({
   setExpanded,
   isFullyExpanded,
   expandableDescendants,
@@ -20879,7 +22817,7 @@ var statusOrder = [
   selectedStoryId,
   onSelectStoryId
 }) {
-  let containerRef = useRef(null), api = useStorybookApi(), [rootIds, orphanIds, initialExpanded] = useMemo(
+  let containerRef = useRef(null), api = useStorybookApi(), isModifiedFilterActive = (useStorybookState().includedStatusFilters ?? []).includes("status-value:modified"), [rootIds, orphanIds, initialExpanded] = useMemo(
     () => Object.keys(data).reduce(
       (acc, id) => {
         let item = data[id];
@@ -20938,6 +22876,9 @@ var statusOrder = [
   }), groupStatus = useMemo(
     () => getGroupStatus(collapsedData, allStatuses ?? {}),
     [collapsedData, allStatuses]
+  ), groupDualStatus = useMemo(
+    () => getGroupDualStatus(collapsedData, allStatuses ?? {}),
+    [collapsedData, allStatuses]
   ), treeItems = useMemo(() => collapsedItems.map((itemId) => {
     let item = collapsedData[itemId], id = createId(itemId, refId);
     if (item.type === "root") {
@@ -20945,7 +22886,7 @@ var statusOrder = [
       return (
         // @ts-expect-error (TODO)
         react_default.createElement(
-          Root,
+          Root3,
           {
             api,
             key: id,
@@ -20959,7 +22900,8 @@ var statusOrder = [
             setExpanded,
             isFullyExpanded,
             expandableDescendants: descendants,
-            onSelectStoryId
+            onSelectStoryId,
+            isModifiedFilterActive
           }
         )
       );
@@ -20973,7 +22915,7 @@ var statusOrder = [
         key: id,
         item,
         statuses: allStatuses?.[itemId] ?? {},
-        groupStatus,
+        groupDualStatus,
         refId,
         docsMode,
         isOrphan: orphanIds.some((oid) => itemId === oid || itemId.startsWith(`${oid}-`)),
@@ -20981,7 +22923,8 @@ var statusOrder = [
         isSelected: selectedStoryId === itemId,
         isExpanded: !!expanded[itemId],
         setExpanded,
-        onSelectStoryId
+        onSelectStoryId,
+        isModifiedFilterActive
       }
     );
   }), [
@@ -20992,7 +22935,8 @@ var statusOrder = [
     docsMode,
     expandableDescendants,
     expanded,
-    groupStatus,
+    groupDualStatus,
+    isModifiedFilterActive,
     onSelectStoryId,
     orphanIds,
     refId,
@@ -21044,7 +22988,7 @@ var Wrapper6 = styled.div(({ isMain }) => ({
     }
   }
 })), Ref = react_default.memo(function(props) {
-  let { docsOptions } = useStorybookState(), api = useStorybookApi(), {
+  let storybookState = useStorybookState(), api = useStorybookApi(), {
     filteredIndex: index,
     id: refId,
     title: title2 = refId,
@@ -21060,11 +23004,11 @@ var Wrapper6 = styled.div(({ isMain }) => ({
     indexError,
     previewInitialized,
     allStatuses
-  } = props, length = useMemo(() => index ? Object.keys(index).length : 0, [index]), indicatorRef = useRef(null), isMain = refId === DEFAULT_REF_ID, isLoading = isLoadingMain || (type === "auto-inject" && !previewInitialized || type === "server-checked") || type === "unknown", state = getStateType(isLoading, !!loginUrl && length === 0, !!indexError, !isLoading && length === 0), [isExpanded, setExpanded] = useState(expanded);
+  } = props, length = useMemo(() => index ? Object.keys(index).length : 0, [index]), indicatorRef = useRef(null), isMain = refId === DEFAULT_REF_ID, isLoading = isLoadingMain || (type === "auto-inject" && !previewInitialized || type === "server-checked") || type === "unknown", isError2 = !!indexError, isEmpty = !isLoading && length === 0, isAuthRequired = !!loginUrl && length === 0, activeFilterCount = getActiveFilterCount(storybookState), state = getStateType(isLoading, isAuthRequired, isError2, isEmpty), [isExpanded, setExpanded] = useState(expanded);
   useEffect(() => {
     index && selectedStoryId && index[selectedStoryId] && setExpanded(!0);
-  }, [setExpanded, index, selectedStoryId]);
-  let handleClick = useCallback(() => setExpanded((value) => !value), [setExpanded]), setHighlightedItemId = useCallback(
+  }, [index, selectedStoryId]);
+  let handleClick = useCallback(() => setExpanded((value) => !value), []), setHighlightedItemId = useCallback(
     (itemId) => setHighlighted({ itemId, refId }),
     [setHighlighted, refId]
   ), onSelectStoryId = useCallback(
@@ -21079,7 +23023,14 @@ var Wrapper6 = styled.div(({ isMain }) => ({
     },
     react_default.createElement(CollapseButton2, { "data-action": "collapse-ref", onClick: handleClick }, react_default.createElement(CollapseIcon2, { isExpanded }), react_default.createElement(RefTitle, { title: title2 }, title2)),
     react_default.createElement(RefIndicator, { ...props, state, ref: indicatorRef })
-  ), isExpanded && react_default.createElement(Wrapper6, { "data-title": title2, isMain }, state === "auth" && react_default.createElement(AuthBlock, { id: refId, loginUrl }), state === "error" && react_default.createElement(ErrorBlock, { error: indexError }), state === "loading" && react_default.createElement(LoaderBlock, { isMain }), state === "empty" && react_default.createElement(EmptyBlock, { isMain, hasEntries }), state === "ready" && react_default.createElement(
+  ), isExpanded && react_default.createElement(Wrapper6, { "data-title": title2, isMain }, state === "auth" && react_default.createElement(AuthBlock, { id: refId, loginUrl }), state === "error" && react_default.createElement(ErrorBlock, { error: indexError }), state === "loading" && react_default.createElement(LoaderBlock, { isMain }), state === "empty" && react_default.createElement(
+    EmptyBlock,
+    {
+      isMain,
+      hasEntries,
+      activeFilterCount
+    }
+  ), state === "ready" && react_default.createElement(
     Tree,
     {
       allStatuses,
@@ -21087,7 +23038,7 @@ var Wrapper6 = styled.div(({ isMain }) => ({
       isMain,
       refId,
       data: index,
-      docsMode: docsOptions.docsMode,
+      docsMode: storybookState.docsOptions.docsMode,
       selectedStoryId,
       onSelectStoryId,
       highlightedRef,
@@ -21205,6 +23156,366 @@ var Explorer = react_default.memo(function({
     ))
   );
 });
+
+// src/manager/components/sidebar/Filter.tsx
+init_react();
+
+// src/manager/components/sidebar/FilterPanel.tsx
+init_react();
+
+// src/manager/components/sidebar/FilterPanelLink.tsx
+init_react();
+var MutedText = styled.span(({ theme }) => ({
+  color: theme.textMutedColor
+})), StatusIcon2 = styled.span(({ $iconColor }) => ({
+  display: "contents",
+  color: $iconColor ?? void 0,
+  "> svg": {
+    transform: "scale(1.3)"
+  }
+})), createFilterLink = ({
+  id,
+  type,
+  title: title2,
+  tooltip,
+  count,
+  icon,
+  isIncluded,
+  isExcluded,
+  onCheckboxChange,
+  onInvert
+}) => {
+  let isChecked = isIncluded || isExcluded, toggleLabel = `${type} filter: ${isExcluded ? `exclude ${title2}` : title2}`, toggleTooltip = tooltip ?? `${isChecked ? "Remove" : "Add"} ${type} filter: ${title2}`, invertButtonLabel = `${isExcluded ? "Include" : "Exclude"} ${type}: ${title2}`;
+  return {
+    id: `filter-${type}-${id}`,
+    content: react_default.createElement(ActionList.HoverItem, { targetId: `filter-${type}-${id}` }, react_default.createElement(ActionList.Action, { as: "label", ariaLabel: !1, tabIndex: -1, tooltip: toggleTooltip }, react_default.createElement(ActionList.Icon, null, isExcluded ? react_default.createElement(DeleteIcon, null) : isIncluded ? null : icon, react_default.createElement(
+      Form.Checkbox,
+      {
+        checked: isChecked,
+        onChange: onCheckboxChange,
+        "data-tag": title2,
+        "aria-label": toggleLabel
+      }
+    )), react_default.createElement(ActionList.Text, null, react_default.createElement("span", null, title2, isExcluded && react_default.createElement(MutedText, null, " (excluded)"))), isExcluded ? react_default.createElement("s", null, count) : react_default.createElement("span", null, count)), react_default.createElement(
+      ActionList.Button,
+      {
+        "data-target-id": `filter-${type}-${id}`,
+        ariaLabel: invertButtonLabel,
+        onClick: onInvert
+      },
+      react_default.createElement("span", { style: { minWidth: 45 } }, isExcluded ? "Include" : "Exclude")
+    ))
+  };
+};
+
+// src/manager/components/sidebar/FilterPanel.utils.ts
+var BUILT_IN_TAGS = /* @__PURE__ */ new Set([
+  "dev",
+  "test",
+  "autodocs",
+  "attached-mdx",
+  "unattached-mdx",
+  "play-fn",
+  "test-fn",
+  "manifest"
+]), STATUS_DISPLAY_ORDER = [
+  "status-value:new",
+  "status-value:modified",
+  "status-value:affected",
+  "status-value:reviewing"
+], areFiltersEqual = (left, right) => left.length === right.length && (/* @__PURE__ */ new Set([...left, ...right])).size === left.length, getFilterFunction = (tag) => Object.hasOwn(BUILT_IN_FILTERS, tag) ? BUILT_IN_FILTERS[tag] : USER_TAG_FILTER(tag);
+
+// src/manager/components/sidebar/useFilterData.tsx
+init_react();
+var BUILT_IN_FILTER_DEFS = [
+  { id: "_docs", title: "Documentation", icon: react_default.createElement(DocumentIcon, { color: color.gold }), tag: "_docs" },
+  { id: "_play", title: "Play", icon: react_default.createElement(PlayHollowIcon, { color: color.seafoam }), tag: "_play" },
+  { id: "_test", title: "Testing", icon: react_default.createElement(BeakerIcon, { color: color.green }), tag: "_test" }
+];
+function useTagFilterEntries(indexJson) {
+  return useMemo(() => {
+    let entries = Object.values(indexJson.entries), userTagsCounts = entries.reduce((acc, entry) => (entry.tags?.forEach((tag) => {
+      BUILT_IN_TAGS.has(tag) || (acc[tag] = (acc[tag] || 0) + 1);
+    }), acc), {}), tagEntries = Object.entries(userTagsCounts).map(([tag, count]) => ({
+      id: tag,
+      type: "tag",
+      title: tag,
+      count,
+      icon: null
+    })), getBuiltInCount = (filterFn) => entries.filter((entry) => filterFn?.(entry)).length;
+    return { builtInEntries: BUILT_IN_FILTER_DEFS.map((def) => ({
+      id: def.id,
+      type: "built-in",
+      title: def.title,
+      icon: def.icon,
+      count: getBuiltInCount(getFilterFunction(def.tag))
+    })), tagEntries };
+  }, [indexJson.entries]);
+}
+function useStatusFilterEntries(allStatuses) {
+  return useMemo(() => {
+    let changeDetectionEnabled = !!globalThis?.FEATURES?.changeDetection, counts = countStatusesByValue(allStatuses), reviewingCount = counts["status-value:reviewing"] ?? 0;
+    return !changeDetectionEnabled && reviewingCount === 0 ? [] : (changeDetectionEnabled ? STATUS_DISPLAY_ORDER : ["status-value:reviewing"]).map((statusValue) => ({
+      statusValue,
+      shortName: statusValueShortName(statusValue),
+      description: statusValueDescription(statusValue),
+      count: counts[statusValue] ?? 0
+    })).filter((entry) => entry.statusValue !== "status-value:reviewing" || entry.count > 0);
+  }, [allStatuses]);
+}
+
+// src/manager/components/sidebar/FilterPanel.tsx
+var Wrapper7 = styled.div({
+  minWidth: 240,
+  maxWidth: 300,
+  maxHeight: 15.5 * 32 + 8,
+  // 15.5 items at 32px each + 8px padding
+  overflow: "hidden",
+  overflowY: "auto",
+  scrollbarWidth: "thin"
+}), FilterPanel = ({
+  api,
+  indexJson,
+  defaultIncludedFilters,
+  defaultExcludedFilters,
+  includedFilters,
+  excludedFilters,
+  allStatuses,
+  includedStatusFilters,
+  excludedStatusFilters
+}) => {
+  let theme = useTheme(), { builtInEntries, tagEntries } = useTagFilterEntries(indexJson), statusEntries = useStatusFilterEntries(allStatuses), toTagFilterItem = useCallback(
+    (entry) => {
+      if (entry.count === 0 && entry.type === "built-in") return null;
+      let isIncluded = includedFilters.includes(entry.id), isExcluded = excludedFilters.includes(entry.id), isChecked = isIncluded || isExcluded;
+      return {
+        id: entry.id,
+        type: entry.type,
+        title: entry.title,
+        count: entry.count,
+        icon: entry.icon,
+        isIncluded,
+        isExcluded,
+        onCheckboxChange: () => {
+          isChecked ? api.removeTagFilters([entry.id]) : api.addTagFilters([entry.id], !1);
+        },
+        onInvert: () => api.addTagFilters([entry.id], !isExcluded)
+      };
+    },
+    [api, includedFilters, excludedFilters]
+  ), toStatusFilterItem = useCallback(
+    (entry) => {
+      let isRelated = entry.statusValue === "status-value:affected", shortName = isRelated ? "related" : entry.shortName, isIncluded = includedStatusFilters.includes(entry.statusValue), isExcluded = excludedStatusFilters.includes(entry.statusValue), isChecked = isIncluded || isExcluded, { icon: statusIconEl, iconColor } = getStatus(theme, entry.statusValue), icon = isRelated ? react_default.createElement("span", { "aria-hidden": "true" }) : statusIconEl ? react_default.createElement(StatusIcon2, { $iconColor: iconColor }, statusIconEl) : null;
+      return {
+        id: shortName,
+        type: "status",
+        title: shortName.charAt(0).toUpperCase() + shortName.slice(1),
+        tooltip: entry.description,
+        count: entry.count,
+        icon,
+        isIncluded,
+        isExcluded,
+        onCheckboxChange: () => {
+          isChecked ? api.removeStatusFilters([entry.statusValue]) : api.addStatusFilters([entry.statusValue], !1);
+        },
+        onInvert: () => api.addStatusFilters([entry.statusValue], !isExcluded)
+      };
+    },
+    [api, includedStatusFilters, excludedStatusFilters, theme]
+  ), builtInItems = useMemo(
+    () => builtInEntries.sort((a2, b2) => a2.id.localeCompare(b2.id)).map(toTagFilterItem).filter((f2) => f2 !== null),
+    [builtInEntries, toTagFilterItem]
+  ), tagItems = useMemo(
+    () => tagEntries.sort((a2, b2) => a2.id.localeCompare(b2.id)).map(toTagFilterItem).filter((f2) => f2 !== null),
+    [tagEntries, toTagFilterItem]
+  ), statusItems = useMemo(
+    () => statusEntries.map(toStatusFilterItem),
+    [statusEntries, toStatusFilterItem]
+  ), changeDetectionStatusItems = useMemo(
+    () => statusItems.filter((item) => item.id !== "reviewing"),
+    [statusItems]
+  ), reviewingStatusItems = useMemo(
+    () => statusItems.filter((item) => item.id === "reviewing"),
+    [statusItems]
+  ), filterIds = useMemo(
+    () => [...builtInEntries.map((e2) => e2.id), ...tagEntries.map((e2) => e2.id)],
+    [builtInEntries, tagEntries]
+  ), setAllFilters = useCallback(
+    (selected) => api.setAllTagFilters(selected ? filterIds : [], []),
+    [api, filterIds]
+  ), isDefaultSelection = areFiltersEqual(includedFilters, defaultIncludedFilters) && areFiltersEqual(excludedFilters, defaultExcludedFilters), hasDefaultSelection = defaultIncludedFilters.length > 0 || defaultExcludedFilters.length > 0, isNothingSelectedYet = includedFilters.length === 0 && excludedFilters.length === 0 && includedStatusFilters.length === 0 && excludedStatusFilters.length === 0, hasItems = builtInItems.length > 0 || tagItems.length > 0;
+  return react_default.createElement(Wrapper7, null, hasItems && react_default.createElement(ActionList, { as: "div" }, react_default.createElement(ActionList.Item, { as: "div" }, isNothingSelectedYet ? react_default.createElement(
+    ActionList.Button,
+    {
+      ariaLabel: !1,
+      id: "select-all",
+      key: "select-all",
+      onClick: () => setAllFilters(!0)
+    },
+    react_default.createElement(BatchAcceptIcon, null),
+    react_default.createElement(ActionList.Text, null, "Select all")
+  ) : react_default.createElement(
+    ActionList.Button,
+    {
+      ariaLabel: !1,
+      id: "deselect-all",
+      key: "deselect-all",
+      onClick: async () => {
+        await setAllFilters(!1), await api.resetStatusFilters();
+      }
+    },
+    react_default.createElement(SweepIcon, null),
+    react_default.createElement(ActionList.Text, null, "Clear filters")
+  ), hasDefaultSelection && react_default.createElement(
+    ActionList.Button,
+    {
+      id: "reset-filters",
+      key: "reset-filters",
+      onClick: () => api.resetTagFilters(),
+      ariaLabel: "Reset filters",
+      tooltip: "Reset to default selection",
+      disabled: isDefaultSelection
+    },
+    react_default.createElement(UndoIcon, null)
+  ))), reviewingStatusItems.length > 0 && react_default.createElement(ActionList, null, reviewingStatusItems.map((item) => {
+    let link = createFilterLink(item);
+    return react_default.createElement(Fragment, { key: link.id }, link.content);
+  })), builtInItems.length > 0 && react_default.createElement(ActionList, null, builtInItems.map((item) => {
+    let link = createFilterLink(item);
+    return react_default.createElement(Fragment, { key: link.id }, link.content);
+  })), changeDetectionStatusItems.length > 0 && react_default.createElement(ActionList, null, changeDetectionStatusItems.map((item) => {
+    let link = createFilterLink(item);
+    return react_default.createElement(Fragment, { key: link.id }, link.content);
+  })), tagItems.length > 0 && react_default.createElement(ActionList, null, tagItems.map((item) => {
+    let link = createFilterLink(item);
+    return react_default.createElement(Fragment, { key: link.id }, link.content);
+  })), tagItems.length === 0 && react_default.createElement(ActionList, { as: "div" }, react_default.createElement(ActionList.Item, { as: "div" }, react_default.createElement(
+    ActionList.Link,
+    {
+      ariaLabel: !1,
+      href: api.getDocsUrl({ subpath: "writing-stories/tags#custom-tags" }),
+      target: "_blank"
+    },
+    react_default.createElement(ActionList.Icon, null, react_default.createElement(DocumentIcon, null)),
+    react_default.createElement(ActionList.Text, null, react_default.createElement("span", null, "Learn how to add tags")),
+    react_default.createElement(ActionList.Icon, null, react_default.createElement(ShareAltIcon, null))
+  ))));
+};
+
+// src/manager/components/sidebar/Filter.tsx
+var StyledButton2 = styled(Button)(({ $isHighlighted, theme }) => ({
+  "&:focus-visible": {
+    outlineOffset: 4
+  },
+  ...$isHighlighted && {
+    background: theme.background.hoverable,
+    color: theme.color.secondary
+  }
+})), TagSelected = styled(Badge)(({ theme }) => ({
+  position: "absolute",
+  top: 7,
+  right: 7,
+  transform: "translate(50%, -50%)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  padding: 3,
+  height: 6,
+  minWidth: 6,
+  lineHeight: "px",
+  boxShadow: `${theme.barSelectedColor} 0 0 0 1px inset`,
+  fontSize: theme.typography.size.s1 - 1,
+  background: theme.barSelectedColor,
+  color: theme.color.inverseText
+})), filterMapper = ({ api, state }) => ({
+  api,
+  indexJson: state.internal_index,
+  activeFilterCount: getActiveFilterCount(state),
+  defaultIncludedFilters: state.defaultIncludedTagFilters,
+  defaultExcludedFilters: state.defaultExcludedTagFilters,
+  includedFilters: state.includedTagFilters,
+  excludedFilters: state.excludedTagFilters,
+  includedStatusFilters: state.includedStatusFilters ?? [],
+  excludedStatusFilters: state.excludedStatusFilters ?? []
+}), FilterInner = ({
+  api,
+  indexJson,
+  activeFilterCount,
+  defaultIncludedFilters,
+  defaultExcludedFilters,
+  includedFilters,
+  excludedFilters,
+  includedStatusFilters,
+  excludedStatusFilters
+}) => {
+  let [expanded, setExpanded] = useState(!1), allStatuses = experimental_useStatusStore(), handleToggleExpand = useCallback(
+    (event) => {
+      event.preventDefault(), setExpanded(!expanded);
+    },
+    [expanded]
+  );
+  return react_default.createElement(
+    PopoverProvider,
+    {
+      ariaLabel: "Tag filters",
+      placement: "bottom",
+      onVisibleChange: setExpanded,
+      offset: 8,
+      padding: 0,
+      popover: () => react_default.createElement(
+        FilterPanel,
+        {
+          api,
+          indexJson,
+          defaultIncludedFilters,
+          defaultExcludedFilters,
+          includedFilters,
+          excludedFilters,
+          allStatuses,
+          includedStatusFilters,
+          excludedStatusFilters
+        }
+      )
+    },
+    react_default.createElement(
+      StyledButton2,
+      {
+        key: "tags",
+        ariaLabel: activeFilterCount ? `${activeFilterCount} active tag ${activeFilterCount !== 1 ? "filters" : "filter"}` : "Tag filters",
+        ariaDescription: "Filter the items shown in a sidebar based on the tags applied to them.",
+        variant: "ghost",
+        padding: "small",
+        $isHighlighted: activeFilterCount > 0,
+        onClick: handleToggleExpand
+      },
+      react_default.createElement(FilterIcon, null),
+      activeFilterCount > 0 && react_default.createElement(TagSelected, null)
+    )
+  );
+}, Filter = () => react_default.createElement(Consumer, { filter: filterMapper }, ({
+  api,
+  indexJson,
+  activeFilterCount,
+  defaultIncludedFilters,
+  defaultExcludedFilters,
+  includedFilters,
+  excludedFilters,
+  includedStatusFilters,
+  excludedStatusFilters
+}) => indexJson ? react_default.createElement(
+  FilterInner,
+  {
+    api,
+    indexJson,
+    activeFilterCount,
+    defaultIncludedFilters,
+    defaultExcludedFilters,
+    includedFilters,
+    excludedFilters,
+    includedStatusFilters,
+    excludedStatusFilters
+  }
+) : null);
 
 // src/manager/components/sidebar/Heading.tsx
 init_react();
@@ -21434,6 +23745,74 @@ var BrandArea = styled.div(({ theme }) => ({
   onMenuClick,
   ...props
 }) => react_default.createElement(HeadingWrapper, { ...props }, skipLinkHref && react_default.createElement(SkipToCanvasLink, { ariaLabel: !1, asChild: !0 }, react_default.createElement("a", { href: skipLinkHref, tabIndex: 0 }, "Skip to content")), react_default.createElement(BrandArea, null, react_default.createElement(Brand, null)), react_default.createElement(SidebarMenu, { menu, isHighlighted: menuHighlighted, onClick: onMenuClick }));
+
+// src/manager/components/sidebar/ReviewWidget.tsx
+init_react();
+var HEADING_ID = "storybook-review-widget-heading", Region2 = styled.section({
+  width: "100%"
+}), HeaderContent = styled(ActionList.Text)({
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "flex-start",
+  alignItems: "center",
+  gap: 6,
+  // Reserve room for the dismiss button, which is positioned in the top-right
+  // corner so it comes last in the tab order (after the review action).
+  paddingRight: 24
+}), HeaderTitle = styled.h2(({ theme }) => ({
+  margin: 0,
+  color: theme.color.defaultText,
+  fontWeight: theme.typography.weight.bold,
+  fontSize: theme.typography.size.s1,
+  lineHeight: `${theme.typography.size.s3}px`
+})), AgenticIcon = styled(WandIcon)(({ theme }) => ({
+  color: theme.fgColor.agentic
+})), DismissButton = styled(ActionList.Button)({
+  position: "absolute",
+  top: 4,
+  right: 4,
+  zIndex: 1
+}), DismissIcon = styled(CloseAltIcon)({
+  padding: 1
+}), useActiveReviewStoryCount = () => {
+  let { state } = useReview();
+  return useMemo(() => state ? collectReviewStoryIds(state).size : 0, [state]);
+}, useActiveReviewTitle = () => {
+  let { state } = useReview();
+  return state?.title ?? null;
+}, ReviewWidget = () => {
+  let api = useStorybookApi(), navigate = useNavigate(), storyCount = useActiveReviewStoryCount(), reviewTitle = useActiveReviewTitle(), {
+    includedStatusFilters = [],
+    excludedStatusFilters = [],
+    includedTagFilters = [],
+    excludedTagFilters = []
+  } = useStorybookState(), emit = useChannel({}), regionRef = useRef(null), { landmarkProps } = useLandmark(
+    { role: "region", "aria-labelledby": HEADING_ID },
+    regionRef
+  );
+  if (!api.getIsNavShown() || storyCount === 0)
+    return null;
+  let onOpen = () => {
+    navigateToReviewSummary(api, navigate, {
+      includedStatusFilters,
+      excludedStatusFilters,
+      includedTagFilters,
+      excludedTagFilters
+    });
+  }, onDismiss = (event) => {
+    event.stopPropagation(), emit(REVIEW_EVENTS.DISMISS_REVIEW);
+  }, storyLabel = storyCount === 1 ? "story" : "stories";
+  return react_default.createElement(Region2, { ref: regionRef, ...landmarkProps }, react_default.createElement(Card, { color: "agentic", outlineAnimation: "spin", id: "storybook-review-widget" }, react_default.createElement(ActionList, { as: "div" }, react_default.createElement(ActionList.Item, { as: "div" }, react_default.createElement(HeaderContent, null, react_default.createElement(AgenticIcon, { "aria-hidden": !0 }), react_default.createElement(HeaderTitle, { id: HEADING_ID }, "Quick review")))), react_default.createElement(ActionList, { as: "div" }, react_default.createElement(ActionList.Item, { as: "div" }, react_default.createElement(
+    ActionList.Action,
+    {
+      ariaLabel: reviewTitle ? `Review ${storyCount} ${storyLabel}: ${reviewTitle}` : `Review ${storyCount} ${storyLabel}`,
+      disableAllTooltips: !0,
+      appearance: "agentic",
+      onClick: onOpen
+    },
+    react_default.createElement(ActionList.Text, null, react_default.createElement("strong", null, "Review ", storyCount, " ", storyLabel), reviewTitle ? react_default.createElement("small", null, reviewTitle) : null)
+  ))), react_default.createElement(DismissButton, { appearance: "agentic", ariaLabel: "Dismiss review", onClick: onDismiss }, react_default.createElement(DismissIcon, null))));
+}, ReviewWidget_default = ReviewWidget;
 
 // src/manager/components/sidebar/Search.tsx
 init_react();
@@ -23605,7 +25984,7 @@ var { document: document7 } = scope, DEFAULT_MAX_SEARCH_RESULTS = 50, options = 
   flexShrink: 0
 })), FocusKeyCmd = styled.span({
   fontSize: "14px"
-}), Actions = styled.div({
+}), Actions2 = styled.div({
   display: "flex",
   alignItems: "center",
   gap: 2
@@ -23623,7 +26002,9 @@ var { document: document7 } = scope, DEFAULT_MAX_SEARCH_RESULTS = 50, options = 
       let groupStatus = getGroupStatus(index || {}, allStatuses ?? {});
       return index && acc.push(
         ...Object.values(index).map((item) => {
-          let storyStatuses = allStatuses?.[item.id], mostCriticalStatusValue = storyStatuses ? getMostCriticalStatusValue(Object.values(storyStatuses).map((s2) => s2.value)) : null;
+          let storyStatuses = allStatuses?.[item.id], mostCriticalStatusValue = storyStatuses ? getMostCriticalStatusValue(
+            Object.values(storyStatuses).filter((status) => status.typeId !== REVIEW_STATUS_TYPE_ID).map((status) => status.value)
+          ) : null;
           return {
             ...searchItem(item, dataset.hash[refId]),
             status: mostCriticalStatusValue ?? groupStatus[item.id] ?? null
@@ -23742,7 +26123,7 @@ var { document: document7 } = scope, DEFAULT_MAX_SEARCH_RESULTS = 50, options = 
           react_default.createElement(IconWrapper, null, react_default.createElement(SearchIcon, null)),
           react_default.createElement(Input, { ...inputProps, isMobile: isMobile2 }),
           !isMobile2 && enableShortcuts && !isOpen && react_default.createElement(FocusKey, null, searchShortcut === "\u2318 K" ? react_default.createElement(react_default.Fragment, null, react_default.createElement(FocusKeyCmd, null, "\u2318"), "K") : searchShortcut),
-          react_default.createElement(Actions, null, input && react_default.createElement(
+          react_default.createElement(Actions2, null, input && react_default.createElement(
             Button,
             {
               padding: "small",
@@ -23843,7 +26224,7 @@ var { document: document8 } = scope, ResultsList = styled.ol({
     { cursor: 0, nodes: [] }
   );
   return react_default.createElement("span", null, result);
-}), Title = styled.div({
+}), Title3 = styled.div({
   display: "grid",
   justifyContent: "start",
   gridAutoColumns: "auto",
@@ -23881,8 +26262,8 @@ var { document: document8 } = scope, ResultsList = styled.ol({
   useEffect(() => {
     api && props.isHighlighted && item.type === "component" && api.emit(PRELOAD_ENTRIES, { ids: [item.children[0]] }, { options: { target: item.refId } });
   }, [api, props.isHighlighted, item]);
-  let nameMatch = matches.find((match) => match.key === "name"), pathMatches = matches.filter((match) => match.key === "path"), [icon] = item.status ? getStatus(theme, item.status) : [];
-  return react_default.createElement(ResultRow, { ...props, onClick: click }, react_default.createElement(IconWrapper2, null, item.type === "component" && react_default.createElement(TypeIcon2, { viewBox: "0 0 14 14", width: "14", height: "14", type: "component" }, react_default.createElement(UseSymbol, { type: "component" })), item.type === "story" && react_default.createElement(TypeIcon2, { viewBox: "0 0 14 14", width: "14", height: "14", type: item.subtype }, react_default.createElement(UseSymbol, { type: item.subtype })), !(item.type === "component" || item.type === "story") && react_default.createElement(TypeIcon2, { viewBox: "0 0 14 14", width: "14", height: "14", type: "document" }, react_default.createElement(UseSymbol, { type: "document" }))), react_default.createElement(ResultRowContent, { className: "search-result-item--label" }, react_default.createElement(Title, null, react_default.createElement(Highlight, { match: nameMatch }, item.name)), react_default.createElement(Path, null, item.path.map((group, index) => react_default.createElement("span", { key: index }, react_default.createElement(Highlight, { match: pathMatches.find((match) => match.arrayIndex === index) }, group))))), item.status ? react_default.createElement(StatusLabel, { status: item.status }, icon) : null);
+  let nameMatch = matches.find((match) => match.key === "name"), pathMatches = matches.filter((match) => match.key === "path"), icon = item.status ? getStatus(theme, item.status).icon : null;
+  return react_default.createElement(ResultRow, { ...props, onClick: click }, react_default.createElement(IconWrapper2, null, item.type === "component" && react_default.createElement(TypeIcon2, { viewBox: "0 0 14 14", width: "14", height: "14", type: "component" }, react_default.createElement(UseSymbol, { type: "component" })), item.type === "story" && react_default.createElement(TypeIcon2, { viewBox: "0 0 14 14", width: "14", height: "14", type: item.subtype }, react_default.createElement(UseSymbol, { type: item.subtype })), !(item.type === "component" || item.type === "story") && react_default.createElement(TypeIcon2, { viewBox: "0 0 14 14", width: "14", height: "14", type: "document" }, react_default.createElement(UseSymbol, { type: "document" }))), react_default.createElement(ResultRowContent, { className: "search-result-item--label" }, react_default.createElement(Title3, null, react_default.createElement(Highlight, { match: nameMatch }, item.name)), react_default.createElement(Path, null, item.path.map((group, index) => react_default.createElement("span", { key: index }, react_default.createElement(Highlight, { match: pathMatches.find((match) => match.arrayIndex === index) }, group))))), item.status ? react_default.createElement(StatusLabel, { status: item.status }, icon) : null);
 }), SearchResults = react_default.memo(function({
   query,
   results,
@@ -23995,7 +26376,7 @@ var DEFAULT_HEIGHT = 500, HoverCard2 = styled(Card)({
 })), Content3 = styled.div({
   display: "flex",
   flexDirection: "column"
-}), Bar2 = styled.div(({ onClick }) => ({
+}), Bar3 = styled.div(({ onClick }) => ({
   display: "flex",
   width: "100%",
   cursor: onClick ? "pointer" : "default",
@@ -24130,7 +26511,7 @@ var DEFAULT_HEIGHT = 500, HoverCard2 = styled(Card)({
       outlineAttrs: landmarkProps
     },
     react_default.createElement("h2", { id: "storybook-testing-widget-heading", className: "sb-sr-only" }, "Component tests"),
-    react_default.createElement(Bar2, { ...hasTestProviders ? { onClick: (e2) => toggleCollapsed(e2) } : {} }, react_default.createElement(Action, null, hasTestProviders && react_default.createElement(
+    react_default.createElement(Bar3, { ...hasTestProviders ? { onClick: (e2) => toggleCollapsed(e2) } : {} }, react_default.createElement(Action, null, hasTestProviders && react_default.createElement(
       Optional,
       {
         content: react_default.createElement(RunButton, { isRunning, onRunAll }, isRunning ? "Running..." : "Run tests"),
@@ -24276,7 +26657,7 @@ var SIDEBAR_BOTTOM_SPACER_ID = "sidebar-bottom-spacer", SIDEBAR_BOTTOM_WRAPPER_I
       },
       hasStatuses,
       clearStatuses: () => {
-        internal_fullStatusStore.unset(), internal_fullTestProviderStore.clearAll(), setErrorsActive(!1), setWarningsActive(!1);
+        api.clearStatuses(), setErrorsActive(!1), setWarningsActive(!1);
       },
       errorCount,
       errorsActive,
@@ -24312,290 +26693,6 @@ var SIDEBAR_BOTTOM_SPACER_ID = "sidebar-bottom-spacer", SIDEBAR_BOTTOM_WRAPPER_I
     }
   );
 };
-
-// src/manager/components/sidebar/TagsFilter.tsx
-init_react();
-
-// src/manager/components/sidebar/TagsFilterPanel.tsx
-init_react();
-
-// src/shared/constants/tags.ts
-var Tag2 = {
-  /** Indicates that autodocs should be generated for this component */
-  AUTODOCS: "autodocs",
-  /** MDX documentation attached to a component's stories file */
-  ATTACHED_MDX: "attached-mdx",
-  /** Standalone MDX documentation not attached to stories */
-  UNATTACHED_MDX: "unattached-mdx",
-  /** Story has a play function */
-  PLAY_FN: "play-fn",
-  /** Story has a test function */
-  TEST_FN: "test-fn",
-  /** Development environment tag */
-  DEV: "dev",
-  /** Test environment tag */
-  TEST: "test",
-  /** Manifest generation tag */
-  MANIFEST: "manifest"
-}, BUILT_IN_FILTERS = {
-  _docs: (entry, excluded) => excluded ? entry.type !== "docs" : entry.type === "docs",
-  _play: (entry, excluded) => excluded ? entry.type !== "story" || !entry.tags?.includes(Tag2.PLAY_FN) : entry.type === "story" && !!entry.tags?.includes(Tag2.PLAY_FN),
-  _test: (entry, excluded) => excluded ? entry.type !== "story" || entry.subtype !== "test" : entry.type === "story" && entry.subtype === "test"
-}, USER_TAG_FILTER = (tag) => (entry, excluded) => excluded ? !entry.tags?.includes(tag) : !!entry.tags?.includes(tag);
-
-// src/manager/components/sidebar/TagsFilterPanel.tsx
-var groupByType = (filters) => filters.filter(Boolean).reduce(
-  (acc, filter) => (acc[filter.type] ??= [], acc[filter.type].push(filter), acc),
-  {}
-), Wrapper7 = styled.div({
-  minWidth: 240,
-  maxWidth: 300,
-  maxHeight: 15.5 * 32 + 8,
-  // 15.5 items at 32px each + 8px padding
-  overflow: "hidden",
-  overflowY: "auto",
-  scrollbarWidth: "thin"
-}), MutedText = styled.span(({ theme }) => ({
-  color: theme.textMutedColor
-})), BUILT_IN_TAGS = /* @__PURE__ */ new Set([
-  "dev",
-  "test",
-  "autodocs",
-  "attached-mdx",
-  "unattached-mdx",
-  "play-fn",
-  "test-fn",
-  "manifest"
-]), equal3 = (left, right) => left.length === right.length && (/* @__PURE__ */ new Set([...left, ...right])).size === left.length, getFilterFunction = (tag) => Object.hasOwn(BUILT_IN_FILTERS, tag) ? BUILT_IN_FILTERS[tag] : USER_TAG_FILTER(tag), TagsFilterPanel = ({
-  api,
-  indexJson,
-  defaultIncludedFilters,
-  defaultExcludedFilters,
-  includedFilters,
-  excludedFilters
-}) => {
-  let ref = useRef(null), filtersById = useMemo(() => {
-    let userTagsCounts = Object.values(indexJson.entries).reduce(
-      (acc, entry) => (entry.tags?.forEach((tag) => {
-        BUILT_IN_TAGS.has(tag) || (acc[tag] = (acc[tag] || 0) + 1);
-      }), acc),
-      {}
-    ), userFilters = Object.fromEntries(
-      Object.entries(userTagsCounts).map(([tag, count]) => [tag, { id: tag, type: "tag", title: tag, count }])
-    ), getBuiltInCount = (filterFn) => Object.values(indexJson.entries).filter((entry) => filterFn?.(entry)).length, builtInFilters = {
-      _docs: {
-        id: "_docs",
-        type: "built-in",
-        title: "Documentation",
-        icon: react_default.createElement(DocumentIcon, { color: color.gold }),
-        count: getBuiltInCount(getFilterFunction("_docs"))
-      },
-      _play: {
-        id: "_play",
-        type: "built-in",
-        title: "Play",
-        icon: react_default.createElement(PlayHollowIcon, { color: color.seafoam }),
-        count: getBuiltInCount(getFilterFunction("_play"))
-      },
-      _test: {
-        id: "_test",
-        type: "built-in",
-        title: "Testing",
-        icon: react_default.createElement(BeakerIcon, { color: color.green }),
-        count: getBuiltInCount(getFilterFunction("_test"))
-      }
-    };
-    return { ...userFilters, ...builtInFilters };
-  }, [indexJson.entries]), toggleFilter = useCallback(
-    (id, selected, excluded) => {
-      excluded !== void 0 ? api.addTagFilters([id], excluded) : selected ? api.addTagFilters([id], !1) : api.removeTagFilters([id]);
-    },
-    [api]
-  ), setAllFilters = useCallback(
-    (selected) => {
-      api.setAllTagFilters(selected ? Object.keys(filtersById) : [], []);
-    },
-    [api, filtersById]
-  ), isDefaultSelection = useMemo(() => equal3(includedFilters, defaultIncludedFilters) && equal3(excludedFilters, defaultExcludedFilters), [includedFilters, excludedFilters, defaultIncludedFilters, defaultExcludedFilters]), hasDefaultSelection = useMemo(() => defaultIncludedFilters.length > 0 || defaultExcludedFilters.length > 0, [defaultIncludedFilters, defaultExcludedFilters]), builtInFilterIcons = useMemo(
-    () => ({
-      _docs: react_default.createElement(DocumentIcon, { color: color.gold }),
-      _play: react_default.createElement(PlayHollowIcon, { color: color.seafoam }),
-      _test: react_default.createElement(BeakerIcon, { color: color.green })
-    }),
-    []
-  ), renderLink = ({ id, type, title: title2, count }) => {
-    let onToggle = (selected, excluded) => toggleFilter(id, selected, excluded), isIncluded = includedFilters.includes(id), isExcluded = excludedFilters.includes(id), isChecked = isIncluded || isExcluded, toggleLabel = `${type} filter: ${isExcluded ? `exclude ${title2}` : title2}`, toggleTooltip = `${isChecked ? "Remove" : "Add"} ${type} filter: ${title2}`, invertButtonLabel = `${isExcluded ? "Include" : "Exclude"} ${type}: ${title2}`, icon = type === "built-in" ? builtInFilterIcons[id] : null;
-    if (!(count === 0 && type === "built-in"))
-      return {
-        id: `filter-${type}-${id}`,
-        content: react_default.createElement(ActionList.HoverItem, { targetId: `filter-${type}-${id}` }, react_default.createElement(ActionList.Action, { as: "label", ariaLabel: !1, tabIndex: -1, tooltip: toggleTooltip }, react_default.createElement(ActionList.Icon, null, isExcluded ? react_default.createElement(DeleteIcon, null) : isIncluded ? null : icon, react_default.createElement(
-          Form.Checkbox,
-          {
-            checked: isChecked,
-            onChange: () => onToggle(!isChecked),
-            "data-tag": title2,
-            "aria-label": toggleLabel
-          }
-        )), react_default.createElement(ActionList.Text, null, react_default.createElement("span", null, title2, isExcluded && react_default.createElement(MutedText, null, " (excluded)"))), isExcluded ? react_default.createElement("s", null, count) : react_default.createElement("span", null, count)), react_default.createElement(
-          ActionList.Button,
-          {
-            "data-target-id": `filter-${type}-${id}`,
-            ariaLabel: invertButtonLabel,
-            onClick: () => onToggle(!0, !isExcluded)
-          },
-          react_default.createElement("span", { style: { minWidth: 45 } }, isExcluded ? "Include" : "Exclude")
-        ))
-      };
-  }, groups = groupByType(Object.values(filtersById)), links = Object.values(groups).map(
-    (group) => group.sort((a2, b2) => a2.id.localeCompare(b2.id)).map((filter) => renderLink(filter)).filter((value) => !!value)
-  ).filter((value) => value.length > 0), hasItems = links.length > 0, hasUserTags = Object.values(filtersById).some(({ type }) => type === "tag"), isNothingSelectedYet = includedFilters.length === 0 && excludedFilters.length === 0;
-  return react_default.createElement(Wrapper7, { ref }, hasItems && react_default.createElement(ActionList, { as: "div" }, react_default.createElement(ActionList.Item, { as: "div" }, isNothingSelectedYet ? react_default.createElement(
-    ActionList.Button,
-    {
-      ariaLabel: !1,
-      id: "select-all",
-      key: "select-all",
-      onClick: () => setAllFilters(!0)
-    },
-    react_default.createElement(BatchAcceptIcon, null),
-    react_default.createElement(ActionList.Text, null, "Select all")
-  ) : react_default.createElement(
-    ActionList.Button,
-    {
-      ariaLabel: !1,
-      id: "deselect-all",
-      key: "deselect-all",
-      onClick: () => setAllFilters(!1)
-    },
-    react_default.createElement(SweepIcon, null),
-    react_default.createElement(ActionList.Text, null, "Clear filters")
-  ), hasDefaultSelection && react_default.createElement(
-    ActionList.Button,
-    {
-      id: "reset-filters",
-      key: "reset-filters",
-      onClick: () => api.resetTagFilters(),
-      ariaLabel: "Reset filters",
-      tooltip: "Reset to default selection",
-      disabled: isDefaultSelection
-    },
-    react_default.createElement(UndoIcon, null)
-  ))), links.map((group) => react_default.createElement(ActionList, { key: group.map((link) => link.id).join("_") }, group.map((link) => react_default.createElement(Fragment, { key: link.id }, link.content)))), !hasUserTags && react_default.createElement(ActionList, { as: "div" }, react_default.createElement(ActionList.Item, { as: "div" }, react_default.createElement(
-    ActionList.Link,
-    {
-      ariaLabel: !1,
-      href: api.getDocsUrl({ subpath: "writing-stories/tags#custom-tags" }),
-      target: "_blank"
-    },
-    react_default.createElement(ActionList.Icon, null, react_default.createElement(DocumentIcon, null)),
-    react_default.createElement(ActionList.Text, null, react_default.createElement("span", null, "Learn how to add tags")),
-    react_default.createElement(ActionList.Icon, null, react_default.createElement(ShareAltIcon, null))
-  ))));
-};
-
-// src/manager/components/sidebar/TagsFilter.tsx
-var StyledButton2 = styled(Button)(({ $isHighlighted, theme }) => ({
-  "&:focus-visible": {
-    outlineOffset: 4
-  },
-  ...$isHighlighted && {
-    background: theme.background.hoverable,
-    color: theme.color.secondary
-  }
-})), TagSelected = styled(Badge)(({ theme }) => ({
-  position: "absolute",
-  top: 7,
-  right: 7,
-  transform: "translate(50%, -50%)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: 3,
-  height: 6,
-  minWidth: 6,
-  lineHeight: "px",
-  boxShadow: `${theme.barSelectedColor} 0 0 0 1px inset`,
-  fontSize: theme.typography.size.s1 - 1,
-  background: theme.barSelectedColor,
-  color: theme.color.inverseText
-})), tagsFilterMapper = ({ api, state }) => ({
-  api,
-  indexJson: state.internal_index,
-  activeFilterCount: (state.includedTagFilters?.length ?? 0) + (state.excludedTagFilters?.length ?? 0),
-  defaultIncludedFilters: state.defaultIncludedTagFilters,
-  defaultExcludedFilters: state.defaultExcludedTagFilters,
-  includedFilters: state.includedTagFilters,
-  excludedFilters: state.excludedTagFilters
-}), TagsFilterInner = ({
-  api,
-  indexJson,
-  activeFilterCount,
-  defaultIncludedFilters,
-  defaultExcludedFilters,
-  includedFilters,
-  excludedFilters
-}) => {
-  let [expanded, setExpanded] = useState(!1), handleToggleExpand = useCallback(
-    (event) => {
-      event.preventDefault(), setExpanded(!expanded);
-    },
-    [expanded]
-  );
-  return react_default.createElement(
-    PopoverProvider,
-    {
-      ariaLabel: "Tag filters",
-      placement: "bottom",
-      onVisibleChange: setExpanded,
-      offset: 8,
-      padding: 0,
-      popover: () => react_default.createElement(
-        TagsFilterPanel,
-        {
-          api,
-          indexJson,
-          defaultIncludedFilters,
-          defaultExcludedFilters,
-          includedFilters,
-          excludedFilters
-        }
-      )
-    },
-    react_default.createElement(
-      StyledButton2,
-      {
-        key: "tags",
-        ariaLabel: activeFilterCount ? `${activeFilterCount} active tag ${activeFilterCount !== 1 ? "filters" : "filter"}` : "Tag filters",
-        ariaDescription: "Filter the items shown in a sidebar based on the tags applied to them.",
-        variant: "ghost",
-        padding: "small",
-        $isHighlighted: activeFilterCount > 0,
-        onClick: handleToggleExpand
-      },
-      react_default.createElement(FilterIcon, null),
-      activeFilterCount > 0 && react_default.createElement(TagSelected, null)
-    )
-  );
-}, TagsFilter = () => react_default.createElement(Consumer, { filter: tagsFilterMapper }, ({
-  api,
-  indexJson,
-  activeFilterCount,
-  defaultIncludedFilters,
-  defaultExcludedFilters,
-  includedFilters,
-  excludedFilters
-}) => indexJson ? react_default.createElement(
-  TagsFilterInner,
-  {
-    api,
-    indexJson,
-    activeFilterCount,
-    defaultIncludedFilters,
-    defaultExcludedFilters,
-    includedFilters,
-    excludedFilters
-  }
-) : null);
 
 // src/manager/components/sidebar/useLastViewed.ts
 init_react();
@@ -24686,7 +26783,7 @@ var DEFAULT_REF_ID = "storybook_internal", Container11 = styled.header(({ theme 
   let [isFileSearchModalOpen, setIsFileSearchModalOpen] = useState(!1), selected = useMemo(() => storyId && { storyId, refId }, [storyId, refId]), dataset = useCombination(index, indexError, previewInitialized, allStatuses, refs), isLoading = !index && !indexError, hasEntries = Object.keys(indexJson?.entries ?? {}).length > 0, lastViewedProps = useLastViewed(selected), { isMobile: isMobile2 } = useLayout(), api = useStorybookApi(), { viewMode } = api.getUrlState(), headerRef = useRef(null), { landmarkProps } = useLandmark(
     { "aria-labelledby": "global-site-h1", role: "banner" },
     headerRef
-  ), skipLinkHref = viewMode !== void 0 && viewMode !== "story" && viewMode !== "docs" ? "#main-content-wrapper" : "#storybook-preview-wrapper";
+  ), skipLinkHref = isPagesViewMode(viewMode) ? "#main-content-wrapper" : "#storybook-preview-wrapper", showReviewWidget = useActiveReviewStoryCount() > 0, showOnboardingChecklist = !isLoading && scope.CONFIG_TYPE === "DEVELOPMENT" && scope.FEATURES?.sidebarOnboardingChecklist !== !1 && !showReviewWidget;
   return react_default.createElement(
     Container11,
     {
@@ -24707,7 +26804,7 @@ var DEFAULT_REF_ID = "storybook_internal", Container11 = styled.header(({ theme 
         isLoading,
         onMenuClick
       }
-    ), !isLoading && scope.CONFIG_TYPE === "DEVELOPMENT" && scope.FEATURES?.sidebarOnboardingChecklist !== !1 && react_default.createElement(ChecklistWidget, null)), react_default.createElement(
+    ), showOnboardingChecklist ? react_default.createElement(ChecklistWidget, null) : null), !isLoading && showReviewWidget ? react_default.createElement(ReviewWidget_default, null) : null, react_default.createElement(
       Search,
       {
         dataset,
@@ -24731,7 +26828,7 @@ var DEFAULT_REF_ID = "storybook_internal", Container11 = styled.header(({ theme 
             onOpenChange: setIsFileSearchModalOpen
           }
         )),
-        searchFieldContent: react_default.createElement(TagsFilter, null),
+        searchFieldContent: react_default.createElement(Filter, null),
         ...lastViewedProps
       },
       ({
@@ -24907,14 +27004,14 @@ var ProgressCircle2 = styled(ProgressSpinner)(({ theme }) => ({
       id: actionName,
       title: label,
       onClick: () => action(),
-      right: enableShortcuts ? react_default.createElement(Shortcut, { keys: keys[actionName] }) : null
+      right: enableShortcuts && keys[actionName] ? react_default.createElement(Shortcut, { keys: keys[actionName] }) : null
     }));
   }, [api, enableShortcuts, shortcutKeys]);
   return useMemo(
     () => [
       [
         about,
-        ...scope.CONFIG_TYPE === "DEVELOPMENT" ? [guide] : [],
+        ...scope.CONFIG_TYPE === "DEVELOPMENT" && scope.FEATURES?.menuOnboardingChecklist !== !1 ? [guide] : [],
         ...enableShortcuts ? [shortcuts] : []
       ],
       [sidebarToggle, toolbarToogle, addonsToggle, up, down, prev, next, collapse],
@@ -24991,7 +27088,10 @@ var Sidebar3 = react_default.memo(function({ onMenuClick }) {
 }), Sidebar_default = Sidebar3;
 
 // src/manager/App.tsx
-var App = ({ managerLayoutState, setManagerLayoutState, pages, hasTab }) => {
+var MainPreview = () => {
+  let { isSummaryVisible } = useReview();
+  return isSummaryVisible ? null : react_default.createElement(Preview_default, { id: "main", withLoader: !0 });
+}, App = ({ managerLayoutState, setManagerLayoutState, pages, hasTab }) => {
   let { setMobileAboutOpen } = useLayout(), { enableShortcuts = !0 } = addons.getConfig();
   return useEffect(() => {
     document.body.setAttribute("data-shortcuts-enabled", enableShortcuts ? "true" : "false");
@@ -25013,7 +27113,8 @@ var App = ({ managerLayoutState, setManagerLayoutState, pages, hasTab }) => {
       hasTab,
       managerLayoutState,
       setManagerLayoutState,
-      slotMain: react_default.createElement(Preview_default, { id: "main", withLoader: !0 }),
+      slotOverlay: isReviewFeatureEnabled(scope.FEATURES) ? react_default.createElement(ReviewPersistentLayer, null) : void 0,
+      slotMain: react_default.createElement(MainPreview, null),
       slotSidebar: react_default.createElement(Sidebar_default, { onMenuClick: () => setMobileAboutOpen((state) => !state) }),
       slotPanel: react_default.createElement(Panel_default, null),
       slotPages: pages.map(({ id, render: Content6 }) => react_default.createElement(Content6, { key: id }))
@@ -25056,7 +27157,7 @@ var Container12 = styled.div({
     width: "auto",
     marginRight: 8
   }
-}), Footer = styled.div(({ theme }) => ({
+}), Footer2 = styled.div(({ theme }) => ({
   marginBottom: 24,
   display: "flex",
   flexDirection: "column",
@@ -25064,7 +27165,7 @@ var Container12 = styled.div({
   color: theme.base === "light" ? theme.color.dark : theme.color.lightest,
   fontWeight: theme.typography.weight.regular,
   fontSize: theme.typography.size.s2
-})), Actions2 = styled.div({
+})), Actions3 = styled.div({
   display: "flex",
   flexDirection: "row",
   alignItems: "center",
@@ -25079,7 +27180,7 @@ var Container12 = styled.div({
   "&:hover": {
     color: theme.base === "light" ? theme.color.darkest : theme.color.lightest
   }
-})), AboutScreen = ({ onNavigateToWhatsNew }) => react_default.createElement(Container12, null, react_default.createElement(Header, null, react_default.createElement(StorybookLogo, { alt: "Storybook" })), react_default.createElement(UpgradeBlock, { onNavigateToWhatsNew }), react_default.createElement(Footer, null, react_default.createElement(Actions2, null, react_default.createElement(Button, { ariaLabel: !1, asChild: !0 }, react_default.createElement("a", { href: "https://github.com/storybookjs/storybook" }, react_default.createElement(GithubIcon, null), "GitHub")), react_default.createElement(Button, { ariaLabel: !1, asChild: !0 }, react_default.createElement("a", { href: "https://storybook.js.org/docs?ref=ui" }, react_default.createElement(DocumentIcon, { style: { display: "inline", marginRight: 5 } }), "Documentation"))), react_default.createElement("div", null, "Open source software maintained by", " ", react_default.createElement(StyledLink, { href: "https://www.chromatic.com/" }, "Chromatic"), " and the", " ", react_default.createElement(StyledLink, { href: "https://github.com/storybookjs/storybook/graphs/contributors" }, "Storybook Community"))));
+})), AboutScreen = ({ onNavigateToWhatsNew }) => react_default.createElement(Container12, null, react_default.createElement(Header, null, react_default.createElement(StorybookLogo, { alt: "Storybook" })), react_default.createElement(UpgradeBlock, { onNavigateToWhatsNew }), react_default.createElement(Footer2, null, react_default.createElement(Actions3, null, react_default.createElement(Button, { ariaLabel: !1, asChild: !0 }, react_default.createElement("a", { href: "https://github.com/storybookjs/storybook" }, react_default.createElement(GithubIcon, null), "GitHub")), react_default.createElement(Button, { ariaLabel: !1, asChild: !0 }, react_default.createElement("a", { href: "https://storybook.js.org/docs?ref=ui" }, react_default.createElement(DocumentIcon, { style: { display: "inline", marginRight: 5 } }), "Documentation"))), react_default.createElement("div", null, "Open source software maintained by", " ", react_default.createElement(StyledLink, { href: "https://www.chromatic.com/" }, "Chromatic"), " and the", " ", react_default.createElement(StyledLink, { href: "https://github.com/storybookjs/storybook/graphs/contributors" }, "Storybook Community"))));
 
 // src/manager/settings/AboutPage.tsx
 var NotificationClearer = class extends Component {
@@ -25277,7 +27378,7 @@ var Sections = styled.ol(({ theme }) => ({
       color: theme.color.mediumdark
     }
   }
-})), StatusIcon2 = styled.div(({ theme }) => ({
+})), StatusIcon3 = styled.div(({ theme }) => ({
   position: "relative",
   flex: "0 0 auto",
   minHeight: 16,
@@ -25316,7 +27417,7 @@ var Sections = styled.ol(({ theme }) => ({
   width: visible ? "auto" : 0,
   height: visible ? 18 : 16,
   transition: "all var(--transition-duration, 0.2s)"
-})), Actions3 = styled.div({
+})), Actions4 = styled.div({
   alignSelf: "flex-end",
   flexDirection: "row-reverse",
   display: "flex",
@@ -25331,11 +27432,23 @@ var Sections = styled.ol(({ theme }) => ({
     transform: "rotate(var(--toggle-button-rotate))",
     transition: "transform var(--transition-duration, 0.2s)"
   }
-}), Checklist = ({
+}), ChecklistCopyButton = ({
+  label,
+  copyContent,
+  onClick
+}) => {
+  let { children: copyChildren, buttonProps: copyButtonProps } = useCopyButton2({
+    children: label,
+    onCopy: onClick,
+    content: copyContent
+  });
+  return react_default.createElement(Button, { variant: "solid", size: "small", ...copyButtonProps }, copyChildren);
+}, Checklist = ({
   availableItems,
   accept,
   skip,
-  reset
+  reset,
+  forceCollapsed = !1
 }) => {
   let api = useStorybookApi(), locationHash = useLocationHash(), { itemsById, sectionsById } = useMemo(
     () => availableItems.reduce(
@@ -25349,13 +27462,13 @@ var Sections = styled.ol(({ theme }) => ({
     [availableItems]
   ), sections = useMemo(
     () => Object.values(sectionsById).map(({ id, title: title2, itemIds }) => {
-      let items = itemIds.map((id2) => itemsById[id2]), progress = items.reduce((acc, item) => item.isOpen ? acc : acc + 1, 0) / items.length * 100;
+      let items = itemIds.map((id2) => itemsById[id2]).filter(({ showOnGuidePage }) => showOnGuidePage !== !1), progress = items.reduce((acc, item) => item.isOpen ? acc : acc + 1, 0) / items.length * 100;
       return { id, title: title2, items, progress };
     }),
     [itemsById, sectionsById]
   );
   return react_default.createElement(Sections, null, sections.map(({ id, title: title2, items, progress }) => {
-    let collapsed = progress === 100 && items.every((item) => item.id !== locationHash);
+    let collapsed = forceCollapsed || progress === 100 && items.every((item) => item.id !== locationHash);
     return react_default.createElement("li", { key: id }, react_default.createElement(Focus.Proxy, { targetId: `toggle-${id}` }, react_default.createElement(
       Collapsible,
       {
@@ -25367,9 +27480,9 @@ var Sections = styled.ol(({ theme }) => ({
             isCollapsed,
             onClick: toggleCollapsed
           },
-          react_default.createElement(StatusIcon2, null, react_default.createElement(Checked2, { "data-visible": progress === 100 })),
+          react_default.createElement(StatusIcon3, null, react_default.createElement(Checked2, { "data-visible": progress === 100 })),
           react_default.createElement(SectionHeading, null, title2),
-          react_default.createElement(Actions3, null, react_default.createElement(
+          react_default.createElement(Actions4, null, react_default.createElement(
             ToggleButton2,
             {
               ...toggleProps,
@@ -25411,9 +27524,9 @@ var Sections = styled.ol(({ theme }) => ({
                     isCollapsed: isCollapsed2 || !itemContent,
                     onClick: itemContent ? toggleCollapsed : void 0
                   },
-                  react_default.createElement(StatusIcon2, null, react_default.createElement(Checked2, { "data-visible": isChecked }), react_default.createElement(Skipped, { visible: isSkipped }, "Skipped")),
+                  react_default.createElement(StatusIcon3, null, react_default.createElement(Checked2, { "data-visible": isChecked }), react_default.createElement(Skipped, { visible: isSkipped }, "Skipped")),
                   react_default.createElement(ItemHeading, { skipped: isSkipped }, item.label),
-                  react_default.createElement(Actions3, null, itemContent && react_default.createElement(
+                  react_default.createElement(Actions4, null, itemContent && react_default.createElement(
                     ToggleButton2,
                     {
                       ...toggleProps,
@@ -25434,7 +27547,17 @@ var Sections = styled.ol(({ theme }) => ({
                       readOnly: !0
                     },
                     react_default.createElement(LockIcon, null)
-                  ), isOpen && !isLocked && item.action && react_default.createElement(
+                  ), isOpen && !isLocked && item.action && (item.action.copyContent ? react_default.createElement(
+                    ChecklistCopyButton,
+                    {
+                      label: item.action.label,
+                      copyContent: item.action.copyContent,
+                      onClick: () => item.action.onClick({
+                        api,
+                        accept: () => accept(item.id)
+                      })
+                    }
+                  ) : react_default.createElement(
                     Button,
                     {
                       ariaLabel: !1,
@@ -25448,7 +27571,7 @@ var Sections = styled.ol(({ theme }) => ({
                       }
                     },
                     item.action.label
-                  ), isOpen && !isLocked && !item.action && !item.subscribe && react_default.createElement(
+                  )), isOpen && !isLocked && !item.action && !item.subscribe && react_default.createElement(
                     Button,
                     {
                       ariaLabel: !1,
@@ -25494,6 +27617,56 @@ var Sections = styled.ol(({ theme }) => ({
   }));
 };
 
+// src/manager/settings/Checklist/AiSetupBlock.tsx
+init_react();
+var AiCtaCard = styled.div(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  padding: "10px 10px 10px 15px",
+  border: `1px solid ${theme.base === "dark" ? theme.color.darker : theme.color.border}`,
+  borderRadius: 8,
+  background: theme.background.content
+})), AiCtaHeadingRow = styled.div({
+  display: "flex",
+  alignItems: "center",
+  gap: 10
+}), AiCtaHeading = styled.h2(({ theme, $skipped }) => ({
+  flex: 1,
+  margin: 0,
+  color: $skipped ? theme.textMutedColor : theme.color.defaultText,
+  fontSize: theme.typography.size.s2,
+  fontWeight: theme.typography.weight.bold,
+  textWrap: "pretty"
+})), AiCtaDescription = styled.p(({ theme }) => ({
+  margin: 0,
+  color: theme.color.defaultText,
+  fontSize: theme.typography.size.s2,
+  fontWeight: theme.typography.weight.regular,
+  marginTop: 8
+})), AiCtaActions = styled.div({
+  display: "flex",
+  gap: 8,
+  justifyContent: "flex-end",
+  marginTop: 12
+}), CopyButton3 = ({ api }) => {
+  let { children: buttonChildren, buttonProps } = useCopyButton2({
+    children: "Copy prompt",
+    childrenOnCopy: react_default.createElement(react_default.Fragment, null, react_default.createElement(CheckIcon, null), " Copied!"),
+    content: getAiSetupPrompt(),
+    onCopy: () => {
+      api.emit(AI_PROMPT_NUDGE, { id: "setup", origin: "onboarding-guide-page" });
+    }
+  });
+  return react_default.createElement(Button, { variant: "solid", size: "medium", ...buttonProps }, buttonChildren);
+}, AiSetupBlock = ({
+  item,
+  reset,
+  skip
+}) => {
+  let api = useStorybookApi();
+  return !item.isDone && !item.isAccepted && !item.isCompleted ? react_default.createElement(AiCtaCard, null, react_default.createElement(AiCtaHeadingRow, null, item.isSkipped && react_default.createElement(StatusIcon3, null, react_default.createElement(Skipped, { visible: !0 }, "Skipped")), react_default.createElement(AiCtaHeading, { $skipped: item.isSkipped }, "Set up Storybook with AI"), item.isSkipped && react_default.createElement(Button, { ariaLabel: "Undo", variant: "ghost", padding: "small", onClick: () => reset(item.id) }, react_default.createElement(UndoIcon, null))), react_default.createElement(Collapsible.Content, { collapsed: item.isSkipped }, react_default.createElement(AiCtaDescription, null, "Run a prompt in your AI agent to analyze your codebase, configure decorators and mocks, write sample stories for your UI components, and verify everything works."), react_default.createElement(AiCtaActions, null, react_default.createElement(Button, { variant: "ghost", size: "medium", ariaLabel: !1, onClick: () => skip(item.id) }, "Skip"), react_default.createElement(CopyButton3, { api })))) : null;
+};
+
 // src/manager/settings/GuidePage.tsx
 var Container13 = styled.div(({ theme }) => ({
   display: "flex",
@@ -25517,8 +27690,8 @@ var Container13 = styled.div(({ theme }) => ({
     margin: 0
   }
 })), GuidePage = () => {
-  let checklist = useChecklist();
-  return react_default.createElement(Container13, null, react_default.createElement(Intro, null, react_default.createElement("h1", null, "Guide"), react_default.createElement("p", null, "Whether you're just getting started or looking for ways to level up, this checklist will help you make the most of your Storybook.")), react_default.createElement(Checklist, { ...checklist }), scope.FEATURES?.sidebarOnboardingChecklist !== !1 && react_default.createElement(react_default.Fragment, null, checklist.openItems.length === 0 ? react_default.createElement("center", null, "Your work here is done!") : checklist.widget.disable || checklist.openItems.every((item) => item.isMuted) ? react_default.createElement("center", null, "Want to see this in the sidebar?", " ", react_default.createElement(Link, { onClick: () => checklist.disable(!1) }, "Show in sidebar")) : react_default.createElement("center", null, "Don't want to see this in the sidebar?", " ", react_default.createElement(Link, { onClick: () => checklist.mute(checklist.allItems.map(({ id }) => id)) }, "Remove from sidebar"))));
+  let checklist = useChecklist(), aiSetupItem = checklist.availableItems.find((item) => item.id === "aiSetup");
+  return react_default.createElement(Container13, null, react_default.createElement(Intro, null, react_default.createElement("h1", null, "Guide"), react_default.createElement("p", null, "Whether you're just getting started or looking for ways to level up, this checklist will help you make the most of your Storybook.")), aiSetupItem && react_default.createElement(AiSetupBlock, { item: aiSetupItem, reset: checklist.reset, skip: checklist.skip }), react_default.createElement(Checklist, { ...checklist, forceCollapsed: aiSetupItem?.isOpen }), scope.FEATURES?.sidebarOnboardingChecklist !== !1 && react_default.createElement(react_default.Fragment, null, checklist.openItems.length === 0 ? react_default.createElement("center", null, "Your work here is done!") : checklist.widget.disable || checklist.openItems.every((item) => item.isMuted) ? react_default.createElement("center", null, "Want to see this in the sidebar?", " ", react_default.createElement(Link, { onClick: () => checklist.disable(!1) }, "Show in sidebar")) : react_default.createElement("center", null, "Don't want to see this in the sidebar?", " ", react_default.createElement(Link, { onClick: () => checklist.mute(checklist.allItems.map(({ id }) => id)) }, "Remove from sidebar"))));
 };
 
 // src/manager/settings/ShortcutsPage.tsx
@@ -25529,7 +27702,7 @@ init_react();
 
 // src/manager/settings/SettingsFooter.tsx
 init_react();
-var Footer2 = styled.div(({ theme }) => ({
+var Footer3 = styled.div(({ theme }) => ({
   display: "flex",
   paddingTop: 20,
   marginTop: 20,
@@ -25538,7 +27711,7 @@ var Footer2 = styled.div(({ theme }) => ({
   "& > * + *": {
     marginLeft: 20
   }
-})), SettingsFooter = (props) => react_default.createElement(Footer2, { ...props }, react_default.createElement(Link, { secondary: !0, href: "https://storybook.js.org?ref=ui", cancel: !1, target: "_blank" }, "Docs"), react_default.createElement(Link, { secondary: !0, href: "https://github.com/storybookjs/storybook", cancel: !1, target: "_blank" }, "GitHub"), react_default.createElement(
+})), SettingsFooter = (props) => react_default.createElement(Footer3, { ...props }, react_default.createElement(Link, { secondary: !0, href: "https://storybook.js.org?ref=ui", cancel: !1, target: "_blank" }, "Docs"), react_default.createElement(Link, { secondary: !0, href: "https://github.com/storybookjs/storybook", cancel: !1, target: "_blank" }, "GitHub"), react_default.createElement(
   Link,
   {
     secondary: !0,
@@ -25813,7 +27986,7 @@ var Centered = styled.div({
 }), LoaderWrapper2 = styled.div({
   position: "relative",
   height: "32px"
-}), Message2 = styled.div(({ theme }) => ({
+}), Message3 = styled.div(({ theme }) => ({
   paddingTop: "12px",
   color: theme.textMutedColor,
   maxWidth: "295px",
@@ -25835,12 +28008,13 @@ var Centered = styled.div({
 })), WhatsNewFooter = ({
   isNotificationsEnabled,
   onToggleNotifications,
-  onCopyLink
+  copyContent
 }) => {
-  let theme = useTheme(), [copyText, setCopyText] = useState("Copy Link"), copyLink = () => {
-    onCopyLink(), setCopyText("Copied!"), setTimeout(() => setCopyText("Copy Link"), 4e3);
-  };
-  return react_default.createElement(Container15, null, react_default.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10 } }, react_default.createElement(HeartIcon, { color: theme.color.mediumdark }), react_default.createElement("div", null, "Share this with your team."), react_default.createElement(Button, { ariaLabel: !1, onClick: copyLink, size: "small", variant: "ghost" }, copyText)), isNotificationsEnabled ? react_default.createElement(Button, { ariaLabel: !1, size: "small", variant: "ghost", onClick: onToggleNotifications }, react_default.createElement(EyeCloseIcon, null), "Hide notifications") : react_default.createElement(Button, { ariaLabel: !1, size: "small", variant: "ghost", onClick: onToggleNotifications }, react_default.createElement(EyeIcon, null), "Show notifications"));
+  let theme = useTheme(), { children: copyText, buttonProps: copyButtonProps } = useCopyButton2({
+    children: "Copy Link",
+    content: copyContent
+  });
+  return react_default.createElement(Container15, null, react_default.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10 } }, react_default.createElement(HeartIcon, { color: theme.color.mediumdark }), react_default.createElement("div", null, "Share this with your team."), react_default.createElement(Button, { size: "small", variant: "ghost", ...copyButtonProps }, copyText)), isNotificationsEnabled ? react_default.createElement(Button, { ariaLabel: !1, size: "small", variant: "ghost", onClick: onToggleNotifications }, react_default.createElement(EyeCloseIcon, null), "Hide notifications") : react_default.createElement(Button, { ariaLabel: !1, size: "small", variant: "ghost", onClick: onToggleNotifications }, react_default.createElement(EyeIcon, null), "Show notifications"));
 }, Iframe = styled.iframe(
   {
     position: "absolute",
@@ -25861,12 +28035,12 @@ var Centered = styled.div({
   width: 32,
   height: 32,
   margin: "0 auto"
-})), WhatsNewLoader = () => react_default.createElement(Centered, null, react_default.createElement(LoaderWrapper2, null, react_default.createElement(Loader, null)), react_default.createElement(Message2, null, "Loading...")), MaxWaitTimeMessaging = () => react_default.createElement(Centered, null, react_default.createElement(AlertIcon2, null), react_default.createElement(Message2, null, "The page couldn't be loaded. Check your internet connection and try again.")), PureWhatsNewScreen = ({
+})), WhatsNewLoader = () => react_default.createElement(Centered, null, react_default.createElement(LoaderWrapper2, null, react_default.createElement(Loader, null)), react_default.createElement(Message3, null, "Loading...")), MaxWaitTimeMessaging = () => react_default.createElement(Centered, null, react_default.createElement(AlertIcon2, null), react_default.createElement(Message3, null, "The page couldn't be loaded. Check your internet connection and try again.")), PureWhatsNewScreen = ({
   didHitMaxWaitTime,
   isLoaded,
   onLoad,
   url,
-  onCopyLink,
+  copyContent,
   onToggleNotifications,
   isNotificationsEnabled
 }) => react_default.createElement(Fragment, null, !isLoaded && !didHitMaxWaitTime && react_default.createElement(WhatsNewLoader, null), didHitMaxWaitTime ? react_default.createElement(MaxWaitTimeMessaging, null) : react_default.createElement(react_default.Fragment, null, react_default.createElement(Iframe, { isLoaded, onLoad, src: url, title: "What's new?" }), react_default.createElement(
@@ -25874,7 +28048,7 @@ var Centered = styled.div({
   {
     isNotificationsEnabled,
     onToggleNotifications,
-    onCopyLink
+    copyContent
   }
 ))), MAX_WAIT_TIME = 1e4, WhatsNewScreen = () => {
   let api = useStorybookApi(), state = useStorybookState(), { whatsNewData } = state, [isLoaded, setLoaded] = useState(!1), [didHitMaxWaitTime, setDidHitMaxWaitTime] = useState(!1);
@@ -25894,9 +28068,7 @@ var Centered = styled.div({
       },
       url: whatsNewData.url,
       isNotificationsEnabled,
-      onCopyLink: () => {
-        navigator.clipboard?.writeText(whatsNewData.blogUrl ?? whatsNewData.url);
-      },
+      copyContent: whatsNewData.blogUrl ?? whatsNewData.url,
       onToggleNotifications: () => {
         isNotificationsEnabled ? scope.confirm("All update notifications will no longer be shown. Are you sure?") && api.toggleWhatsNewNotifications() : api.toggleWhatsNewNotifications();
       }
@@ -25927,7 +28099,7 @@ var { document: document9 } = scope, Content5 = styled(ScrollArea)(({ theme }) =
     };
     return document9.addEventListener("keydown", handleEscape), () => document9.removeEventListener("keydown", handleEscape);
   }, [enableShortcuts, onClose]);
-  let tabs = useMemo(() => {
+  let api = useStorybookApi(), toolsExtra = Object.values(api.getElements(Addon_TypesEnum.TOOLEXTRA)), tabs = useMemo(() => {
     let tabsToInclude = [
       {
         id: "about",
@@ -25935,7 +28107,7 @@ var { document: document9 } = scope, Content5 = styled(ScrollArea)(({ theme }) =
         children: react_default.createElement(RouteWrapper, { path: "about" }, react_default.createElement(AboutPage, { key: "about" }))
       }
     ];
-    return scope.CONFIG_TYPE === "DEVELOPMENT" && tabsToInclude.push({
+    return scope.CONFIG_TYPE === "DEVELOPMENT" && scope.FEATURES?.menuOnboardingChecklist !== !1 && tabsToInclude.push({
       id: "guide",
       title: "Guide",
       children: react_default.createElement(RouteWrapper, { path: "guide" }, react_default.createElement(GuidePage, { key: "guide" }))
@@ -25955,7 +28127,7 @@ var { document: document9 } = scope, Content5 = styled(ScrollArea)(({ theme }) =
       TabsView,
       {
         tabs,
-        tools: react_default.createElement(react_default.Fragment, null, react_default.createElement(SidebarToggle, null, menuTool.render({})), react_default.createElement(
+        tools: react_default.createElement(react_default.Fragment, null, react_default.createElement(SidebarToggle, null, menuTool.render({})), toolsExtra.map((item) => react_default.createElement(react_default.Fragment, { key: item.id }, item.render({}))), react_default.createElement(
           Button,
           {
             padding: "small",
@@ -25992,7 +28164,7 @@ var { document: document9 } = scope, Content5 = styled(ScrollArea)(({ theme }) =
 // src/manager/index.tsx
 ThemeProvider.displayName = "ThemeProvider";
 q.displayName = "HelmetProvider";
-var Root3 = ({ provider }) => react_default.createElement(q, { key: "helmet.Provider" }, react_default.createElement(LocationProvider, { key: "location.provider" }, react_default.createElement(Main, { provider }))), Main = ({ provider }) => {
+var Root5 = ({ provider }) => react_default.createElement(q, { key: "helmet.Provider" }, react_default.createElement(LocationProvider, { key: "location.provider" }, react_default.createElement(Main3, { provider }))), Main3 = ({ provider }) => {
   let navigate = useNavigate();
   return react_default.createElement(Location, { key: "location.consumer" }, (locationData) => react_default.createElement(
     Provider,
@@ -26032,7 +28204,7 @@ var Root3 = ({ provider }) => react_default.createElement(q, { key: "helmet.Prov
 function renderStorybookUI(domNode, provider) {
   if (!(provider instanceof Provider2))
     throw new ProviderDoesNotExtendBaseProviderError();
-  createRoot(domNode).render(react_default.createElement(Root3, { key: "root", provider }));
+  createRoot(domNode).render(react_default.createElement(Root5, { key: "root", provider }));
 }
 
 // src/manager/runtime.tsx
@@ -26046,12 +28218,15 @@ addons.register(
     render: () => react_default.createElement(ToolbarManager, null)
   })
 );
+var channel = createBrowserChannel({ page: "manager" });
+addons.setChannel(channel);
+channel.emit(CHANNEL_CREATED);
 var ReactProvider = class extends Provider2 {
   constructor() {
-    super();
+    super(...arguments);
+    this.addons = addons;
+    this.channel = channel;
     this.wsDisconnected = !1;
-    let channel = createBrowserChannel({ page: "manager" });
-    addons.setChannel(channel), channel.emit(CHANNEL_CREATED), this.addons = addons, this.channel = channel, scope.__STORYBOOK_ADDONS_CHANNEL__ = channel;
   }
   getElements(type) {
     return this.addons.getElements(type);
