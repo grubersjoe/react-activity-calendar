@@ -17,6 +17,7 @@ import {
   useTransitionStyles,
   type OffsetOptions,
   type Placement,
+  type ReferenceType,
   type UseHoverProps,
   type UseTransitionStylesProps,
 } from '@floating-ui/react'
@@ -32,7 +33,7 @@ export type TooltipConfig = {
 }
 
 export type TooltipProps = TooltipConfig & {
-  children: ReactElement<{ ref: Ref<unknown> }>
+  children: ReactElement<{ ref: Ref<ReferenceType> }>
   text: string
   colorScheme: ColorScheme
 }
