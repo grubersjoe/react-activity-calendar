@@ -156,7 +156,7 @@ export const Loading: Story = {
   parameters: {
     docs: {
       source: {
-        code: '<ActivityCalendar data={data} loading />',
+        code: '<ActivityCalendar data={[]} loading />',
       },
     },
   },
@@ -235,7 +235,7 @@ export const ActivityLevels: Story = {
   parameters: {
     docs: {
       source: {
-        code: '<ActivityCalendar data={data} levels={{min: 0, max: 2}} />',
+        code: '<ActivityCalendar data={data} minLevel={0} maxLevel={2} />',
       },
     },
   },
@@ -243,6 +243,13 @@ export const ActivityLevels: Story = {
 
 export const DateRanges: Story = {
   args: defaultProps,
+  parameters: {
+    docs: {
+      source: {
+        code: '<ActivityCalendar data={dateRange} />',
+      },
+    },
+  },
   render: args => {
     const dataLong = useMemo(
       () =>
