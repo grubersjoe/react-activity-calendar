@@ -33,7 +33,7 @@ jobs:
         run: pnpm exec prettier -c .
 
       - name: Run type checks (TypeScript)
-        run: pnpm exec tsgo
+        run: pnpm exec tsc
 
       - name: Run linter (ESLint)
         run: pnpm lint
