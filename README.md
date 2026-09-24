@@ -86,7 +86,7 @@ state of CRA. Personally, I would recommend using [Vite](https://vitejs.dev/) in
 ### Start the Storybook
 
 ```shell
-npm run storybook
+npm run dev
 ```
 
 ### Update the documentation
