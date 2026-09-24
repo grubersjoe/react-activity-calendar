@@ -4,9 +4,7 @@ import type { ColorScheme } from '../types'
 const query = '(prefers-color-scheme: dark)'
 
 export function useColorScheme() {
-  const [colorScheme, setColorScheme] = useState<ColorScheme>(() =>
-    typeof window === 'undefined' ? 'light' : window.matchMedia(query).matches ? 'dark' : 'light',
-  )
+  const [colorScheme, setColorScheme] = useState<ColorScheme>('light')
 
   const onChange = (event: MediaQueryListEvent) => {
     setColorScheme(event.matches ? 'dark' : 'light')
