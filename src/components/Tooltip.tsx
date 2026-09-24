@@ -13,11 +13,11 @@ import {
   useFloating,
   useHover,
   useInteractions,
+  useMergeRefs,
   useRole,
   useTransitionStyles,
   type OffsetOptions,
   type Placement,
-  type ReferenceType,
   type UseHoverProps,
   type UseTransitionStylesProps,
 } from '@floating-ui/react'
@@ -33,7 +33,7 @@ export type TooltipConfig = {
 }
 
 export type TooltipProps = TooltipConfig & {
-  children: ReactElement<{ ref: Ref<ReferenceType> }>
+  children: ReactElement<{ ref?: Ref<Element> }>
   text: string
   colorScheme: ColorScheme
 }
@@ -70,10 +70,11 @@ export function Tooltip({
 
   const { getReferenceProps, getFloatingProps } = useInteractions([hover, dismiss, role])
   const { isMounted, styles: transitionStyles } = useTransitionStyles(context, transitionStylesProp)
+  const mergedRef = useMergeRefs([refs.setReference, children.props.ref])
 
   return (
     <>
-      {cloneElement(children, { ref: refs.setReference, ...getReferenceProps() })}
+      {cloneElement(children, { ...getReferenceProps(children.props), ref: mergedRef })}
       {isMounted && (
         <FloatingPortal>
           <div
