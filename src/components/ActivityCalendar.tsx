@@ -12,7 +12,6 @@ import {
   type ReactElement,
 } from 'react'
 import { getYear, parseISO } from 'date-fns'
-import { DEFAULT_LABELS, LABEL_MARGIN } from '../constants'
 import { useColorScheme } from '../hooks/useColorScheme'
 import { useLoadingAnimation } from '../hooks/useLoadingAnimation'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
@@ -25,7 +24,12 @@ import {
   validateActivities,
   validateLevels,
 } from '../lib/calendar'
-import { getMonthLabels, initWeekdayLabels, maxWeekdayLabelWidth } from '../lib/label'
+import {
+  defaultLabels,
+  getMonthLabels,
+  initWeekdayLabels,
+  maxWeekdayLabelWidth,
+} from '../lib/label'
 import { createTheme } from '../lib/theme'
 import { styles } from '../styles/styles'
 import type {
@@ -259,8 +263,9 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     const year = getYear(parseISO(firstActivity.date))
     const weeks = groupByWeeks(activities, weekStart, emptyLevel)
 
-    const labels = Object.assign({}, DEFAULT_LABELS, labelsProp)
-    const labelHeight = showMonthLabels ? fontSize + LABEL_MARGIN : 0
+    const labelMargin = 8 // px
+    const labels = Object.assign({}, defaultLabels, labelsProp)
+    const labelHeight = showMonthLabels ? fontSize + labelMargin : 0
 
     const weekdayLabels = initWeekdayLabels(showWeekdayLabels, weekStart)
 
@@ -268,7 +273,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     // because server and client HTML would not match.
     const weekdayLabelOffset =
       isClient && weekdayLabels.shouldShow
-        ? maxWeekdayLabelWidth(labels.weekdays, weekdayLabels, fontSize) + LABEL_MARGIN
+        ? maxWeekdayLabelWidth(labels.weekdays, weekdayLabels, fontSize) + labelMargin
         : undefined
 
     function getDimensions() {
@@ -441,7 +446,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
 
             return (
               <text
-                x={-LABEL_MARGIN}
+                x={-labelMargin}
                 y={labelHeight + (blockSize + blockMargin) * index + blockSize / 2}
                 dominantBaseline="central"
                 textAnchor="end"

@@ -1,7 +1,31 @@
 import { getMonth, parseISO } from 'date-fns'
 import type { Props } from '../components/ActivityCalendar'
-import { DEFAULT_MONTH_LABELS } from '../constants'
 import type { DayIndex, DayName, Week, WeekdayLabels } from '../types'
+
+const defaultMonthLabels = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+]
+
+export const defaultLabels = {
+  months: defaultMonthLabels,
+  weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  totalCount: '{{count}} activities in {{year}}',
+  legend: {
+    less: 'Less',
+    more: 'More',
+  },
+}
 
 type MonthLabel = {
   weekIndex: number
@@ -10,7 +34,7 @@ type MonthLabel = {
 
 export function getMonthLabels(
   weeks: Array<Week>,
-  monthNames: Array<string> = DEFAULT_MONTH_LABELS,
+  monthNames: Array<string> = defaultMonthLabels,
 ): Array<MonthLabel> {
   return weeks
     .reduce<Array<MonthLabel>>((labels, week, weekIndex) => {
