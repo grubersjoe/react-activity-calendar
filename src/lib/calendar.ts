@@ -10,7 +10,6 @@ import {
   startOfYear,
   subWeeks,
 } from 'date-fns'
-import { NAMESPACE } from '../constants'
 import type { Activity, DayIndex, Levels, Week } from '../types'
 
 export function validateLevels({ minLevel, maxLevel }: Levels) {
@@ -114,7 +113,7 @@ function fillHoles(activities: Array<Activity>, emptyLevel: number): Array<Activ
  * https://getbem.com/naming/
  */
 export function getClassName(element: string) {
-  return `${NAMESPACE}__${element}`
+  return `react-activity-calendar__${element}`
 }
 
 export function getEmptyLevel({ minLevel, maxLevel }: Levels): number {

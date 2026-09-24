@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react'
-import { NAMESPACE } from '../constants'
+import { useEffect, useId, useState } from 'react'
 import type { ColorScheme } from '../types'
 
-export const loadingAnimationName = `${NAMESPACE}--loading-animation`
-
 export function useLoadingAnimation(zeroColor: string, colorScheme: ColorScheme) {
+  const animationName = `react-activity-calendar--loading-${useId()}`
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
@@ -16,7 +14,7 @@ export function useLoadingAnimation(zeroColor: string, colorScheme: ColorScheme)
 
     const style = document.createElement('style')
     style.innerHTML = `
-      @keyframes ${loadingAnimationName} {
+      @keyframes "${animationName}" {
         0% {
           fill: ${colorLoading};
         }
@@ -40,7 +38,7 @@ export function useLoadingAnimation(zeroColor: string, colorScheme: ColorScheme)
       style.removeEventListener('load', handleLoad)
       setLoaded(false)
     }
-  }, [zeroColor, colorScheme])
+  }, [zeroColor, colorScheme, animationName])
 
-  return loaded
+  return { loaded, animationName }
 }

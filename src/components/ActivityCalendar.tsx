@@ -12,9 +12,9 @@ import {
   type ReactElement,
 } from 'react'
 import { getYear, parseISO } from 'date-fns'
-import { DEFAULT_LABELS, LABEL_MARGIN, NAMESPACE } from '../constants'
+import { DEFAULT_LABELS, LABEL_MARGIN } from '../constants'
 import { useColorScheme } from '../hooks/useColorScheme'
-import { loadingAnimationName, useLoadingAnimation } from '../hooks/useLoadingAnimation'
+import { useLoadingAnimation } from '../hooks/useLoadingAnimation'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 import {
   generateEmptyData,
@@ -237,7 +237,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     const colorScheme = colorSchemeProp ?? systemColorScheme
     const colorScale = theme[colorScheme]
     const emptyLevel = getEmptyLevel(levels)
-    const animationLoaded = useLoadingAnimation(
+    const { loaded: animationLoaded, animationName } = useLoadingAnimation(
       colorScale[emptyLevel - minLevel] as string,
       colorScheme,
     )
@@ -289,7 +289,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
             const loadingAnimation =
               loading && useAnimation
                 ? {
-                    animation: `${loadingAnimationName} 1.75s ease-in-out infinite`,
+                    animation: `"${animationName}" 1.75s ease-in-out infinite`,
                     animationDelay: `${weekIndex * 20 + dayIndex * 20}ms`,
                   }
                 : undefined
@@ -487,7 +487,7 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     return (
       <article
         ref={ref}
-        className={`${NAMESPACE} ${className ?? ''}`.trim()}
+        className={`react-activity-calendar ${className ?? ''}`.trim()}
         style={{ ...styleProp, ...styles.container(fontSize) }}
       >
         <div className={getClassName('scroll-container')} style={styles.scrollContainer(fontSize)}>

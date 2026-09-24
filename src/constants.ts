@@ -1,4 +1,3 @@
-export const NAMESPACE = 'react-activity-calendar'
 export const LABEL_MARGIN = 8 // px
 
 export const DEFAULT_MONTH_LABELS = [
