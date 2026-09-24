@@ -11,20 +11,20 @@ export function createTheme(
     const numberOfLevels = levels.maxLevel - levels.minLevel + 1
     validateThemeInput(input, numberOfLevels)
 
-    input.light = input.light ?? defaultTheme.light
-    input.dark = input.dark ?? defaultTheme.dark
+    const light = input.light ?? defaultTheme.light
+    const dark = input.dark ?? defaultTheme.dark
 
     return {
-      light: isPair(input.light)
-        ? calcColorScale([input.light[1], input.light[0], input.light[1]], levels)
-        : isTriple(input.light)
-          ? calcColorScale(input.light, levels)
-          : input.light,
-      dark: isPair(input.dark)
-        ? calcColorScale([input.dark[1], input.dark[0], input.dark[1]], levels)
-        : isTriple(input.dark)
-          ? calcColorScale(input.dark, levels)
-          : input.dark,
+      light: isPair(light)
+        ? calcColorScale([light[1], light[0], light[1]], levels)
+        : isTriple(light)
+          ? calcColorScale(light, levels)
+          : light,
+      dark: isPair(dark)
+        ? calcColorScale([dark[1], dark[0], dark[1]], levels)
+        : isTriple(dark)
+          ? calcColorScale(dark, levels)
+          : dark,
     }
   }
 
