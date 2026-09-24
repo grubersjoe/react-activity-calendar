@@ -23,6 +23,7 @@ import {
   groupByWeeks,
   range,
   validateActivities,
+  validateLevels,
 } from '../lib/calendar'
 import { getMonthLabels, initWeekdayLabels, maxWeekdayLabelWidth } from '../lib/label'
 import { createTheme } from '../lib/theme'
@@ -228,13 +229,9 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
       setIsClient(true)
     }, [])
 
-    if (minLevel >= maxLevel) {
-      throw new RangeError(
-        `Minimum activity level must be less than maximum level. Got ${minLevel} and ${maxLevel}.`,
-      )
-    }
-
     const levels = { minLevel, maxLevel }
+    validateLevels(levels)
+
     const theme = createTheme(themeProp, levels)
     const systemColorScheme = useColorScheme()
     const colorScheme = colorSchemeProp ?? systemColorScheme

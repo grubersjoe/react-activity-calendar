@@ -13,6 +13,22 @@ import {
 import { NAMESPACE } from '../constants'
 import type { Activity, DayIndex, Levels, Week } from '../types'
 
+export function validateLevels({ minLevel, maxLevel }: Levels) {
+  if (!Number.isInteger(minLevel)) {
+    throw new RangeError(`Minimum activity level ${minLevel} must be an integer.`)
+  }
+
+  if (!Number.isInteger(maxLevel)) {
+    throw new RangeError(`Maximum activity level ${maxLevel} must be an integer.`)
+  }
+
+  if (minLevel >= maxLevel) {
+    throw new RangeError(
+      `Minimum activity level must be less than maximum level. Got ${minLevel} and ${maxLevel}.`,
+    )
+  }
+}
+
 export function validateActivities(activities: Array<Activity>, { minLevel, maxLevel }: Levels) {
   if (activities.length === 0) {
     throw new Error('Activity data must not be empty.')

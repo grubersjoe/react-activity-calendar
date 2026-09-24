@@ -6,7 +6,33 @@ import {
   groupByWeeks,
   range,
   validateActivities,
+  validateLevels,
 } from './calendar'
+
+describe('validateLevels', () => {
+  it.each([0.5, -0.5, NaN, Infinity, -Infinity])('rejects non-integer bounds %s', level => {
+    expect(() => {
+      validateLevels({ minLevel: level, maxLevel: 4 })
+    }).toThrow(new RangeError(`Minimum activity level ${level} must be an integer.`))
+
+    expect(() => {
+      validateLevels({ minLevel: 0, maxLevel: level })
+    }).toThrow(new RangeError(`Maximum activity level ${level} must be an integer.`))
+  })
+
+  it.each([
+    { minLevel: 0, maxLevel: 0 },
+    { minLevel: 4, maxLevel: 0 },
+  ])('rejects invalid bounds %j', levels => {
+    expect(() => {
+      validateLevels(levels)
+    }).toThrow(
+      new RangeError(
+        `Minimum activity level must be less than maximum level. Got ${levels.minLevel} and ${levels.maxLevel}.`,
+      ),
+    )
+  })
+})
 
 describe.each([
   [{ minLevel: 0, maxLevel: 4 }, 0],
