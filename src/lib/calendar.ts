@@ -23,6 +23,10 @@ export function validateActivities(activities: Array<Activity>, { minLevel, maxL
       throw new Error(`Activity date '${date}' is not a valid ISO 8601 date string.`)
     }
 
+    if (!Number.isInteger(level)) {
+      throw new RangeError(`Activity level ${level} for ${date} must be a finite integer.`)
+    }
+
     if (level < minLevel || level > maxLevel) {
       throw new RangeError(
         `Activity level ${level} for ${date} is out of range. It must be between ${minLevel} and ${maxLevel}.`,

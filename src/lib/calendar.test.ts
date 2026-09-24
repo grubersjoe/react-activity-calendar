@@ -45,6 +45,15 @@ describe.each([
 })
 
 describe('validateActivities', () => {
+  it.each([0.5, -0.5, NaN, Infinity, -Infinity])('rejects non-integer level %s', level => {
+    expect(() => {
+      validateActivities([{ date: '2024-01-01', count: 0, level }], {
+        minLevel: 0,
+        maxLevel: 4,
+      })
+    }).toThrow(new RangeError(`Activity level ${level} for 2024-01-01 must be a finite integer.`))
+  })
+
   it.each([
     ['empty', [], { minLevel: 0, maxLevel: 4 }],
     ['invalid date', [{ date: 'invalid', count: 0, level: 0 }], { minLevel: 0, maxLevel: 4 }],
