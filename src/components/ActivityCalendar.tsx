@@ -19,6 +19,7 @@ import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 import {
   generateEmptyData,
   getClassName,
+  getEmptyLevel,
   groupByWeeks,
   range,
   validateActivities,
@@ -47,9 +48,10 @@ export type Props = {
    * representing activity intensity. By default, `minLevel` is 0 and `maxLevel`
    * is 4, resulting in five activity levels.
    *
-   * Dates without corresponding entries are assumed to have no activity. This
-   * allows you to set arbitrary start and end dates for the calendar by passing
-   * empty entries as the first and last items.
+   * Dates without corresponding entries have count 0 and use the activity
+   * level closest to zero within [minLevel, maxLevel].
+   * This allows you to set arbitrary start and end dates for the calendar by
+   * passing empty entries as the first and last items.
    *
    * @example
    * {
@@ -237,8 +239,11 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
     const systemColorScheme = useColorScheme()
     const colorScheme = colorSchemeProp ?? systemColorScheme
     const colorScale = theme[colorScheme]
-
-    const animationLoaded = useLoadingAnimation(colorScale[0] as string, colorScheme)
+    const emptyLevel = getEmptyLevel(levels)
+    const animationLoaded = useLoadingAnimation(
+      colorScale[emptyLevel - minLevel] as string,
+      colorScheme,
+    )
     const useAnimation = !usePrefersReducedMotion()
 
     if (loading) {
@@ -248,14 +253,14 @@ export const ActivityCalendar = forwardRef<HTMLElement, Props>(
         return null
       }
 
-      activities = generateEmptyData()
+      activities = generateEmptyData(emptyLevel)
     }
 
     validateActivities(activities, levels)
 
     const firstActivity = activities[0] as Activity
     const year = getYear(parseISO(firstActivity.date))
-    const weeks = groupByWeeks(activities, weekStart)
+    const weeks = groupByWeeks(activities, weekStart, emptyLevel)
 
     const labels = Object.assign({}, DEFAULT_LABELS, labelsProp)
     const labelHeight = showMonthLabels ? fontSize + LABEL_MARGIN : 0

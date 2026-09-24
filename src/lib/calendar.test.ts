@@ -1,6 +1,48 @@
 import { describe, expect, it } from 'vitest'
 import type { Activity, Levels } from '../types'
-import { range, validateActivities } from './calendar'
+import {
+  generateEmptyData,
+  getEmptyLevel,
+  groupByWeeks,
+  range,
+  validateActivities,
+} from './calendar'
+
+describe.each([
+  [{ minLevel: 0, maxLevel: 4 }, 0],
+  [{ minLevel: 1, maxLevel: 5 }, 1],
+  [{ minLevel: -4, maxLevel: 0 }, 0],
+  [{ minLevel: -5, maxLevel: -1 }, -1],
+  [{ minLevel: -2, maxLevel: 4 }, 0],
+] satisfies Array<[Levels, number]>)('empty activities for %j', (levels, expectedLevel) => {
+  it('uses the valid level closest to zero', () => {
+    expect(getEmptyLevel(levels)).toBe(expectedLevel)
+  })
+
+  it('fills missing days without changing supplied activities', () => {
+    const first = { date: '2024-01-01', count: 3, level: levels.minLevel }
+    const last = { date: '2024-01-03', count: 7, level: levels.maxLevel }
+    const weeks = groupByWeeks([first, last], 0, getEmptyLevel(levels))
+
+    expect(weeks).toStrictEqual([
+      [undefined, first, { date: '2024-01-02', count: 0, level: expectedLevel }, last],
+    ])
+    expect(weeks[0]?.[1]).toBe(first)
+    expect(weeks[0]?.[3]).toBe(last)
+  })
+
+  it('generates valid loading data with no activity', () => {
+    const data = generateEmptyData(getEmptyLevel(levels))
+
+    expect(data.length).toBeGreaterThanOrEqual(365)
+    expect(data.every(activity => activity.count === 0 && activity.level === expectedLevel)).toBe(
+      true,
+    )
+    expect(() => {
+      validateActivities(data, levels)
+    }).not.toThrow()
+  })
+})
 
 describe('validateActivities', () => {
   it.each([

@@ -34,8 +34,9 @@ export function validateActivities(activities: Array<Activity>, { minLevel, maxL
 export function groupByWeeks(
   activities: Array<Activity>,
   weekStart: DayIndex = 0, // 0 = Sunday
+  emptyLevel = 0,
 ): Array<Week> {
-  const normalizedActivities = fillHoles(activities)
+  const normalizedActivities = fillHoles(activities, emptyLevel)
 
   // Determine the first date of the calendar. If the first date is not the
   // passed weekday, the respective weekday one week earlier is used.
@@ -65,7 +66,7 @@ export function groupByWeeks(
  * The calendar expects a continuous sequence of days,
  * so fill gaps with empty activity data.
  */
-function fillHoles(activities: Array<Activity>): Array<Activity> {
+function fillHoles(activities: Array<Activity>, emptyLevel: number): Array<Activity> {
   const calendar = new Map(activities.map(a => [a.date, a]))
   const firstActivity = activities[0] as Activity
   const lastActivity = activities[activities.length - 1] as Activity
@@ -83,7 +84,7 @@ function fillHoles(activities: Array<Activity>): Array<Activity> {
     return {
       date,
       count: 0,
-      level: 0,
+      level: emptyLevel,
     }
   })
 }
@@ -96,7 +97,11 @@ export function getClassName(element: string) {
   return `${NAMESPACE}__${element}`
 }
 
-export function generateEmptyData(): Array<Activity> {
+export function getEmptyLevel({ minLevel, maxLevel }: Levels): number {
+  return Math.max(minLevel, Math.min(0, maxLevel))
+}
+
+export function generateEmptyData(emptyLevel = 0): Array<Activity> {
   const year = new Date().getFullYear()
   const days = eachDayOfInterval({
     start: new Date(year, 0, 1),
@@ -106,7 +111,7 @@ export function generateEmptyData(): Array<Activity> {
   return days.map(date => ({
     date: formatISO(date, { representation: 'date' }),
     count: 0,
-    level: 0,
+    level: emptyLevel,
   }))
 }
 
