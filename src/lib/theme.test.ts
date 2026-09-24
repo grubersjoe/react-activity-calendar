@@ -104,6 +104,24 @@ describe('createTheme', () => {
     expect(createTheme(explicitTheme)).toStrictEqual(explicitTheme)
   })
 
+  it.each([
+    { minLevel: 0, maxLevel: 1 },
+    { minLevel: 1, maxLevel: 2 },
+    { minLevel: -2, maxLevel: -1 },
+    { minLevel: 0, maxLevel: 2 },
+    { minLevel: 1, maxLevel: 3 },
+    { minLevel: -3, maxLevel: -1 },
+    { minLevel: -1, maxLevel: 1 },
+  ])('preserves explicit palettes for levels %j', levels => {
+    const numberOfLevels = levels.maxLevel - levels.minLevel + 1
+    const input = {
+      light: ['red', 'yellow', 'green'].slice(0, numberOfLevels),
+      dark: ['purple', 'orange', 'blue'].slice(0, numberOfLevels),
+    }
+
+    expect(createTheme(input, levels)).toStrictEqual(input)
+  })
+
   it('calculates color scales for two inputs', () => {
     const input: ThemeInput = {
       light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
@@ -186,8 +204,8 @@ describe('createTheme', () => {
     [
       { minLevel: -8, maxLevel: -7 },
       {
-        light: ['hsl(0, 0%, 26%)', 'color-mix(in oklab, hsl(0, 0%, 92%) 12.5%, hsl(0, 0%, 26%))'],
-        dark: ['hsl(0, 0%, 92%)', 'color-mix(in oklab, hsl(0, 0%, 22%) 12.5%, hsl(0, 0%, 92%))'],
+        light: ['hsl(0, 0%, 92%)', 'hsl(0, 0%, 26%)'],
+        dark: ['hsl(0, 0%, 22%)', 'hsl(0, 0%, 92%)'],
       },
     ],
     [

@@ -15,16 +15,8 @@ export function createTheme(
     const dark = input.dark ?? defaultTheme.dark
 
     return {
-      light: isPair(light)
-        ? calcColorScale([light[1], light[0], light[1]], levels)
-        : isTriple(light)
-          ? calcColorScale(light, levels)
-          : light,
-      dark: isPair(dark)
-        ? calcColorScale([dark[1], dark[0], dark[1]], levels)
-        : isTriple(dark)
-          ? calcColorScale(dark, levels)
-          : dark,
+      light: resolveColorScale(light, levels),
+      dark: resolveColorScale(dark, levels),
     }
   }
 
@@ -77,6 +69,18 @@ function validateThemeInput(input: ThemeInput, numberOfLevels: number) {
       }
     }
   }
+}
+
+function resolveColorScale(colors: Array<Color>, levels: Levels): Array<Color> {
+  if (colors.length === levels.maxLevel - levels.minLevel + 1) {
+    return colors
+  }
+
+  if (isPair(colors)) {
+    return calcColorScale([colors[1], colors[0], colors[1]], levels)
+  }
+
+  return isTriple(colors) ? calcColorScale(colors, levels) : colors
 }
 
 function calcColorScale(
