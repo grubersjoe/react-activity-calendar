@@ -84,7 +84,7 @@
     "rollup-plugin-filesize": "^10.0.0",
     "rollup-plugin-visualizer": "^7.1.1",
     "sass-embedded": "^1.105.1",
-    "storybook": "^10.6.1",
+    "storybook": "^10.6.2",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.71.0",
     "vite": "^8.3.2",
